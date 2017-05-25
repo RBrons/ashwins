@@ -383,11 +383,10 @@ $ ->
   $(document).on 'click', '.ask_accepted', (e) ->
     e.preventDefault()
     property_price = selected_offer_tab.find('.property-price').find('h1').text()
-    add_counteroffer_row(selected_offer_tab.find('input.cur_offer_id').val(), "", "Counter-Party", property_price)
     selected_offer_tab.find('.last_counteroffer_price').val(property_price)
-    selected_offer_tab.find('.initial_log_counteroffer').prop('disabled', 'disabled')
-    $(this).prop('disabled', 'disabled')
-    selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
+    
+    selected_offer_tab.find('.btn_accept_counteroffer').click()
+
 
   $(document).on "click", ".add_counteroffer", (e) ->
     e.preventDefault()
@@ -452,19 +451,26 @@ $ ->
         data: { is_accepted: true, accepted_counteroffer_id: accepted_counteroffer_id }
         success: (data) ->
           if data.status
-            
             $.notify "Counter Accepted", "success"
           else
             $.notify "Failed", "error"
-      selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', 'disabled')
+      
+      last_counteroffer = last_counteroffer || selected_offer_tab.find('.last_counteroffer').val()
       if last_counteroffer == 'Client'
         selected_offer_tab.find('.btn_accept_counteroffer').text('Client\'s Counter Accepted')
-      else
+      else if last_counteroffer == 'Counter-Party'
         selected_offer_tab.find('.btn_accept_counteroffer').text('Buyer\'s Counter Accepted')
+      else  
+        selected_offer_tab.find('.btn_accept_counteroffer').text('Ask Accepted')
+        selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
 
+      selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', 'disabled')
       selected_offer_tab.find('.add_counteroffer').attr('disabled', 'disabled')
                                                   .hide()
-      
+      selected_offer_tab.find('.initial_log_counteroffer').attr('disabled', 'disabled')
+                                                  .hide()                                          
+      selected_offer_tab.find('.ask_accepted').attr('disabled', 'disabled')
+                                                  .hide()
       $(document).find('#relinquishing_purchaser_name').text(selected_offer_tab.find('input.offeror_name').val())
       $('#negotions_tab a#relinquishing_purchaser').click()                                                 
     else
