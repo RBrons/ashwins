@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524121644) do
+ActiveRecord::Schema.define(version: 20170525160946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -481,6 +481,7 @@ ActiveRecord::Schema.define(version: 20170524121644) do
     t.string   "current_step"
     t.datetime "closing_date"
     t.decimal  "closing_proceeds",    precision: 15, scale: 2
+    t.decimal  "cap_rate"
     t.index ["property_id", "transaction_id"], name: "index_transaction_properties_on_property_id_and_transaction_id", unique: true, using: :btree
     t.index ["property_id"], name: "index_transaction_properties_on_property_id", using: :btree
     t.index ["transaction_id"], name: "index_transaction_properties_on_transaction_id", using: :btree

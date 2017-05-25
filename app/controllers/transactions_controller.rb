@@ -1,7 +1,7 @@
 class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy, :edit_qualified_intermediary,
                                          :qualified_intermediary, :properties_edit, :properties_update,
-                                         :terms, :terms_update, :inspection, :closing, :personnel, 
+                                         :terms, :terms_update, :inspection, :closing, :personnel,
                                          :personnel_update, :get_status, :set_status, :qi_status]
   before_action :current_page
   before_action :add_breadcrum, only: [:index]
@@ -31,13 +31,13 @@ class TransactionsController < ApplicationController
             break
           end
         end
-        del_transaction_ids << transaction.id if del_flag   
+        del_transaction_ids << transaction.id if del_flag
       end
     elsif params[:mode] == 'buy'
       # check for 'already sold' transactions beacuse created_at <
       # created_at for a complimentary sale transaction else
       # check for the sale closure
-      @transactions.each do |transaction|  
+      @transactions.each do |transaction|
         main = transaction.main
         sale = main.sale
         if !sale.nil?
@@ -45,36 +45,36 @@ class TransactionsController < ApplicationController
             tprops = sale.transaction_properties
             del_flag = true
             tprops.each do |prop|
-              
+
               if prop.closed?
                 del_flag = false
                 break
               end
-              
+
             end
-            del_transaction_ids << transaction.id if del_flag  
+            del_transaction_ids << transaction.id if del_flag
           end
         end
-        
+
       end
     end
     @transactions = @transactions.where.not('transactions.id in (?)', del_transaction_ids)
     @transactions = @transactions.order('transactions.created_at DESC').paginate(page: params[:page], per_page: sessioned_per_page)
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/transactions\">List </a></h4></div>".html_safe
   end
-  
+
   # GET /project/1
   # GET /project/1.json
   def show
     @properties = @transaction.properties.order(id: :asc)
   end
-  
+
   # GET /project/new
   def new
     if params[:transaction_type] == '1031 Still Selling' || params[:type] == 'purchase'
-      
+
       @transaction_main = TransactionMain.find_by(id: params[:main_id]) || TransactionMain.create(user_id: current_user.id, init: true)
-      
+
       @transaction = if params[:type] == 'purchase'
                        t = TransactionSale.where(transaction_main_id: @transaction_main.id).first ||
                         TransactionSale.new(transaction_main_id: @transaction_main.id)
@@ -89,18 +89,18 @@ class TransactionsController < ApplicationController
                          replacement_purchaser_first_name: t.replacement_seller_first_name,
                          replacement_purchaser_last_name: t.replacement_purchaser_last_name,
                          purchaser_person_is: t.seller_person_is
-                       })   
+                       })
                        t1.save
-                       t1                  
+                       t1
                      else
                        params[:type] = 'sale'
                        TransactionSale.new(transaction_main_id: @transaction_main.id)
                      end
-      
+
       @transaction.is_purchase = (params[:type] == 'sale' || params[:type].blank?) ? 0 : 1
       @transaction.prop_owner = @transaction.replacement_seller_contact_id || 0
       @transaction.prop_status = "Prospective Purchase"
-      
+
       if @transaction.transaction_properties.blank?
         @transaction.transaction_properties.build
       end
@@ -123,47 +123,47 @@ class TransactionsController < ApplicationController
         replacement_purchaser_first_name: t.replacement_seller_first_name,
         replacement_purchaser_last_name: t.replacement_purchaser_last_name,
         seller_person_is: t.purchaser_person_is
-      })   
+      })
       @transaction.save
       @transaction.is_purchase = 0
     end
     params[:main_id] = @transaction_main.id
-  
+
   end
-  
+
   # GET /project/1/edit
   def edit
     if params["type"] == "sale"
       @transaction.relqn_seller_entity_id = @transaction.relinquishing_seller_entity_id if @transaction.seller_person_is
-      @transaction.relqn_purchaser_contact_id = @transaction.relinquishing_purchaser_contact_id if @transaction.purchaser_person_is      
+      @transaction.relqn_purchaser_contact_id = @transaction.relinquishing_purchaser_contact_id if @transaction.purchaser_person_is
     else
       @transaction.rplmnt_seller_contact_id = @transaction.replacement_seller_contact_id if @transaction.seller_person_is
       @transaction.rplmnt_purchaser_entity_id = @transaction.replacement_purchaser_entity_id if @transaction.purchaser_person_is
     end
-    
+
   end
-  
+
   # GET /Transaction/1/properties_edit
   def properties_edit
     if params["type"] == "sale"
       @transaction.prop_owner = @transaction.relinquishing_seller_entity_id || 0
-      @transaction.prop_status = "Purchased"      
+      @transaction.prop_status = "Purchased"
     else
       @transaction.prop_owner = @transaction.replacement_seller_contact_id || 0
       @transaction.prop_status = "Prospective Purchase"
-    end    
+    end
     if @transaction.transaction_properties.blank?
       @transaction.transaction_properties.build
     end
     @transaction.entity_info = @transaction.seller_name || @transaction.purchaser_name
   end
-  
+
   # GET /Transaction/1/properties_update
   def properties_update
     pid = params[:transaction][:transaction_properties_attributes]["0".to_sym][:property_id]
     flag = false
-    
-    if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil? 
+
+    if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil?
       property = Property.where(id: pid).first
       if !property.owner_entity_id.nil?
         contact = Contact.where(id: property.owner_entity_id).first
@@ -172,14 +172,14 @@ class TransactionsController < ApplicationController
         @transaction.replacement_seller_last_name = contact.last_name
         flag = true
       end
-    end 
+    end
 
     begin
-      TransactionSale.transaction do 
+      TransactionSale.transaction do
         @transaction.save! if flag
         @transaction.update!(transaction_property_params)
       end
-      
+
       #return redirect_to personnel_transaction_path(@transaction, sub: 'personnel', type: params[:type], main_id: params[:main_id])
       if @transaction.get_sale_purchase_text == 'sale'
         return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
@@ -192,9 +192,9 @@ class TransactionsController < ApplicationController
      @transaction.errors.add(:base, "Could not complete the action. Verify the data and try again.")
      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
     end
-    
+
   end
-  
+
   # POST /project
   # POST /project.json
   def create
@@ -207,7 +207,7 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       if !@ct.nil?
         cflag = @ct.save
-      end      
+      end
       if @transaction.save && cflag
         AccessResource.add_access({ user: current_user, resource: @transaction })
         @transaction.transaction_main.update_column(:init, false)
@@ -220,7 +220,7 @@ class TransactionsController < ApplicationController
       end
     end
   end
-  
+
   # PATCH/PUT /project/1
   # PATCH/PUT /project/1.json
   def update
@@ -231,9 +231,9 @@ class TransactionsController < ApplicationController
     cflag = true
     if !@ct.nil?
       cflag = @ct.save
-    end  
+    end
     if @transaction.save && cflag #update(transaction_params)
-      #redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id) 
+      #redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id, status_alert: (CGI.escape(params[:status_alert]) rescue nil))
     else
       render action: :edit
@@ -242,24 +242,24 @@ class TransactionsController < ApplicationController
 
   def fix_transaction
     purchase = params[:is_purchase] || "false"
-    
+
     if purchase == "true"
-      if @transaction.seller_person_is == false 
+      if @transaction.seller_person_is == false
         @transaction.replacement_seller_contact_id = @transaction.rplmnt_seller_contact_id
       end
-      if @transaction.purchaser_person_is == false 
+      if @transaction.purchaser_person_is == false
         @transaction.replacement_purchaser_entity_id = @transaction.rplmnt_purchaser_entity_id
       end
       if @transaction.replacement_seller_contact_id
         seller = Contact.where(id: @transaction.replacement_seller_contact_id).first
-        if seller 
+        if seller
           @transaction.replacement_seller_first_name = seller.first_name
           @transaction.replacement_seller_last_name = seller.last_name
         end
       end
       if @transaction.replacement_purchaser_entity_id
         purchaser = Entity.where(id: @transaction.replacement_purchaser_entity_id).first
-        if purchaser 
+        if purchaser
           @transaction.replacement_purchaser_honorific = purchaser.honorific
           @transaction.replacement_purchaser_first_name = purchaser.first_name || purchaser.name
           @transaction.replacement_purchaser_last_name = purchaser.last_name
@@ -269,12 +269,12 @@ class TransactionsController < ApplicationController
           @transaction.relinquishing_seller_first_name = purchaser.first_name || purchaser.name
           @transaction.relinquishing_seller_last_name = purchaser.last_name
         end
-      end 
+      end
     else
-      if @transaction.seller_person_is == false 
+      if @transaction.seller_person_is == false
         @transaction.relinquishing_seller_entity_id = @transaction.relqn_seller_entity_id
       end
-      if @transaction.purchaser_person_is == false 
+      if @transaction.purchaser_person_is == false
         @transaction.relinquishing_purchaser_contact_id = @transaction.relqn_purchaser_contact_id
       end
       if @transaction.relinquishing_seller_entity_id
@@ -288,15 +288,15 @@ class TransactionsController < ApplicationController
           @transaction.replacement_purchaser_honorific = seller.honorific
           @transaction.replacement_purchaser_first_name = seller.first_name || seller.name
           @transaction.replacement_purchaser_last_name = seller.last_name
-        end        
+        end
       end
       if @transaction.relinquishing_purchaser_contact_id
         purchaser = Contact.where(id: @transaction.relinquishing_purchaser_contact_id).first
-        if purchaser 
+        if purchaser
           @transaction.relinquishing_purchaser_first_name = purchaser.first_name
           @transaction.relinquishing_purchaser_last_name = purchaser.last_name
         end
-      end 
+      end
     end
 
     if @transaction.is_a?(TransactionSale)
@@ -318,7 +318,7 @@ class TransactionsController < ApplicationController
     end
     return @ct
   end
-  
+
   # DELETE /project/1
   # DELETE /project/1.json
   def destroy
@@ -328,18 +328,18 @@ class TransactionsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
   def settings
     @transaction = TransactionSale.find_by(key: params[:id])
     render layout: false
   end
-  
+
   def edit_qualified_intermediary
     @qualified_intermediary = @transaction.qualified_intermediary
     @qualified_intermediary.wired_instruction
     @qualified_intermediary.contact
   end
-  
+
   def qualified_intermediary
     @qualified_intermediary = @transaction.qualified_intermediary
     if @qualified_intermediary.update(qualified_intermediary_params)
@@ -349,7 +349,7 @@ class TransactionsController < ApplicationController
       render action: :edit_qualified_intermediary
     end
   end
-  
+
   def terms
     if @transaction.transaction_term.blank?
       @transaction.build_transaction_term
@@ -366,23 +366,23 @@ class TransactionsController < ApplicationController
     else
       @property = Property.find(params[:cur_property])
     end
-    
+
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
     if ! @transaction_property.transaction_property_offers.present?
       @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
-    end 
+    end
 
 
   end
 
   def inspection
-    
+
   end
 
   def closing
     if request.post?
-      # Parameters: {"date"=>{"year"=>"2017", "month"=>"6", "day"=>"4"}, 
-      # "closing_proceeds"=>"12121212.00", "main_id"=>"83", "cur_property"=>"16", 
+      # Parameters: {"date"=>{"year"=>"2017", "month"=>"6", "day"=>"4"},
+      # "closing_proceeds"=>"12121212.00", "main_id"=>"83", "cur_property"=>"16",
       # "commit"=>"Proceed to Close", "id"=>"31"}
       @transaction_property = TransactionProperty.where(property_id: params[:cur_property], transaction_id: params[:id]).first
       if @transaction_property.nil?
@@ -393,19 +393,19 @@ class TransactionsController < ApplicationController
         d = params[:date]
         @transaction_property.closing_date = Date.new(d["year"].to_i,d["month"].to_i,d["day"].to_i)
         @transaction_property.closing_proceeds = params[:closing_proceeds]
-        @transaction_property.save           
-        
-        if @transaction.main.identification_deadline.nil? || 
+        @transaction_property.save
+
+        if @transaction.main.identification_deadline.nil? ||
             ((@transaction.main.identification_deadline + 45.days) < (@transaction_property.closing_date + 45.days))
             @transaction.main.identification_deadline = @transaction_property.closing_date + 45.days
-        end 
-        if @transaction.main.transaction_deadline.nil? || 
+        end
+        if @transaction.main.transaction_deadline.nil? ||
             ((@transaction.main.transaction_deadline + 180.days) < (@transaction_property.closing_date + 180.days))
             @transaction.main.transaction_deadline = @transaction_property.closing_date + 180.days
-        end 
+        end
 
         has_deadline_passed = false
-        has_deadline_passed = 
+        has_deadline_passed =
           DateTime.now > @transaction.main.transaction_deadline if !@transaction.main.transaction_deadline.nil?
 
         if has_deadline_passed
@@ -425,7 +425,7 @@ class TransactionsController < ApplicationController
             val = val + prev_val - @transaction_property.closing_proceeds
           end
           @transaction.main.qi_funds = val
-        end        
+        end
 
         @transaction.main.save
         if @transaction.is_a?(TransactionSale)
@@ -442,12 +442,12 @@ class TransactionsController < ApplicationController
               replacement_purchaser_first_name: t.replacement_seller_first_name,
               replacement_purchaser_last_name: t.replacement_purchaser_last_name,
               purchaser_person_is: t.seller_person_is
-            })   
+            })
             t1.is_purchase = 1
             t1.save
           end
-        end                 
-        
+        end
+
       end
       #return redirect_to edit_transaction_path(@transaction, type: 'sale', main_id: @transaction.transaction_main_id)
       return redirect_to qi_status_transaction_path(@transaction, main_id: @transaction.main.id)
@@ -466,8 +466,8 @@ class TransactionsController < ApplicationController
       @closing_date = @transaction_property.closing_date || Date.today
       @closing_proceeds = @transaction_property.closing_proceeds || 0
       @closed = @transaction_property.closed?
-    end   
-    
+    end
+
   end
 
   def qi_status
@@ -475,7 +475,7 @@ class TransactionsController < ApplicationController
     @transaction_main = TransactionMain.find(@transaction_main_id)
     if @transaction_main.nil?
       # big problem
-    end 
+    end
     params[:sub] = 'closing'
     params[:type] = 'qi_status'
     @tproperties = TransactionProperty.where(transaction_main_id: @transaction_main.id)
@@ -487,9 +487,9 @@ class TransactionsController < ApplicationController
       else
         @purchases << prop
       end
-    end  
+    end
   end
-  
+
   def terms_update
     if @transaction.update(transaction_terms_params)
       # redirect_to terms_transaction_path(@transaction, sub: params[:sub], main_id: params[:main_id], type: params[:type])
@@ -498,7 +498,7 @@ class TransactionsController < ApplicationController
       render action: :terms
     end
   end
-  
+
   def personnel
     if @transaction.transaction_personnel.blank?
       @transaction.create_transaction_personnel
@@ -506,7 +506,7 @@ class TransactionsController < ApplicationController
     #@transaction.transaction_personnel.create_contacts
     @transaction_personnel = @transaction.transaction_personnel
   end
-  
+
   def personnel_update
     @transaction_personnel = @transaction.transaction_personnel
     if @transaction.transaction_personnel.update(transaction_personnels_params)
@@ -519,11 +519,11 @@ class TransactionsController < ApplicationController
       render action: :personnel
     end
   end
-  
+
   def get_status
-  
+
   end
-  
+
   def set_status
     if @transaction_main.update(transaction_main_params)
       redirect_to get_status_transaction_path(@transaction_main, main_id: params[:main_id], type: params[:type])
@@ -531,7 +531,7 @@ class TransactionsController < ApplicationController
       render action: :get_status
     end
   end
-  
+
   def multi_delete
     common_multi_delete
   end
@@ -541,10 +541,10 @@ class TransactionsController < ApplicationController
   def set_transaction
     @transaction_main = TransactionMain.find(params[:main_id])
     for_sale_or_purchase_tab
-    
+
     save_current_step_state
   end
-  
+
   def for_sale_or_purchase_tab
     if params[:type].blank? || params[:type] == 'sale'
       @transaction = @transaction_main.sale
@@ -560,44 +560,44 @@ class TransactionsController < ApplicationController
       else
         TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step: params[:sub])
       end
-    end  
+    end
   end
-  
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def transaction_params
     params.require(:transaction).permit!
   end
-  
+
   def qualified_intermediary_params
     params.require(:qualified_intermediary).permit(:name, :currently_held, :price,
                                                    :premises_address, :city, :state, :country, :seller,
                                                    :seller_entity_type, :due_diligence_period, :wired_instruction_attributes => [:bank, :aba_no, :credit_to, :account_number, :reference, :id],
                                                    :contact_attributes                                                       => [:first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :id])
   end
-  
+
   def transaction_property_params
-    params.require(:transaction).permit(transaction_properties_attributes: [:property_id, :sale_price, :id, :is_sale, :transaction_main_id, :_destroy])
+    params.require(:transaction).permit(transaction_properties_attributes: [:property_id, :sale_price, :id, :is_sale, :transaction_main_id, :_destroy, :cap_rate])
   end
-  
+
   def transaction_terms_params
     params.require(:transaction).permit(transaction_term_attributes: [:id, :purchase_price, :cap_rate, :psa_date, :m_psa_date, :first_deposit_date_due, :m_first_deposit_date_due,
                                                                       :first_deposit, :inspection_period_days, :end_of_inspection_period_note,
                                                                       :second_deposit, :second_deposit_amount, :closing_date, :m_closing_date, :transaction_id, :second_deposit_date_due, :m_second_deposit_date_due])
   end
-  
+
   def transaction_personnels_params
     params.require(:transaction).permit(:contacts_attributes => [:first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :id, :object_title])
   end
-  
+
   def transaction_main_params
     params.require(:transaction_main).permit!
   end
-  
+
   private
   def current_page
     @current_page = 'project'
   end
-  
+
   def add_breadcrum
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/transactions\">Transactions </a></h4></div>".html_safe
   end
