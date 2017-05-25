@@ -4027,7 +4027,7 @@ fieldset {
 }
 
 .wizard_horizontal ul.wizard_steps li .btn{
-    margin: 5px 5px;
+    margin: 5px 5px 5px 20px;
     padding: 15px 20px;
 }
 
@@ -4068,12 +4068,17 @@ fieldset {
     display: block;
     margin: 0 auto 5px;
     padding: 10px 10px 10px 25px; 
-    font-size: 15px;
+    font-size: 14px;
     color: white;
     background: #1ABB9C;
     text-align: center;
     position: relative;
     z-index: 1
+}
+@media (max-width: 1440px) and (min-width: 1200px){
+    .wizard_horizontal ul.wizard_steps li a .step_no {
+        font-size: 10px;
+    }
 }
 .wizard_horizontal ul.wizard_steps li.selected a:after {
     border-left-color: #3082EE;
