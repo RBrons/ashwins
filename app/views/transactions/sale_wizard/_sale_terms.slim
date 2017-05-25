@@ -426,6 +426,9 @@ button#back_prev_tab.btn.btn-default Back
       .row
         .col-md-12.margin-lg-top.form-group
             button.initial_log_counteroffer.btn.btn-default Log Initial Counter Offer
+            button.ask_accepted.btn.btn-default.border-red.red Ask Accepted
+            input.last_counteroffer_price[type="hidden" value=""]
+
             table.counteroffer_history.table.margin-lg-top
                 tbody
                     tr.last_row
@@ -434,6 +437,7 @@ button#back_prev_tab.btn.btn-default Back
                         td
       .row.counteroffer_action_buttons_wrapper[style="display: none"]
         .col-md-4.col-xs-12.form-group
-            button.add_counteroffer.btn.btn-default.red.border-red Buyer Counter
-            = link_to 'Accept Offer', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
+          input.last_counteroffer[type="hidden" value=""]
+          button.add_counteroffer.btn.btn-default.red.border-red Buyer Counter
+          = link_to 'Accept Offer', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
             
