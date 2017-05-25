@@ -315,6 +315,7 @@ $ ->
       rightAlign: false
       prefix: '$ '
       removeMaskOnSubmit: true
+      positionCaretOnTab: true
   
   $(document).on 'click', '#offer_list li a', (e)->
     selected_offer_tab = $(document).find($(this).attr('href'))
