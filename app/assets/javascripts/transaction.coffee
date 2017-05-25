@@ -386,6 +386,7 @@ $ ->
     add_counteroffer_row(selected_offer_tab.find('input.cur_offer_id').val(), "", "Counter-Party", property_price)
     selected_offer_tab.find('.last_counteroffer_price').val(property_price)
     selected_offer_tab.find('.initial_log_counteroffer').prop('disabled', 'disabled')
+    $(this).prop('disabled', 'disabled')
     selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
 
   $(document).on "click", ".add_counteroffer", (e) ->
