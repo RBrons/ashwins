@@ -59,7 +59,7 @@
       /= f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("all"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
 
     .form-group
-      = label_tag "#{params[:ownership_status] == 'Prospective Purchase' ? 'Offering Price' : 'Purchase Price'}"
+      = label_tag "#{(params[:ostatus] == 'Prospective Purchase' || @property.ownership_status == 'Prospective Purchase') ? 'Asking Price' : 'Purchase Price'}"
       .input-group
         .input-group-addon $
         = f.text_field :price, class: 'form-control width-field-md input-mask-currency'
@@ -74,7 +74,7 @@
         = f.text_field :cap_rate, readonly: true, class: 'form-control input-mask-currency'
         .input-group-addon %
 
-    - unless params[:ownership_status] == 'Prospective Purchase'
+    - unless (params[:ostatus] == 'Prospective Purchase' || @property.ownership_status == 'Prospective Purchase')
       .clearfix
       .form-group.width-field-lg
         label.control-label Closing Date
