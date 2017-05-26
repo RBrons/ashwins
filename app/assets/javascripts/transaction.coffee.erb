@@ -167,10 +167,25 @@ $ ->
           $('#offer_and_acceptance_section .tab-content').append '<div class="tab-pane" id="' + tabId + '">' + $('#offer_and_acceptance_template').html() + '</div>'
           $('#offer_list li:nth-child(' + index + ') a').click()
 
-          selected_offer_tab.find('input.offeror_name').val(data.offer_name)
-          $.notify "Successfully added", "success"
           initialize_editable_currency_field()
           initialize_editable_date_field()
+          selected_offer_tab.find('.contact_is_company_false').iCheck
+            checkboxClass: 'icheckbox_flat-blue'
+            radioClass: 'iradio_flat-blue'
+          selected_offer_tab.find('.contact_is_company_true').iCheck
+            checkboxClass: 'icheckbox_flat-blue'
+            radioClass: 'iradio_flat-blue'
+            
+          selected_offer_tab.find('input.cur_offer_id').val(data.offer_id)
+          selected_offer_tab.find('.from_relinquishing_offeror').val(data.offer_id)
+          selected_offer_tab.find('.relingquishing_offeror_form').attr('action', '/contacts/' + data.offeror_contact_id)
+
+          if $(document).find('ul#offer_list li.done').length >= 1
+            selected_offer_tab.find('.initial_log_counteroffer').prop('disabled', 'disabled')
+            selected_offer_tab.find('.ask_accepted').prop('disabled', 'disabled')
+
+          $.notify "Successfully added", "success"
+          
         else
           $.notify "Failed", "error"
 
@@ -191,6 +206,21 @@ $ ->
           $.notify "Successfully deleted", "success"
         else
           $.notify "Failed", "error"
+
+  $(document).on 'ifChecked', '.contact_is_company_false', ->
+    selected_offer_tab.find('.company-fields-wrapper').hide()
+    selected_offer_tab.find('.company-fields-wrapper').find('input').val('')
+    
+    selected_offer_tab.find('.individual-fields-wrapper').show()
+    selected_offer_tab.find('.individual-fields-wrapper').find('input').val('')
+
+  $(document).on 'ifChecked', '.contact_is_company_true', ->
+    selected_offer_tab.find('.company-fields-wrapper').show()
+    selected_offer_tab.find('.company-fields-wrapper').find('input').val('')
+
+    selected_offer_tab.find('.individual-fields-wrapper').hide()
+    selected_offer_tab.find('.individual-fields-wrapper').find('input').val('')
+    
 
   # - Taks list on LOI
   $(document).on 'ifChanged', '#letter_of_intent_section .to_do .field_list .task_status', (e)->
@@ -313,21 +343,29 @@ $ ->
   $(document).on 'click', '#offer_list li a', (e)->
     selected_offer_tab = $(document).find($(this).attr('href'))
 
-  $(document).on 'change', '.offeror_name', ->
-    tab_element = $(document).find('#offer_list li.active a')
-    offer_name = $(this).val()
-    $.ajax
-      url: '/transaction_property_offers/' + tab_element.data('offer-id')
-      type: 'PUT'
-      dataType: 'json'
-      data: { offer_name: offer_name }
-      success: (data) ->
-        if data.status
-          tab_element.text(offer_name)
-          $.notify "Successfully updated", "success"
-        else
-          $.notify "Failed", "error"
+  $(document).on 'change', '.relingquishing_offeror_form input', ->
+    if selected_offer_tab.find('.relingquishing_offeror_form').attr('action') != ""
+      action_url = selected_offer_tab.find('.relingquishing_offeror_form').attr('action')
+      type = 'PUT'
+    else
+      action_url = '/contacts/'
+      type = 'POST'
 
+    $.ajax
+      url: action_url
+      type: type
+      dataType: 'json'
+      data: selected_offer_tab.find('.relingquishing_offeror_form').serialize()
+      success: (data) ->
+        if data
+          selected_offer_tab.find('.relingquishing_offeror_form').attr('action', '/contacts/' + data.id)
+          if !data.is_company
+            $(document).find('#offer_list li.active a').text(data.first_name)
+          else
+            $(document).find('#offer_list li.active a').text(data.company_name)
+          $.notify "Success!", "success"
+        else
+          $.notify "Failed!", "error"
 
   add_counteroffer_row = (offer_id, date, offeror, price) ->
     date = date || moment().format('YYYY-MM-DD')
@@ -376,10 +414,8 @@ $ ->
 
   $(document).on 'click', '.ask_accepted', (e) ->
     e.preventDefault()
-    property_price = selected_offer_tab.find('.property-price').find('h1').text()
-    selected_offer_tab.find('.last_counteroffer_price').val(property_price)
-
-    selected_offer_tab.find('.btn_accept_counteroffer').click()
+    tab_element = $(document).find('#offer_list li.active a')
+    accept_counteroffer(tab_element.data('offer-id'))
 
 
   $(document).on "click", ".add_counteroffer", (e) ->
@@ -417,58 +453,41 @@ $ ->
   # Click Accept offer
   $(document).on "click", ".btn_accept_counteroffer", (e) ->
     e.preventDefault()
-    location = $(this).attr('href')
-    dialog = $(document).find('#accept_counteroffer')
+    tab_element = $(document).find('#offer_list li.active a')
+    accepted_counteroffer_id = selected_offer_tab.find('table.counteroffer_history tr.last_row').prev().data('counteroffer-id')
+    accept_counteroffer(tab_element.data('offer-id'), accepted_counteroffer_id )
+
+  accept_counteroffer = (offer_id, accepted_counteroffer_id = 0) ->
     $.ajax
-        type: "get"
-        url: location
-        dataType: "html"
-        success: (val) ->
-          purchaser = selected_offer_tab.find('input.offeror_name').val()
-          purchasing_property = $(document).find('#negotiated_property').val()
-          accepted_price = selected_offer_tab.find('.last_counteroffer_price').val()
-          accept_offer_description = '<h2>' + purchaser + ' will be purchasing ' + purchasing_property + ' for ' + accepted_price + '</h2>'
-
-          dialog.find('.modal-body').html(accept_offer_description + val)
-          dialog.modal()
-        error: (e) ->
-          console.log e
-
-  $(document).on 'ajax:complete', '#accept_counteroffer form', (event, data, status, xhr)->
-    if status
-      tab_element = $(document).find('#offer_list li.active a')
-      accepted_counteroffer_id = selected_offer_tab.find('table.counteroffer_history tr.last_row').prev().data('counteroffer-id')
-      $.ajax
-        url: '/transaction_property_offers/' + tab_element.data('offer-id')
-        type: 'PUT'
-        dataType: 'json'
-        data: { is_accepted: true, accepted_counteroffer_id: accepted_counteroffer_id }
-        success: (data) ->
-          if data.status
-            $.notify "Counter Accepted", "success"
+      url: '/transaction_property_offers/' + offer_id
+      type: 'PUT'
+      dataType: 'json'
+      data: { is_accepted: true, accepted_counteroffer_id: accepted_counteroffer_id }
+      success: (data) ->
+        if data.status
+          $.notify "Counter Accepted", "success"
+          
+          last_counteroffer = last_counteroffer || selected_offer_tab.find('.last_counteroffer').val()
+          if last_counteroffer == 'Client'
+            selected_offer_tab.find('.btn_accept_counteroffer').text('Client\'s Counter Accepted')
+          else if last_counteroffer == 'Counter-Party'
+            selected_offer_tab.find('.btn_accept_counteroffer').text('Buyer\'s Counter Accepted')
           else
-            $.notify "Failed", "error"
+            selected_offer_tab.find('.btn_accept_counteroffer').text('Ask Accepted')
+            selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
 
-      last_counteroffer = last_counteroffer || selected_offer_tab.find('.last_counteroffer').val()
-      if last_counteroffer == 'Client'
-        selected_offer_tab.find('.btn_accept_counteroffer').text('Client\'s Counter Accepted')
-      else if last_counteroffer == 'Counter-Party'
-        selected_offer_tab.find('.btn_accept_counteroffer').text('Buyer\'s Counter Accepted')
-      else
-        selected_offer_tab.find('.btn_accept_counteroffer').text('Ask Accepted')
-        selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
-
-      selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', 'disabled')
-      selected_offer_tab.find('.add_counteroffer').attr('disabled', 'disabled')
+          selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', 'disabled')
+          selected_offer_tab.find('.add_counteroffer').attr('disabled', 'disabled')
+                                                      .hide()
+          selected_offer_tab.find('.initial_log_counteroffer').attr('disabled', 'disabled')
+                                                              .hide()
+          selected_offer_tab.find('.ask_accepted').attr('disabled', 'disabled')
                                                   .hide()
-      selected_offer_tab.find('.initial_log_counteroffer').attr('disabled', 'disabled')
-                                                  .hide()
-      selected_offer_tab.find('.ask_accepted').attr('disabled', 'disabled')
-                                                  .hide()
-      $(document).find('#relinquishing_purchaser_name').text(selected_offer_tab.find('input.offeror_name').val())
-      $('#negotions_tab a#relinquishing_purchaser').click()
-    else
-      $.notify "Failed!", "error"
+          $(document).find('#relinquishing_purchaser_name').val(data.offer_name)
+                                                           .show()
+          $('#negotions_tab a#relinquishing_purchaser').click()
+        else
+          $.notify "Failed", "error"
 
   $(document).on 'click', '#back_prev_tab', (e) ->
     e.preventDefault()

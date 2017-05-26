@@ -23,11 +23,16 @@ class ContactsController < ApplicationController
     
     respond_to do |format|
       if @contact.save
+        if params[:from_relinquishing_offeror].present?
+          TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: @contact.first_name)
+        end
         format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
+        format.json { render json: @contact }
       else
         format.html { render action: 'new' }
         format.js {render layout: false, template: "contacts/new"}
+        format.json { render json: false }
       end
     end
   end
@@ -51,11 +56,20 @@ class ContactsController < ApplicationController
     
     respond_to do |format|
       if @contact.save
+        if params[:from_relinquishing_offeror].present?
+          if @contact.is_company
+            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: @contact.company_name)
+          else
+            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: @contact.first_name)
+          end
+        end
         format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
+        format.json { render json: @contact }
       else
         format.html { render action: 'edit' }
         format.js {render layout: false, template: "contacts/new"}
+        format.json { render json: false }
       end
     end
   end

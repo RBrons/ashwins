@@ -3,7 +3,7 @@ class TransactionPropertyOffer < ApplicationRecord
   has_many :counteroffers, foreign_key: :transaction_property_offer_id, dependent: :destroy
 
   def is_ask_accepted?
-    if self.accepted_counteroffer_id.present?
+    if self.accepted_counteroffer_id != 0
       return false
     else
       return true
