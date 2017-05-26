@@ -50,22 +50,22 @@
                     = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction, type: 'sale', sub: 'terms', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
-                        span.manual_delete_property.lnr.lnr-cross[data-permalink="#{@transaction_main.sale.transaction_properties.count > 1 ? properties_edit_transaction_path(@transaction, sub: 'property', type: 'sale', main_id: params[:main_id]) : edit_transaction_path(@transaction, sub: 'parties', type: 'sale', main_id: params[:main_id])}"]
+                        span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
                   - when 'inspection'
                     = link_to @transaction_main.sale.present? ? inspection_transaction_path(@transaction, type: 'sale', sub: 'inspection', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
-                        span.manual_delete_property.lnr.lnr-cross[data-permalink="#{@transaction_main.sale.transaction_properties.count > 1 ? properties_edit_transaction_path(@transaction, sub: 'property', type: 'sale', main_id: params[:main_id]) : edit_transaction_path(@transaction, sub: 'parties', type: 'sale', main_id: params[:main_id])}"]
+                        span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
                   - when 'closing'
                     = link_to @transaction_main.sale.present? ? closing_transaction_path(@transaction, type: 'sale', sub: 'closing', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
-                        span.manual_delete_property.lnr.lnr-cross[data-permalink="#{@transaction_main.sale.transaction_properties.count > 1 ? properties_edit_transaction_path(@transaction, sub: 'property', type: 'sale', main_id: params[:main_id]) : edit_transaction_path(@transaction, sub: 'parties', type: 'sale', main_id: params[:main_id])}"]
+                        span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
                   - else
                     = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction, type: 'sale', sub: 'terms', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
-                        span.manual_delete_property.lnr.lnr-cross[data-permalink="#{@transaction_main.sale.transaction_properties.count > 1 ? properties_edit_transaction_path(@transaction, sub: 'property', type: 'sale', main_id: params[:main_id]) : edit_transaction_path(@transaction, sub: 'parties', type: 'sale', main_id: params[:main_id])}"]
+                        span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
       
       / Purchase Menu
       li class=("#{params[:type] == 'purchase' ? 'active' : ''}")
