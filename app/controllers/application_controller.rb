@@ -12,15 +12,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include ApplicationHelper
   helper_method :sessioned_per_page
-  
+
   before_action :save_current_url
   # before_filter :ability, :last_active
   before_action :authenticate_user!
   before_action :user_enabled
   before_action :miniprofiler
   before_action :check_member_init
-  
-  
+
+
   def save_current_url
     if current_user.try(:email).blank?
       unless ['/', '/users/sign_in'].include?(current_FULLPATH)
@@ -31,11 +31,11 @@ class ApplicationController < ActionController::Base
   end
 
   def check_member_init
-    MemberType.InitMemberTypes if (MemberType.objects.nil? || MemberType.objects.empty?) 
+    MemberType.InitMemberTypes if (MemberType.objects.nil? || MemberType.objects.empty?)
   end
-  
+
   protected
-  
+
   def admin
     begin
       @admin_namespace     = params[:controller].include?('admin/')
@@ -45,14 +45,14 @@ class ApplicationController < ActionController::Base
       Error.send e
     end
   end
-  
+
   def create_admin_session email, admin
     session[:admin_email], session[:admin] = email, admin
     admin.update_columns(:total_login => admin.total_login+1, :last_login => Time.now)
   rescue => e
     Error.send e
   end
-  
+
   def auto_create_admin_session email
     admin = Admin.find_by(email: email)
     if admin
@@ -61,13 +61,13 @@ class ApplicationController < ActionController::Base
   rescue => e
     Error.send e
   end
-  
+
   def admin_authentication
     if @admin.blank? || @admin_email.blank?
       redirect_to admin_get_login_path
     end
   end
-  
+
   def user_block_or_trash
     if current_user && (current_user.blocked || current_user.trash)
       sign_out current_user
@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
       redirect_to '/'
     end
   end
-  
+
   def user_enabled
     if current_user && !current_user.enabled
       sign_out current_user
@@ -86,7 +86,7 @@ class ApplicationController < ActionController::Base
       redirect_to '/'
     end
   end
-  
+
   def check_user_approval
     unless current_user.user_approval
       redirect_to social_index_path(notifyApproval: true)
@@ -94,8 +94,8 @@ class ApplicationController < ActionController::Base
     if current_user.approval_msg || current_user.services.where(provider: "google_oauth2").blank?
       redirect_to social_index_path
     end
-  end 
-  
+  end
+
   def ability
     unless current_user.blank?
       @ability = current_user.ability
@@ -104,7 +104,29 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
+  def defaultize(obj)
+    defVals = DefaultValue.where(entity_name: obj.class.name)
+    defVals.each do |val|
+      val_ = val.value
+      if val.value_type == 'Amount'
+        begin
+          val_ = val_.to_f
+        rescue => exception
+          val_ = 0.00
+        end
+      elsif val.value_type == 'Integer'
+        begin
+          val_ = val_.to_i
+        rescue => exception
+          val_ = 0
+        end
+      end
+      obj.try("#{val.attribute_name.underscore}=".to_sym, val_)
+    end
+    return obj
+  end
+
   private
   def last_active
     unless current_user.blank?
@@ -114,7 +136,7 @@ class ApplicationController < ActionController::Base
     puts e.message
     puts e.backtrace
   end
-  
+
   def invalid_access_render
     respond_to do |type|
       type.js { render :text => "Unauthorized Error", :status => 401, :layout => false }
@@ -122,22 +144,22 @@ class ApplicationController < ActionController::Base
     end
     true
   end
-  
+
   def entity_check
     raise UnauthorizedError unless AccessResource.can_access?(user: current_user, resource: @entity)
   end
-  
+
   def miniprofiler
     Rack::MiniProfiler.authorize_request if Rails.env.development?
   end
-  
+
   public
   def after_sign_in_path_for(resource)
     last_url           = session[:last_url]
     session[:last_url] = nil
     last_url || '/'
   end
-  
+
   def common_multi_delete
     ids    = params[:multi_delete_objects]
     ids    = ids.split(',').map(&:to_i).compact
@@ -149,7 +171,7 @@ class ApplicationController < ActionController::Base
     end
     redirect_to :back
   end
-  
+
   def sessioned_per_page(per_page=false)
     if per_page != false && !nil_or_zero(per_page)
       session[:per_page] = per_page

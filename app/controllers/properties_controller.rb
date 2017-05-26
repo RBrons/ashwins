@@ -32,7 +32,7 @@ class PropertiesController < ApplicationController
 
   # GET /properties/new
   def new
-    @property = Property.new
+    @property = defaultize(Property.new)
     @property.ostatus = params["ostatus"]
     add_breadcrumb ("<div class=\"pull-left\"><h4><a href=\'" + new_property_path(ostatus: params["ostatus"]) +
       "\'> Add Property - " + params["ostatus"] + " </a></h4></div>").html_safe
@@ -69,7 +69,7 @@ class PropertiesController < ApplicationController
       @property.cl_image_url = cl_hash["url"] if cl_hash.key?("url")
       @property.cl_image_url_secure = cl_hash["secure_url"] if cl_hash.key?("secure_url")
       @property.cl_image_original_filename = cl_hash["original_filename"] if cl_hash.key?("original_filename")
-    end    
+    end
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
@@ -89,16 +89,16 @@ class PropertiesController < ApplicationController
   def update
     @property = Property.find(params[:id])
     @property.assign_attributes(property_params)
-    
+
     # store previous image public id to remove
     public_id = ""
     if !@property.cl_image_public_id.blank?
-      public_id = @property.cl_image_public_id        
+      public_id = @property.cl_image_public_id
     end
 
     if params["property"]["prop_img"]
       # return json from cloudinary
-      cl_hash = {}           
+      cl_hash = {}
 
       # upload to cloudinary
       cl_hash = Cloudinary::Uploader.upload(params["property"]["prop_img"])
@@ -112,8 +112,8 @@ class PropertiesController < ApplicationController
       @property.cl_image_url_secure = cl_hash["secure_url"] if cl_hash.key?("secure_url")
       @property.cl_image_original_filename = cl_hash["original_filename"] if cl_hash.key?("original_filename")
 
-      
-    end    
+
+    end
     if !@property.owner_person_is.nil?
       @property.owner_entity_id = @property.owner_entity_id_indv if @property.owner_person_is
     end

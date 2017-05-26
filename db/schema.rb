@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170525160946) do
+ActiveRecord::Schema.define(version: 20170526064136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,15 @@ ActiveRecord::Schema.define(version: 20170525160946) do
     t.decimal  "offered_price",                 precision: 15, scale: 2
     t.datetime "created_at",                                             null: false
     t.datetime "updated_at",                                             null: false
+  end
+
+  create_table "default_values", force: :cascade do |t|
+    t.string   "entity_name"
+    t.string   "attribute_name"
+    t.string   "value"
+    t.string   "value_type"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "dynamic_fields", force: :cascade do |t|
