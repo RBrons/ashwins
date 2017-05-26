@@ -140,6 +140,11 @@ $ ->
 
   $(document).on "click", ".main_menu span.manual_delete_property", (e)->
     e.preventDefault()
+
+    if $(this).parent().parent().hasClass('in-contract')
+      if confirm('Please note: Since this property is in Contract, if Purchaser is really breaking contract, you may have various legal remedies.') == false
+        return
+    
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
     window.location.href = actionurl
 
