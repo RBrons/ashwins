@@ -496,3 +496,77 @@ $ ->
     if keyCode == 13
       e.preventDefault()
       return false
+
+  $(document).on 'ifChecked', '.radio_edit_mode_cap', ->
+    $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', false)
+    $(this).parents(".transaction-property-calculation").find("input[name*='sale_price']").prop('readonly', true)
+
+  $(document).on 'ifChecked', '.radio_edit_mode_price', ->
+    $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', true)
+    $(this).parents(".transaction-property-calculation").find("input[name*='sale_price']").prop('readonly', false)
+
+  $(document).on 'keyup', ".transaction-property-calculation input[name*='cap_rate']", (e)->
+    currentRent = $(this).parents('.fields').find('.transaction-property-calculation-readonly .current-rent').val().replace(/\,/g, '')
+    currentCapRate = $(this).val().replace(/\,/g, '')
+
+    $(this).parents('.transaction-property-calculation').find("input[name*='sale_price']").val(parseFloat(currentRent) * parseFloat(currentCapRate))
+
+  $(document).on 'keyup', ".transaction-property-calculation input[name*='sale_price']", (e)->
+    currentRent = $(this).parents('.fields').find('.transaction-property-calculation-readonly .current-rent').val().replace(/\,/g, '')
+    currentPrice = $(this).val().replace(/\,/g, '')
+
+    $(this).parents('.transaction-property-calculation').find("input[name*='cap_rate']").val(parseFloat(currentPrice) / parseFloat(currentRent))
+
+  $(document).on 'change', '.transaction-property-select select.for-purchase', (e)->
+    currentRent = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-rent")
+    currentCap = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-cap-rate")
+    currentPrice = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-price")
+    currentImage = $(this).parents('.fields').find(".transaction-property-image img")
+
+    if $(this).val()
+      $.ajax
+        type: "POST"
+        url: "/xhr/get_property_data_for_transaction"
+        data: {id: $(this).val()}
+        dataType: "json"
+        success: (val) ->
+          currentRent.val(val.rent)
+          currentCap.val(val.cap)
+          currentPrice.val(val.price)
+          if val.image
+            currentImage.attr 'src', 'http://res.cloudinary.com/a1031fun-com/image/upload/c_scale/' + val.image
+            currentImage.attr 'alt', val.image
+          else
+            currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+        error: (e) ->
+          console.log e
+    else
+      currentRent.val(0)
+      currentCap.val(0)
+      currentPrice.val(0)
+      currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+      currentImage.attr 'alt', "Placeholder"
+
+  $(document).on 'change', '.transaction-property-select select.for-sale', (e)->
+    currentRent = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-rent")
+    currentImage = $(this).parents('.fields').find(".transaction-property-image img")
+
+    if $(this).val()
+      $.ajax
+        type: "POST"
+        url: "/xhr/get_property_data_for_transaction"
+        data: {id: $(this).val()}
+        dataType: "json"
+        success: (val) ->
+          currentRent.val(val.rent)
+          if val.image
+            currentImage.attr 'src', 'http://res.cloudinary.com/a1031fun-com/image/upload/c_scale/' + val.image
+            currentImage.attr 'alt', val.image
+          else
+            currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+        error: (e) ->
+          console.log e
+    else
+      currentRent.val(0)
+      currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+      currentImage.attr 'alt', "Placeholder"
