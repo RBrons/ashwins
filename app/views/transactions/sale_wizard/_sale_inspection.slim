@@ -15,104 +15,311 @@ div[role="tabpanel"]
           a#inspection_zoning[href="#inspection_zoning_section" role="tab" data-toggle="tab" aria-expanded="false"] Zoning
   .tab-content
       #seller_documentation_section.active.tab-pane.fade.in[role="tabpanel"]
-          form
-            .col-lg-6.col-md-6.col-sm-12.col-xs-12
-              .form-group
-                  label.control-label Seller Documentation
-                  .input-group.select_in_gdrive
-                      input#file_seller_documentation.form-control[type="text"]
-                      span.input-group-btn
-                          button#btn_seller_documentation.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                              span.margin-md-left.blue Select in Google Drive
-              .form-group
-                  button.btn.btn-default
-                    span.fa.fa-plus.margin-sm-right
-                    | Add Document
+        form
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .form-group
+                label.control-label Seller Documentation
+                .input-group.select_in_gdrive
+                    input#file_seller_documentation.form-control[type="text"]
+                    span.input-group-btn
+                        button#btn_seller_documentation.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+            .form-group
+                button.btn.btn-default
+                  span.fa.fa-plus.margin-sm-right
+                  | Add Document
                       
-      div#environmental_section.tab-pane.fade[role="tabpanel"]
-          form
-            .col-lg-6.col-md-6.col-sm-12.col-xs-12
-              .form-group
-                  label.control-label Correspondence
-                  .input-group.select_in_gdrive
-                      input#file_correspondence.form-control[type="text"]
-                      span.input-group-btn
-                          button#btn_correspondence.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                              span.margin-md-left.blue Select in Google Drive
-              .form-group
-                  label.control-label Proposal
-                  .input-group.select_in_gdrive
-                      input#file_proposal.form-control[type="text"]
-                      span.input-group-btn
-                          button#btn_proposal.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                              span.margin-md-left.blue Select in Google Drive
-              .form-group
-                  label.control-label Invoice
-                  .input-group.select_in_gdrive
-                      input#file_invoice.form-control[type="text"]
-                      span.input-group-btn
-                          button#btn_invoice.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                              span.margin-md-left.blue Select in Google Drive
-            
-            .col-lg-6.col-md-6.col-sm-12.col-xs-12
-              .note
-                h2 Tasks
-                ul.to_do
-                  li 
-                    .field_list.done
-                      .left
-                        input.task_status.flat-icheck[type="checkbox" checked]    
-                      .right
-                        span Received Phase I from seller
-                  li
-                    .field_list
-                      .left
-                        input.task_status.flat-icheck[type="checkbox"]
-                      .right
-                        span Is there a Phase II?
-                  li
-                    .field_list
-                      .left
-                        input.task_status.flat-icheck[type="checkbox"]
-                      .right
-                        span Select and Contract with Engineer
-                  li
-                    .field_list
-                      .left
-                        input.task_status.flat-icheck[type="checkbox"]
-                      .right
-                        span Send Seller's Survey and 'As Built' Survey to Engineer(Sharing Issue)
-                  li
-                    .field_list
-                      .left
-                        input.task_status.flat-icheck[type="checkbox"]
-                      .right
-                        span Completion of Purchaser's Phase I
-                  li 
-                    .field_list
-                      .left
-                        input.task_status.flat-icheck[type="checkbox"]
-                      .right
-                        span Send Purchaser's Phase I to Purchaser's Environmental Consultant(Sharing Issue)
-                  li
-                    .field_list
-                      .left
-                        input.task_status.flat-icheck[type="checkbox"]
-                      .right
-                        span Conference with Purchaser's Environmental Constaultant and Client Purchaser
+      #environmental_section.tab-pane.fade[role="tabpanel"]
+        form
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .form-group
+                label.control-label Correspondence
+                .input-group.select_in_gdrive
+                    input#file_correspondence.form-control[type="text"]
+                    span.input-group-btn
+                        button#btn_correspondence.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+            .form-group
+                label.control-label Proposal
+                .input-group.select_in_gdrive
+                    input#file_proposal.form-control[type="text"]
+                    span.input-group-btn
+                        button#btn_proposal.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+            .form-group
+                label.control-label Invoice
+                .input-group.select_in_gdrive
+                    input#file_invoice.form-control[type="text"]
+                    span.input-group-btn
+                        button#btn_invoice.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+              
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .note
+              h2 Tasks
+              ul.to_do
+                li 
+                  .field_list.done
+                    .left
+                      input.task_status.flat-icheck[type="checkbox" checked]    
+                    .right
+                      span Received Phase I from seller
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Is there a Phase II?
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Select and Contract with Engineer
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Send Seller's Survey and 'As Built' Survey to Engineer(Sharing Issue)
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Completion of Purchaser's Phase I
+                li 
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Send Purchaser's Phase I to Purchaser's Environmental Consultant(Sharing Issue)
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Conference with Purchaser's Environmental Constaultant and Client Purchaser
 
-      #lease_section.tab-pane.fade.active.in[role="tabpanel"]
-
-      div#inspection_title_section.tab-pane.fade[role="tabpanel"]
+      #lease_section.tab-pane.fade[role="tabpanel"]
+        form
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .form-group
+              label.control-label Correspondence
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Lease
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Lease Guaranty
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Lease Abstract
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+              
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .note
+              h2 Tasks
+              ul.to_do
+                li 
+                  .field_list.done
+                    span Comming soon
+                    / .left
+                    /   input.task_status.flat-icheck[type="checkbox" checked]    
+                    / .right
+                    /   span Comming soon
+                
+      #inspection_title_section.tab-pane.fade[role="tabpanel"]
+        form
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .form-group
+              label.control-label Correspondence
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Proposal
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Invoice
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Commitment
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Exceptions
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+              
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .note
+              h2 Tasks
+              ul.to_do
+                li 
+                  .field_list.done
+                    span Comming soon
+                    / .left
+                    /   input.task_status.flat-icheck[type="checkbox" checked]    
+                    / .right
+                    /   span Comming soon
         
-      div#survey_section.tab-pane.fade[role="tabpanel"]
-          
+      #survey_section.tab-pane.fade[role="tabpanel"]
+        form
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .form-group
+              label.control-label Correspondence
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Proposal
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Invoice
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Seller Provided Survey
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Our Survey
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+              
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .note
+              h2 Tasks
+              ul.to_do
+                li 
+                  .field_list.done
+                    span Comming soon
+                    / .left
+                    /   input.task_status.flat-icheck[type="checkbox" checked]    
+                    / .right
+                    /   span Comming soon
 
-      div#inspection_zoning_section.tab-pane.fade[role="tabpanel"]
+      #inspection_zoning_section.tab-pane.fade[role="tabpanel"]
+        form
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .form-group
+              label.control-label Correspondence
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Proposal
+              .input-group.select_in_gdrive
+                  input.form-control[type="text"]
+                  span.input-group-btn
+                    button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                      = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                      span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Invoice
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Preliminary Zoning Report
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+            .form-group
+              label.control-label Final Zoning Report
+              .input-group.select_in_gdrive
+                input.form-control[type="text"]
+                span.input-group-btn
+                  button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                    = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                    span.margin-md-left.blue Select in Google Drive
+              
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .note
+              h2 Tasks
+              ul.to_do
+                li 
+                  .field_list.done
+                    span Comming soon
+                    / .left
+                    /   input.task_status.flat-icheck[type="checkbox" checked]    
+                    / .right
+                    /   span Comming soon
 
 .divider
 button.btn.btn-default Back
