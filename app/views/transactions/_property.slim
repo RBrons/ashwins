@@ -52,9 +52,9 @@
         .margin-lg-top
         .transaction-property-select.form-group
           - if @transaction.prop_owner == 0
-            = transaction_property_form.select :property_id, options_for_select(Property.where('ownership_status = ? and title is not null', @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {}, class: 'form-control'
+            = transaction_property_form.select :property_id, options_for_select(Property.where('ownership_status = ? and title is not null', @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {}, class: 'form-control for-purchase'
           - else
-            = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {}, class: 'form-control'
+            = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {}, class: 'form-control for-sale'
         .transaction-property-image
           - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.cl_image_public_id.nil?
             = cl_image_tag(transaction_property_form.object.property.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
