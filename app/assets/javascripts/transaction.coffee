@@ -140,9 +140,8 @@ $ ->
   
   $(document).on "click", ".main_menu span.manual_delete_property", (e)->
     e.preventDefault()
-    elem = $(this)
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
-    window.location.href = actionurl 
+    window.location.href = actionurl
     
 # Negotiations Step in Sale Wizard
   # - Offer and Acceptance
