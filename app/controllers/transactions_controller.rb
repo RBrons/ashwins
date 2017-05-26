@@ -536,6 +536,26 @@ class TransactionsController < ApplicationController
     common_multi_delete
   end
 
+  def delete_transaction_property
+    tran_prop_id = params[:property_id]
+    @transaction_main = TransactionMain.find(params[:main_id])
+
+    if params[:type].blank? || params[:type] == 'sale'
+      @transaction = @transaction_main.sale
+    else
+      @transaction = @transaction_main.purchase
+    end
+
+    @transaction.transaction_properties.where(property_id: tran_prop_id).destroy_all
+    if @transaction.transaction_properties.count > 0
+      redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+    else
+      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+    end
+
+    
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_transaction
