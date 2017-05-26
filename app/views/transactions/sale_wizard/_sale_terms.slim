@@ -10,13 +10,13 @@
           a#offer_and_acceptance[href="#offer_and_acceptance_section" role="tab" data-toggle="tab" aria-expanded="true"] Offer and Acceptance
           
       li[role="presentation"]
-          a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] Relinquishing Purchaser
-          
-      li[role="presentation"]
           a#letter_of_intent[href="#letter_of_intent_section" role="tab" data-toggle="tab" aria-expanded="false"] Letter of intent
 
       li[role="presentation"]
           a#purchase_sale_agreement[href="#purchase_sale_agreement_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchase Sale Agreement
+      
+      li[role="presentation"]
+          a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] Relinquishing Purchaser
 
       li[role="presentation"]
           a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
@@ -25,10 +25,11 @@
       #offer_and_acceptance_section.tab-pane.fade.active.in[role="tabpanel"]
         ul#offer_list.nav.nav-tabs.bar_tabs[role="tablist"]
           - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
-            li[role="presentation"]
+            li[role="presentation" class=( transaction_property_offer.is_accepted ? 'done' : '' )]
               a[href="#{ '#offer_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"] 
                 = transaction_property_offer.offer_name
                 span.delete_offer.fa.fa-times
+          
           li[role="presentation"]
             a#new_offer[href="#" role="tab" data-toggle="tab" aria-expanded="false" data-tran-prop-id="#{@transaction_property.id}"] 
               i.fa.fa-plus
@@ -37,68 +38,95 @@
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
             .tab-pane.fade.active.in[role="tabpanel" id="#{'offer_' + transaction_property_offer.id.to_s}"]
               .col-md-12.col-xs-12
-                form
-                  input.cur_offer_id[type="hidden" value="#{transaction_property_offer.id}"]
-                  .row
+                input.cur_offer_id[type="hidden" value="#{transaction_property_offer.id}"]
+                
+                .row
+                  - @purchaser = get_transaction_property_offeror(transaction_property_offer)
+                  form.relingquishing_offeror_form[remote="true" action="#{contact_path(@purchaser)}"]
                     .col-md-4.form-group
-                        label.control-label Relinquishing Offeror
-                        input.offeror_name.form-control[type="text" required="required" value="#{transaction_property_offer.offer_name}"]
-                  .row
-                    .col-md-12
-                        .property-price.col-md-3
-                            h4 Asking
-                            h1.green.margin-lg-top
-                              = number_to_currency(@transaction.transaction_properties.where(property_id: params[:cur_property]).first.sale_price)
-                        .col-md-9
-                          - (0..2).each do |index|
-                            = image_tag('sale_house.jpg', :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
-                  .row
-                    .col-md-12.margin-lg-top.form-group
-                      button.initial_log_counteroffer.btn.btn-default[style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Log Initial Counter Offer
-                      button.ask_accepted.btn.btn-default.border-red.red[style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Ask Accepted
-                      input.last_counteroffer_price[type="hidden" value="#{get_recent_counteroffer_price(transaction_property_offer)}"]
+                      input[type="hidden" name="contact[role]" value="Counter-Party"]
+                      input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+                      input[type="hidden" name="from_relinquishing_offeror" value="#{transaction_property_offer.id}"]
                       
-                      table.counteroffer_history.table.margin-lg-top
-                        tbody
-                          - transaction_property_offer.counteroffers.order(updated_at: :asc).each do |counteroffer|
-                            tr[data-counteroffer-id="#{counteroffer.id}"]
-                              td[width="150"]
-                                span.editable-date[data-name="offered_date" data-type="combodate" data-value="#{counteroffer.offered_date}" data-format="YYYY-MM-DD" data-viewformat="MM/DD/YYYY" data-url="#{counteroffer_path(counteroffer.id)}"]
-                              td[width="300"] 
-                                span = counteroffer.offer_type
-                              td[width="300"]
-                                span.green.editable-currency[data-name="offered_price" data-type="text" data-value="#{number_to_currency(counteroffer.offered_price)}" data-url="#{counteroffer_path(counteroffer.id)}"]
-                              td
-                                - if !transaction_property_offer.is_accepted
-                                  a.delete_counteroffer.btn.btn-danger.btn-xs
-                                    i.fa.fa-trash
-                          tr.last_row
+                      h2.heading_without_padding_large Relinquishing Offeror
+                      .form-group
+                        .heading_blue.radio-inline
+                          span
+                            input.contact_is_company_false.form-control.flat-icheck.radiobuttons[type="radio" value="false" name="contact[is_company]" checked=( @purchaser.is_company ? false : 'checked' ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                          span.margin-md-left Individual
+                        .heading_blue.radio-inline
+                          span.margin-md-left
+                            input.contact_is_company_true.form-control.flat-icheck.radiobuttons[type="radio" value="true" name="contact[is_company]" checked=( @purchaser.is_company ? 'checked' : false ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )] 
+                          span.margin-md-left Entity
+                      
+                      .company-fields-wrapper[style="#{'display: none' if !@purchaser.is_company}"]
+                        .form-group
+                          label Company Name
+                          input.form-control[type="text" name="contact[company_name]" value="#{@purchaser.try(:company_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                      .individual-fields-wrapper[style="#{'display: none' if @purchaser.is_company}"]
+                        .form-group
+                          label First Name
+                          input.form-control[type="text" name="contact[first_name]" value="#{@purchaser.try(:first_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                        .form-group
+                          label Last Name
+                          input.form-control[type="text" name="contact[last_name]" value="#{@purchaser.try(:last_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                          
+                .row
+                  .col-md-12
+                      .property-price.col-md-3
+                          h4 Asking
+                          h1.green.margin-lg-top
+                            = number_to_currency(@transaction.transaction_properties.where(property_id: params[:cur_property]).first.sale_price)
+                      .col-md-9
+                        - (0..2).each do |index|
+                          = image_tag('sale_house.jpg', :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
+                .row
+                  .col-md-12.margin-lg-top.form-group
+                    button.initial_log_counteroffer.btn.btn-default[disabled="#{ @transaction_property.transaction_property_offers.where(is_accepted: true).count >= 1 ? 'disabled' : false }" style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Log Initial Counter Offer
+                    button.ask_accepted.btn.btn-default.border-red.red[disabled="#{ @transaction_property.transaction_property_offers.where(is_accepted: true).count >= 1 ? 'disabled' : false }" style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Ask Accepted
+                    input.last_counteroffer_price[type="hidden" value="#{get_recent_counteroffer_price(transaction_property_offer)}"]
+                    
+                    table.counteroffer_history.table.margin-lg-top
+                      tbody
+                        - transaction_property_offer.counteroffers.order(updated_at: :asc).each do |counteroffer|
+                          tr[data-counteroffer-id="#{counteroffer.id}"]
+                            td[width="150"]
+                              span.editable-date[data-name="offered_date" data-type="combodate" data-value="#{counteroffer.offered_date}" data-format="YYYY-MM-DD" data-viewformat="MM/DD/YYYY" data-url="#{counteroffer_path(counteroffer.id)}"]
+                            td[width="300"] 
+                              span = counteroffer.offer_type
+                            td[width="300"]
+                              span.green.editable-currency[data-name="offered_price" data-type="text" data-value="#{number_to_currency(counteroffer.offered_price)}" data-url="#{counteroffer_path(counteroffer.id)}"]
                             td
-                            td
-                            td
-                            td
-                  .row.counteroffer_action_buttons_wrapper[style="#{'display: none' if transaction_property_offer.counteroffers.count == 0 && !transaction_property_offer.is_accepted }"]
-                    .col-md-4.col-xs-12.form-group
-                      - last_counteroffer = transaction_property_offer.counteroffers.last
-                      input.last_counteroffer[type="hidden" value="#{last_counteroffer.try(:offer_type)}"]
-                      - if !transaction_property_offer.is_accepted
-                        - if last_counteroffer.try(:offered_date) && last_counteroffer.try(:offered_price)
-                          button.add_counteroffer.btn.btn-default.red.border-red #{ last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Client Counter' : 'Buyer Counter' }
-                        - else
-                          button.add_counteroffer.btn.btn-default.red.border-red[disabled] #{ last_counteroffer.present? ? (last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Buyer Counter' : 'Client Counter') : 'Buyer Counter' }
-                        = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Counter Accepted' : 'Accept Counter', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
+                              - if !transaction_property_offer.is_accepted
+                                a.delete_counteroffer.btn.btn-danger.btn-xs
+                                  i.fa.fa-trash
+                        tr.last_row
+                          td
+                          td
+                          td
+                          td
+                .row.counteroffer_action_buttons_wrapper[style="#{'display: none' if transaction_property_offer.counteroffers.count == 0 && !transaction_property_offer.is_accepted }"]
+                  .col-md-4.col-xs-12.form-group
+                    - last_counteroffer = transaction_property_offer.counteroffers.last
+                    input.last_counteroffer[type="hidden" value="#{last_counteroffer.try(:offer_type)}"]
+                    - if !transaction_property_offer.is_accepted
+                      - if last_counteroffer.try(:offered_date) && last_counteroffer.try(:offered_price)
+                        button.add_counteroffer.btn.btn-default.red.border-red #{ last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Client Counter' : 'Buyer Counter' }
                       - else
-                        -if transaction_property_offer.is_ask_accepted?
-                          = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
-                        - else
-                          = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Client\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted 
+                        button.add_counteroffer.btn.btn-default.red.border-red[disabled] #{ last_counteroffer.present? ? (last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Buyer Counter' : 'Client Counter') : 'Buyer Counter' }
+                      = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Counter Accepted' : 'Accept Counter', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
+                    - else
+                      -if transaction_property_offer.is_ask_accepted?
+                        = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
+                      - else
+                        = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Client\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted 
               
       #relinquishing_purchaser_section.tab-pane.fade[role="tabpanel"]
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .clearfix.margin-sm-top
-          h2.heading_without_padding_large
-              = "Relinquishing Purchaser".html_safe
-          = link_to @transaction_property.transaction_property_offers.where(is_accepted: true).order(updated_at: :asc).first.try(:offer_name), "", id: "relinquishing_purchaser_name"
+          h2.heading_without_padding_large = "Relinquishing Purchaser".html_safe
+          - @relinquishing_purchaser = get_relinquishing_property_purchaser(@transaction_property.property_id, @transaction_property.transaction_id)
+          input#relinquishing_purchaser_name.form-control[type="text" value="#{ (@relinquishing_purchaser.try(:is_company) ? @relinquishing_purchaser.company_name : @relinquishing_purchaser.try(:first_name).to_s + ' ' + @relinquishing_purchaser.try(:last_name).to_s) }" style="#{ 'display: none' if !@relinquishing_purchaser.present? }" readonly]
           
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
         .col-md-6.col-sm-12.col-xs-12
@@ -409,11 +437,37 @@ button#back_prev_tab.btn.btn-default Back
 /! Offer and Acceptance Template
 #offer_and_acceptance_template[style="display: none"]
   .col-md-12.col-xs-12
-    form
-      .row
+    input.cur_offer_id[type="hidden" value=""]
+    
+    .row
+      form.relingquishing_offeror_form[remote="true" action=""]
         .col-md-4.form-group
-            label.control-label Relinquishing Offeror
-            input.offeror_name.form-control[type="text" required="required"]
+          input[type="hidden" name="contact[role]" value="Counter-Party"]
+          input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+          input.from_relinquishing_offeror[type="hidden" name="from_relinquishing_offeror" value=""]
+          
+          h2.heading_without_padding_large Relinquishing Offeror
+          .form-group
+            .heading_blue.radio-inline
+              span
+                input.contact_is_company_false.form-control.radiobuttons[type="radio" value="false" name="contact[is_company]" checked]
+              span.margin-md-left Individual
+            .heading_blue.radio-inline
+              span.margin-md-left
+                input.contact_is_company_true.form-control.radiobuttons[type="radio" value="true" name="contact[is_company]"] 
+              span.margin-md-left Entity
+          
+          .company-fields-wrapper[style="display: none"]
+            .form-group
+              label Company Name
+              input.form-control[type="text" name="contact[company_name]" value=""]
+          .individual-fields-wrapper
+            .form-group
+              label First Name
+              input.form-control[type="text" name="contact[first_name]" value=""]
+            .form-group
+              label Last Name
+              input.form-control[type="text" name="contact[last_name]" value=""]
       .row
         .col-md-12
             .property-price.col-md-3

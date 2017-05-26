@@ -366,12 +366,13 @@ class TransactionsController < ApplicationController
     else
       @property = Property.find(params[:cur_property])
     end
-
+    
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
-    if ! @transaction_property.transaction_property_offers.present?
-      @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+    if params[:type] == 'sale'
+      if ! @transaction_property.transaction_property_offers.present?
+        @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+      end
     end
-
 
   end
 

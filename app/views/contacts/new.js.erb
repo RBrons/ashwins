@@ -1,9 +1,7 @@
 <% if !@contact.persisted? %>
   $("div#OwnershipFormNewEntity").find(".model-body").find(".OwnershipFormNewEntity").html("<%= j render(:partial => 'form') %>")
-  $("div#accept_counteroffer").find(".model-body").html("<%= j render(:partial => 'form') %>")
 <%else%>
   $("div#OwnershipFormNewEntity").modal('hide')
-  $("div#accept_counteroffer").modal('hide')
   if ($('.entity_owner')[0].checked){
     $('#owner_entity_dropown_selection').html('<input autocomplete="off" id="property_owner_person_id" name="property[owner_person_id]" type="hidden">')
     $('#property_owner_person_id').val('<%= @contact.id %>')
