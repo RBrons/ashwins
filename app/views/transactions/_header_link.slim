@@ -8,7 +8,7 @@ hr
     - persisted = @transaction.persisted?
     - if @transaction.is_a?(TransactionSale)
       
-      .form_wizard.wizard_horizontal
+      #sale_side_wizard.form_wizard.wizard_horizontal
         ul.wizard_steps
           li class=("#{'selected' if params[:sub] == 'parties' || params[:sub].blank? }")
             - disabled = nil
@@ -46,7 +46,7 @@ hr
       
     - else @transaction.is_a?(TransactionPurchase)
     
-      .form_wizard.wizard_horizontal
+      #buy_side_wizard.form_wizard.wizard_horizontal
         ul.wizard_steps
           li class=("#{'selected' if params[:sub] == 'property' || params[:sub].blank?}")
             - disabled = nil

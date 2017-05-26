@@ -53,20 +53,6 @@ class XhrController < ApplicationController
     render :json => @groups.to_json
   end
 
-  def manual_delete_transaction_property
-    tran_prop_id = params[:property_id]
-    @transaction_main = TransactionMain.find(params[:main_id])
-
-    if params[:type].blank? || params[:type] == 'sale'
-      @transaction = @transaction_main.sale
-    else
-      @transaction = @transaction_main.purchase
-    end
-
-    @transaction.transaction_properties.where(property_id: tran_prop_id).destroy_all
-    # render json: true
-  end
-
   def owns_list
     if request.xhr?
       @entity = Entity.where(id: params[:id]).first
