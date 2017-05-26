@@ -272,9 +272,10 @@ Rails.application.routes.draw do
     end
     collection do
       post :multi_delete
+      get :delete_transaction_property
     end
   end
-
+  
   resources :transaction_sales, path: :transactions
   resources :transaction_purchases, path: :transactions
 

@@ -141,20 +141,9 @@ $ ->
   $(document).on "click", ".main_menu span.manual_delete_property", (e)->
     e.preventDefault()
     elem = $(this)
-    actionurl = '/xhr/manual_delete_transaction_property'
-    $.ajax
-      url: actionurl
-      type: 'POST'
-      dataType: 'html'
-      data: {main_id: $(this).data('tran-mainid'), property_id: $(this).data('tran-propid'), type: $(this).data('tran-type')}
-      success: (data) ->
-        $('#sidebar-menu').html(data)
-        # if(data)
-        #   elem.parent().parent().remove()
-        # $.notify "Success!", "success"
-        # else
-        #   $.notify "Failed!", "error"
-          
+    actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
+    window.location.href = actionurl 
+    
 # Negotiations Step in Sale Wizard
   # - Offer and Acceptance
   $(document).on 'click', '.nav-tabs #new_offer', (e)->
