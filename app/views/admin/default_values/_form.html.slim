@@ -1,0 +1,27 @@
+h4 Note: For Dates use the format DD-MM-YYYY
+
+= form_for [:admin, @default_value] do |f|
+  - if @default_value.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@default_value.errors.count, "error")} prohibited this default_value from being saved:"
+      ul
+        - @default_value.errors.full_messages.each do |message|
+          li = message
+
+  .form-group.required
+      = f.label "Entity/Table", class: "control-label"
+      = f.select :entity_name, options_for_select(["Property"], @default_value.entity_name)
+
+  .form-group.required
+      = f.label "Attribute/Field Name", class: "control-label"
+      = f.select :attribute_name, options_for_select(Property.column_names.map(&:camelize), @default_value.attribute_name)
+
+  .form-group.required
+      = f.label "Attribute/Field Value", class: "control-label"
+      = f.text_field :value, class: "form-control"
+
+  .form-group.required
+      = f.label "Type", class: "control-label"
+      = f.select :value_type, options_for_select(["Amount", "Date", "String"], @default_value.value_type)
+
+  .actions = f.submit

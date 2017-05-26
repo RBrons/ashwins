@@ -4,7 +4,7 @@
 $ ->
   $(document).on "click", "img[id='comma']", ->
     toggle_comma("on")
-  
+
   $(document).on "click", "img[id='comma-grey']", ->
     toggle_comma("off")
 
@@ -14,7 +14,7 @@ $ ->
       $("#comma").show()
       $("#comma-grey").hide()
       $("#entity_has_comma").val(true)
-    else 
+    else
       $("#comma").hide()
       $("#comma-grey").show()
       $("#entity_has_comma").val(false)
@@ -42,13 +42,13 @@ $ ->
       toggle_comma("on")
     if name
       name = name.trim()
-      $('#edit-title-llc').html(name+comma_str+legal_ending_str)    
+      $('#edit-title-llc').html(name+comma_str+legal_ending_str)
     if (typeof xhr) == "object" && xhr.redirect != undefined
-      window.location.href = xhr.redirect+"?just_created="+xhr.just_created      
+      window.location.href = xhr.redirect+"?just_created="+xhr.just_created
     else
       tab_ = $("#int_action").val()
       if tab_
-        str_ = " / "        
+        str_ = " / "
         $("#int-action-llc").html(str_ + '<a href="#">'+tab_+'</a>')
       $.scrollTo(0)
-      $.unblockUI()      
+      $.unblockUI()

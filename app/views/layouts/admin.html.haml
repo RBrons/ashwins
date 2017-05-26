@@ -46,6 +46,10 @@
               %span
                 %span
                   = link_to 'Purchase Transactions', admin_transactions_path(klazz: 'TransactionPurchase'), class: "btn btn-sm #{controller_name == 'transactions' && (params[:klazz] == 'TransactionPurchase') ? 'btn-primary' : 'btn-default'}"
+              %span
+                %span
+                  = link_to 'Default Values', admin_default_values_path, class: "btn btn-sm #{controller_name == 'default_values' ? 'btn-primary' : 'btn-default'}"
+
         %div.col-md-1
     .container-fluid
       %div.row

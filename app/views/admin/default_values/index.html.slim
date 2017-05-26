@@ -1,0 +1,34 @@
+h1 Default Values
+
+= link_to 'New Default value', new_admin_default_value_path, class: "#{edit_xs}"
+
+h4 Note: For Dates use the format DD-MM-YYYY
+
+table#data_table
+  thead
+    tr
+      th
+        | Table/Entity
+      th
+        | Attribute/Field
+      th
+        | Value
+      th
+        | Type
+      th
+        | Actions
+  tbody
+    - @default_values.each do |default_value|
+      tr
+        td
+          = default_value.entity_name
+        td
+          = default_value.attribute_name
+        td
+          = default_value.value
+        td
+          = default_value.value_type
+        td
+          = link_to 'Edit',  edit_admin_default_value_path(default_value), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', [:admin, default_value], method: :delete, class: "#{delete_xs} entity-page-xhr"
+
