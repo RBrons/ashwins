@@ -493,6 +493,11 @@ $ ->
           loi_description = data.offer_name + ' is purchasing ' + $(document).find('#negotiated_property').val() + ' for ' + selected_offer_tab.find('.last_counteroffer_price').val()
           $(document).find('#loi_description').text(loi_description)
           $(document).find('#loi_description').show()
+          
+          accepted_price = Number(selected_offer_tab.find('.last_counteroffer_price').val().replace(/[^0-9\.]+/g,""))
+          current_rent = Number($(document).find('#relinquishing_property_current_rent').val().replace(/[^0-9\.]+/g,""))
+          console.log (current_rent/accepted_price).toFixed(2)
+          $(document).find('#relinquishing_property_rat_race').val((current_rent/accepted_price).toFixed(2))
 
           $('#negotions_tab a#letter_of_intent').click()
         else

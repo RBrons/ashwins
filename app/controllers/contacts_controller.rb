@@ -24,7 +24,7 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.save
         if params[:from_relinquishing_offeror].present?
-          TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: @contact.first_name)
+          TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.first_name} #{@contact.last_name}")
         end
         format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
@@ -57,10 +57,8 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.save
         if params[:from_relinquishing_offeror].present?
-          if @contact.is_company
-            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: @contact.company_name)
-          else
-            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: @contact.first_name)
+          if params[:from_relinquishing_offeror].present?
+            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.first_name} #{@contact.last_name}")
           end
         end
         format.html { redirect_to contacts_path }

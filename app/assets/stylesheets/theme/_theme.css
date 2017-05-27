@@ -1639,7 +1639,8 @@ ul.msg_list li a .message {
 }
 
 ul.to_do {
-    padding: 0
+    padding: 0;
+    margin: 0
 }
 ul.to_do li {
     background: transparent;
