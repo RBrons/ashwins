@@ -137,6 +137,64 @@
           span = @property.title + " for "
           span = number_to_currency(get_sale_price(@transaction_property)) 
         .col-md-6.col-sm-12.col-xs-12
+          
+          .form-group
+              label.control-lable Sale Price
+              .input-group
+                  span.input-group-btn
+                      button.btn.btn-default[type="button"] $
+                  input#relinquishing_property_sale_price.form-control.input-mask-currency[type="text" value="#{get_sale_price(@transaction_property)}"]
+          .form-group
+              label.control-lable Current Annual Rent
+              .input-group
+                  span.input-group-btn
+                      button.btn.btn-default[type="button"] $
+                  input.form-control.input-mask-currency[type="text" value="#{@property.current_rent}"]
+          .form-group
+              label.control-lable Cap Rate
+              .input-group
+                input.form-control[type="text" readonly value="#{ number_with_precision(@property.current_rent / get_sale_price(@transaction_property).to_f, precision: 2).to_s if get_sale_price(@transaction_property).to_f != 0 }"]
+                span.input-group-btn
+                  button.btn.btn-default[type="button"] %
+          .form-group
+              label.control-lable First Deposit Due Date
+              p.no-margin Number of Days After Date of Purchase Sale Agreement
+              input.form-control.width-field-sm[type="text" value=""]
+          .form-group
+              label.control-lable Amount of First Deposit
+              .input-group
+                span.input-group-btn
+                    button.btn.btn-default[type="button"] $
+                input.form-control.input-mask-currency[type="text"]
+          .form-group
+              label.control-lable Number of Days in Inspection Period
+              input.form-control.width-field-sm[type="text" value=""]
+          .form-group
+            .field_list
+              .left
+                input#enable-2nd-deposit.flat-icheck[type="checkbox"] 
+                .vertical-line
+              .right
+                .form-group
+                  label.control-label &nbsp;2nd Deposit Due Date
+                  p.no-margin Number of Days After Inspection Period(If applicable) 
+                  input.form-control.width-field-sm[type="text" value=""]
+                .form-group
+                  label.control-label 2nd Deposit Amount
+                  .input-group
+                    span.input-group-btn
+                      button.btn.btn-default[type="button"] $
+                    input.form-control.input-mask-currency[type="text"] 
+
+          .form-group
+            label.control-label Approximate Date of Closing
+            p.no-margin Number of Days After insepction Period
+            input.form-control.width-field-sm[type="text" value=""]
+              
+          .form-group
+            label.control-label Date of Closing Note
+            input.form-control[type="text"]
+
           .form-group
               label.control-label Letter of intent
               .input-group.select_in_gdrive
@@ -157,66 +215,6 @@
               .checkbox-inline
                   input.flat-icheck[type="checkbox" name=""]
                       span.margin-sm-left Executed
-          .form-group
-              label.control-lable Sale Price
-              .input-group
-                  span.input-group-btn
-                      button.btn.btn-default[type="button"] $
-                  input#relinquishing_property_sale_price.form-control.input-mask-currency[type="text" value="#{get_sale_price(@transaction_property)}"]
-          .form-group
-              label.control-lable Current Annual Rent
-              .input-group
-                  span.input-group-btn
-                      button.btn.btn-default[type="button"] $
-                  input.form-control.input-mask-currency[type="text" value="#{@property.current_rent}"]
-          .form-group
-              label.control-lable Cap Rate
-              .input-group
-                input.form-control[type="text" value="#{get_sale_price(@transaction_property).to_f / @property.current_rent if @property.current_rent != 0 }"]
-                span.input-group-btn
-                      button.btn.btn-default[type="button"] %
-          .form-group
-              label.control-lable First Deposit Due Date
-              p.no-margin Number of Days After Date of Purchase Sale Agreement
-              select.form-control.select_auto_block
-                  option[value=""] 3
-          .form-group
-              label.control-lable Amount of First Deposit
-              .input-group
-                span.input-group-btn
-                    button.btn.btn-default[type="button"] $
-                input.form-control.input-mask-currency[type="text"]
-          .form-group
-              label.control-lable Number of Days in Inspection Period
-              select.form-control.select_auto_block
-                  option[value=""] 3
-          .form-group
-            .field_list
-              .left
-                input#enable-2nd-deposit.flat-icheck[type="checkbox"] 
-                .vertical-line
-              .right
-                .form-group
-                  label.control-label &nbsp;2nd Deposit Due Date
-                  p.no-margin Number of Days After Inspection Period(If applicable) 
-                  select.form-control.select_auto_block
-                    option[value=""] 3
-                .form-group
-                  label.control-label 2nd Deposit Amount
-                  .input-group
-                    span.input-group-btn
-                      button.btn.btn-default[type="button"] $
-                    input.form-control.input-mask-currency[type="text"] 
-
-          .form-group
-            label.control-label Approximate Date of Closing
-            p.no-margin Number of Days After insepction Period
-            select.form-control.select_auto_block
-              option[value=""] 3
-              
-          .form-group
-            label.control-label Date of Closing Note
-            input.form-control[type="text"]
 
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .note
@@ -227,19 +225,13 @@
                   .left
                     input.task_status.flat-icheck[type="checkbox"]    
                   .right
-                    span Received Terms from Counter Party
+                    span LOI Drafted?
               li
                 .field_list
                   .left
                     input.task_status.flat-icheck[type="checkbox"]
                   .right
-                    span PSA Drafted?
-              li
-                .field_list
-                  .left
-                    input.task_status.flat-icheck[type="checkbox"]
-                  .right
-                    span PSA Sent to or Received from Counter-Party?
+                    span LOI Sent to or Received from Counter-Party
               li
                 .field_list
                   .left
