@@ -61,6 +61,19 @@ module TransactionsHelper
             return false
         end
     end
+
+    def get_sale_price(transaction_property)
+        accepted_offer = transaction_property.transaction_property_offers.where(is_accepted: true).first
+        if accepted_offer.present?
+            if accepted_offer.accepted_counteroffer_id == 0
+                return transaction_property.sale_price
+            else
+                return Counteroffer.find(accepted_offer.accepted_counteroffer_id).try(:offered_price)
+            end
+        else
+            return ''
+        end
+    end
     
     def is_property_closed?(transaction_id, property_id)
       retVal = false
