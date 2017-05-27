@@ -139,85 +139,87 @@
           span = @property.title + " for "
           span = number_to_currency(get_sale_price(@transaction_property)) 
         .col-md-6.col-sm-12.col-xs-12
-          
-          .form-group
-              label.control-lable Sale Price
-              .input-group
-                  span.input-group-btn
-                      button.btn.btn-default[type="button"] $
-                  input#relinquishing_property_sale_price.form-control.input-mask-currency[type="text" readonly value="#{get_sale_price(@transaction_property)}"]
-          .form-group
-              label.control-lable Current Annual Rent
-              .input-group
-                  span.input-group-btn
-                      button.btn.btn-default[type="button"] $
-                  input#relinquishing_property_current_rent.form-control.input-mask-currency[type="text" readonly value="#{@property.current_rent}"]
-          .form-group
-              label.control-lable RAT RACE
-              .input-group
-                input#relinquishing_property_rat_race.form-control[type="text" readonly value="#{ number_with_precision(@property.current_rent / get_sale_price(@transaction_property).to_f, precision: 2).to_s if get_sale_price(@transaction_property).to_f != 0 }"]
-                span.input-group-btn
-                  button.btn.btn-default[type="button"] %
-          .form-group
-              label.control-lable First Deposit Due Date
-              p.no-margin Number of Days After Date of Purchase Sale Agreement
-              input.form-control.width-field-sm[type="text" value=""]
-          .form-group
-              label.control-lable Amount of First Deposit
-              .input-group
-                span.input-group-btn
-                    button.btn.btn-default[type="button"] $
-                input.form-control.input-mask-currency[type="text"]
-          .form-group
-              label.control-lable Number of Days in Inspection Period
-              input.form-control.width-field-sm[type="text" value=""]
-          .form-group
-            .field_list
-              .left
-                input#enable-2nd-deposit.flat-icheck[type="checkbox"] 
-                .vertical-line
-              .right
-                .form-group
-                  label.control-label &nbsp;2nd Deposit Due Date
-                  p.no-margin Number of Days After Inspection Period(If applicable) 
+          = nested_form_for(@transaction, as: :transaction, remote: true, :html => {:'data-type' => 'json', :id => 'loi_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type])) do |f|
+            = f.fields_for :transaction_term do |transaction_term_form|
+              .form-group
+                  label.control-lable Sale Price
+                  .input-group
+                      span.input-group-btn
+                          button.btn.btn-default[type="button"] $
+                      = transaction_term_form.text_field :purchase_price, value: get_sale_price(@transaction_property), class: 'form-control input-mask-currency', id: 'relinquishing_property_sale_price', readonly: true
+              .form-group
+                  label.control-lable Current Annual Rent
+                  .input-group
+                      span.input-group-btn
+                          button.btn.btn-default[type="button"] $
+                      = transaction_term_form.text_field :current_annual_rent, value: @property.current_rent, class: 'form-control input-mask-currency', id: 'relinquishing_property_current_rent', readonly: true
+              .form-group
+                  label.control-lable RAT RACE
+                  .input-group
+                    = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
+                    span.input-group-btn
+                      button.btn.btn-default[type="button"] %
+              .form-group
+                  label.control-lable First Deposit Due Date
+                  p.no-margin Number of Days After Date of Purchase Sale Agreement
                   input.form-control.width-field-sm[type="text" value=""]
-                .form-group
-                  label.control-label 2nd Deposit Amount
+              .form-group
+                  label.control-lable Amount of First Deposit
                   .input-group
                     span.input-group-btn
-                      button.btn.btn-default[type="button"] $
-                    input.form-control.input-mask-currency[type="text"] 
-
-          .form-group
-            label.control-label Approximate Date of Closing
-            p.no-margin Number of Days After insepction Period
-            input.form-control.width-field-sm[type="text" value=""]
+                        button.btn.btn-default[type="button"] $
+                    = transaction_term_form.text_field :first_deposit, class: 'form-control input-mask-currency'
+              .form-group
+                  label.control-lable Number of Days in Inspection Period
+                  = transaction_term_form.text_field :inspection_period_days, class: 'form-control width-field-sm'
+              .form-group
+                .field_list
+                  .left
+                    input#enable-2nd-deposit.flat-icheck[type="checkbox"] 
+                    .vertical-line
+                  .right
+                    .form-group
+                      label.control-label &nbsp;2nd Deposit Due Date
+                      p.no-margin Number of Days After Inspection Period(If applicable) 
+                      input.form-control.width-field-sm[type="text" value=""]
+                    .form-group
+                      label.control-label 2nd Deposit Amount
+                      .input-group
+                        span.input-group-btn
+                          button.btn.btn-default[type="button"] $
+                        = transaction_term_form.text_field :second_deposit_amount, class: 'form-control input-mask-currency'
               
-          .form-group
-            label.control-label Date of Closing Note
-            input.form-control[type="text"]
-
-          .form-group
-              label.control-label Letter of intent
-              .input-group.select_in_gdrive
-                  input#file_letter_of_intent.form-control[type="text"]
-                  span.input-group-btn
-                      button#btn_letter_of_intent.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                          = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                          span.margin-md-left.blue Select in Google Drive
-              .checkbox-inline
-                  input.flat-icheck[type="checkbox" name=""] 
-                      span.margin-sm-left Directory
-              .checkbox-inline
-                  input.flat-icheck[type="checkbox" name="" checked]
-                      span.margin-sm-left Draft                            
-              .checkbox-inline
-                  input.flat-icheck[type="checkbox" name=""]
-                      span.margin-sm-left Executable
-              .checkbox-inline
-                  input.flat-icheck[type="checkbox" name=""]
-                      span.margin-sm-left Executed
-
+              .form-group
+                label.control-label Approximate Date of Closing
+                p.no-margin Number of Days After insepction Period
+                input.form-control.width-field-sm[type="text" value=""]
+                  
+              .form-group
+                label.control-label Date of Closing Note
+                = transaction_term_form.text_field :closing_date_note, class: 'form-control'
+                
+              .form-group
+                  label.control-label Letter of intent
+                  .input-group.select_in_gdrive
+                      input#file_letter_of_intent.form-control[type="text"]
+                      span.input-group-btn
+                          button#btn_letter_of_intent.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                              span.margin-md-left.blue Select in Google Drive
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""] 
+                          span.margin-sm-left Directory
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name="" checked]
+                          span.margin-sm-left Draft                            
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""]
+                          span.margin-sm-left Executable
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""]
+                          span.margin-sm-left Executed
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
+        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .note
             h2 Tasks
