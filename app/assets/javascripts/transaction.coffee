@@ -493,7 +493,7 @@ $ ->
           loi_description = data.offer_name + ' is purchasing ' + $(document).find('#negotiated_property').val() + ' for ' + selected_offer_tab.find('.last_counteroffer_price').val()
           $(document).find('#loi_description').text(loi_description)
           $(document).find('#loi_description').show()
-          
+
           accepted_price = Number(selected_offer_tab.find('.last_counteroffer_price').val().replace(/[^0-9\.]+/g,""))
           current_rent = Number($(document).find('#relinquishing_property_current_rent').val().replace(/[^0-9\.]+/g,""))
           console.log (current_rent/accepted_price).toFixed(2)
@@ -536,9 +536,25 @@ $ ->
     $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', false)
     $(this).parents(".transaction-property-calculation").find("input[name*='sale_price']").prop('readonly', true)
 
+    radioBox = $(this).parents(".transaction-property-calculation").find(".radio-box")
+    capBox = $(this).parents(".transaction-property-calculation").find(".cap-rate-box")
+    priceBox = $(this).parents(".transaction-property-calculation").find(".price-box")
+
+    capBox.insertAfter(radioBox)
+    capBox.find('label').text('Propose a Cap Rate')
+    priceBox.find('label').text('This will result in an Asking Price of')
+
   $(document).on 'ifChecked', '.radio_edit_mode_price', ->
     $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', true)
     $(this).parents(".transaction-property-calculation").find("input[name*='sale_price']").prop('readonly', false)
+
+    radioBox = $(this).parents(".transaction-property-calculation").find(".radio-box")
+    capBox = $(this).parents(".transaction-property-calculation").find(".cap-rate-box")
+    priceBox = $(this).parents(".transaction-property-calculation").find(".price-box")
+
+    priceBox.insertAfter(radioBox)
+    priceBox.find('label').text('Propose an Asking Price')
+    capBox.find('label').text('This will result in a Cap Rate of')
 
   $(document).on 'keyup', ".transaction-property-calculation input[name*='cap_rate']", (e)->
     currentRent = $(this).parents('.fields').find('.transaction-property-calculation-readonly .current-rent').val().replace(/\,/g, '')
