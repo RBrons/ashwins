@@ -489,7 +489,7 @@ $ ->
           $(document).find('#relinquishing_purchaser_name').val(data.offer_name)
                                                            .show()
           $(document).find('#relinquishing_property_sale_price').val(selected_offer_tab.find('.last_counteroffer_price').val())
-          
+
           loi_description = data.offer_name + ' is purchasing ' + $(document).find('#negotiated_property').val() + ' for ' + selected_offer_tab.find('.last_counteroffer_price').val()
           $(document).find('#loi_description').text(loi_description)
           $(document).find('#loi_description').show()
@@ -550,7 +550,7 @@ $ ->
     currentRent = $(this).parents('.fields').find('.transaction-property-calculation-readonly .current-rent').val().replace(/\,/g, '')
     currentPrice = $(this).val().replace(/\,/g, '')
 
-    $(this).parents('.transaction-property-calculation').find("input[name*='cap_rate']").val(parseFloat(currentPrice) / parseFloat(currentRent))
+    $(this).parents('.transaction-property-calculation').find("input[name*='cap_rate']").val(parseFloat(currentRent) / parseFloat(currentPrice) * 100)
 
 #  $(document).on 'change', '.transaction-property-select select.for-purchase', (e)->
 #    currentRent = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-rent")
