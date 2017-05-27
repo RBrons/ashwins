@@ -16,8 +16,9 @@
       = transaction_property_form.hidden_field(:is_sale, :value => params[:type] == 'sale' ? 'true' : 'false')
       - if transaction_property_form.object.closed?
         .margin-lg-top
-        .transaction-property-select.form-group
-          = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {disabled: 'disabled'}, class: 'form-control'
+        .transaction-property-select.form-group.center
+          h3 = transaction_property_form.object.property.name
+          / = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {disabled: 'disabled'}, class: 'form-control'
         .transaction-property-calculation-readonly
           .form-group.center
             label Current Rent
@@ -70,11 +71,13 @@
           = transaction_property_form.link_to_remove '⊗', class: 'pull-right'
           .clearfix
         .margin-lg-top
-        .transaction-property-select.form-group
-          - if @transaction.prop_owner == 0
-            = transaction_property_form.select :property_id, options_for_select(Property.where('ownership_status = ? and title is not null', @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-purchase'
-          - else
-            = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-sale'
+        .transaction-property-select.form-group.center
+          h3 = transaction_property_form.object.property.name
+          = transaction_property_form.hidden_field :property_id
+          / - if @transaction.prop_owner == 0
+            / = transaction_property_form.select :property_id, options_for_select(Property.where('ownership_status = ? and title is not null', @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-purchase'
+          / - else
+            / = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-sale'
         .transaction-property-calculation-readonly
           .form-group.center
             label Current Rent
@@ -112,12 +115,12 @@
           .form-group.center
             .heading_blue.radio-inline
               span
-                input type='radio' name='edit_mode' value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
-              span.margin-md-left Edit Cap Rate
+                input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
+              span.margin-md-left Input Cap Rate
             .heading_blue.radio-inline
               span
-                input type='radio' name='edit_mode' value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
-              span.margin-md-left Edit Price
+                input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
+              span.margin-md-left Input Price
           .form-group.center
             label Propose a Cap Rate
             .input-group

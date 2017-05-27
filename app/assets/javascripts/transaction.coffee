@@ -144,7 +144,7 @@ $ ->
     if $(this).parent().parent().hasClass('in-contract')
       if confirm('Please note: Since this property is in Contract, if Purchaser is really breaking contract, you may have various legal remedies.') == false
         return
-    
+
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
     window.location.href = actionurl
 
@@ -175,7 +175,7 @@ $ ->
           selected_offer_tab.find('.contact_is_company_true').iCheck
             checkboxClass: 'icheckbox_flat-blue'
             radioClass: 'iradio_flat-blue'
-            
+
           selected_offer_tab.find('input.cur_offer_id').val(data.offer_id)
           selected_offer_tab.find('.from_relinquishing_offeror').val(data.offer_id)
           selected_offer_tab.find('.relingquishing_offeror_form').attr('action', '/contacts/' + data.offeror_contact_id)
@@ -185,7 +185,7 @@ $ ->
             selected_offer_tab.find('.ask_accepted').prop('disabled', 'disabled')
 
           $.notify "Successfully added", "success"
-          
+
         else
           $.notify "Failed", "error"
 
@@ -210,7 +210,7 @@ $ ->
   $(document).on 'ifChecked', '.contact_is_company_false', ->
     selected_offer_tab.find('.company-fields-wrapper').hide()
     selected_offer_tab.find('.company-fields-wrapper').find('input').val('')
-    
+
     selected_offer_tab.find('.individual-fields-wrapper').show()
     selected_offer_tab.find('.individual-fields-wrapper').find('input').val('')
 
@@ -220,7 +220,7 @@ $ ->
 
     selected_offer_tab.find('.individual-fields-wrapper').hide()
     selected_offer_tab.find('.individual-fields-wrapper').find('input').val('')
-    
+
 
   # - Taks list on LOI
   $(document).on 'ifChanged', '#letter_of_intent_section .to_do .field_list .task_status', (e)->
@@ -466,7 +466,7 @@ $ ->
       success: (data) ->
         if data.status
           $.notify "Counter Accepted", "success"
-          
+
           last_counteroffer = last_counteroffer || selected_offer_tab.find('.last_counteroffer').val()
           if last_counteroffer == 'Client'
             selected_offer_tab.find('.btn_accept_counteroffer').text('Client\'s Counter Accepted')
@@ -536,56 +536,56 @@ $ ->
 
     $(this).parents('.transaction-property-calculation').find("input[name*='cap_rate']").val(parseFloat(currentPrice) / parseFloat(currentRent))
 
-  $(document).on 'change', '.transaction-property-select select.for-purchase', (e)->
-    currentRent = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-rent")
-    currentCap = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-cap-rate")
-    currentPrice = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-price")
-    currentImage = $(this).parents('.fields').find(".transaction-property-image img")
+#  $(document).on 'change', '.transaction-property-select select.for-purchase', (e)->
+#    currentRent = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-rent")
+#    currentCap = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-cap-rate")
+#    currentPrice = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-price")
+#    currentImage = $(this).parents('.fields').find(".transaction-property-image img")
 
-    if $(this).val()
-      $.ajax
-        type: "POST"
-        url: "/xhr/get_property_data_for_transaction"
-        data: {id: $(this).val()}
-        dataType: "json"
-        success: (val) ->
-          currentRent.val(val.rent)
-          currentCap.val(val.cap)
-          currentPrice.val(val.price)
-          if val.image
-            currentImage.attr 'src', 'http://res.cloudinary.com/a1031fun-com/image/upload/c_scale/' + val.image
-            currentImage.attr 'alt', val.image
-          else
-            currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
-        error: (e) ->
-          console.log e
-    else
-      currentRent.val(0)
-      currentCap.val(0)
-      currentPrice.val(0)
-      currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
-      currentImage.attr 'alt', "Placeholder"
+#    if $(this).val()
+#      $.ajax
+#        type: "POST"
+#        url: "/xhr/get_property_data_for_transaction"
+#        data: {id: $(this).val()}
+#        dataType: "json"
+#        success: (val) ->
+#          currentRent.val(val.rent)
+#          currentCap.val(val.cap)
+#          currentPrice.val(val.price)
+#          if val.image
+#            currentImage.attr 'src', 'http://res.cloudinary.com/a1031fun-com/image/upload/c_scale/' + val.image
+#            currentImage.attr 'alt', val.image
+#          else
+#            currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+#        error: (e) ->
+#          console.log e
+#    else
+#      currentRent.val(0)
+#      currentCap.val(0)
+#      currentPrice.val(0)
+#      currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+#      currentImage.attr 'alt', "Placeholder"
 
-  $(document).on 'change', '.transaction-property-select select.for-sale', (e)->
-    currentRent = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-rent")
-    currentImage = $(this).parents('.fields').find(".transaction-property-image img")
+#  $(document).on 'change', '.transaction-property-select select.for-sale', (e)->
+#    currentRent = $(this).parents('.fields').find(".transaction-property-calculation-readonly .current-rent")
+#    currentImage = $(this).parents('.fields').find(".transaction-property-image img")
 
-    if $(this).val()
-      $.ajax
-        type: "POST"
-        url: "/xhr/get_property_data_for_transaction"
-        data: {id: $(this).val()}
-        dataType: "json"
-        success: (val) ->
-          currentRent.val(val.rent)
-          if val.image
-            currentImage.attr 'src', 'http://res.cloudinary.com/a1031fun-com/image/upload/c_scale/' + val.image
-            currentImage.attr 'alt', val.image
-          else
-            currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
-        error: (e) ->
-          console.log e
-    else
-      currentRent.val(0)
-      currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
-      currentImage.attr 'alt', "Placeholder"
+#    if $(this).val()
+#      $.ajax
+#        type: "POST"
+#        url: "/xhr/get_property_data_for_transaction"
+#        data: {id: $(this).val()}
+#        dataType: "json"
+#        success: (val) ->
+#          currentRent.val(val.rent)
+#          if val.image
+#            currentImage.attr 'src', 'http://res.cloudinary.com/a1031fun-com/image/upload/c_scale/' + val.image
+#            currentImage.attr 'alt', val.image
+#          else
+#            currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+#        error: (e) ->
+#          console.log e
+#    else
+#      currentRent.val(0)
+#      currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
+#      currentImage.attr 'alt', "Placeholder"
