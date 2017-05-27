@@ -202,6 +202,8 @@ $ ->
           $(anchor.attr('href')).remove()
           anchor.parent().remove()
           $("#offer_list li").children('a').first().click()
+          $(document).find('.initial_log_counteroffer').prop('disabled', false)
+          $(document).find('.ask_accepted').prop('disabled', false)
 
           $.notify "Successfully deleted", "success"
         else
@@ -415,6 +417,7 @@ $ ->
   $(document).on 'click', '.ask_accepted', (e) ->
     e.preventDefault()
     tab_element = $(document).find('#offer_list li.active a')
+    selected_offer_tab.find('.last_counteroffer_price').val(selected_offer_tab.find('.property-price').text())
     accept_counteroffer(tab_element.data('offer-id'))
 
 
@@ -485,13 +488,21 @@ $ ->
                                                   .hide()
           $(document).find('#relinquishing_purchaser_name').val(data.offer_name)
                                                            .show()
-          $('#negotions_tab a#relinquishing_purchaser').click()
+          $(document).find('#relinquishing_property_sale_price').val(selected_offer_tab.find('.last_counteroffer_price').val())
+          
+          loi_description = data.offer_name + ' is purchasing ' + $(document).find('#negotiated_property').val() + ' for ' + selected_offer_tab.find('.last_counteroffer_price').val()
+          $(document).find('#loi_description').text(loi_description)
+          $(document).find('#loi_description').show()
+
+          $('#negotions_tab a#letter_of_intent').click()
         else
           $.notify "Failed", "error"
 
   $(document).on 'click', '#back_prev_tab', (e) ->
     e.preventDefault()
     $('#negotions_tab li.active').prev().find('a').click()
+
+# End of Alex's code
 
   # Show modal for submenu of top menu
   $(document).on 'click', '.top-header ul li a > span', (e)->
