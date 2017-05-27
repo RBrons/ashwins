@@ -14,9 +14,6 @@ $ ->
       $(document).find('div.sale-tr-pr-detail').hide();
       $(document).find('div.sale-tr-et-detail').show();
 
-  $(document).on 'click', '#save-and-next', ->
-
-
   # Purchase
   $(document).on 'ifChecked', '#transaction_purchaser_person_is_true', ->
     if this.checked
@@ -503,11 +500,15 @@ $ ->
         else
           $.notify "Failed", "error"
 
+  $(document).on 'ajax:success', '#loi_form', (e, data, status, xhr) ->
+    $.notify 'Success', 'success'
+    $('#negotions_tab li.active').next().find('a').click()
+
+  
   $(document).on 'click', '#back_prev_tab', (e) ->
     e.preventDefault()
     $('#negotions_tab li.active').prev().find('a').click()
-
-# End of Alex's code
+  
 
   # Show modal for submenu of top menu
   $(document).on 'click', '.top-header ul li a > span', (e)->
@@ -524,6 +525,9 @@ $ ->
 
     modal_id = '#md-' + $(this).attr('id')
     $(modal_id).modal()
+
+#-- End of Alex's code --#
+
 
   # Prevent edit transaction form submit on enter
   $(document).on 'keyup keypress', 'form#edit_transaction', (e)->
