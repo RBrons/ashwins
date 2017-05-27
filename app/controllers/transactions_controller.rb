@@ -101,9 +101,9 @@ class TransactionsController < ApplicationController
       @transaction.prop_owner = @transaction.replacement_seller_contact_id || 0
       @transaction.prop_status = "Prospective Purchase"
 
-      if @transaction.transaction_properties.blank?
-        @transaction.transaction_properties.build
-      end
+      # if @transaction.transaction_properties.blank?
+      #   @transaction.transaction_properties.build
+      # end
     elsif params[:transaction_type] == '1031 Already Sold'
       @transaction_main        = TransactionMain.create(user_id: current_user.id, init: true, purchase_only: true)
       @transaction             = TransactionPurchase.new(transaction_main_id: @transaction_main.id)
@@ -128,6 +128,7 @@ class TransactionsController < ApplicationController
       @transaction.is_purchase = 0
     end
     params[:main_id] = @transaction_main.id
+    build_gallery_transaction_properties @transaction, params[:type]
 
   end
 
@@ -152,25 +153,31 @@ class TransactionsController < ApplicationController
       @transaction.prop_owner = @transaction.replacement_seller_contact_id || 0
       @transaction.prop_status = "Prospective Purchase"
     end
-    if @transaction.transaction_properties.blank?
-      @transaction.transaction_properties.build
-    end
+    # if @transaction.transaction_properties.blank?
+    #   @transaction.transaction_properties.build
+    # end
     @transaction.entity_info = @transaction.seller_name || @transaction.purchaser_name
+    # @transaction.transaction_properties.build
+    build_gallery_transaction_properties @transaction, params[:type]
   end
 
   # GET /Transaction/1/properties_update
   def properties_update
-    pid = params[:transaction][:transaction_properties_attributes]["0".to_sym][:property_id]
     flag = false
+    p_count = @transaction.transaction_properties.length
 
-    if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil?
-      property = Property.where(id: pid).first
-      if !property.owner_entity_id.nil?
-        contact = Contact.where(id: property.owner_entity_id).first
-        @transaction.replacement_seller_contact_id = contact.id
-        @transaction.replacement_seller_first_name = contact.company_name || contact.first_name
-        @transaction.replacement_seller_last_name = contact.last_name
-        flag = true
+    (0..p_count-1).each do |p_index|
+      pid = params[:transaction][:transaction_properties_attributes]["#{p_index}".to_sym][:property_id]
+
+      if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil?
+        property = Property.where(id: pid).first
+        if !property.owner_entity_id.nil?
+          contact = Contact.where(id: property.owner_entity_id).first
+          @transaction.replacement_seller_contact_id = contact.id
+          @transaction.replacement_seller_first_name = contact.company_name || contact.first_name
+          @transaction.replacement_seller_last_name = contact.last_name
+          flag = true
+        end
       end
     end
 
@@ -366,7 +373,7 @@ class TransactionsController < ApplicationController
     else
       @property = Property.find(params[:cur_property])
     end
-    
+
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
     if params[:type] == 'sale'
       if ! @transaction_property.transaction_property_offers.present?
@@ -554,7 +561,7 @@ class TransactionsController < ApplicationController
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
     end
 
-    
+
   end
 
   private
@@ -621,5 +628,23 @@ class TransactionsController < ApplicationController
 
   def add_breadcrum
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/transactions\">Transactions </a></h4></div>".html_safe
+  end
+
+  def build_gallery_transaction_properties transaction, type
+    if type == 'sale'
+      possible_properties =
+      Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', transaction.prop_owner, transaction.prop_status)
+    elsif type == 'purchase'
+      possible_properties =
+      Property.where('ownership_status = ? and title is not null', transaction.prop_status)
+    end
+
+    existing_transaction_properties = transaction.transaction_properties.pluck(:property_id).uniq.compact
+
+    possible_properties.each do |pp|
+      unless existing_transaction_properties.include? pp.id
+        transaction.transaction_properties.build( property_id: pp.id, is_sale: (type=='sale') ? true : false, transaction_main_id: transaction.transaction_main_id )
+      end
+    end
   end
 end
