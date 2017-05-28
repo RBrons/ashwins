@@ -67,8 +67,9 @@
               = transaction_property_form.text_field :sale_price, :readonly => true, class: 'form-control input-mask-currency'
       -else
         .transaction-property-header
-          = link_to "◇", "#", class: 'pull-left'
-          = transaction_property_form.link_to_remove '⊗', class: 'pull-right'
+          / = link_to "◇", "#", class: 'pull-left'
+          = transaction_property_form.check_box :is_selected, class: 'pull-left flat-icheck is_selected_property'
+          / = transaction_property_form.link_to_remove '⊗', class: 'pull-right'
           .clearfix
         .margin-lg-top
         .transaction-property-select.form-group.center

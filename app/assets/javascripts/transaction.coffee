@@ -504,11 +504,11 @@ $ ->
     $.notify 'Success', 'success'
     $('#negotions_tab li.active').next().find('a').click()
 
-  
+
   $(document).on 'click', '#back_prev_tab', (e) ->
     e.preventDefault()
     $('#negotions_tab li.active').prev().find('a').click()
-  
+
 
   # Show modal for submenu of top menu
   $(document).on 'click', '.top-header ul li a > span', (e)->
@@ -535,6 +535,22 @@ $ ->
     if keyCode == 13
       e.preventDefault()
       return false
+
+  $.each $(document).find('.is_selected_property'), ->
+    if !$(this).is(":checked")
+      $(this).parents(".fields").addClass('property-unchecked')
+
+  $(document).on 'ifChecked', '.is_selected_property', ->
+    if $(this).is(":checked")
+      $(this).parents(".fields").removeClass('property-unchecked')
+    else
+      $(this).parents(".fields").addClass('property-unchecked')
+
+  $(document).on 'ifUnchecked', '.is_selected_property', ->
+    if $(this).is(":checked")
+      $(this).parents(".fields").removeClass('property-unchecked')
+    else
+      $(this).parents(".fields").addClass('property-unchecked')
 
   $(document).on 'ifChecked', '.radio_edit_mode_cap', ->
     $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', false)

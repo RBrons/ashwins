@@ -610,7 +610,7 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_property_params
-    params.require(:transaction).permit(transaction_properties_attributes: [:property_id, :sale_price, :id, :is_sale, :transaction_main_id, :_destroy, :cap_rate])
+    params.require(:transaction).permit(transaction_properties_attributes: [:property_id, :sale_price, :id, :is_sale, :transaction_main_id, :_destroy, :cap_rate, :is_selected])
   end
 
   def transaction_terms_params
