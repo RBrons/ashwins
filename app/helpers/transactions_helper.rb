@@ -9,8 +9,8 @@ module TransactionsHelper
         end
 
         if is_sale != 'undefined'
-            transaction_property_ids = TransactionProperty.where(transaction_main_id: trans_main_id, is_sale: is_sale).pluck(:property_id)
-            properties = Property.where(id: transaction_property_ids).order(created_at: :asc)
+            transaction_property_ids = TransactionProperty.where(transaction_main_id: trans_main_id, is_sale: is_sale, is_selected: true).pluck(:property_id)
+            properties = Property.where(id: transaction_property_ids).order(created_at: :desc)
         else
             properties = nil
         end
