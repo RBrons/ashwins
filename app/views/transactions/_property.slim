@@ -11,7 +11,7 @@
         - @transaction.errors.full_messages.each do |message|
           li = message
   .transaction_properties_wrapper
-    = f.fields_for :transaction_properties, class: 'sss' do |transaction_property_form|
+    = f.fields_for :transaction_properties do |transaction_property_form|
       = transaction_property_form.hidden_field :transaction_main_id, :value => params[:main_id]
       = transaction_property_form.hidden_field(:is_sale, :value => params[:type] == 'sale' ? 'true' : 'false')
       - if transaction_property_form.object.closed?
