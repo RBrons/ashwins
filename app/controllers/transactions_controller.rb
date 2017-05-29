@@ -84,6 +84,7 @@ class TransactionsController < ApplicationController
                          relinquishing_seller_honorific: t.relinquishing_seller_honorific,
                          relinquishing_seller_first_name: t.relinquishing_seller_first_name,
                          relinquishing_seller_last_name: t.relinquishing_purchaser_last_name,
+
                          replacement_purchaser_entity_id: t.replacement_purchaser_entity_id,
                          replacement_purchaser_honorific: t.replacement_purchaser_honorific,
                          replacement_purchaser_first_name: t.replacement_seller_first_name,
@@ -165,7 +166,7 @@ class TransactionsController < ApplicationController
   def properties_update
     flag = false
     p_count = @transaction.transaction_properties.length
-
+    
     (0..p_count-1).each do |p_index|
       pid = params[:transaction][:transaction_properties_attributes]["#{p_index}".to_sym][:property_id]
 
@@ -240,8 +241,11 @@ class TransactionsController < ApplicationController
       cflag = @ct.save
     end
     if @transaction.save && cflag #update(transaction_params)
-      #redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
-      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id, status_alert: (CGI.escape(params[:status_alert]) rescue nil))
+      if params[:type] == 'purchase'
+        redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+      else
+        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id, status_alert: (CGI.escape(params[:status_alert]) rescue nil))
+      end
     else
       render action: :edit
     end

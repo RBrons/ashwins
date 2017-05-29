@@ -3,7 +3,7 @@
 - else
   - options = [ 'Active']
 
-- @relinquishing_purchaser = get_relinquishing_property_purchaser(@transaction_property.property_id, @transaction_property.transaction_id)
+- @relinquishing_purchaser = get_property_purchaser(@transaction_property.property_id, @transaction_property.transaction_id, 'sale')
 
 #negotiations_wrapper
   input#negotiated_property[type="hidden" value="#{@property.title}"]
@@ -156,7 +156,7 @@
               .form-group
                   label.control-lable Cap Rate
                   .input-group
-                    = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
+                    = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent.to_f / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
                     span.input-group-btn
                       button.btn.btn-default[type="button"] %
               .form-group
@@ -323,23 +323,23 @@
               .form-group
                 label.control-label Date of Purchase Sale Agreement
                 .clearfix
-                = transaction_term_form.date_select :psa_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year }, class: "form-control select_auto transaction_transaction_term_attributes_psa_date"
+                = transaction_term_form.date_select :psa_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2 }, class: "form-control select_auto transaction_transaction_term_attributes_psa_date"
               .form-group
                   label.control-lable First Deposit To Be Received By
                   .clearfix
                   = transaction_term_form.hidden_field :first_deposit_days_after_psa
-                  = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.first_deposit_days_after_psa.to_i.day) }, class: "form-control select_auto", readonly: true
+                  = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.first_deposit_days_after_psa.to_i.day) }, class: "form-control select_auto", readonly: true
               .form-group
                   label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
                   .clearfix
                   = transaction_term_form.hidden_field :inspection_period_days
-                  = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", readonly: true
+                  = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", readonly: true
               - if transaction_term_form.object.second_deposit
                 .form-group
                     label.control-lable Second Deposit To Be Received By
                     .clearfix
                       = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period
-                      = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
+                      = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
               .form-group
                   label.control-lable Definition Of Holidays
                   .clearfix
@@ -348,7 +348,7 @@
                   label.control-lable Approximate Date Of Closing
                   .clearfix
                   = transaction_term_form.hidden_field :closing_days_after_inspection_period
-                  = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
+                  = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
       
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
