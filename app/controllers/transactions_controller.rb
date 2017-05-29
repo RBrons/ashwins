@@ -358,10 +358,6 @@ class TransactionsController < ApplicationController
   end
 
   def terms
-    if @transaction.transaction_term.blank?
-      @transaction.build_transaction_term
-    end
-
     if params[:cur_property].blank?
       @property = get_transaction_properties(params[:main_id], params[:type]).first
       if @property.present?
@@ -375,6 +371,10 @@ class TransactionsController < ApplicationController
     end
 
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
+    if @transaction_property.transaction_term.blank?
+      @transaction_property.build_transaction_term
+    end
+
     if params[:type] == 'sale'
       if ! @transaction_property.transaction_property_offers.present?
         @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
@@ -499,16 +499,17 @@ class TransactionsController < ApplicationController
   end
 
   def terms_update
+    @transaction_property = @transaction.transaction_properties.where(property_id: params[:cur_property]).first
     respond_to do |format|
-      if @transaction.update(transaction_terms_params)
+      if @transaction_property.update(transaction_terms_params)
         format.html {
           # redirect_to terms_transaction_path(@transaction, sub: params[:sub], main_id: params[:main_id], type: params[:type])
           redirect_to edit_qualified_intermediary_transaction_path(@transaction, sub: 'qi', type: params[:type], main_id: params[:main_id])
         }
-        format.json { render json: true }
+        format.json { render json: @transaction_property.transaction_term }
       else
         format.html {render action: :terms}
-        format.json { render json: false }
+        format.json { render json: @transaction_property.errors.full_messages }
       end
     end
   end
@@ -616,7 +617,8 @@ class TransactionsController < ApplicationController
   def transaction_terms_params
     params.require(:transaction).permit(transaction_term_attributes: [:id, :purchase_price, :current_annual_rent, :cap_rate, :psa_date, :m_psa_date, :first_deposit_date_due, :m_first_deposit_date_due,
                                                                       :first_deposit, :inspection_period_days, :end_of_inspection_period_note,
-                                                                      :second_deposit, :second_deposit_amount, :closing_date, :m_closing_date, :transaction_id, :second_deposit_date_due, :m_second_deposit_date_due])
+                                                                      :second_deposit, :second_deposit_amount, :closing_date, :m_closing_date, :transaction_id, :second_deposit_date_due, :m_second_deposit_date_due,
+                                                                      :first_deposit_days_after_psa, :second_deposit_days_after_inspection_period, :closing_days_after_inspection_period])
   end
 
   def transaction_personnels_params

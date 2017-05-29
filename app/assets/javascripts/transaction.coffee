@@ -500,15 +500,22 @@ $ ->
         else
           $.notify "Failed", "error"
 
-  $(document).on 'ajax:success', '#loi_form', (e, data, status, xhr) ->
+  $(document).on 'ajax:success', '.transaction_property_term_form', (e, data, status, xhr) ->
     $.notify 'Success', 'success'
+    if data.psa_date != ''
+      psa_date = new Date(data.psa_date)
+      console.log psa_date
+      set_first_deposit_date_due(psa_date, data.first_deposit_days_after_psa)
+      set_inspection_period_end(psa_date, data.inspection_period_days)
+      set_second_deposit_date_due(psa_date, data.second_deposit_days_after_inspection_period)
+      set_closing_date(psa_date, data.closing_days_after_inspection_period)
+    
     $('#negotions_tab li.active').next().find('a').click()
-
 
   $(document).on 'click', '#back_prev_tab', (e) ->
     e.preventDefault()
     $('#negotions_tab li.active').prev().find('a').click()
-
+    set_first_deposit_date_due(psa_date, first_deposit_days_after_psa)
 
   # Show modal for submenu of top menu
   $(document).on 'click', '.top-header ul li a > span', (e)->
@@ -526,6 +533,52 @@ $ ->
     modal_id = '#md-' + $(this).attr('id')
     $(modal_id).modal()
 
+  # Purcahse Sale Agreement
+  set_first_deposit_date_due = (psa_date, offset = 0)->
+    first_deposit_date_due = psa_date
+    first_deposit_date_due.setDate(first_deposit_date_due.getDate() + parseInt(offset));
+    $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_1i').val(first_deposit_date_due.getFullYear())
+    $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_2i').val(first_deposit_date_due.getMonth() + 1)
+    $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_3i').val(first_deposit_date_due.getDate())
+  
+  set_inspection_period_end = (psa_date, offset = 0)->
+    inspection_period_end = psa_date
+    inspection_period_end.setDate(inspection_period_end.getDate() + parseInt(offset));
+    $(document).find('#transaction_transaction_term_attributes_inspection_period_end_1i').val(inspection_period_end.getFullYear())
+    $(document).find('#transaction_transaction_term_attributes_inspection_period_end_2i').val(inspection_period_end.getMonth() + 1)
+    $(document).find('#transaction_transaction_term_attributes_inspection_period_end_3i').val(inspection_period_end.getDate())
+  
+  set_second_deposit_date_due = (psa_date, offset = 0)->
+    second_deposit_date_due = psa_date
+    second_deposit_date_due.setDate(second_deposit_date_due.getDate() + parseInt(offset));
+    $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_1i').val(second_deposit_date_due.getFullYear())
+    $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_2i').val(second_deposit_date_due.getMonth() + 1)
+    $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_3i').val(second_deposit_date_due.getDate())
+
+  set_closing_date = (psa_date, offset = 0)->
+    closing_date = psa_date
+    closing_date.setDate(closing_date.getDate() + parseInt(offset));
+    $(document).find('#transaction_transaction_term_attributes_closing_date_1i').val(closing_date.getFullYear())
+    $(document).find('#transaction_transaction_term_attributes_closing_date_2i').val(closing_date.getMonth() + 1)
+    $(document).find('#transaction_transaction_term_attributes_closing_date_3i').val(closing_date.getDate())
+
+  $(document).on 'change', '.transaction_transaction_term_attributes_psa_date', ()->
+    psa_year = $(document).find('#transaction_transaction_term_attributes_psa_date_1i option:selected').val()
+    psa_month = $(document).find('#transaction_transaction_term_attributes_psa_date_2i option:selected').val()
+    psa_day = $(document).find('#transaction_transaction_term_attributes_psa_date_3i option:selected').val()
+    psa_date = new Date(parseInt(psa_year), parseInt(psa_month) - 1, parseInt(psa_day))
+    
+    first_deposit_days_after_psa = $(document).find('#transaction_transaction_term_attributes_first_deposit_days_after_psa').val()
+    set_first_deposit_date_due(psa_date, first_deposit_days_after_psa)
+
+    inspection_period_days = $(document).find('#transaction_transaction_term_attributes_inspection_period_days').val()
+    set_inspection_period_end(psa_date, inspection_period_days)
+
+    second_deposit_days_after_inspection_period = $(document).find('#transaction_transaction_term_attributes_second_deposit_days_after_inspection_period').val()
+    set_second_deposit_date_due(psa_date, second_deposit_days_after_inspection_period)
+
+    closing_days_after_inspection_period = $(document).find('#transaction_transaction_term_attributes_closing_days_after_inspection_period').val()
+    set_closing_date(psa_date, closing_days_after_inspection_period)
 #-- End of Alex's code --#
 
 

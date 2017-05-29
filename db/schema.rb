@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170528170936) do
+ActiveRecord::Schema.define(version: 20170528210956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,27 +516,31 @@ ActiveRecord::Schema.define(version: 20170528170936) do
   end
 
   create_table "transaction_terms", force: :cascade do |t|
-    t.decimal  "purchase_price",                precision: 15, scale: 2
+    t.decimal  "purchase_price",                              precision: 15, scale: 2
     t.integer  "cap_rate"
     t.date     "psa_date"
-    t.date     "first_deposit_date_due"
-    t.decimal  "first_deposit",                 precision: 15, scale: 2
+    t.decimal  "first_deposit",                               precision: 15, scale: 2
     t.integer  "inspection_period_days"
     t.text     "end_of_inspection_period_note"
     t.boolean  "second_deposit"
-    t.decimal  "second_deposit_amount",         precision: 15, scale: 2
-    t.date     "closing_date"
+    t.decimal  "second_deposit_amount",                       precision: 15, scale: 2
     t.integer  "transaction_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "second_deposit_date_due"
-    t.decimal  "current_annual_rent",           precision: 15, scale: 2
+    t.decimal  "current_annual_rent",                         precision: 15, scale: 2
     t.text     "closing_date_note"
-    t.boolean  "m_date_select",                                          default: false
-    t.boolean  "m_first_deposit_date_due",                               default: false
-    t.boolean  "m_closing_date",                                         default: false
-    t.boolean  "m_psa_date",                                             default: false
-    t.boolean  "m_second_deposit_date_due",                              default: false
+    t.boolean  "m_date_select",                                                        default: false
+    t.boolean  "m_first_deposit_date_due",                                             default: false
+    t.boolean  "m_closing_date",                                                       default: false
+    t.boolean  "m_psa_date",                                                           default: false
+    t.boolean  "m_second_deposit_date_due",                                            default: false
+    t.integer  "transaction_property_id"
+    t.date     "closing_date"
+    t.date     "second_deposit_date_due"
+    t.date     "first_deposit_date_due"
+    t.integer  "first_deposit_days_after_psa"
+    t.integer  "second_deposit_days_after_inspection_period"
+    t.integer  "closing_days_after_inspection_period"
   end
 
   create_table "transactions", force: :cascade do |t|
