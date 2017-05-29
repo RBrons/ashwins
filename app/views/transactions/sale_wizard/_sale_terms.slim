@@ -154,7 +154,7 @@
                           button.btn.btn-default[type="button"] $
                       = transaction_term_form.text_field :current_annual_rent, value: @property.current_rent, class: 'form-control input-mask-currency', id: 'relinquishing_property_current_rent', readonly: true
               .form-group
-                  label.control-lable RAT RACE
+                  label.control-lable Cap Rate
                   .input-group
                     = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
                     span.input-group-btn
