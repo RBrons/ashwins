@@ -172,13 +172,7 @@ class Entity < ApplicationRecord
   end
 
   def has_purchased_properties?
-    if [2, 3].include? self.id
-      Property.where("(owner_entity_id = ? or owner_entity_id_indv = ?) and ownership_status = 'Purchased'", self.id).length > 0 ? true : false
-    elsif [1, 4].include? self.id
-      Property.where(ownership_status: 'Purchased', owner_entity_id_indv: self.id).length > 0 ? true : false
-    else
-      Property.where(ownership_status: 'Purchased', owner_entity_id: self.id).length > 0 ? true : false
-    end
+    Property.where(ownership_status: 'Purchased', owner_entity_id: self.id).length > 0 ? true : false
   end
 
   def self.TransactionEntityWithType(etype="entity")
