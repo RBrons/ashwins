@@ -358,27 +358,33 @@ class TransactionsController < ApplicationController
   end
 
   def terms
-    if @transaction.transaction_term.blank?
-      @transaction.build_transaction_term
-    end
-
     if params[:cur_property].blank?
       @property = get_transaction_properties(params[:main_id], params[:type]).first
-      if @property.present?
-        params[:cur_property] = @property.id.to_s
-      else
-        params[:cur_property] = ""
-        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
-      end
     else
       @property = Property.find(params[:cur_property])
     end
 
+    if @property.present?
+      params[:cur_property] = @property.id.to_s
+    else
+      params[:cur_property] = ""
+      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
+      return
+    end
+    
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
-    if params[:type] == 'sale'
-      if ! @transaction_property.transaction_property_offers.present?
-        @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+    if @transaction_property.present?
+      if @transaction_property.transaction_term.blank?
+        @transaction_property.build_transaction_term
       end
+
+      if params[:type] == 'sale'
+        if ! @transaction_property.transaction_property_offers.present?
+          @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+        end
+      end
+    else
+      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
     end
 
   end
@@ -499,16 +505,17 @@ class TransactionsController < ApplicationController
   end
 
   def terms_update
+    @transaction_property = @transaction.transaction_properties.where(property_id: params[:cur_property]).first
     respond_to do |format|
-      if @transaction.update(transaction_terms_params)
+      if @transaction_property.update(transaction_terms_params)
         format.html {
           # redirect_to terms_transaction_path(@transaction, sub: params[:sub], main_id: params[:main_id], type: params[:type])
           redirect_to edit_qualified_intermediary_transaction_path(@transaction, sub: 'qi', type: params[:type], main_id: params[:main_id])
         }
-        format.json { render json: true }
+        format.json { render json: @transaction_property.transaction_term }
       else
         format.html {render action: :terms}
-        format.json { render json: false }
+        format.json { render json: @transaction_property.errors.full_messages }
       end
     end
   end
@@ -560,14 +567,14 @@ class TransactionsController < ApplicationController
       @transaction = @transaction_main.purchase
     end
 
-    @transaction.transaction_properties.where(property_id: tran_prop_id).destroy_all
-    if @transaction.transaction_properties.count > 0
-      redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
-    else
-      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
-    end
-
-
+    if @transaction.transaction_properties.where(property_id: tran_prop_id).where(is_selected: true).destroy_all
+      if @transaction.transaction_properties.where(is_selected: true).count > 0
+        redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+      else
+        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+      end
+    end  
+  
   end
 
   private
@@ -616,7 +623,8 @@ class TransactionsController < ApplicationController
   def transaction_terms_params
     params.require(:transaction).permit(transaction_term_attributes: [:id, :purchase_price, :current_annual_rent, :cap_rate, :psa_date, :m_psa_date, :first_deposit_date_due, :m_first_deposit_date_due,
                                                                       :first_deposit, :inspection_period_days, :end_of_inspection_period_note,
-                                                                      :second_deposit, :second_deposit_amount, :closing_date, :m_closing_date, :transaction_id, :second_deposit_date_due, :m_second_deposit_date_due])
+                                                                      :second_deposit, :second_deposit_amount, :closing_date, :m_closing_date, :transaction_id, :second_deposit_date_due, :m_second_deposit_date_due,
+                                                                      :first_deposit_days_after_psa, :second_deposit_days_after_inspection_period, :closing_days_after_inspection_period])
   end
 
   def transaction_personnels_params
