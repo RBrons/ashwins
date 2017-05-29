@@ -1,5 +1,5 @@
 class TransactionTerm < ApplicationRecord
-  
+
   def sale
     TransactionSale.find_by(id: self.transaction_id)
   end
