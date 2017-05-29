@@ -360,25 +360,31 @@ class TransactionsController < ApplicationController
   def terms
     if params[:cur_property].blank?
       @property = get_transaction_properties(params[:main_id], params[:type]).first
-      if @property.present?
-        params[:cur_property] = @property.id.to_s
-      else
-        params[:cur_property] = ""
-        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
-      end
     else
       @property = Property.find(params[:cur_property])
     end
 
-    @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
-    if @transaction_property.transaction_term.blank?
-      @transaction_property.build_transaction_term
+    if @property.present?
+      params[:cur_property] = @property.id.to_s
+    else
+      params[:cur_property] = ""
+      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
+      return
     end
-
-    if params[:type] == 'sale'
-      if ! @transaction_property.transaction_property_offers.present?
-        @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+    
+    @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
+    if @transaction_property.present?
+      if @transaction_property.transaction_term.blank?
+        @transaction_property.build_transaction_term
       end
+
+      if params[:type] == 'sale'
+        if ! @transaction_property.transaction_property_offers.present?
+          @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+        end
+      end
+    else
+      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
     end
 
   end
@@ -561,14 +567,14 @@ class TransactionsController < ApplicationController
       @transaction = @transaction_main.purchase
     end
 
-    @transaction.transaction_properties.where(property_id: tran_prop_id).destroy_all
-    if @transaction.transaction_properties.count > 0
-      redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
-    else
-      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
-    end
-
-
+    if @transaction.transaction_properties.where(property_id: tran_prop_id).where(is_selected: true).destroy_all
+      if @transaction.transaction_properties.where(is_selected: true).count > 0
+        redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+      else
+        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+      end
+    end  
+  
   end
 
   private
