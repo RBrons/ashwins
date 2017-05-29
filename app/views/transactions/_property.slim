@@ -68,7 +68,7 @@
       -else
         .transaction-property-header
           / = link_to "◇", "#", class: 'pull-left'
-          = transaction_property_form.check_box :is_selected, class: 'pull-left flat-icheck is_selected_property'
+          = transaction_property_form.check_box :is_selected, disabled: transaction_property_form.object.is_selected, class: 'pull-left flat-icheck is_selected_property'
           / = transaction_property_form.link_to_remove '⊗', class: 'pull-right'
           .clearfix
         .margin-lg-top

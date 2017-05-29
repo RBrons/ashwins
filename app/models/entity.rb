@@ -171,28 +171,44 @@ class Entity < ApplicationRecord
     }
   end
 
+  def has_purchased_properties?
+    if [2, 3].include? self.id
+      Property.where("(owner_entity_id = ? or owner_entity_id_indv = ?) and ownership_status = 'Purchased'", self.id).length > 0 ? true : false
+    elsif [1, 4].include? self.id
+      Property.where(ownership_status: 'Purchased', owner_entity_id_indv: self.id).length > 0 ? true : false
+    else
+      Property.where(ownership_status: 'Purchased', owner_entity_id: self.id).length > 0 ? true : false
+    end
+  end
+
   def self.TransactionEntityWithType(etype="entity")
     if etype == "individual"
       # exclude all non individual member types
-      a = Entity.where.not(name: [nil, ''], type_: ([2,3] + (5..100).to_a)).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      a = Entity.where.not(name: [nil, ''], type_: ([2,3] + (5..100).to_a))
       # include sole props which have no business name
-      b = Entity.where("(name2 is null or name2 = '') and type_ = ?", 2).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      b = Entity.where("(name2 is null or name2 = '') and type_ = ?", 2)
       # include poa for individuals
       poa = Principal.where("entity_id is not null and is_person = ?", true).pluck(:super_entity_id)
-      c = Entity.where(id: poa).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      c = Entity.where(id: poa)
     else
       # exclude all individual member types
-      a = Entity.where.not(name: [nil, ''], type_: [1,2,3,4]).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      a = Entity.where.not(name: [nil, ''], type_: [1,2,3,4])
       # include sole props with business names
-      b = Entity.where("name2 is not null and name2 <> '' and type_ = ?", 2).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      b = Entity.where("name2 is not null and name2 <> '' and type_ = ?", 2)
       # include poa for entities
       poa = Principal.where("entity_id is not null and is_person = ?", false).pluck(:super_entity_id)
-      c = Entity.where(id: poa).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      c = Entity.where(id: poa)
     end
     MemberType.InitMemberTypes if MemberType.member_types.nil?
-    return (a+b+c).uniq.map! {
-        |item| [ self.create_name_with_legal_ending(item[0], item[3], item[4]), item[1], item[2], "#{MemberType.member_types[item[2]]}", item[4].blank? ]
-    }
+
+    return (a+b+c).uniq
+      .select! {
+        |item| item.has_purchased_properties?
+      }
+      .pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      .map! {
+          |item| [ self.create_name_with_legal_ending(item[0], item[3], item[4]), item[1], item[2], "#{MemberType.member_types[item[2]]}", item[4].blank? ]
+      }
   end
 
   def self.create_name_with_legal_ending(name_, has_comma_=false, legal_ending_='')
