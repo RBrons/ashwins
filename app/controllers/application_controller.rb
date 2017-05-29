@@ -121,6 +121,8 @@ class ApplicationController < ActionController::Base
         rescue => exception
           val_ = 0
         end
+      elsif val.value_type == 'Random US City'
+          val_ = US_CITIES.sample
       end
       obj.try("#{val.attribute_name.underscore}=".to_sym, val_)
     end

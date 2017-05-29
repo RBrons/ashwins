@@ -20,7 +20,11 @@ table#data_table
       tr
         td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => property.id
         td = property.ownership_status
-        td = property.owner.try(:name)
+        td
+          -if property.owner.is_a?(Entity)
+            = link_to property.owner.try(:display_name), entity_path(property.owner.key)
+          - elsif property.owner.is_a?(Contact)
+            = link_to property.owner.try(:name), edit_contact_path(property.owner.id)
         td = property.title
         td = property.location_county
         td = property.abbreviations_state
@@ -43,7 +47,7 @@ table#data_table
   .pull-right
     = will_paginate @properties
 
-javascript: 
+javascript:
   $( document ).ready(function() {
     $( "#purchased" ).click(function() {
       if ($('#purchased_accepted').is(":checked")){
