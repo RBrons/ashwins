@@ -519,14 +519,17 @@ ActiveRecord::Schema.define(version: 20170528210956) do
     t.decimal  "purchase_price",                              precision: 15, scale: 2
     t.integer  "cap_rate"
     t.date     "psa_date"
+    t.date     "first_deposit_date_due"
     t.decimal  "first_deposit",                               precision: 15, scale: 2
     t.integer  "inspection_period_days"
     t.text     "end_of_inspection_period_note"
     t.boolean  "second_deposit"
     t.decimal  "second_deposit_amount",                       precision: 15, scale: 2
+    t.date     "closing_date"
     t.integer  "transaction_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "second_deposit_date_due"
     t.decimal  "current_annual_rent",                         precision: 15, scale: 2
     t.text     "closing_date_note"
     t.boolean  "m_date_select",                                                        default: false
@@ -535,9 +538,6 @@ ActiveRecord::Schema.define(version: 20170528210956) do
     t.boolean  "m_psa_date",                                                           default: false
     t.boolean  "m_second_deposit_date_due",                                            default: false
     t.integer  "transaction_property_id"
-    t.date     "closing_date"
-    t.date     "second_deposit_date_due"
-    t.date     "first_deposit_date_due"
     t.integer  "first_deposit_days_after_psa"
     t.integer  "second_deposit_days_after_inspection_period"
     t.integer  "closing_days_after_inspection_period"
