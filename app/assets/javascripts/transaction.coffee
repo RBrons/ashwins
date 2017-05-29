@@ -502,13 +502,16 @@ $ ->
 
   $(document).on 'ajax:success', '.transaction_property_term_form', (e, data, status, xhr) ->
     $.notify 'Success', 'success'
-    if data.psa_date != ''
+    if data.psa_date
       psa_date = new Date(data.psa_date)
-      console.log psa_date
-      set_first_deposit_date_due(psa_date, data.first_deposit_days_after_psa)
-      set_inspection_period_end(psa_date, data.inspection_period_days)
-      set_second_deposit_date_due(psa_date, data.second_deposit_days_after_inspection_period)
-      set_closing_date(psa_date, data.closing_days_after_inspection_period)
+    else
+      psa_date = new Date()
+
+    console.log psa_date
+    set_first_deposit_date_due(psa_date, data.first_deposit_days_after_psa)
+    set_inspection_period_end(psa_date, data.inspection_period_days)
+    set_second_deposit_date_due(psa_date, data.second_deposit_days_after_inspection_period)
+    set_closing_date(psa_date, data.closing_days_after_inspection_period)
     
     $('#negotions_tab li.active').next().find('a').click()
 
