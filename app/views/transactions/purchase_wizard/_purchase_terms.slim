@@ -3,87 +3,487 @@
 - else
   - options = [ 'Active']
 
-= nested_form_for(@transaction, as: :transaction, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type])) do |f|
-  - if @transaction.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
-      ul
-        - @transaction.errors.full_messages.each do |message|
-          li = gsub_error_message(message, ['Transaction term base '])
+- @replacement_purchaser = get_property_purchaser(@transaction_property.property_id, @transaction_property.transaction_id, 'purchase')
 
-  .col-lg-4.col-md-4.col-sm-12.col-xs-12
-    = f.fields_for :transaction_term do |transaction_term_form|
-      .form-group
-        label Purchase Price
-        .input-group
-          .input-group-addon $
-          = transaction_term_form.text_field :purchase_price, class: 'form-control'
-      .form-group
-        label Cap Rate
-        .input-group
-          = transaction_term_form.text_field :cap_rate, class: 'form-control'
-          .input-group-addon %
-      .clearfix
-      .form-group
-        label Date of Purchase Sale Agreement
-        .clearfix
-        .pull-left
-          = transaction_term_form.date_select :psa_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto transaction_transaction_term_attributes_psa_date", style: "#{'display: none;' if transaction_term_form.object.m_psa_date?}"
-          = transaction_term_form.text_field :psa_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless transaction_term_form.object.m_psa_date?}"
-        .pull-right
-          .pull-left
-            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-          .pull-right
-            = transaction_term_form.check_box :m_psa_date, data: { class: 'transaction_transaction_term_attributes_psa_date' }, class: 'manually_date'
-      .clearfix
-      .form-group
-        label First Deposit Due Date
-        .clearfix
-        .pull-left
-          = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto transaction_transaction_term_attributes_first_deposit_date_due", style: "#{'display: none;' if transaction_term_form.object.m_first_deposit_date_due?}"
-          = transaction_term_form.text_field :first_deposit_date_due, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless transaction_term_form.object.m_first_deposit_date_due?}"
-        .pull-right
-          .pull-left
-            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-          .pull-right
-            = transaction_term_form.check_box :m_first_deposit_date_due, data: { class: 'transaction_transaction_term_attributes_first_deposit_date_due' }, class: 'manually_date'
-      .clearfix
-      .form-group
-        label Amount of First Deposit
-        .input-group
-          .input-group-addon $
-          = transaction_term_form.text_field :first_deposit, class: 'form-control'
-      .form-group
-        label Number of Days in Inspection Period
-        = transaction_term_form.text_field :inspection_period_days, class: 'form-control'
+#negotiations_wrapper
+  input#negotiated_property[type="hidden" value="#{@property.title}"]
+  div[role="tabpanel"]
+    ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+      li.active[role="presentation"]
+          a#offer_and_acceptance[href="#offer_and_acceptance_section" role="tab" data-toggle="tab" aria-expanded="true"] Offer and Acceptance
+          
+      li[role="presentation"]
+          a#letter_of_intent[href="#letter_of_intent_section" role="tab" data-toggle="tab" aria-expanded="false"] Letter of intent
 
-      .clearfix
-      .form-group
-        label 2nd Deposit Due Date -- Number of Days After Inspection Period
-        .clearfix
-        .pull-left
-          = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto transaction_transaction_term_attributes_second_deposit_date_due", style: "#{'display: none;' if transaction_term_form.object.m_second_deposit_date_due?}"
-          = transaction_term_form.text_field :second_deposit_date_due, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless transaction_term_form.object.m_second_deposit_date_due?}"
-        .pull-right
-          .pull-left
-            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-          .pull-right
-            = transaction_term_form.check_box :m_second_deposit_date_due, data: { class: 'transaction_transaction_term_attributes_second_deposit_date_due' }, class: 'manually_date'
+      li[role="presentation"]
+          a#purchase_sale_agreement[href="#purchase_sale_agreement_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchase Sale Agreement
+      
+      li[role="presentation"]
+          a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] Replacement Purchaser
 
-      .clearfix
-      .form-group
-        label Date of Closing
-        .clearfix
-        .pull-left
-          = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto transaction_transaction_term_attributes_closing_date", style: "#{'display: none;' if transaction_term_form.object.m_closing_date?}"
-          = transaction_term_form.text_field :closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless transaction_term_form.object.m_closing_date?}"
-        .pull-right
-          .pull-left
-            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-          .pull-right
-            = transaction_term_form.check_box :m_closing_date, data: { class: 'transaction_transaction_term_attributes_closing_date' }, class: 'manually_date'
+      li[role="presentation"]
+          a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
 
-  .clearfix.margin-lg-top
-  .form-group
-    = link_to 'Back', $header_links[:parties], class: 'btn btn-primary next-prev margin-sm-right'
-    = f.submit 'Save & Next', class: 'btn btn-primary next-prev'
+    .tab-content
+      #offer_and_acceptance_section.tab-pane.fade.active.in[role="tabpanel"]
+        ul#offer_list.nav.nav-tabs.bar_tabs[role="tablist"]
+          - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
+            li[role="presentation" class=( transaction_property_offer.is_accepted ? 'done' : '' )]
+              a[href="#{ '#offer_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"] 
+                = transaction_property_offer.offer_name
+                span.delete_offer.fa.fa-times
+          
+          li[role="presentation"]
+            a#new_offer[href="#" role="tab" data-toggle="tab" aria-expanded="false" data-tran-prop-id="#{@transaction_property.id}"] 
+              i.fa.fa-plus
+
+        .tab-content
+          - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
+            .tab-pane.fade.active.in[role="tabpanel" id="#{'offer_' + transaction_property_offer.id.to_s}"]
+              .col-md-12.col-xs-12
+                input.cur_offer_id[type="hidden" value="#{transaction_property_offer.id}"]
+                
+                .row
+                  - @purchaser = get_transaction_property_offeror(transaction_property_offer)
+                  form.relingquishing_offeror_form[remote="true" action="#{contact_path(@purchaser)}"]
+                    .col-md-4.form-group
+                      input[type="hidden" name="contact[role]" value="Counter-Party"]
+                      input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+                      input[type="hidden" name="from_relinquishing_offeror" value="#{transaction_property_offer.id}"]
+                      
+                      h2.heading_without_padding_large Replacement Offeror
+                      .form-group
+                        .heading_blue.radio-inline
+                          span
+                            input.contact_is_company_false.form-control.flat-icheck.radiobuttons[type="radio" value="false" name="contact[is_company]" checked=( @purchaser.is_company ? false : 'checked' ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                          span.margin-md-left Individual
+                        .heading_blue.radio-inline
+                          span.margin-md-left
+                            input.contact_is_company_true.form-control.flat-icheck.radiobuttons[type="radio" value="true" name="contact[is_company]" checked=( @purchaser.is_company ? 'checked' : false ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )] 
+                          span.margin-md-left Entity
+                      
+                      .company-fields-wrapper[style="#{'display: none' if !@purchaser.is_company}"]
+                        .form-group
+                          label Company Name
+                          input.form-control[type="text" name="contact[company_name]" value="#{@purchaser.try(:company_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                      .individual-fields-wrapper[style="#{'display: none' if @purchaser.is_company}"]
+                        .form-group
+                          label First Name
+                          input.form-control[type="text" name="contact[first_name]" value="#{@purchaser.try(:first_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                        .form-group
+                          label Last Name
+                          input.form-control[type="text" name="contact[last_name]" value="#{@purchaser.try(:last_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                          
+                .row
+                  .col-md-12
+                      .col-md-3
+                          h4 Asking
+                          h1.property-price.green.margin-lg-top
+                            = number_to_currency(@transaction_property.try(:sale_price))
+                          - if @property.try(:title).present?
+                            h2.green.margin-lg-top = 'For ' + @property.try(:title)
+                      .col-md-9
+                        - (0..2).each do |index|
+                          = image_tag('sale_house.jpg', :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
+                .row
+                  .col-md-12.margin-lg-top.form-group
+                    button.initial_log_counteroffer.btn.btn-default[disabled=( @transaction_property.transaction_property_offers.where(is_accepted: true).count >= 1 ? 'disabled' : false ) style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Log Initial Counter Offer
+                    button.ask_accepted.btn.btn-default.border-red.red[disabled=( @transaction_property.transaction_property_offers.where(is_accepted: true).count >= 1 ? 'disabled' : false ) style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Ask Accepted
+                    input.last_counteroffer_price[type="hidden" value="#{get_recent_counteroffer_price(transaction_property_offer)}"]
+                    
+                    table.counteroffer_history.table.margin-lg-top
+                      tbody
+                        - transaction_property_offer.counteroffers.order(updated_at: :asc).each do |counteroffer|
+                          tr[data-counteroffer-id="#{counteroffer.id}"]
+                            td[width="150"]
+                              span.editable-date[data-name="offered_date" data-type="combodate" data-value="#{counteroffer.offered_date}" data-format="YYYY-MM-DD" data-viewformat="MM/DD/YYYY" data-url="#{counteroffer_path(counteroffer.id)}"]
+                            td[width="300"] 
+                              span = counteroffer.offer_type
+                            td[width="300"]
+                              span.green.editable-currency[data-name="offered_price" data-type="text" data-value="#{number_to_currency(counteroffer.offered_price)}" data-url="#{counteroffer_path(counteroffer.id)}"]
+                            td
+                              - if !transaction_property_offer.is_accepted
+                                a.delete_counteroffer.btn.btn-danger.btn-xs
+                                  i.fa.fa-trash
+                        tr.last_row
+                          td
+                          td
+                          td
+                          td
+                .row.counteroffer_action_buttons_wrapper[style="#{'display: none' if transaction_property_offer.counteroffers.count == 0 && !transaction_property_offer.is_accepted }"]
+                  .col-md-4.col-xs-12.form-group
+                    - last_counteroffer = transaction_property_offer.counteroffers.last
+                    input.last_counteroffer[type="hidden" value="#{last_counteroffer.try(:offer_type)}"]
+                    - if !transaction_property_offer.is_accepted
+                      - if last_counteroffer.try(:offered_date) && last_counteroffer.try(:offered_price)
+                        button.add_counteroffer.btn.btn-default.red.border-red #{ last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Client Counter' : 'Buyer Counter' }
+                      - else
+                        button.add_counteroffer.btn.btn-default.red.border-red[disabled] #{ last_counteroffer.present? ? (last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Buyer Counter' : 'Client Counter') : 'Buyer Counter' }
+                      = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Counter Accepted' : 'Accept Counter', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
+                    - else
+                      -if transaction_property_offer.is_ask_accepted?
+                        = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
+                      - else
+                        = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Client\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted 
+              
+      #relinquishing_purchaser_section.tab-pane.fade[role="tabpanel"]
+        .col-lg-4.col-md-4.col-sm-12.col-xs-12
+          .clearfix.margin-sm-top
+          h2.heading_without_padding_large = "Replacement Purchaser".html_safe
+          input#relinquishing_purchaser_name.form-control[type="text" value="#{ (@replacement_purchaser.try(:is_company) ? @replacement_purchaser.company_name : @replacement_purchaser.try(:first_name).to_s + ' ' + @replacement_purchaser.try(:last_name).to_s) }" style="#{ 'display: none' if !@replacement_purchaser.present? }" readonly]
+          
+      #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
+        h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
+          span = @replacement_purchaser.try(:is_company) ? @replacement_purchaser.company_name : @replacement_purchaser.try(:first_name).to_s + ' ' + @replacement_purchaser.try(:last_name).to_s
+          span &nbsp;is purchasing&nbsp;
+          span = @property.title + " for "
+          span = number_to_currency(get_sale_price(@transaction_property)) 
+        .col-md-6.col-sm-12.col-xs-12
+          = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
+            = f.fields_for :transaction_term do |transaction_term_form|
+              .form-group
+                  label.control-lable Purchase Price
+                  .input-group
+                      span.input-group-btn
+                          button.btn.btn-default[type="button"] $
+                      = transaction_term_form.text_field :purchase_price, value: get_sale_price(@transaction_property), class: 'form-control input-mask-currency', id: 'relinquishing_property_sale_price', readonly: true
+              .form-group
+                  label.control-lable Current Annual Rent
+                  .input-group
+                      span.input-group-btn
+                          button.btn.btn-default[type="button"] $
+                      = transaction_term_form.text_field :current_annual_rent, value: @property.current_rent, class: 'form-control input-mask-currency', id: 'relinquishing_property_current_rent', readonly: true
+              .form-group
+                  label.control-lable Cap Rate
+                  .input-group
+                    = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent.to_f / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
+                    span.input-group-btn
+                      button.btn.btn-default[type="button"] %
+              .form-group
+                  label.control-lable First Deposit Due Date
+                  p.no-margin Number of Days After Date of Purchase Sale Agreement
+                  = transaction_term_form.text_field :first_deposit_days_after_psa, class: 'form-control width-field-sm'
+              .form-group
+                  label.control-lable Amount of First Deposit
+                  .input-group
+                    span.input-group-btn
+                        button.btn.btn-default[type="button"] $
+                    = transaction_term_form.text_field :first_deposit, class: 'form-control input-mask-currency'
+              .form-group
+                  label.control-lable Number of Days in Inspection Period
+                  = transaction_term_form.text_field :inspection_period_days, class: 'form-control width-field-sm'
+              .form-group
+                .field_list
+                  .left
+                    = transaction_term_form.check_box :second_deposit, class: 'flat-icheck', id: 'enable-2nd-deposit'
+                    .vertical-line[style="#{transaction_term_form.object.second_deposit ? 'border-color: #3082ee' : 'border-color: #777777'}"]
+                  .right
+                    .form-group
+                      label.control-label &nbsp;2nd Deposit Due Date
+                      p.no-margin Number of Days After Inspection Period(If applicable)
+                      = transaction_term_form.text_field :second_deposit_days_after_inspection_period, class: 'form-control width-field-sm', disabled: !transaction_term_form.object.second_deposit
+                    .form-group
+                      label.control-label 2nd Deposit Amount
+                      .input-group
+                        span.input-group-btn
+                          button.btn.btn-default[type="button"] $
+                        = transaction_term_form.text_field :second_deposit_amount, class: 'form-control input-mask-currency', disabled: !transaction_term_form.object.second_deposit
+              
+              .form-group
+                label.control-label Approximate Date of Closing
+                p.no-margin Number of Days After insepction Period
+                = transaction_term_form.text_field :closing_days_after_inspection_period, class: 'form-control'
+                
+              .form-group
+                label.control-label Date of Closing Note
+                = transaction_term_form.text_field :closing_date_note, class: 'form-control'
+                
+              .form-group
+                  label.control-label Letter of intent
+                  .input-group.select_in_gdrive
+                      input#file_letter_of_intent.form-control[type="text"]
+                      span.input-group-btn
+                          button#btn_letter_of_intent.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                              span.margin-md-left.blue Select in Google Drive
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""] 
+                          span.margin-sm-left Directory
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name="" checked]
+                          span.margin-sm-left Draft                            
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""]
+                          span.margin-sm-left Executable
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""]
+                          span.margin-sm-left Executed
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
+        
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+          .note
+            h2 Tasks
+            ul.to_do
+              li 
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]    
+                  .right
+                    span LOI Drafted?
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span LOI Sent to or Received from Counter-Party
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Agreement on Terms?
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Executed by Client?
+              li 
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Executed by Counter-Party?
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Document Property Filed?
+      
+      #purchase_sale_agreement_section.tab-pane.fade[role="tabpanel"]
+        .col-md-6.col-sm-12.col-xs-12
+          = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
+            = f.fields_for :transaction_term do |transaction_term_form|
+              
+              .form-group
+                  .field_list
+                    label.control-label Purchase Sales Agreement
+                    .input-group.select_in_gdrive
+                      input#file_purchase_sales_agreement.form-control[type="text"]
+                      span.input-group-btn
+                        button#btn_purchase_sales_agreement.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                          = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                          span.margin-md-left.blue Select in Google Drive
+                    .checkbox-inline
+                        input.flat-icheck[type="checkbox" name=""] 
+                            span.margin-sm-left Directory
+                    .checkbox-inline
+                        input.flat-icheck[type="checkbox" name="" checked]
+                            span.margin-sm-left Draft                            
+                    .checkbox-inline
+                        input.flat-icheck[type="checkbox" name=""]
+                            span.margin-sm-left Executable
+                    .checkbox-inline
+                        input.flat-icheck[type="checkbox" name=""]
+                            span.margin-sm-left Executed
+                    
+                    .clearfix.margin-sm-top
+                    button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
+                    
+                  button#add_purchase_sale_agreement.btn.btn-default 
+                    i.fa.fa-plus 
+                    | &nbsp;Add Document
+
+                  #purchase_sales_agreement_template[style="display: none"]
+                    .field_list
+                      label.control-label Purchase Sales Agreement
+                      .input-group.select_in_gdrive
+                        input.form-control[type="text"]
+                        span.input-group-btn
+                          button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+                      .checkbox-inline
+                          input.flat-icheck[type="checkbox" name=""] 
+                              span.margin-sm-left Directory
+                      .checkbox-inline
+                          input.flat-icheck[type="checkbox" name="" checked]
+                              span.margin-sm-left Draft                            
+                      .checkbox-inline
+                          input.flat-icheck[type="checkbox" name=""]
+                              span.margin-sm-left Executable
+                      .checkbox-inline
+                          input.flat-icheck[type="checkbox" name=""]
+                              span.margin-sm-left Executed
+                      .clearfix.margin-sm-top
+                      button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
+                    
+              .clearfix
+              .form-group
+                label.control-label Date of Purchase Sale Agreement
+                .clearfix
+                = transaction_term_form.date_select :psa_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2 }, class: "form-control select_auto transaction_transaction_term_attributes_psa_date"
+              .form-group
+                  label.control-lable First Deposit To Be Received By
+                  .clearfix
+                  = transaction_term_form.hidden_field :first_deposit_days_after_psa
+                  = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.first_deposit_days_after_psa.to_i.day) }, class: "form-control select_auto", readonly: true
+              .form-group
+                  label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
+                  .clearfix
+                  = transaction_term_form.hidden_field :inspection_period_days
+                  = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", readonly: true
+              - if transaction_term_form.object.second_deposit
+                .form-group
+                    label.control-lable Second Deposit To Be Received By
+                    .clearfix
+                      = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period
+                      = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
+              .form-group
+                  label.control-lable Definition Of Holidays
+                  .clearfix
+                  input.form-control[type="text" disabled="disabled"]
+              .form-group
+                  label.control-lable Approximate Date Of Closing
+                  .clearfix
+                  = transaction_term_form.hidden_field :closing_days_after_inspection_period
+                  = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
+      
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+          .note
+            h2 Tasks
+            ul.to_do
+              li 
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]    
+                  .right
+                    span Received Terms from Counter Party
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span PSA Drafted?
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span PSA Sent to or Received from Counter-Party?
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Agreement on Terms?
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Executed by Client?
+              li 
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Executed by Counter-Party?
+              li
+                .field_list
+                  .left
+                    input.task_status.flat-icheck[type="checkbox"]
+                  .right
+                    span Document Property Filed?
+
+      #escrow_section.tab-pane.fade[role="tabpanel"]
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+          .form-group
+              label.control-label Qualified Intermediary
+              .input-group.select_in_gdrive
+                  input#file_qi.form-control[type="text"]
+                  span.input-group-btn
+                      button#btn_qi.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                          = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                          span.margin-md-left.blue Select in Google Drive
+          .form-group
+              label.control-label Title Document
+              .input-group.select_in_gdrive
+                  input#file_title_document.form-control[type="text"]
+                  span.input-group-btn
+                      button#btn_title_document.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                          = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                          span.margin-md-left.blue Select in Google Drive
+          .form-group
+              button.btn.btn-default
+                span.fa.fa-plus.margin-sm-right
+                | Add Document
+.clearfix
+.divider
+button#back_prev_tab.btn.btn-default Back
+
+/! Offer and Acceptance Template
+#offer_and_acceptance_template[style="display: none"]
+  .col-md-12.col-xs-12
+    input.cur_offer_id[type="hidden" value=""]
+    
+    .row
+      form.relingquishing_offeror_form[remote="true" action=""]
+        .col-md-4.form-group
+          input[type="hidden" name="contact[role]" value="Counter-Party"]
+          input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+          input.from_relinquishing_offeror[type="hidden" name="from_relinquishing_offeror" value=""]
+          
+          h2.heading_without_padding_large Replacement Offeror
+          .form-group
+            .heading_blue.radio-inline
+              span
+                input.contact_is_company_false.form-control.radiobuttons[type="radio" value="false" name="contact[is_company]" checked]
+              span.margin-md-left Individual
+            .heading_blue.radio-inline
+              span.margin-md-left
+                input.contact_is_company_true.form-control.radiobuttons[type="radio" value="true" name="contact[is_company]"] 
+              span.margin-md-left Entity
+          
+          .company-fields-wrapper[style="display: none"]
+            .form-group
+              label Company Name
+              input.form-control[type="text" name="contact[company_name]" value=""]
+          .individual-fields-wrapper
+            .form-group
+              label First Name
+              input.form-control[type="text" name="contact[first_name]" value=""]
+            .form-group
+              label Last Name
+              input.form-control[type="text" name="contact[last_name]" value=""]
+      .row
+        .col-md-12
+            .col-md-3
+                h4 Asking
+                h1.property-price.green.margin-lg-top
+                  = number_to_currency(@transaction.transaction_properties.where(property_id: params[:cur_property]).first.sale_price)
+                - if @property.try(:title).present?
+                  h2.green.margin-lg-top = 'For ' + @property.try(:title)
+            .col-md-9
+              - (0..2).each do |index|
+                = image_tag('sale_house.jpg', :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
+      .row
+        .col-md-12.margin-lg-top.form-group
+            button.initial_log_counteroffer.btn.btn-default Log Initial Counter Offer
+            button.ask_accepted.btn.btn-default.border-red.red Ask Accepted
+            input.last_counteroffer_price[type="hidden" value=""]
+
+            table.counteroffer_history.table.margin-lg-top
+                tbody
+                    tr.last_row
+                        td
+                        td
+                        td
+      .row.counteroffer_action_buttons_wrapper[style="display: none"]
+        .col-md-4.col-xs-12.form-group
+          input.last_counteroffer[type="hidden" value=""]
+          button.add_counteroffer.btn.btn-default.red.border-red Buyer Counter
+          = link_to 'Accept Offer', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
+            

@@ -105,7 +105,7 @@
           ul.nav.child_menu[style= "display:block"]
             - buy_properties.each do |property|
               - pclosed = is_property_closed?(@transaction_main.purchase.try(:id) || 0, property.id)
-              li[class=("#{'current-page' if property.id.to_s == params[:cur_property]}")]
+              li[class=("#{'current-page' if property.id.to_s == params[:cur_property]} #{'in-closed' if pclosed}")]
                 / check if this property has ever clicked
                 - prev_step = get_property_step(property.id, params[:main_id], false) 
                 - case prev_step.current_step

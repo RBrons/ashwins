@@ -48,8 +48,13 @@ module TransactionsHelper
         end
     end
 
-    def get_relinquishing_property_purchaser(property_id, transaction_id)
-        transaction_property = TransactionProperty.where(property_id: property_id).where(transaction_id: transaction_id).where(is_sale: true).first
+    def get_property_purchaser(property_id, transaction_id, type="sale")
+        if type == 'sale'
+            is_sale = true
+        else
+            is_sale = false
+        end
+        transaction_property = TransactionProperty.where(property_id: property_id).where(transaction_id: transaction_id).where(is_sale: is_sale).first
         if transaction_property.present?
             accepted_offer = transaction_property.transaction_property_offers.where(is_accepted: true).first
             if accepted_offer.present?

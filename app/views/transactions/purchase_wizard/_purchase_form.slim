@@ -16,40 +16,59 @@
         - @transaction.errors.full_messages.each do |message|
           li = transaction_message_filter(message)
 
-  .col-lg-6.col-md-6.col-sm-12.col-xs-12
-    .clearfix.margin-sm-top
-    h2.heading_without_padding_large
-      | Basic Info
-    .clearfix
-    .form-group
-      label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
-      .clearfix
-      .pull-left
-        = f.date_select :purchase_only_closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto transaction_purchase_only_closing_date", style: "#{'display: none;' if f.object.m_purchase_only_closing_date?}"
-        = f.text_field :purchase_only_closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_purchase_only_closing_date?}"
-      .pull-right
-        .pull-left
-          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-        .pull-right
-          = f.check_box :m_purchase_only_closing_date, data: {class: 'transaction_purchase_only_closing_date'}, class: 'manually_date'
+  .row
+    .col-md-12
+      .clearfix.margin-sm-top
+        div[role="tabpanel"]
+          ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+            li.active[role="presentation"]
+                a#basic_info[href="#basic_info_section" role="tab" data-toggle="tab" aria-expanded="true"] Basic info
+                
+            li[role="presentation"]
+                a#broker[href="#broker_section" role="tab" data-toggle="tab" aria-expanded="false"] Broker
 
-    .clearfix
-    .form-group.margin-sm-top
-      label = "Amount of QI Funds #{require_field}".html_safe
-      .input-group
-        .input-group-addon $
-        = f.text_field :purchase_only_qi_funds, class: 'form-control'
+            li[role="presentation"]
+                a#attorney[href="#attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Attorney
+           
+          .tab-content
+            #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
+              .col-lg-6.col-md-6.col-sm-12.col-xs-12
+                h2.heading_without_padding_large
+                  | Basic Info
+                .clearfix
+                .form-group
+                  label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
+                  .clearfix
+                  .pull-left
+                    = f.date_select :purchase_only_closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto transaction_purchase_only_closing_date", style: "#{'display: none;' if f.object.m_purchase_only_closing_date?}"
+                    = f.text_field :purchase_only_closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_purchase_only_closing_date?}"
+                  .pull-right
+                    .pull-left
+                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                    .pull-right
+                      = f.check_box :m_purchase_only_closing_date, data: {class: 'transaction_purchase_only_closing_date'}, class: 'manually_date'
 
-    .clearfix
-      .form-group
-        = hidden_field_tag :seller_info, @transaction.try(:seller_info)
-        = hidden_field_tag :status_alert, "#{ params[:status_alert] || (f.object.status.present? ? nil : 'Purchase Pre LOI' )}"
-        = hidden_field_tag :transaction_klazz, @transaction.class.to_s
-        = f.hidden_field :transaction_main_id
+                .clearfix
+                .form-group.margin-sm-top
+                  label = "Amount of QI Funds #{require_field}".html_safe
+                  .input-group
+                    .input-group-addon $
+                    = f.text_field :purchase_only_qi_funds, class: 'form-control'
 
-    = f.hidden_field :purchaser_person_is, :value => f.object.purchaser_person_is?
-    = f.hidden_field :rplmnt_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
-    = f.hidden_field :replacement_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
+                .clearfix
+                  .form-group
+                    = hidden_field_tag :seller_info, @transaction.try(:seller_info)
+                    = hidden_field_tag :status_alert, "#{ params[:status_alert] || (f.object.status.present? ? nil : 'Purchase Pre LOI' )}"
+                    = hidden_field_tag :transaction_klazz, @transaction.class.to_s
+                    = f.hidden_field :transaction_main_id
 
-    .form-group
-      = f.submit 'Save & Next', class: 'btn btn-primary next-prev'
+                = f.hidden_field :purchaser_person_is, :value => f.object.purchaser_person_is?
+                = f.hidden_field :rplmnt_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
+                = f.hidden_field :replacement_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
+
+                .form-group
+                  = f.submit 'Save & Next', class: 'btn btn-primary next-prev'
+            
+            #broker_section.tab-pane.fade[role="tabpanel"]
+
+            #attorney_section.tab-pane.fade[role="tabpanel"]
