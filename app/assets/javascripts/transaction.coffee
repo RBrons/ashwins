@@ -9,9 +9,11 @@ $ ->
     tr = $(this).closest('tr')
     if tr.hasClass 'shown'
       tr.nextUntil('.parent-row').hide()
+      tr.nextUntil('.parent-row').removeClass('striped-row')
       tr.removeClass 'shown'
     else
       tr.nextUntil('.parent-row').show()
+      tr.nextUntil('.parent-row').addClass('striped-row')
       tr.addClass 'shown'
     
   # Sale
@@ -521,9 +523,24 @@ $ ->
 
     console.log psa_date
     set_first_deposit_date_due(psa_date, data.first_deposit_days_after_psa)
+    $(document).find('#transaction_transaction_term_attributes_first_deposit_days_after_psa').val(data.first_deposit_days_after_psa)
+
     set_inspection_period_end(psa_date, data.inspection_period_days)
+    $(document).find('#transaction_transaction_term_attributes_inspection_period_days').val(data.inspection_period_days)
+
     set_second_deposit_date_due(psa_date, data.second_deposit_days_after_inspection_period)
+    $(document).find('#transaction_transaction_term_attributes_second_deposit_days_after_inspection_period').val(data.second_deposit_days_after_inspection_period)
+    if (data.second_deposit)
+      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper').show()
+      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper input').prop('disabled', false)
+      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper select').prop('disabled', false)
+    else
+      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper').hide()
+      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper input').prop('disabled', 'disabled')
+      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper select').prop('disabled', 'disabled')
+
     set_closing_date(psa_date, data.closing_days_after_inspection_period)
+    $(document).find('#transaction_transaction_term_attributes_closing_days_after_inspection_period').val(data.closing_days_after_inspection_period)
     
     $('#negotions_tab li.active').next().find('a').click()
 
@@ -550,28 +567,28 @@ $ ->
 
   # Purcahse Sale Agreement
   set_first_deposit_date_due = (psa_date, offset = 0) ->
-    first_deposit_date_due = psa_date
+    first_deposit_date_due = new Date(psa_date)
     first_deposit_date_due.setDate(first_deposit_date_due.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_1i').val(first_deposit_date_due.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_2i').val(first_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_3i').val(first_deposit_date_due.getDate())
   
   set_inspection_period_end = (psa_date, offset = 0) ->
-    inspection_period_end = psa_date
+    inspection_period_end = new Date(psa_date)
     inspection_period_end.setDate(inspection_period_end.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_1i').val(inspection_period_end.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_2i').val(inspection_period_end.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_3i').val(inspection_period_end.getDate())
   
   set_second_deposit_date_due = (psa_date, offset = 0) ->
-    second_deposit_date_due = psa_date
+    second_deposit_date_due = new Date(psa_date)
     second_deposit_date_due.setDate(second_deposit_date_due.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_1i').val(second_deposit_date_due.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_2i').val(second_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_3i').val(second_deposit_date_due.getDate())
 
   set_closing_date = (psa_date, offset = 0 )->
-    closing_date = psa_date
+    closing_date = new Date(psa_date)
     closing_date.setDate(closing_date.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_closing_date_1i').val(closing_date.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_closing_date_2i').val(closing_date.getMonth() + 1)

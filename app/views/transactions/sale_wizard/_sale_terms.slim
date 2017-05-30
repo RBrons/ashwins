@@ -334,12 +334,12 @@
                   .clearfix
                   = transaction_term_form.hidden_field :inspection_period_days
                   = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", readonly: true
-              - if transaction_term_form.object.second_deposit
-                .form-group
-                    label.control-lable Second Deposit To Be Received By
-                    .clearfix
-                      = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period
-                      = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
+              
+              .form-group.transaction_transaction_term_attributes_second_deposit_wrapper[style="#{transaction_term_form.object.second_deposit ? '' : 'display: none'}"]
+                  label.control-lable Second Deposit To Be Received By
+                  .clearfix
+                    = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: transaction_term_form.object.second_deposit
+                    = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true, disabled: transaction_term_form.object.second_deposit
               .form-group
                   label.control-lable Definition Of Holidays
                   .clearfix

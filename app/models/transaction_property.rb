@@ -16,9 +16,14 @@ class TransactionProperty < ApplicationRecord
   delegate :inspection_period_days, to: :transaction_term, allow_nil: true
   delegate :psa_date, to: :transaction_term, allow_nil: true
   delegate :second_deposit_date_due, to: :transaction_term, allow_nil: true
-  delegate :first_deposit_days_after_psa, to: :transaction_term, allow_nil: true
-  delegate :second_deposit_days_after_inspection_period, to: :transaction_term, allow_nil: true
-  delegate :closing_days_after_inspection_period, to: :transaction_term, allow_nil: true
+
+  delegate :measured_days_to_1st_deposit, to: :transaction_term, allow_nil: true
+  delegate :measured_days_to_end_of_inspection, to: :transaction_term, allow_nil: true
+  delegate :measured_days_to_2nd_deposit, to: :transaction_term, allow_nil: true
+  delegate :measured_days_to_closing, to: :transaction_term, allow_nil: true
+  delegate :last_day_for_buyer_to_receive_deposit, to: :transaction_term, allow_nil: true
+  
+  
   
   def closed?
     return !self.closing_date.nil?
