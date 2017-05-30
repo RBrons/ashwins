@@ -15,16 +15,42 @@ $ ->
       tr.nextUntil('.parent-row').show()
       tr.nextUntil('.parent-row').addClass('striped-row')
       tr.addClass 'shown'
-    
+
   # Sale
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
     $(document).find('div.sale-tr-pr-detail').show()
     $(document).find('div.sale-tr-et-detail').hide()
 
+    if !($(".sale-tr-pr-detail .selectize-single-transaction").val() > 0)
+      $(".sale-step1-form input[type=submit]").hide()
+      $("#save-and-next").hide()
+    else
+      $(".sale-step1-form input[type=submit]").show()
+      $("#save-and-next").show()
+
   $(document).on 'ifChecked', '#transaction_seller_person_is_false', ->
-    if this.checked
-      $(document).find('div.sale-tr-pr-detail').hide();
-      $(document).find('div.sale-tr-et-detail').show();
+    $(document).find('div.sale-tr-pr-detail').hide()
+    $(document).find('div.sale-tr-et-detail').show()
+
+    if !($(".sale-tr-et-detail .selectize-single-transaction").val() > 0)
+      $(".sale-step1-form input[type=submit]").hide()
+      $("#save-and-next").hide()
+    else
+      $(".sale-step1-form input[type=submit]").show()
+      $("#save-and-next").show()
+
+  if !($(document).find(".sale-tr-et-detail .selectize-single-transaction").val() > 0) && !($(document).find(".sale-tr-pr-detail .selectize-single-transaction").val() > 0) && $(document).find(".sale-step1-form").length > 0
+    $("#save-and-next").hide()
+
+  $(document).find("select.selectize-single-transaction").selectize
+    create: false
+    onChange: (value) ->
+      if !(value > 0 )
+        $(".sale-step1-form input[type=submit]").hide()
+        $("#save-and-next").hide()
+      else
+        $(".sale-step1-form input[type=submit]").show()
+        $("#save-and-next").show()
 
   # Purchase
   $(document).on 'ifChecked', '#transaction_purchaser_person_is_true', ->
@@ -149,11 +175,11 @@ $ ->
 
   $(document).on "click", ".main_menu span.manual_delete_property", (e)->
     e.preventDefault()
-    
+
     if $(this).parent().parent().hasClass('in-contract')
       if confirm('Please note: Since this property is in Contract, if Purchaser is really breaking contract, you may have various legal remedies.') == false
         return
-    
+
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
     window.location.href = actionurl
 
@@ -541,7 +567,7 @@ $ ->
 
     set_closing_date(psa_date, data.closing_days_after_inspection_period)
     $(document).find('#transaction_transaction_term_attributes_closing_days_after_inspection_period').val(data.closing_days_after_inspection_period)
-    
+
     $('#negotions_tab li.active').next().find('a').click()
 
   $(document).on 'click', '#back_prev_tab', (e) ->
@@ -572,14 +598,14 @@ $ ->
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_1i').val(first_deposit_date_due.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_2i').val(first_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_3i').val(first_deposit_date_due.getDate())
-  
+
   set_inspection_period_end = (psa_date, offset = 0) ->
     inspection_period_end = new Date(psa_date)
     inspection_period_end.setDate(inspection_period_end.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_1i').val(inspection_period_end.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_2i').val(inspection_period_end.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_3i').val(inspection_period_end.getDate())
-  
+
   set_second_deposit_date_due = (psa_date, offset = 0) ->
     second_deposit_date_due = new Date(psa_date)
     second_deposit_date_due.setDate(second_deposit_date_due.getDate() + parseInt(offset));
@@ -599,7 +625,7 @@ $ ->
     psa_month = $(document).find('#transaction_transaction_term_attributes_psa_date_2i option:selected').val()
     psa_day = $(document).find('#transaction_transaction_term_attributes_psa_date_3i option:selected').val()
     psa_date = new Date(parseInt(psa_year), parseInt(psa_month) - 1, parseInt(psa_day))
-    
+
     first_deposit_days_after_psa = $(document).find('#transaction_transaction_term_attributes_first_deposit_days_after_psa').val() || 0
     set_first_deposit_date_due(psa_date, first_deposit_days_after_psa)
 
@@ -615,27 +641,66 @@ $ ->
 
 
   # Prevent edit transaction form submit on enter
-  $(document).on 'keyup keypress', 'form#edit_transaction', (e)->
+  $(document).on 'keyup keypress', 'form.transaction-photo-gallery', (e)->
     keyCode = e.keyCode || e.which
     if keyCode == 13
       e.preventDefault()
       return false
 
+  # Edit transaction form validation check
+  $("form.transaction-photo-gallery").on 'click', 'input[type=submit]', (e)->
+    resultValidation = true
+    checkedElement = false
+
+    $.each $("form.transaction-photo-gallery").find('.is_selected_property'), ->
+      if $(this).is(":checked")
+        checkedElement = true
+        if $(this).parents(".fields").find(".cap-rate-box input").val() == "" || $(this).parents(".fields").find(".price-box input").val() == ""
+          resultValidation = false
+          $(this).parents(".fields").find(".transaction-form-validation").show()
+
+    if resultValidation == false || checkedElement == false
+      e.preventDefault()
+      return false
+
+  $("form.transaction-photo-gallery").on 'keydown', '.cap-rate-box input', (e)->
+    $(this).parents(".fields").find(".transaction-form-validation").hide()
+
+  $("form.transaction-photo-gallery").on 'keydown', '.price-box input', (e)->
+    $(this).parents(".fields").find(".transaction-form-validation").hide()
+
   $.each $(document).find('.is_selected_property'), ->
     if !$(this).is(":checked")
       $(this).parents(".fields").addClass('property-unchecked')
+
+  checkShowButton = ->
+    flgShowButton = false
+    if $(".transaction-photo-gallery").length == 0 && $(".sale-step1-form").length == 0
+      flgShowButton = true
+    $.each $(document).find('.is_selected_property'), ->
+      if $(this).is(":checked")
+        flgShowButton = true
+    if flgShowButton == false
+      $("#save-and-next").hide()
+      $(".transaction-photo-gallery input[type=submit]").hide()
+    else
+      $("#save-and-next").show()
+      $(".transaction-photo-gallery input[type=submit]").show()
+  checkShowButton()
 
   $(document).on 'ifChecked', '.is_selected_property', ->
     if $(this).is(":checked")
       $(this).parents(".fields").removeClass('property-unchecked')
     else
       $(this).parents(".fields").addClass('property-unchecked')
+    checkShowButton()
 
   $(document).on 'ifUnchecked', '.is_selected_property', ->
     if $(this).is(":checked")
       $(this).parents(".fields").removeClass('property-unchecked')
     else
       $(this).parents(".fields").addClass('property-unchecked')
+    checkShowButton()
 
   $(document).on 'ifChecked', '.radio_edit_mode_cap', ->
     $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', false)
