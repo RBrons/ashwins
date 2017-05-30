@@ -23,13 +23,13 @@
           ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
             li.active[role="presentation"]
                 a#basic_info[href="#basic_info_section" role="tab" data-toggle="tab" aria-expanded="true"] Basic info
-                
+
             li[role="presentation"]
                 a#broker[href="#broker_section" role="tab" data-toggle="tab" aria-expanded="false"] Broker
 
             li[role="presentation"]
                 a#attorney[href="#attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Attorney
-           
+
           .tab-content
             #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
               .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -37,23 +37,30 @@
                   | Basic Info
                 .clearfix
                 .form-group
-                  label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
-                  .clearfix
-                  .pull-left
-                    = f.date_select :purchase_only_closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto transaction_purchase_only_closing_date", style: "#{'display: none;' if f.object.m_purchase_only_closing_date?}"
-                    = f.text_field :purchase_only_closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_purchase_only_closing_date?}"
-                  .pull-right
-                    .pull-left
-                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                    .pull-right
-                      = f.check_box :m_purchase_only_closing_date, data: {class: 'transaction_purchase_only_closing_date'}, class: 'manually_date'
+                  p
+                    - unless @property.owner_entity_id.present?
+                      - owner_name = "No Owner"
+                    - else
+                      - owner_name = Entity.find(@property.owner_entity_id).display_name
+                    = "The Seller of <b>#{@property.name}</b> is <b>#{owner_name}</b> to be drawn from the Properties Module.".html_safe
+                / .form-group
+                  / label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
+                  / .clearfix
+                  / .pull-left
+                  /  = f.date_select :purchase_only_closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto transaction_purchase_only_closing_date", style: "#{'display: none;' if f.object.m_purchase_only_closing_date?}"
+                  /  = f.text_field :purchase_only_closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_purchase_only_closing_date?}"
+                  / .pull-right
+                  /  .pull-left
+                  /    label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                  /  .pull-right
+                  /    = f.check_box :m_purchase_only_closing_date, data: {class: 'transaction_purchase_only_closing_date'}, class: 'manually_date'
 
-                .clearfix
-                .form-group.margin-sm-top
-                  label = "Amount of QI Funds #{require_field}".html_safe
-                  .input-group
-                    .input-group-addon $
-                    = f.text_field :purchase_only_qi_funds, class: 'form-control'
+                / .clearfix
+                / .form-group.margin-sm-top
+                /  label = "Amount of QI Funds #{require_field}".html_safe
+                /  .input-group
+                /    .input-group-addon $
+                /    = f.text_field :purchase_only_qi_funds, class: 'form-control'
 
                 .clearfix
                   .form-group
@@ -68,7 +75,7 @@
 
                 .form-group
                   = f.submit 'Save & Next', class: 'btn btn-primary next-prev'
-            
+
             #broker_section.tab-pane.fade[role="tabpanel"]
 
             #attorney_section.tab-pane.fade[role="tabpanel"]

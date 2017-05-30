@@ -3,13 +3,19 @@
 - else
   - options = [ 'Active']
 
-= nested_form_for(@transaction, as: :transaction, url: properties_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type])) do |f|
+= nested_form_for(@transaction, as: :transaction, url: properties_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type]), html: {class: 'transaction-photo-gallery'}) do |f|
   - if @transaction.errors.any?
     #error_explanation
       h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
       ul
         - @transaction.errors.full_messages.each do |message|
           li = message
+  .transaction-note
+    p style="padding: 0 10px;"
+      - if params[:type] == "sale"
+        ="<b>Note: </b> Please select one or more properties to sell, propose a cap rate or sale price and then hit Save & Next".html_safe
+      - else
+        ="<b>Note: </b> Please select one or more properties to purchase, propose a cap rate or purchase price and then hit Save & Next".html_safe
   .transaction_properties_wrapper
     = f.fields_for :transaction_properties do |transaction_property_form|
       = transaction_property_form.hidden_field :transaction_main_id, :value => params[:main_id]
