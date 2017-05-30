@@ -32,8 +32,9 @@ class PropertiesController < ApplicationController
 
   # GET /properties/new
   def new
-    @property = defaultize(Property.new)
-    @property.ostatus = params["ostatus"]
+    @property = defaultize(Property.new({ostatus: params[:ostatus]}))
+    #@property.ostatus = params["ostatus"]
+    @property.check_price_current_rent_cap_rate
     add_breadcrumb ("<div class=\"pull-left\"><h4><a href=\'" + new_property_path(ostatus: params["ostatus"]) +
       "\'> Add Property - " + params["ostatus"] + " </a></h4></div>").html_safe
     render layout: false if request.xhr?

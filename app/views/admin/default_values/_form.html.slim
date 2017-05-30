@@ -22,6 +22,6 @@ h4 Note: For Dates use the format DD-MM-YYYY
 
   .form-group.required
       = f.label "Type", class: "control-label"
-      = f.select :value_type, options_for_select(["Amount", "Date", "String", "Random US City"], @default_value.value_type)
+      = f.select :value_type, options_for_select(DefaultValue::OPTIONS, @default_value.value_type)
 
   .actions = f.submit
