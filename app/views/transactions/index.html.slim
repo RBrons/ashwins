@@ -75,10 +75,10 @@
   table#data_table.sale_mode
     thead
       tr
-        th
-        th = check_box_tag :object_all, false, false
+        th[data-orderable="false"] = check_box_tag :object_all, false, false
         th Seller
         th Buyer
+        th[data-orderable="false"]
         th
           | Relinquished Property
           br
@@ -98,16 +98,24 @@
         - next if var.main.blank?
         - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
           tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
-            td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 0 && index == 0 }"]
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
             td = var.relinquishing_seller_entity.display_name
             td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
+            td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 0 && index == 0 }"]
             td = p.name
             td = p.try(:psa_date)
-            td = "Measured: #{ p.try(:first_deposit_days_after_psa) } Days"
-            td = "Measured: #{ p.try(:inspection_period_days) } Days"
-            td = "Measured: #{ p.try(:second_deposit_days_after_inspection_period) } Days"
-            td = "Measured: #{ p.try(:closing_days_after_inspection_period) } Days"
+            td 
+              span.pull-left = "Measured: #{ p.try(:measured_days_to_1st_deposit) } Days"
+              span.label.label-danger.pull-right = p.try(:first_deposit_date_due)
+            td 
+              span.pull-left = "Measured: #{ p.try(:measured_days_to_end_of_inspection) } Days"
+              span.label.label-danger.pull-right = p.try(:last_day_for_buyer_to_receive_deposit)
+            td 
+              span.pull-left = "Measured: #{ p.try(:measured_days_to_2nd_deposit) } Days"
+              span.label.label-danger.pull-right = p.try(:second_deposit_date_due)
+            td 
+              span.pull-left = "Measured: #{ p.try(:measured_days_to_closing) } Days"
+              span.label.label-danger.pull-right = p.try(:closing_date)
             td = var.try(:type_is)
             td = var.try(:type_is)
             td

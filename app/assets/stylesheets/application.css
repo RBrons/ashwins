@@ -34,6 +34,10 @@ table#data_table tbody tr.shown td.details-control {
     background: url('/assets/details_close.png') no-repeat center center;
 }
 
+table#data_table tbody tr.shown{
+    background-color: #f1f1f1
+}
+
 .form-group.required .control-label:after { 
    content:"*";
    color:red;
