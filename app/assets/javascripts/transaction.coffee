@@ -653,17 +653,34 @@ $ ->
     if !$(this).is(":checked")
       $(this).parents(".fields").addClass('property-unchecked')
 
+  checkShowButton = ->
+    flgShowButton = false
+    if $("#edit_transaction").length == 0
+      flgShowButton = true
+    $.each $(document).find('.is_selected_property'), ->
+      if $(this).is(":checked")
+        flgShowButton = true
+    if flgShowButton == false
+      $("#save-and-next").hide()
+      $("#edit_transaction input[type=submit]").hide()
+    else
+      $("#save-and-next").show()
+      $("#edit_transaction input[type=submit]").show()
+  checkShowButton()
+
   $(document).on 'ifChecked', '.is_selected_property', ->
     if $(this).is(":checked")
       $(this).parents(".fields").removeClass('property-unchecked')
     else
       $(this).parents(".fields").addClass('property-unchecked')
+    checkShowButton()
 
   $(document).on 'ifUnchecked', '.is_selected_property', ->
     if $(this).is(":checked")
       $(this).parents(".fields").removeClass('property-unchecked')
     else
       $(this).parents(".fields").addClass('property-unchecked')
+    checkShowButton()
 
   $(document).on 'ifChecked', '.radio_edit_mode_cap', ->
     $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', false)
