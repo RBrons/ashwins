@@ -66,7 +66,7 @@ CLIENT_PARTICIPANT_ROLE = ["Principal",
 
   # Views
   def name
-    if !company_name.nil?
+    if !company_name.nil? && !company_name.blank?
        "#{self.company_name} #{self.legal_ending}"
     else
       "#{self.first_name} #{self.last_name}"

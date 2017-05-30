@@ -275,7 +275,7 @@ Rails.application.routes.draw do
       get :delete_transaction_property
     end
   end
-  
+
   resources :transaction_sales, path: :transactions
   resources :transaction_purchases, path: :transactions
 
@@ -308,7 +308,9 @@ Rails.application.routes.draw do
     end
 
     resources :default_values do
-
+      collection do
+        get :new_property
+      end
     end
 
   end

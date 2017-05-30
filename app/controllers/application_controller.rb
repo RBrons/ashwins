@@ -122,7 +122,19 @@ class ApplicationController < ActionController::Base
           val_ = 0
         end
       elsif val.value_type == 'Random US City'
-          val_ = US_CITIES.sample
+        val_ = US_CITIES.sample
+      elsif val.value_type == 'Random Tenant'
+        val_ = (Property::TENANTS - ["No Tenant"]).sample
+      elsif val.value_type == 'Random Rent'
+        val_ =  500 + rand(9500) # (500..10000).to_a.sample
+      elsif val.value_type == 'Random Cap Rate'
+        val_ = 3 + rand(8)
+      elsif val.value_type == 'Random Owner'
+        if obj.try(:ostatus) == 'Purchased'
+          val_ = Entity.all.pluck('id').sample
+        elsif obj.try(:ostatus) == 'Prospective Purchase'
+          val_ = Contact.where(role: 'Counter-Party').pluck('id').sample
+        end
       end
       obj.try("#{val.attribute_name.underscore}=".to_sym, val_)
     end
