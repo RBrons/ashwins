@@ -11,7 +11,7 @@ class TransactionProperty < ApplicationRecord
 
   delegate :name, to: :property, allow_nil: true
 
-  delegate :closing_date, to: :transaction_term, allow_nil: true
+  delegate :transaction_term_closing_date, to: :transaction_term, allow_nil: true
   delegate :first_deposit_date_due, to: :transaction_term, allow_nil: true
   delegate :inspection_period_days, to: :transaction_term, allow_nil: true
   delegate :psa_date, to: :transaction_term, allow_nil: true
@@ -23,7 +23,9 @@ class TransactionProperty < ApplicationRecord
   delegate :measured_days_to_closing, to: :transaction_term, allow_nil: true
   delegate :last_day_for_buyer_to_receive_deposit, to: :transaction_term, allow_nil: true
   
-  
+  def is_in_contract?
+    return !self.psa_date.nil?
+  end
   
   def closed?
     return !self.closing_date.nil?

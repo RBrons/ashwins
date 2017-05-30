@@ -51,7 +51,11 @@ class TransactionTerm < ApplicationRecord
       return ''
     end
   end
-  
+
+  def transaction_term_closing_date
+    self.closing_date
+  end
+
   validate :closing_date_with_psa_date
   
   after_save do

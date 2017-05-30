@@ -126,8 +126,8 @@
             td
               - if p.try(:measured_days_to_closing) 
                 span.pull-left = "Measured: #{ p.try(:measured_days_to_closing) } Days"
-              - if p.try(:closing_date)
-                span.deadline-detail.label.label-danger.pull-right[style="display: none"] = p.try(:closing_date)
+              - if p.try(:transaction_term_closing_date)
+                span.deadline-detail.label.label-danger.pull-right[style="display: none"] = p.try(:transaction_term_closing_date)
             td = var.try(:type_is)
             td = var.try(:type_is)
             td
