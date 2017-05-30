@@ -19,10 +19,33 @@ $ ->
     $(document).find('div.sale-tr-pr-detail').show()
     $(document).find('div.sale-tr-et-detail').hide()
 
+    if !($(".sale-tr-pr-detail .selectize-single-transaction").val() > 0)
+      $("#new_transaction input[type=submit]").hide()
+      $("#save-and-next").hide()
+    else
+      $("#new_transaction input[type=submit]").show()
+      $("#save-and-next").show()
+
   $(document).on 'ifChecked', '#transaction_seller_person_is_false', ->
-    if this.checked
-      $(document).find('div.sale-tr-pr-detail').hide();
-      $(document).find('div.sale-tr-et-detail').show();
+    $(document).find('div.sale-tr-pr-detail').hide()
+    $(document).find('div.sale-tr-et-detail').show()
+
+    if !($(".sale-tr-et-detail .selectize-single-transaction").val() > 0)
+      $("#new_transaction input[type=submit]").hide()
+      $("#save-and-next").hide()
+    else
+      $("#new_transaction input[type=submit]").show()
+      $("#save-and-next").show()
+
+  $(document).find("select.selectize-single-transaction").selectize
+    create: false
+    onChange: (value) ->
+      if !(value > 0 )
+        $("#new_transaction input[type=submit]").hide()
+        $("#save-and-next").hide()
+      else
+        $("#new_transaction input[type=submit]").show()
+        $("#save-and-next").show()
 
   # Purchase
   $(document).on 'ifChecked', '#transaction_purchaser_person_is_true', ->

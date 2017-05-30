@@ -17,6 +17,10 @@
           li = transaction_message_filter(message)
 
   .col-lg-4.col-md-4.col-sm-12.col-xs-12
+    .transaction-note style=("#{('display: none;' if f.object.persisted? && f.object.relinquishing_seller_entity.present?)}")
+      p
+        ="<b>Note: </b> To commence your 1031 exchange, please select a client who will sell(relinquish) a property and then hit Save & Next".html_safe
+
     .clearfix.margin-sm-top
       h2.heading_without_padding_large
         = "Relinquishing Seller #{require_field}".html_safe
@@ -35,24 +39,24 @@
       = f.hidden_field :transaction_main_id
 
     .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.seller_person_is?)}")
-      = f.select :relqn_seller_entity_id, options_html_entities(f.object.relinquishing_seller_entity_id, "transactions"), {}, class: 'selectize-single', disabled: f.object.persisted? && f.object.relinquishing_seller_entity.present?
+      = f.select :relqn_seller_entity_id, options_html_entities(f.object.relinquishing_seller_entity_id, "transactions"), {}, class: 'selectize-single-transaction', disabled: f.object.persisted? && f.object.relinquishing_seller_entity.present?
       - if f.object.persisted? && f.object.relinquishing_seller_entity.present?
         .clearfix.margin-sm-top
         - e = @transaction.relinquishing_seller_entity
         - comma_str = ""
         - if e.has_comma
-          - comma_str = "," 
+          - comma_str = ","
         - name_str = "#{e.name.strip}#{comma_str} #{e.legal_ending}"
         = link_to name_str, entity_path(f.object.relinquishing_seller_entity.key), target: '_blank'
 
     .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.seller_person_is?)}")
-      = f.select :relinquishing_seller_entity_id, options_html_entities(f.object.relinquishing_seller_entity_id, "transactions", "individual"), {}, class: 'selectize-single', disabled: f.object.persisted? && f.object.relinquishing_seller_entity.present?
+      = f.select :relinquishing_seller_entity_id, options_html_entities(f.object.relinquishing_seller_entity_id, "transactions", "individual"), {}, class: 'selectize-single-transaction', disabled: f.object.persisted? && f.object.relinquishing_seller_entity.present?
       - if f.object.persisted? && f.object.relinquishing_seller_entity.present?
         .clearfix.margin-sm-top
         - e = @transaction.relinquishing_seller_entity
         - comma_str = ""
         - if e.has_comma
-          - comma_str = "," 
+          - comma_str = ","
         - name_str = "#{e.name.strip}#{comma_str} #{e.legal_ending}"
         = link_to name_str, entity_path(f.object.relinquishing_seller_entity.key), target: '_blank'
 
@@ -82,4 +86,7 @@
 
     .clearfix.margin-lg-top
     .form-group style=("#{('display: none;' if f.object.persisted? && f.object.relinquishing_seller_entity.present?)}")
-      = f.submit 'Save & Next', class: 'btn btn-primary next-prev'
+      = f.submit 'Save & Next', class: 'btn btn-primary next-prev', style: 'display: none'
+
+  javascript:
+    document.getElementById("save-and-next").style.display = "none"
