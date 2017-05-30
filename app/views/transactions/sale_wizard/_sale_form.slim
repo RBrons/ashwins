@@ -3,7 +3,7 @@
 - else
   - options = [ 'Active']
 
-= form_for(@transaction, as: :transaction) do |f|
+= form_for(@transaction, as: :transaction, html: {class: 'sale-step1-form'}) do |f|
   = hidden_field_tag :sub, params[:sub]
   = hidden_field_tag :type, params[:type]
   = hidden_field_tag :main_id, params[:main_id]

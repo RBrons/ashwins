@@ -20,10 +20,10 @@ $ ->
     $(document).find('div.sale-tr-et-detail').hide()
 
     if !($(".sale-tr-pr-detail .selectize-single-transaction").val() > 0)
-      $("#new_transaction input[type=submit]").hide()
+      $(".sale-step1-form input[type=submit]").hide()
       $("#save-and-next").hide()
     else
-      $("#new_transaction input[type=submit]").show()
+      $(".sale-step1-form input[type=submit]").show()
       $("#save-and-next").show()
 
   $(document).on 'ifChecked', '#transaction_seller_person_is_false', ->
@@ -31,23 +31,23 @@ $ ->
     $(document).find('div.sale-tr-et-detail').show()
 
     if !($(".sale-tr-et-detail .selectize-single-transaction").val() > 0)
-      $("#new_transaction input[type=submit]").hide()
+      $(".sale-step1-form input[type=submit]").hide()
       $("#save-and-next").hide()
     else
-      $("#new_transaction input[type=submit]").show()
+      $(".sale-step1-form input[type=submit]").show()
       $("#save-and-next").show()
 
-  if !($(document).find(".sale-tr-et-detail .selectize-single-transaction").val() > 0) && !($(document).find(".sale-tr-pr-detail .selectize-single-transaction").val() > 0) && $(document).find("#new_transaction").length > 0
+  if !($(document).find(".sale-tr-et-detail .selectize-single-transaction").val() > 0) && !($(document).find(".sale-tr-pr-detail .selectize-single-transaction").val() > 0) && $(document).find(".sale-step1-form").length > 0
     $("#save-and-next").hide()
 
   $(document).find("select.selectize-single-transaction").selectize
     create: false
     onChange: (value) ->
       if !(value > 0 )
-        $("#new_transaction input[type=submit]").hide()
+        $(".sale-step1-form input[type=submit]").hide()
         $("#save-and-next").hide()
       else
-        $("#new_transaction input[type=submit]").show()
+        $(".sale-step1-form input[type=submit]").show()
         $("#save-and-next").show()
 
   # Purchase
@@ -624,18 +624,18 @@ $ ->
 
 
   # Prevent edit transaction form submit on enter
-  $(document).on 'keyup keypress', 'form#edit_transaction', (e)->
+  $(document).on 'keyup keypress', 'form.transaction-photo-gallery', (e)->
     keyCode = e.keyCode || e.which
     if keyCode == 13
       e.preventDefault()
       return false
 
   # Edit transaction form validation check
-  $("form#edit_transaction").on 'click', 'input[type=submit]', (e)->
+  $("form.transaction-photo-gallery").on 'click', 'input[type=submit]', (e)->
     resultValidation = true
     checkedElement = false
 
-    $.each $("form#edit_transaction").find('.is_selected_property'), ->
+    $.each $("form.transaction-photo-gallery").find('.is_selected_property'), ->
       if $(this).is(":checked")
         checkedElement = true
         if $(this).parents(".fields").find(".cap-rate-box input").val() == "" || $(this).parents(".fields").find(".price-box input").val() == ""
@@ -646,10 +646,10 @@ $ ->
       e.preventDefault()
       return false
 
-  $("form#edit_transaction").on 'keydown', '.cap-rate-box input', (e)->
+  $("form.transaction-photo-gallery").on 'keydown', '.cap-rate-box input', (e)->
     $(this).parents(".fields").find(".transaction-form-validation").hide()
 
-  $("form#edit_transaction").on 'keydown', '.price-box input', (e)->
+  $("form.transaction-photo-gallery").on 'keydown', '.price-box input', (e)->
     $(this).parents(".fields").find(".transaction-form-validation").hide()
 
   $.each $(document).find('.is_selected_property'), ->
@@ -658,17 +658,17 @@ $ ->
 
   checkShowButton = ->
     flgShowButton = false
-    if $("#edit_transaction").length == 0 && $("#new_transaction").length == 0
+    if $(".transaction-photo-gallery").length == 0 && $(".sale-step1-form").length == 0
       flgShowButton = true
     $.each $(document).find('.is_selected_property'), ->
       if $(this).is(":checked")
         flgShowButton = true
     if flgShowButton == false
       $("#save-and-next").hide()
-      $("#edit_transaction input[type=submit]").hide()
+      $(".transaction-photo-gallery input[type=submit]").hide()
     else
       $("#save-and-next").show()
-      $("#edit_transaction input[type=submit]").show()
+      $(".transaction-photo-gallery input[type=submit]").show()
   checkShowButton()
 
   $(document).on 'ifChecked', '.is_selected_property', ->
