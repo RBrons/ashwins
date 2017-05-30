@@ -4,6 +4,16 @@ $ ->
   selected_offer_tab = $(document).find($(document).find('#offer_list li.active a').attr('href'))
   last_counteroffer = ""
 
+  #Transaction List
+  $(document).on 'click', '#data_table.sale_mode tbody td.details-control', ->
+    tr = $(this).closest('tr')
+    if tr.hasClass 'shown'
+      tr.nextUntil('.parent-row').hide()
+      tr.removeClass 'shown'
+    else
+      tr.nextUntil('.parent-row').show()
+      tr.addClass 'shown'
+    
   # Sale
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
     $(document).find('div.sale-tr-pr-detail').show()
