@@ -15,6 +15,12 @@ $ ->
       tr.nextUntil('.parent-row').show()
       tr.nextUntil('.parent-row').addClass('striped-row')
       tr.addClass 'shown'
+  
+  $(document).on 'ifChanged', '#show-transaction-deadline', ->
+    if this.checked
+      $(document).find('#data_table.sale_mode tbody tr td span.deadline-detail').show()
+    else
+      $(document).find('#data_table.sale_mode tbody tr td span.deadline-detail').hide()
 
   # Sale
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->

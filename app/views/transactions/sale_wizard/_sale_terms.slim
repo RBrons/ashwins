@@ -328,7 +328,7 @@
                   label.control-lable First Deposit To Be Received By
                   .clearfix
                   = transaction_term_form.hidden_field :first_deposit_days_after_psa
-                  = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.first_deposit_days_after_psa.to_i.day) }, class: "form-control select_auto", readonly: true
+                  = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: transaction_term_form.object.first_deposit_date_due || (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.first_deposit_days_after_psa.to_i.day) }, class: "form-control select_auto", readonly: true
               .form-group
                   label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
                   .clearfix
@@ -338,8 +338,8 @@
               .form-group.transaction_transaction_term_attributes_second_deposit_wrapper[style="#{transaction_term_form.object.second_deposit ? '' : 'display: none'}"]
                   label.control-lable Second Deposit To Be Received By
                   .clearfix
-                    = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: transaction_term_form.object.second_deposit
-                    = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true, disabled: transaction_term_form.object.second_deposit
+                    = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: !transaction_term_form.object.second_deposit
+                    = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: transaction_term_form.object.second_deposit_date_due || (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true, disabled: !transaction_term_form.object.second_deposit
               .form-group
                   label.control-lable Definition Of Holidays
                   .clearfix
@@ -348,7 +348,7 @@
                   label.control-lable Approximate Date Of Closing
                   .clearfix
                   = transaction_term_form.hidden_field :closing_days_after_inspection_period
-                  = transaction_term_form.date_select '', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
+                  = transaction_term_form.date_select '', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: transaction_term_form.object.closing_date || (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
       
         .col-lg-6.col-md-6.col-sm-12.col-xs-12

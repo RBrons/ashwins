@@ -3,6 +3,10 @@
   = link_to 'Sale Mode', transactions_path(mode: :sale), class: "btn #{(params[:mode].blank? || params[:mode] == 'sale') ? 'btn-primary' : 'btn-default'}"
   = link_to 'Buy Mode', transactions_path(mode: :buy), class: "btn #{(params[:mode] == 'buy') ? 'btn-primary' : 'btn-default'} margin-sm-left"
 .clearfix.margin-lg-top
+  .heading_blue
+    span
+      input#show-transaction-deadline.flat-icheck[type="checkbox"]
+    span.margin-md-left Show Deadline Details
 
 - if params[:mode] == 'buy'
   table#data_table.purchase_mode
@@ -104,18 +108,26 @@
             td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 0 && index == 0 }"]
             td = p.name
             td = p.try(:psa_date)
+            td
+              - if p.try(:measured_days_to_1st_deposit)
+                span.pull-left = "Measured: #{ p.try(:measured_days_to_1st_deposit) } Days"
+              - if p.try(:first_deposit_date_due)
+                span.deadline-detail.label.label-danger.pull-right[style="display: none"] = p.try(:first_deposit_date_due)
             td 
-              span.pull-left = "Measured: #{ p.try(:measured_days_to_1st_deposit) } Days"
-              span.label.label-danger.pull-right = p.try(:first_deposit_date_due)
+              - if p.try(:measured_days_to_end_of_inspection)
+                span.pull-left = "Measured: #{ p.try(:measured_days_to_end_of_inspection) } Days"
+              - if p.try(:last_day_for_buyer_to_receive_deposit)
+                span.deadline-detail.label.label-danger.pull-right[style="display: none"] = p.try(:last_day_for_buyer_to_receive_deposit)
             td 
-              span.pull-left = "Measured: #{ p.try(:measured_days_to_end_of_inspection) } Days"
-              span.label.label-danger.pull-right = p.try(:last_day_for_buyer_to_receive_deposit)
-            td 
-              span.pull-left = "Measured: #{ p.try(:measured_days_to_2nd_deposit) } Days"
-              span.label.label-danger.pull-right = p.try(:second_deposit_date_due)
-            td 
-              span.pull-left = "Measured: #{ p.try(:measured_days_to_closing) } Days"
-              span.label.label-danger.pull-right = p.try(:closing_date)
+              - if p.try(:measured_days_to_2nd_deposit)
+                span.pull-left = "Measured: #{ p.try(:measured_days_to_2nd_deposit) } Days"
+              - if p.try(:second_deposit_date_due)
+                span.deadline-detail.label.label-danger.pull-right[style="display: none"] = p.try(:second_deposit_date_due)
+            td
+              - if p.try(:measured_days_to_closing) 
+                span.pull-left = "Measured: #{ p.try(:measured_days_to_closing) } Days"
+              - if p.try(:closing_date)
+                span.deadline-detail.label.label-danger.pull-right[style="display: none"] = p.try(:closing_date)
             td = var.try(:type_is)
             td = var.try(:type_is)
             td

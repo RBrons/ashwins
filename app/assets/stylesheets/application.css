@@ -34,7 +34,7 @@ table#data_table tbody tr.shown td.details-control {
     background: url('/assets/details_close.png') no-repeat center center;
 }
 
-table#data_table tbody tr.shown{
+table#data_table tbody tr.parent-row{
     background-color: #f1f1f1
 }
 
