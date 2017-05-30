@@ -550,6 +550,7 @@ $ ->
     $.notify 'Success', 'success'
     if data.psa_date
       psa_date = new Date(data.psa_date)
+      $(document).find('.side-menu>li>.nav.child_menu>li.current-page').addClass('in-contract')
     else
       psa_date = new Date()
 
