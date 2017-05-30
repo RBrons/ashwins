@@ -43,11 +43,11 @@ class XhrController < ApplicationController
     render :json => @groups.to_json
   end
 
-  def get_property_data_for_transaction
-    @property = Property.find(params[:id])
+  # def get_property_data_for_transaction
+  #   @property = Property.find(params[:id])
 
-    render :json => {cap: @property.cap_rate, rent: @property.current_rent, price: @property.price, image: @property.cl_image_public_id}
-  end
+  #   render :json => {cap: @property.cap_rate, rent: @property.current_rent, price: @property.price, image: @property.cl_image_public_id}
+  # end
 
   def entity_child_groups
     @groups = []
