@@ -75,6 +75,7 @@
   table#data_table.sale_mode
     thead
       tr
+        th
         th = check_box_tag :object_all, false, false
         th Seller
         th Buyer
@@ -95,24 +96,23 @@
         - var = transaction
         - today_ = Date.today
         - next if var.main.blank?
-        tr
-          td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
-          td = var.relinquishing_seller_entity.display_name
-          td = var.relinquishing_purchaser_contact.try(:name)
-          td
-            - var.transaction_properties.each do |p|
-              = "#{p.name}"
-              br
-          td = var.psa_date
-          td = "Measured: #{ var.first_deposit_date_due.try(:days_gone) } Days"
-          td = "Measured: #{ var.end_of_inspection.try(:days_gone) } Days"
-          td = "Measured: #{ var.second_deposit_date_due.try(:days_gone) } Days"
-          td = "Measured: #{ var.closing_date.try(:days_gone) } Days"
-          td = var.try(:type_is)
-          td = var.try(:type_is)
-          td
-            = link_to 'Edit', edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
-            = link_to 'Delete', transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+        - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
+          tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
+            td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 0 && index == 0 }"]
+            td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
+            td = var.relinquishing_seller_entity.display_name
+            td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
+            td = p.name
+            td = p.try(:psa_date)
+            td = "Measured: #{ p.try(:first_deposit_days_after_psa) } Days"
+            td = "Measured: #{ p.try(:inspection_period_days) } Days"
+            td = "Measured: #{ p.try(:second_deposit_days_after_inspection_period) } Days"
+            td = "Measured: #{ p.try(:closing_days_after_inspection_period) } Days"
+            td = var.try(:type_is)
+            td = var.try(:type_is)
+            td
+              = link_to 'Edit', edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+              = link_to 'Delete', transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
 
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: { local_path: multi_delete_transactions_path, klazz: [TransactionSale, TransactionPurchase], index_path: transactions_path(trashed: !params[:trashed].to_b, mode: params[:mode]) }

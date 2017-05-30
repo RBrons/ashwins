@@ -26,6 +26,13 @@
  	    font-size: 14px !important;
  }
 
+table#data_table tbody tr td.details-control {
+    background: url('/assets/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+table#data_table tbody tr.shown td.details-control {
+    background: url('/assets/details_close.png') no-repeat center center;
+}
 
 .form-group.required .control-label:after { 
    content:"*";

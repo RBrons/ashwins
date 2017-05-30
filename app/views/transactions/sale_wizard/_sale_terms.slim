@@ -348,7 +348,7 @@
                   label.control-lable Approximate Date Of Closing
                   .clearfix
                   = transaction_term_form.hidden_field :closing_days_after_inspection_period
-                  = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
+                  = transaction_term_form.date_select '', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
       
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
