@@ -37,6 +37,9 @@ $ ->
       $("#new_transaction input[type=submit]").show()
       $("#save-and-next").show()
 
+  if !($(document).find(".sale-tr-et-detail .selectize-single-transaction").val() > 0) && !($(document).find(".sale-tr-pr-detail .selectize-single-transaction").val() > 0) && $(document).find("#new_transaction").length > 0
+    $("#save-and-next").hide()
+
   $(document).find("select.selectize-single-transaction").selectize
     create: false
     onChange: (value) ->
@@ -655,7 +658,7 @@ $ ->
 
   checkShowButton = ->
     flgShowButton = false
-    if $("#edit_transaction").length == 0
+    if $("#edit_transaction").length == 0 && $("#new_transaction").length == 0
       flgShowButton = true
     $.each $(document).find('.is_selected_property'), ->
       if $(this).is(":checked")

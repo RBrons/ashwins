@@ -87,6 +87,3 @@
     .clearfix.margin-lg-top
     .form-group style=("#{('display: none;' if f.object.persisted? && f.object.relinquishing_seller_entity.present?)}")
       = f.submit 'Save & Next', class: 'btn btn-primary next-prev', style: 'display: none'
-
-  javascript:
-    document.getElementById("save-and-next").style.display = "none"

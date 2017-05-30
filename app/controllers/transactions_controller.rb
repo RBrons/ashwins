@@ -166,7 +166,7 @@ class TransactionsController < ApplicationController
   def properties_update
     flag = false
     p_count = @transaction.transaction_properties.length
-    
+
     (0..p_count-1).each do |p_index|
       pid = params[:transaction][:transaction_properties_attributes]["#{p_index}".to_sym][:property_id]
 
@@ -375,7 +375,7 @@ class TransactionsController < ApplicationController
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
       return
     end
-    
+
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
     if @transaction_property.present?
       if @transaction_property.transaction_term.blank?
@@ -577,8 +577,8 @@ class TransactionsController < ApplicationController
       else
         redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
       end
-    end  
-  
+    end
+
   end
 
   private
@@ -654,7 +654,7 @@ class TransactionsController < ApplicationController
       Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', transaction.prop_owner, transaction.prop_status)
     elsif type == 'purchase'
       possible_properties =
-      Property.where('ownership_status = ? and title is not null', transaction.prop_status)
+      Property.where('ownership_status = ? and title is not null', transaction.prop_status).where.not(price: nil)
     end
 
     existing_transaction_properties = transaction.transaction_properties.pluck(:property_id).uniq.compact
