@@ -38,10 +38,11 @@
                 .clearfix
                 .form-group
                   p
-                    - unless @property.owner_entity_id.present?
-                      - owner_name = "No Owner"
-                    - else
+                    - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
                       - owner_name = Entity.find(@property.owner_entity_id).display_name
+                    - else
+                      - owner_name = "No Owner"
+
                     = "The Seller of <b>#{@property.name}</b> is <b>#{owner_name}</b> to be drawn from the Properties Module.".html_safe
                 / .form-group
                   / label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
