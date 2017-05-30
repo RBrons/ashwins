@@ -14,10 +14,27 @@ class Admin::DefaultValuesController < ApplicationController
   # GET /default_values/new
   def new
     @default_value = DefaultValue.new
+    @title = "Property - Add a Default Value"
+    @entity = ["Property"]
+    @entity_fields = Property.column_names.map(&:camelize)
+    @type_options = DefaultValue::PROPERTY_OPTIONS
+  end
+
+  def new_property
+    @default_value = DefaultValue.new
+    @title = "Property - Add a Default Value"
+    @entity = ["Property"]
+    @entity_fields = Property.column_names.map(&:camelize)
+    @type_options = DefaultValue::PROPERTY_OPTIONS
+    render :new
   end
 
   # GET /default_values/1/edit
   def edit
+    @title = "#{@default_value.entity_name} - Edit the Default Value"
+    @entity = [@default_value.entity_name]
+    @entity_fields = @default_value.entity_name.constantize.column_names.map(&:camelize)
+    @type_options = DefaultValue.send("#{@default_value.entity_name.downcase}_options".to_sym)
   end
 
   # POST /default_values

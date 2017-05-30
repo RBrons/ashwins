@@ -10,11 +10,11 @@ h4 Note: For Dates use the format DD-MM-YYYY
 
   .form-group.required
       = f.label "Entity/Table", class: "control-label"
-      = f.select :entity_name, options_for_select(["Property"], @default_value.entity_name)
+      = f.select :entity_name, options_for_select(@entity, @default_value.entity_name)
 
   .form-group.required
       = f.label "Attribute/Field Name", class: "control-label"
-      = f.select :attribute_name, options_for_select(Property.column_names.map(&:camelize), @default_value.attribute_name)
+      = f.select :attribute_name, options_for_select(@entity_fields, @default_value.attribute_name)
 
   .form-group.required
       = f.label "Attribute/Field Value", class: "control-label"
@@ -22,6 +22,6 @@ h4 Note: For Dates use the format DD-MM-YYYY
 
   .form-group.required
       = f.label "Type", class: "control-label"
-      = f.select :value_type, options_for_select(DefaultValue::OPTIONS, @default_value.value_type)
+      = f.select :value_type, options_for_select(@type_options, @default_value.value_type)
 
   .actions = f.submit
