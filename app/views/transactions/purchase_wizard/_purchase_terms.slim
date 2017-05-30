@@ -88,7 +88,7 @@
                       = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Counter Accepted' : 'Accept Counter', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
                     - else
                       -if transaction_property_offer.is_ask_accepted?
-                        = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
+                        = link_to 'Offer Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
                       - else
                         = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Client\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
 
@@ -396,31 +396,31 @@ button#back_prev_tab.btn.btn-default Back
           input.from_relinquishing_offeror[type="hidden" name="from_relinquishing_offeror" value=""]
 
           h2.heading_without_padding_large Replacement Offeror
-          .form-group
-            .heading_blue.radio-inline
-              span
-                input.contact_is_company_false.form-control.radiobuttons[type="radio" value="false" name="contact[is_company]" checked]
-              span.margin-md-left Individual
-            .heading_blue.radio-inline
-              span.margin-md-left
-                input.contact_is_company_true.form-control.radiobuttons[type="radio" value="true" name="contact[is_company]"]
-              span.margin-md-left Entity
+          /.form-group
+          /  .heading_blue.radio-inline
+          /    span
+          /       input.contact_is_company_false.form-control.radiobuttons[type="radio" value="false" name="contact[is_company]" checked]
+          /    span.margin-md-left Individual
+          /  .heading_blue.radio-inline
+          /     span.margin-md-left
+          /     input.contact_is_company_true.form-control.radiobuttons[type="radio" value="true" name="contact[is_company]"]
+          /    span.margin-md-left Entity
 
-          .company-fields-wrapper[style="display: none"]
-            .form-group
-              label Company Name
-              input.form-control[type="text" name="contact[company_name]" value=""]
-          .individual-fields-wrapper
-            .form-group
-              label First Name
-              input.form-control[type="text" name="contact[first_name]" value=""]
-            .form-group
-              label Last Name
-              input.form-control[type="text" name="contact[last_name]" value=""]
+          / .company-fields-wrapper[style="display: none"]
+          /   .form-group
+          /     label Company Name
+          /    input.form-control[type="text" name="contact[company_name]" value=""]
+          /.individual-fields-wrapper
+          /  .form-group
+          /    label First Name
+          /   input.form-control[type="text" name="contact[first_name]" value=""]
+          / .form-group
+          /   label Last Name
+          /   input.form-control[type="text" name="contact[last_name]" value=""]
       .row
         .col-md-12
             .col-md-3
-                h4 Asking
+                h4 Offering
                 h1.property-price.green.margin-lg-top
                   = number_to_currency(@transaction.transaction_properties.where(property_id: params[:cur_property]).first.sale_price)
                 - if @property.try(:title).present?
@@ -431,7 +431,7 @@ button#back_prev_tab.btn.btn-default Back
       .row
         .col-md-12.margin-lg-top.form-group
             button.initial_log_counteroffer.btn.btn-default Log Initial Counter Offer
-            button.ask_accepted.btn.btn-default.border-red.red Ask Accepted
+            button.ask_accepted.btn.btn-default.border-red.red Offer Accepted
             input.last_counteroffer_price[type="hidden" value=""]
 
             table.counteroffer_history.table.margin-lg-top
