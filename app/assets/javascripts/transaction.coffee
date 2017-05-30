@@ -13,7 +13,7 @@ $ ->
     else
       tr.nextUntil('.parent-row').show()
       tr.addClass 'shown'
-    
+
   # Sale
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
     $(document).find('div.sale-tr-pr-detail').show()
@@ -147,11 +147,11 @@ $ ->
 
   $(document).on "click", ".main_menu span.manual_delete_property", (e)->
     e.preventDefault()
-    
+
     if $(this).parent().parent().hasClass('in-contract')
       if confirm('Please note: Since this property is in Contract, if Purchaser is really breaking contract, you may have various legal remedies.') == false
         return
-    
+
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
     window.location.href = actionurl
 
@@ -524,7 +524,7 @@ $ ->
     set_inspection_period_end(psa_date, data.inspection_period_days)
     set_second_deposit_date_due(psa_date, data.second_deposit_days_after_inspection_period)
     set_closing_date(psa_date, data.closing_days_after_inspection_period)
-    
+
     $('#negotions_tab li.active').next().find('a').click()
 
   $(document).on 'click', '#back_prev_tab', (e) ->
@@ -555,14 +555,14 @@ $ ->
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_1i').val(first_deposit_date_due.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_2i').val(first_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_3i').val(first_deposit_date_due.getDate())
-  
+
   set_inspection_period_end = (psa_date, offset = 0) ->
     inspection_period_end = psa_date
     inspection_period_end.setDate(inspection_period_end.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_1i').val(inspection_period_end.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_2i').val(inspection_period_end.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_3i').val(inspection_period_end.getDate())
-  
+
   set_second_deposit_date_due = (psa_date, offset = 0) ->
     second_deposit_date_due = psa_date
     second_deposit_date_due.setDate(second_deposit_date_due.getDate() + parseInt(offset));
@@ -582,7 +582,7 @@ $ ->
     psa_month = $(document).find('#transaction_transaction_term_attributes_psa_date_2i option:selected').val()
     psa_day = $(document).find('#transaction_transaction_term_attributes_psa_date_3i option:selected').val()
     psa_date = new Date(parseInt(psa_year), parseInt(psa_month) - 1, parseInt(psa_day))
-    
+
     first_deposit_days_after_psa = $(document).find('#transaction_transaction_term_attributes_first_deposit_days_after_psa').val() || 0
     set_first_deposit_date_due(psa_date, first_deposit_days_after_psa)
 
@@ -603,6 +603,28 @@ $ ->
     if keyCode == 13
       e.preventDefault()
       return false
+
+  # Edit transaction form validation check
+  $("form#edit_transaction").on 'click', 'input[type=submit]', (e)->
+    resultValidation = true
+    checkedElement = false
+
+    $.each $("form#edit_transaction").find('.is_selected_property'), ->
+      if $(this).is(":checked")
+        checkedElement = true
+        if $(this).parents(".fields").find(".cap-rate-box input").val() == "" || $(this).parents(".fields").find(".price-box input").val() == ""
+          resultValidation = false
+          $(this).parents(".fields").find(".transaction-form-validation").show()
+
+    if resultValidation == false || checkedElement == false
+      e.preventDefault()
+      return false
+
+  $("form#edit_transaction").on 'keydown', '.cap-rate-box input', (e)->
+    $(this).parents(".fields").find(".transaction-form-validation").hide()
+
+  $("form#edit_transaction").on 'keydown', '.price-box input', (e)->
+    $(this).parents(".fields").find(".transaction-form-validation").hide()
 
   $.each $(document).find('.is_selected_property'), ->
     if !$(this).is(":checked")

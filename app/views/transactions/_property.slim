@@ -79,6 +79,8 @@
             / = transaction_property_form.select :property_id, options_for_select(Property.where('ownership_status = ? and title is not null', @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-purchase'
           / - else
             / = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-sale'
+        .transaction-form-validation.center
+          p Cap Rate or Asking Price should not be blank or zero.
         .transaction-property-calculation-readonly
           .form-group.center
             label Current Rent
