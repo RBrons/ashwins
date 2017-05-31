@@ -43,7 +43,7 @@ class Admin::DefaultValuesController < ApplicationController
     @title = "#{@default_value.entity_name} - Edit the Default Value"
     @entity = [@default_value.entity_name]
     @entity_fields = @default_value.entity_name.constantize.column_names.map(&:camelize)
-    @type_options = DefaultValue.send("#{@default_value.entity_name.downcase}_options".to_sym)
+    @type_options = DefaultValue.send("#{@default_value.entity_name.underscore.downcase}_options".to_sym)
   end
 
   # POST /default_values
