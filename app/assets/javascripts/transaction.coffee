@@ -22,6 +22,12 @@ $ ->
     else
       $(document).find('#data_table.sale_mode tbody tr td span.deadline-detail').hide()
 
+  # Save & Next button
+  $(document).on 'click', '#save-and-next', (e) ->
+    e.preventDefault()
+    next_step = $(document).find('ul.wizard_steps li.selected').next()
+    window.location.href = next_step.find('a').attr("href")
+
   # Sale
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
     $(document).find('div.sale-tr-pr-detail').show()
