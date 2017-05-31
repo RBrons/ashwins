@@ -128,7 +128,7 @@ class ApplicationController < ActionController::Base
       elsif val.value_type == 'Random Rent'
         val_ =  500 + rand(9500) # (500..10000).to_a.sample
       elsif val.value_type == 'Random Cap Rate'
-        val_ = 3 + rand(8)
+        val_ = 1 + rand(10)
       elsif val.value_type == 'Random Owner'
         if obj.try(:ostatus) == 'Purchased'
           val_ = Entity.all.pluck('id').sample
