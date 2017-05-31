@@ -29,6 +29,15 @@ class Admin::DefaultValuesController < ApplicationController
     render :new
   end
 
+  def new_terms
+    @default_value = DefaultValue.new
+    @title = "Terms - Add a Default Value"
+    @entity = ["TransactionTerm"]
+    @entity_fields = TransactionTerm.column_names.map(&:camelize)
+    @type_options = DefaultValue::TRANSACTION_TERM_OPTIONS
+    render :new
+  end
+
   # GET /default_values/1/edit
   def edit
     @title = "#{@default_value.entity_name} - Edit the Default Value"

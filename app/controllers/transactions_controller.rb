@@ -380,6 +380,8 @@ class TransactionsController < ApplicationController
     if @transaction_property.present?
       if @transaction_property.transaction_term.blank?
         @transaction_property.build_transaction_term
+        # set default values for transaction term
+        defaultize @transaction_property.transaction_term
       end
 
       if params[:type] == 'sale'

@@ -309,7 +309,7 @@ Rails.application.routes.draw do
 
     resources :default_values do
       collection do
-        get :new_property
+        get :new_property, :new_terms
       end
     end
 
