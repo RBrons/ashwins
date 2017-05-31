@@ -71,12 +71,12 @@
               - when 'closing'
                 h5 = link_to " #{params[:sub].present? ? params[:sub] : ''}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
         - if params[:type] == 'status'
-        .pull-left
-          h5
-            | &nbsp;&nbsp;/&nbsp;&nbsp;
-        .pull-left
-          h5
-            = link_to 'Status', defined?(@transaction_main) && @transaction_main.persisted? ? get_status_transaction_path(@transaction_main, type: 'status', main_id: @transaction_main) : '#', class: ""
+          .pull-left
+            h5
+              | &nbsp;&nbsp;/&nbsp;&nbsp;
+          .pull-left
+            h5
+              = link_to 'Status', defined?(@transaction_main) && @transaction_main.persisted? ? get_status_transaction_path(@transaction_main, type: 'status', main_id: @transaction_main) : '#', class: ""
       
             
     .title_right.note-list

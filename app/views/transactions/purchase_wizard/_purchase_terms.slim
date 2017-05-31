@@ -151,7 +151,7 @@
 
               .form-group
                 label.control-label Approximate Date of Closing
-                p.no-margin Number of Days After insepction Period
+                p.no-margin Number of Days After inspection Period
                 = transaction_term_form.text_field :closing_days_after_inspection_period, class: 'form-control'
 
               .form-group
@@ -348,12 +348,6 @@
           .note
             h2 Tasks
             ul.to_do
-              li
-                .field_list
-                  .left
-                    input.task_status.flat-icheck[type="checkbox"]
-                  .right
-                    span Received Terms from Counter Party
               li
                 .field_list
                   .left

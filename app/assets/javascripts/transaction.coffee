@@ -289,7 +289,9 @@ $ ->
       #     if data
       #       $(document).find('.side-menu>li>.nav.child_menu>li.current-page').addClass('in-contract')
       #     else
-      $(this).parent().parent().parent().addClass('done')
+
+      $(this).closest('li').prevAll().andSelf().find('.field_list').addClass('done')
+      $(this).closest('li').prevAll().andSelf().find('.field_list .task_status').iCheck('check')
     else
       # $.ajax
       #   url: ''
@@ -299,7 +301,8 @@ $ ->
       #     if data
       #       $(document).find('.side-menu>li>.nav.child_menu>li.current-page').removeClass('in-contract')
       #     else
-      $(this).parent().parent().parent().removeClass('done')
+      $(this).closest('li').nextAll().andSelf().find('.field_list').removeClass('done')
+      $(this).closest('li').nextAll().andSelf().find('.field_list .task_status').iCheck('uncheck')
 
     if $('#purchase_sale_agreement_section .to_do .field_list .task_status').filter(':checked').length == $('#purchase_sale_agreement_section .to_do .field_list .task_status').length
       $(document).find('.side-menu>li>.nav.child_menu>li.current-page').addClass('in-contract')
