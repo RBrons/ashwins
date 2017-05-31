@@ -129,8 +129,25 @@
       #relinquishing_purchaser_section.tab-pane.fade[role="tabpanel"]
         .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .clearfix.margin-sm-top
-          h2.heading_without_padding_large = "Relinquishing Purchaser".html_safe
-          input#relinquishing_purchaser_name.form-control[type="text" value="#{ (@relinquishing_purchaser.try(:is_company) ? @relinquishing_purchaser.company_name : @relinquishing_purchaser.try(:first_name).to_s + ' ' + @relinquishing_purchaser.try(:last_name).to_s) }" style="#{ 'display: none' if !@relinquishing_purchaser.present? }" readonly]
+            div[role="tabpanel"]
+              ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+                li.active[role="presentation"]
+                    a#basic_info[href="#basic_info_section" role="tab" data-toggle="tab" aria-expanded="true"] Basic info
+
+                li[role="presentation"]
+                    a#broker[href="#broker_section" role="tab" data-toggle="tab" aria-expanded="false"] Broker
+
+                li[role="presentation"]
+                    a#attorney[href="#attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Attorney
+
+              .tab-content
+                #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
+                  h2.heading_without_padding_large = "Relinquishing Purchaser".html_safe
+                  input#relinquishing_purchaser_name.form-control[type="text" value="#{ (@relinquishing_purchaser.try(:is_company) ? @relinquishing_purchaser.company_name : @relinquishing_purchaser.try(:first_name).to_s + ' ' + @relinquishing_purchaser.try(:last_name).to_s) }" style="#{ 'display: none' if !@relinquishing_purchaser.present? }" readonly]
+                
+                #broker_section.tab-pane.fade[role="tabpanel"]
+
+                #attorney_section.tab-pane.fade[role="tabpanel"]
           
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
@@ -191,7 +208,7 @@
               
               .form-group
                 label.control-label Approximate Date of Closing
-                p.no-margin Number of Days After insepction Period
+                p.no-margin Number of Days After inspection Period
                 = transaction_term_form.text_field :closing_days_after_inspection_period, class: 'form-control'
                 
               .form-group
@@ -388,12 +405,6 @@
           .note
             h2 Tasks
             ul.to_do
-              li 
-                .field_list
-                  .left
-                    input.task_status.flat-icheck[type="checkbox"]    
-                  .right
-                    span Received Terms from Counter Party
               li
                 .field_list
                   .left
