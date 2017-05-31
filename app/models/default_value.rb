@@ -10,4 +10,8 @@ class DefaultValue < ApplicationRecord
       return PROPERTY_OPTIONS
   end
 
+  def self.transaction_term_options
+    return TRANSACTION_TERM_OPTIONS
+  end
+
 end
