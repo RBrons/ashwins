@@ -271,43 +271,7 @@ $ ->
     selected_offer_tab.find('.individual-fields-wrapper').find('input').val('')
 
 
-  # - Taks list on LOI
-  $(document).on 'ifChanged', '#letter_of_intent_section .to_do .field_list .task_status', (e)->
-    if this.checked
-      $(this).parent().parent().parent().addClass('done')
-    else
-      $(this).parent().parent().parent().removeClass('done')
-
-  # - Taks list on PSA
-  $(document).on 'ifChanged', '#purchase_sale_agreement_section .to_do .field_list .task_status', (e)->
-    if this.checked
-      # $.ajax
-      #   url: ''
-      #   type: 'POST'
-      #   dataType: 'json'
-      #   success: (data) ->
-      #     if data
-      #       $(document).find('.side-menu>li>.nav.child_menu>li.current-page').addClass('in-contract')
-      #     else
-
-      $(this).closest('li').prevAll().andSelf().find('.field_list').addClass('done')
-      $(this).closest('li').prevAll().andSelf().find('.field_list .task_status').iCheck('check')
-    else
-      # $.ajax
-      #   url: ''
-      #   type: 'POST'
-      #   dataType: 'json'
-      #   success: (data) ->
-      #     if data
-      #       $(document).find('.side-menu>li>.nav.child_menu>li.current-page').removeClass('in-contract')
-      #     else
-      $(this).closest('li').nextAll().andSelf().find('.field_list').removeClass('done')
-      $(this).closest('li').nextAll().andSelf().find('.field_list .task_status').iCheck('uncheck')
-
-    if $('#purchase_sale_agreement_section .to_do .field_list .task_status').filter(':checked').length == $('#purchase_sale_agreement_section .to_do .field_list .task_status').length
-      $(document).find('.side-menu>li>.nav.child_menu>li.current-page').addClass('in-contract')
-    else
-      $(document).find('.side-menu>li>.nav.child_menu>li.current-page').removeClass('in-contract')
+  
 
   # Enable 2nd Deposit
   $(document).on 'ifChanged', '#enable-2nd-deposit', ->
