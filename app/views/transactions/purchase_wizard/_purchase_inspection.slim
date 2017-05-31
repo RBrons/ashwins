@@ -4,6 +4,8 @@ div[role="tabpanel"]
       li.active[role="presentation"]
           a#seller_documentation[href="#seller_documentation_section" role="tab" data-toggle="tab" aria-expanded="true"] Seller Documentation
       li[role="presentation"]
+          a#environmental[href="#environmental_section" role="tab" data-toggle="tab" aria-expanded="false"] Environmental
+      li[role="presentation"]
           a#lease[href="#lease_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease
       li[role="presentation"]
           a#inspection_title[href="#inspection_title_section" role="tab" data-toggle="tab" aria-expanded="false"] Title
@@ -27,7 +29,8 @@ div[role="tabpanel"]
                 button.btn.btn-default
                   span.fa.fa-plus.margin-sm-right
                   | Add Document
-                      
+      #environmental_section.tab-pane.fade[role="tabpanel"]
+                        
       #lease_section.tab-pane.fade[role="tabpanel"]
         form
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -329,12 +332,6 @@ div[role="tabpanel"]
             .note
               h2 Tasks
               ul.to_do
-                li 
-                  .field_list
-                    .left
-                      input.task_status.flat-icheck[type="checkbox"]
-                    .right
-                      span Comming soon
                 li 
                   .field_list
                     .left
