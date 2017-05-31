@@ -147,6 +147,19 @@ $ ->
 
   init_select_in_google_drive()
 
+  $(document).on 'ifChanged', '.to_do .field_list .task_status', (e)->
+    if this.checked
+      $(this).closest('li').prevAll().andSelf().find('.field_list').addClass('done')
+      $(this).closest('li').prevAll().andSelf().find('.field_list .task_status').iCheck('check')
+    else
+      $(this).closest('li').nextAll().andSelf().find('.field_list').removeClass('done')
+      $(this).closest('li').nextAll().andSelf().find('.field_list .task_status').iCheck('uncheck')
+
+    if $('#purchase_sale_agreement_section .to_do .field_list .task_status').filter(':checked').length == $('#purchase_sale_agreement_section .to_do .field_list .task_status').length
+      $(document).find('.side-menu>li>.nav.child_menu>li.current-page').addClass('in-contract')
+    else
+      $(document).find('.side-menu>li>.nav.child_menu>li.current-page').removeClass('in-contract')
+
   $('div.owns_tree').jstree
   'plugins': [
     'themes'
