@@ -599,6 +599,22 @@ $ ->
     $(modal_id).modal()
 
   # Purcahse Sale Agreement
+  dateFormatYMD = (date)->
+    des_dt = new Date(date)
+    date_string = ""
+    date_string += des_dt.getFullYear() + '-'
+    if des_dt.getMonth() + 1 < 10
+      date_string += '0' + (des_dt.getMonth() + 1)
+    else
+      date_string += (des_dt.getMonth() + 1)
+    date_string += '-'
+    if des_dt.getDate() < 10
+      date_string += '0' + des_dt.getDate()
+    else
+      date_string += des_dt.getDate()
+    
+    return date_string
+
   set_first_deposit_date_due = (psa_date, offset = 0) ->
     first_deposit_date_due = new Date(psa_date)
     first_deposit_date_due.setDate(first_deposit_date_due.getDate() + parseInt(offset));
@@ -606,12 +622,15 @@ $ ->
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_2i').val(first_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_3i').val(first_deposit_date_due.getDate())
 
+    $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due').val(dateFormatYMD(first_deposit_date_due))
+
   set_inspection_period_end = (psa_date, offset = 0) ->
     inspection_period_end = new Date(psa_date)
     inspection_period_end.setDate(inspection_period_end.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_1i').val(inspection_period_end.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_2i').val(inspection_period_end.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_3i').val(inspection_period_end.getDate())
+    
 
   set_second_deposit_date_due = (psa_date, offset = 0) ->
     second_deposit_date_due = new Date(psa_date)
@@ -620,12 +639,16 @@ $ ->
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_2i').val(second_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_3i').val(second_deposit_date_due.getDate())
 
+    $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due').val(dateFormatYMD(second_deposit_date_due))
+
   set_closing_date = (psa_date, offset = 0 )->
     closing_date = new Date(psa_date)
     closing_date.setDate(closing_date.getDate() + parseInt(offset));
     $(document).find('#transaction_transaction_term_attributes_closing_date_1i').val(closing_date.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_closing_date_2i').val(closing_date.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_closing_date_3i').val(closing_date.getDate())
+
+    $(document).find('#transaction_transaction_term_attributes_closing_date').val(dateFormatYMD(closing_date))
 
   $(document).on 'change', '.transaction_transaction_term_attributes_psa_date', ()->
     psa_year = $(document).find('#transaction_transaction_term_attributes_psa_date_1i option:selected').val()
@@ -644,6 +667,22 @@ $ ->
 
     closing_days_after_inspection_period = $(document).find('#transaction_transaction_term_attributes_closing_days_after_inspection_period').val() || 0
     set_closing_date(psa_date, closing_days_after_inspection_period)
+
+  $(document).on 'change', 'input.manually_date_on_psa', ->
+    input_object = $(document).find("input##{$(this).data('class')}")
+    select_object = $(document).find("select.#{$(this).data('class')}")
+      
+    if this.checked
+      input_object.hide()
+      input_object.prop('disabled', 'disabled')
+      select_object.show()
+      select_object.prop('disabled', false)
+    else
+      input_object.show()
+      input_object.prop('disabled', false)
+      select_object.hide()
+      select_object.prop('disabled', 'disabled')
+
 #-- End of Alex's code --#
 
 

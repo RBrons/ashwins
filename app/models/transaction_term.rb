@@ -68,8 +68,8 @@ class TransactionTerm < ApplicationRecord
     end
   end
   
-  before_create :set_second_deposit_date
-  before_save :set_second_deposit_date
+  before_create :set_contract_deadline_date
+  before_save :set_contract_deadline_date
 
   private
   def closing_date_with_psa_date
@@ -82,11 +82,41 @@ class TransactionTerm < ApplicationRecord
   end
 
   private
-  def set_second_deposit_date
+  def set_contract_deadline_date
     self.inspection_period_days = 30 if self.inspection_period_days.blank?
-    if self.psa_date.present? && self.inspection_period_days.present?
-      self.second_deposit_date_due = (self.psa_date + eval("#{self.inspection_period_days}.days") + 3.days).to_date
+
+    if !self.first_deposit_date_due.present?
+      if self.psa_date.present?
+        self.first_deposit_date_due = (self.psa_date + eval("#{self.first_deposit_days_after_psa}.days")).to_date
+      else
+        self.first_deposit_date_due = (Time.zone.now + eval("#{self.first_deposit_days_after_psa.to_i}.days")).to_date
+      end
+    else
+      self.first_deposit_days_after_psa = self.first_deposit_date_due - self.psa_date
     end
+
+    if self.second_deposit
+      if !self.second_deposit_date_due.present?
+        if self.psa_date.present? && self.second_deposit_days_after_inspection_period.present?
+          self.second_deposit_date_due = (self.psa_date + eval("#{self.second_deposit_days_after_inspection_period}.days") + 3.days).to_date
+        else
+          self.second_deposit_date_due = (Time.zone.now + eval("#{self.second_deposit_days_after_inspection_period}.days") + 3.days).to_date
+        end
+      end
+    else
+      self.second_deposit_days_after_inspection_period = self.second_deposit_date_due - self.psa_date
+    end
+
+    if !self.closing_date.present?
+      if self.psa_date.present?
+        self.closing_date = (self.psa_date + eval("#{self.closing_days_after_inspection_period}.days")).to_date
+      else
+        self.closing_date = (Time.zone.now + eval("#{self.closing_days_after_inspection_period.to_i}.days")).to_date
+      end
+    else
+      self.closing_days_after_inspection_period = self.closing_date - self.psa_date
+    end
+
   end
 
 end

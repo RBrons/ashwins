@@ -225,7 +225,7 @@
         .col-md-6.col-sm-12.col-xs-12
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
-
+              
               .form-group
                   .field_list
                     label.control-label Purchase Sales Agreement
@@ -236,23 +236,23 @@
                           = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                           span.margin-md-left.blue Select in Google Drive
                     .checkbox-inline
-                        input.flat-icheck[type="checkbox" name=""]
+                        input.flat-icheck[type="checkbox" name=""] 
                             span.margin-sm-left Directory
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name="" checked]
-                            span.margin-sm-left Draft
+                            span.margin-sm-left Draft                            
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
                             span.margin-sm-left Executable
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
                             span.margin-sm-left Executed
-
+                    
                     .clearfix.margin-sm-top
                     button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
-
-                  button#add_purchase_sale_agreement.btn.btn-default
-                    i.fa.fa-plus
+                    
+                  button#add_purchase_sale_agreement.btn.btn-default 
+                    i.fa.fa-plus 
                     | &nbsp;Add Document
 
                   #purchase_sales_agreement_template[style="display: none"]
@@ -265,11 +265,11 @@
                             = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                             span.margin-md-left.blue Select in Google Drive
                       .checkbox-inline
-                          input.flat-icheck[type="checkbox" name=""]
+                          input.flat-icheck[type="checkbox" name=""] 
                               span.margin-sm-left Directory
                       .checkbox-inline
                           input.flat-icheck[type="checkbox" name="" checked]
-                              span.margin-sm-left Draft
+                              span.margin-sm-left Draft                            
                       .checkbox-inline
                           input.flat-icheck[type="checkbox" name=""]
                               span.margin-sm-left Executable
@@ -278,37 +278,71 @@
                               span.margin-sm-left Executed
                       .clearfix.margin-sm-top
                       button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
-
+                    
               .clearfix
               .form-group
                 label.control-label Date of Purchase Sale Agreement
                 .clearfix
                 = transaction_term_form.date_select :psa_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2 }, class: "form-control select_auto transaction_transaction_term_attributes_psa_date"
+              
+              .clearfix
               .form-group
                   label.control-lable First Deposit To Be Received By
                   .clearfix
-                  = transaction_term_form.hidden_field :first_deposit_days_after_psa
-                  = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: transaction_term_form.object.first_deposit_date_due || (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.first_deposit_days_after_psa.to_i.day) }, class: "form-control select_auto", readonly: true
+                  .pull-left
+                    = transaction_term_form.hidden_field :first_deposit_days_after_psa
+                    = transaction_term_form.text_field :first_deposit_date_due, readonly: true, class: 'form-control'
+                    = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto transaction_transaction_term_attributes_first_deposit_date_due", style: "display: none"
+                  .pull-right
+                    .pull-left
+                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                    .pull-right
+                      input[type="checkbox" data-class="transaction_transaction_term_attributes_first_deposit_date_due" class="manually_date_on_psa"]
+              
+              .clearfix
               .form-group
                   label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
                   .clearfix
                   = transaction_term_form.hidden_field :inspection_period_days
-                  = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", readonly: true
+                  = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", disabled: true
+              
+              .clearfix
               .form-group.transaction_transaction_term_attributes_second_deposit_wrapper[style="#{transaction_term_form.object.second_deposit ? '' : 'display: none'}"]
                   label.control-lable Second Deposit To Be Received By
                   .clearfix
-                    = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: transaction_term_form.object.second_deposit
-                    = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: transaction_term_form.object.second_deposit_date_due || (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.first_deposit_days_after_psa.to_i.day : Time.zone.now + transaction_term_form.object.second_deposit_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true, disabled: transaction_term_form.object.second_deposit
+                  .pull-left
+                    = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: !transaction_term_form.object.second_deposit
+                    = transaction_term_form.text_field :second_deposit_date_due, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control'
+                    = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto transaction_transaction_term_attributes_second_deposit_date_due", disabled: !transaction_term_form.object.second_deposit, style: "display: none"
+                  .pull-right
+                    .pull-left
+                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                    .pull-right
+                      input[type="checkbox" data-class="transaction_transaction_term_attributes_second_deposit_date_due" class="manually_date_on_psa"]
+                      
+              .clearfix
               .form-group
                   label.control-lable Definition Of Holidays
                   .clearfix
                   input.form-control[type="text" disabled="disabled"]
+
+              .clearfix
               .form-group
                   label.control-lable Approximate Date Of Closing
                   .clearfix
-                  = transaction_term_form.hidden_field :closing_days_after_inspection_period
-                  = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: transaction_term_form.object.closing_date || (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.closing_days_after_inspection_period.to_i.day : Time.zone.now + transaction_term_form.object.closing_days_after_inspection_period.to_i.day) }, class: "form-control select_auto", readonly: true
-            = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
+                  .pull-left
+                    = transaction_term_form.hidden_field :closing_days_after_inspection_period
+                    = transaction_term_form.text_field :closing_date, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control'
+                    = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto transaction_transaction_term_attributes_closing_date", style: "display: none"
+                  .pull-right
+                    .pull-left
+                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                    .pull-right
+                      input[type="checkbox" data-class="transaction_transaction_term_attributes_closing_date" class="manually_date_on_psa"]
+
+            .clearfix
+            .margin-lg-top
+              = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
 
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .note
