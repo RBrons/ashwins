@@ -627,10 +627,18 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_terms_params
-    params.require(:transaction).permit(transaction_term_attributes: [:id, :purchase_price, :current_annual_rent, :cap_rate, :psa_date, :m_psa_date, :first_deposit_date_due, :m_first_deposit_date_due,
-                                                                      :first_deposit, :inspection_period_days, :end_of_inspection_period_note,
-                                                                      :second_deposit, :second_deposit_amount, :closing_date, :m_closing_date, :transaction_id, :second_deposit_date_due, :m_second_deposit_date_due,
-                                                                      :first_deposit_days_after_psa, :second_deposit_days_after_inspection_period, :closing_days_after_inspection_period])
+    params.require(:transaction).permit(transaction_term_attributes:
+                                          [:id, :purchase_price, :current_annual_rent,
+                                           :cap_rate, :psa_date, :m_psa_date,
+                                           :first_deposit_date_due, :m_first_deposit_date_due,
+                                           :first_deposit, :inspection_period_days,
+                                           :end_of_inspection_period_note,
+                                           :second_deposit, :second_deposit_amount,
+                                           :closing_date, :m_closing_date, :transaction_id,
+                                           :second_deposit_date_due, :m_second_deposit_date_due,
+                                           :first_deposit_days_after_psa,
+                                           :second_deposit_days_after_inspection_period,
+                                           :closing_days_after_inspection_period, :closing_date_note])
   end
 
   def transaction_personnels_params

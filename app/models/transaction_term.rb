@@ -3,7 +3,7 @@ class TransactionTerm < ApplicationRecord
   def sale
     TransactionSale.find_by(id: self.transaction_id)
   end
-  
+
   def purchase
     TransactionPurchase.find_by(id: self.transaction_id)
   end
@@ -41,7 +41,7 @@ class TransactionTerm < ApplicationRecord
       return self.closing_days_after_inspection_period - offset.to_i
     else
       return 0
-    end 
+    end
   end
 
   def last_day_for_buyer_to_receive_deposit
@@ -57,7 +57,7 @@ class TransactionTerm < ApplicationRecord
   end
 
   validate :closing_date_with_psa_date
-  
+
   after_save do
     if self.closing_date.present? && self.closing_date != self.closing_date_was
       if self.purchase.present?
@@ -67,7 +67,7 @@ class TransactionTerm < ApplicationRecord
       end
     end
   end
-  
+
   before_create :set_contract_deadline_date
   before_save :set_contract_deadline_date
 
@@ -92,7 +92,7 @@ class TransactionTerm < ApplicationRecord
         self.first_deposit_date_due = (Time.zone.now + eval("#{self.first_deposit_days_after_psa.to_i}.days")).to_date
       end
     else
-      self.first_deposit_days_after_psa = self.first_deposit_date_due - self.psa_date
+      self.first_deposit_days_after_psa = self.first_deposit_date_due - self.psa_date if self.psa_date
     end
 
     if self.second_deposit
@@ -102,9 +102,9 @@ class TransactionTerm < ApplicationRecord
         else
           self.second_deposit_date_due = (Time.zone.now + eval("#{self.second_deposit_days_after_inspection_period}.days") + 3.days).to_date
         end
+      else
+        self.second_deposit_days_after_inspection_period = self.second_deposit_date_due - self.psa_date
       end
-    else
-      self.second_deposit_days_after_inspection_period = self.second_deposit_date_due - self.psa_date
     end
 
     if !self.closing_date.present?
@@ -114,7 +114,7 @@ class TransactionTerm < ApplicationRecord
         self.closing_date = (Time.zone.now + eval("#{self.closing_days_after_inspection_period.to_i}.days")).to_date
       end
     else
-      self.closing_days_after_inspection_period = self.closing_date - self.psa_date
+      self.closing_days_after_inspection_period = self.closing_date - self.psa_date if self.psa_date
     end
 
   end
