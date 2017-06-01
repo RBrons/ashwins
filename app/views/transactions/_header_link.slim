@@ -57,7 +57,7 @@ hr
           li class=("#{'selected' if params[:sub] == 'parties' }")
             - disabled = nil
             - disabled = 'disabled' if params[:type] == 'status'
-            - $header_links[:parties] = persisted ? edit_transaction_path(@transaction, sub: 'parties', type: 'purchase', main_id: params[:main_id]) : '#'
+            - $header_links[:parties] = persisted ? edit_transaction_path(@transaction, sub: 'parties', type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property]) : '#'
             = link_to "<span class='step_no'>Who's Selling?</span>".html_safe, $header_links[:parties]
 
           li class=("#{'selected' if params[:sub] == 'terms'}")
