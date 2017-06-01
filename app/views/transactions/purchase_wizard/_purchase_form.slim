@@ -38,8 +38,8 @@
                 .clearfix
                 .form-group
                   p
-                    - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
-                      - owner_name = Entity.find(@property.owner_entity_id).display_name
+                    - if @property.owner.present?
+                      - owner_name = @property.owner.name
                     - else
                       - owner_name = "No Owner"
 
