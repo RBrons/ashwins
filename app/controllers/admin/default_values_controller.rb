@@ -38,6 +38,33 @@ class Admin::DefaultValuesController < ApplicationController
     render :new
   end
 
+  def new_purchase_property
+    @default_value = DefaultValue.new(mode: 'buy')
+    @title = "Purchase Property - Add a Default Value"
+    @entity = ["TransactionProperty"]
+    @entity_fields = TransactionProperty.column_names.map(&:camelize)
+    @type_options = DefaultValue::TRANSACTION_PROPERTY_OPTIONS
+    render :new
+  end
+
+  def new_sell_property
+    @default_value = DefaultValue.new(mode: 'sale')
+    @title = "Sell Property - Add a Default Value"
+    @entity = ["TransactionProperty"]
+    @entity_fields = TransactionProperty.column_names.map(&:camelize)
+    @type_options = DefaultValue::TRANSACTION_PROPERTY_OPTIONS
+    render :new
+  end
+
+  def new_sale_transaction
+    @default_value = DefaultValue.new(mode: 'sale')
+    @title = "Sale Transaction - Add a Default Value"
+    @entity = ["TransactionSale"]
+    @entity_fields = TransactionSale.column_names.map(&:camelize)
+    @type_options = DefaultValue::TRANSACTION_SALE_OPTIONS
+    render :new
+  end
+
   # GET /default_values/1/edit
   def edit
     @title = "#{@default_value.entity_name} - Edit the Default Value"

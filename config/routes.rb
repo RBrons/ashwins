@@ -309,7 +309,8 @@ Rails.application.routes.draw do
 
     resources :default_values do
       collection do
-        get :new_property, :new_terms
+        get :new_property, :new_terms, :new_purchase_property, :new_sell_property,
+            :new_sale_transaction
       end
     end
 

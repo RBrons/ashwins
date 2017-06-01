@@ -95,7 +95,33 @@ class TransactionsController < ApplicationController
                        t1
                      else
                        params[:type] = 'sale'
-                       TransactionSale.new(transaction_main_id: @transaction_main.id)
+                       ts = defaultize TransactionSale.new
+                       entity_ = Entity.find(ts.relinquishing_seller_entity_id)
+                       if entity_.type_ == 1 or entity_.type_ == 4
+                         ts.seller_person_is = true
+                         ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                       elsif entity_.type_ > 4
+                         ts.seller_person_is = false
+                       elsif entity_.type_ == 2
+                         if entity_.name2.nil? || entity_.name2.blank?
+                           ts.seller_person_is = true
+                           ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                         else
+                           ts.seller_person_is = false
+                         end
+                        elsif entity_.type_ == 4
+                          p = Principal.where(entity_id: ts.relinquishing_seller_entity_id)
+                          if p.is_person
+                            ts.seller_person_is = true
+                            ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                          else
+                            ts.seller_person_is = false
+                          end
+                       end
+                       ts.transaction_main_id = @transaction_main.id
+                       ts
+                       # TransactionSale.new(transaction_main_id: @transaction_main.id,
+                       #  relinquishing_seller_entity_id: ts.relinquishing_seller_entity_id)
                      end
 
       @transaction.is_purchase = (params[:type] == 'sale' || params[:type].blank?) ? 0 : 1
@@ -142,19 +168,6 @@ class TransactionsController < ApplicationController
       @transaction.rplmnt_seller_contact_id = @transaction.replacement_seller_contact_id if @transaction.seller_person_is
       @transaction.rplmnt_purchaser_entity_id = @transaction.replacement_purchaser_entity_id if @transaction.purchaser_person_is
 
-      if params[:cur_property].blank?
-        @property = get_transaction_properties(params[:main_id], params[:type]).first
-      else
-        @property = Property.find(params[:cur_property])
-      end
-
-      if @property.present?
-        params[:cur_property] = @property.id.to_s
-      else
-        params[:cur_property] = ""
-        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
-        return
-      end
 
     end
 
@@ -690,7 +703,11 @@ class TransactionsController < ApplicationController
 
     possible_properties.each do |pp|
       unless existing_transaction_properties.include? pp.id
-        transaction.transaction_properties.build( property_id: pp.id, is_sale: (type=='sale') ? true : false, transaction_main_id: transaction.transaction_main_id )
+        type_ = type
+        type_ = 'buy' if type == 'purchase'
+        tp = defaultize TransactionProperty.new, type_
+        transaction.transaction_properties.build( property_id: pp.id, is_sale: (type=='sale') ? true : false,
+          transaction_main_id: transaction.transaction_main_id, cap_rate: tp.cap_rate, sale_price: tp.sale_price )
       end
     end
   end

@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
+ActiveRecord::Schema.define(version: 20170601071538) do
+=======
 ActiveRecord::Schema.define(version: 20170531164940) do
+>>>>>>> 7bdbd031c770b50175b692a81c778031f0d4c9ab
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,6 +139,7 @@ ActiveRecord::Schema.define(version: 20170531164940) do
     t.string   "value_type"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.string   "mode"
   end
 
   create_table "dynamic_fields", force: :cascade do |t|
