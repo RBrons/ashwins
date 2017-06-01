@@ -133,7 +133,7 @@
           .form-group.center.cap-rate-box
             label Propose a Cap Rate
             .input-group
-              = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency'
+              = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
               .input-group-addon %
           .form-group.center.price-box
             - if params[:type] == 'purchase'
