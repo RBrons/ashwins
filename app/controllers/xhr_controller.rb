@@ -9,6 +9,14 @@ class XhrController < ApplicationController
   #   render :json => result
   # end
 
+  def add_new_tenant
+    if new_tenant = current_user.tenants.create(name: params[:name])
+      render :json => {status: "success", id: new_tenant.id}
+    else
+      render :json => {status: "error"}
+    end
+  end
+
   def get_rent_table
     @property = Property.find(params[:id])
     @rent_tables = @property.rent_tables.where(version: params[:version])

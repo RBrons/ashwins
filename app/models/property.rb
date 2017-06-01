@@ -25,8 +25,10 @@ class Property < ApplicationRecord
 
   after_create :access_resource
   after_save :add_key
-  belongs_to :transaction_sale
   before_save :check_price_current_rent_cap_rate
+
+  belongs_to :transaction_sale
+  belongs_to :tenant
 
   TYPES = ['Single Tenant Freestanding', 'Shopping Center',
            'Office Building', 'Apartment Building', 'Industrial',
