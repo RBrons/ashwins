@@ -95,33 +95,33 @@ class TransactionsController < ApplicationController
                        t1
                      else
                        params[:type] = 'sale'
-                       ts = defaultize TransactionSale.new
-                       entity_ = Entity.find(ts.relinquishing_seller_entity_id)
-                       if entity_.type_ == 1 or entity_.type_ == 4
-                         ts.seller_person_is = true
-                         ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
-                       elsif entity_.type_ > 4
-                         ts.seller_person_is = false
-                       elsif entity_.type_ == 2
-                         if entity_.name2.nil? || entity_.name2.blank?
-                           ts.seller_person_is = true
-                           ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
-                         else
-                           ts.seller_person_is = false
-                         end
-                        elsif entity_.type_ == 4
-                          p = Principal.where(entity_id: ts.relinquishing_seller_entity_id)
-                          if p.is_person
-                            ts.seller_person_is = true
-                            ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
-                          else
-                            ts.seller_person_is = false
-                          end
-                       end
-                       ts.transaction_main_id = @transaction_main.id
-                       ts
-                       # TransactionSale.new(transaction_main_id: @transaction_main.id,
-                       #  relinquishing_seller_entity_id: ts.relinquishing_seller_entity_id)
+                      #  ts = defaultize TransactionSale.new
+                      #  entity_ = Entity.find(ts.relinquishing_seller_entity_id)
+                      #  if entity_.type_ == 1 or entity_.type_ == 4
+                      #    ts.seller_person_is = true
+                      #    ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                      #  elsif entity_.type_ > 4
+                      #    ts.seller_person_is = false
+                      #  elsif entity_.type_ == 2
+                      #    if entity_.name2.nil? || entity_.name2.blank?
+                      #      ts.seller_person_is = true
+                      #      ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                      #    else
+                      #      ts.seller_person_is = false
+                      #    end
+                      #   elsif entity_.type_ == 4
+                      #     p = Principal.where(entity_id: ts.relinquishing_seller_entity_id)
+                      #     if p.is_person
+                      #       ts.seller_person_is = true
+                      #       ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                      #     else
+                      #       ts.seller_person_is = false
+                      #     end
+                      #  end
+                      #  ts.transaction_main_id = @transaction_main.id
+                      #  ts
+                       TransactionSale.new(transaction_main_id: @transaction_main.id) #,
+                      #  relinquishing_seller_entity_id: ts.relinquishing_seller_entity_id)
                      end
 
       @transaction.is_purchase = (params[:type] == 'sale' || params[:type].blank?) ? 0 : 1
