@@ -25,8 +25,15 @@ $ ->
   # Save & Next button
   $(document).on 'click', '#save-and-next', (e) ->
     e.preventDefault()
-    next_step = $(document).find('ul.wizard_steps li.selected').next()
-    window.location.href = next_step.find('a').attr("href")
+    save_and_next_btn_in_step = $(document).find('.save_next_in_step')
+    if save_and_next_btn_in_step.length > 1
+      save_and_next_btn_in_step = selected_offer_tab.find('.save_next_in_step')
+      save_and_next_btn_in_step.click()
+    else if save_and_next_btn_in_step.length == 1
+      save_and_next_btn_in_step.click()
+      
+    # next_step = $(document).find('ul.wizard_steps li.selected').next()
+    # window.location.href = next_step.find('a').attr("href")
 
   # Sale
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
@@ -321,6 +328,10 @@ $ ->
           selected_offer_tab.find('.add_counteroffer').attr("disabled", false)
           selected_offer_tab.find('.last_counteroffer_price').val('$' + parseFloat(response.counteroffer.offered_price).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
 
+          if selected_offer_tab.find('.counteroffer_history tr').length > 1
+            selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', false)
+            selected_offer_tab.find('.ask_accepted').hide()
+
 
   initialize_editable_date_field()
 
@@ -344,6 +355,10 @@ $ ->
           selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
           selected_offer_tab.find('.add_counteroffer').attr("disabled", false)
           selected_offer_tab.find('.last_counteroffer_price').val('$' + parseFloat(response.counteroffer.offered_price).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
+
+          if selected_offer_tab.find('.counteroffer_history tr').length > 1
+            selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', false)
+            selected_offer_tab.find('.ask_accepted').hide()
 
 
   initialize_editable_currency_field()
@@ -415,7 +430,7 @@ $ ->
           selected_offer_tab.find('.counteroffer_history tr.last_row').before(add_row_html)
           initialize_editable_currency_field()
           initialize_editable_date_field()
-          selected_offer_tab.find('.add_counteroffer').prop("disabled", "disabled")
+          selected_offer_tab.find('.add_counteroffer').attr("disabled", "disabled")
           $.notify "Successfully updated", "success"
         else
           $.notify "Failed", "error"
@@ -458,7 +473,10 @@ $ ->
           if selected_offer_tab.find('.counteroffer_history tr').length == 1
             selected_offer_tab.find('.initial_log_counteroffer').show()
             selected_offer_tab.find('.ask_accepted').show()
-            selected_offer_tab.find('.counteroffer_action_buttons_wrapper').hide()
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper').hide()
+            else
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').attr('disabled', 'disabled')
 
           selected_offer_tab.find('.add_counteroffer').attr('disabled', false)
           $.notify "Successfully deleted", "success"
@@ -550,7 +568,7 @@ $ ->
 
     $('#negotions_tab li.active').next().find('a').click()
 
-  $(document).on 'click', '#back_prev_tab', (e) ->
+  $(document).on 'click', '.back_prev_step', (e) ->
     e.preventDefault()
     $('#negotions_tab li.active').prev().find('a').click()
     set_first_deposit_date_due(psa_date, first_deposit_days_after_psa)
