@@ -105,8 +105,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def defaultize(obj)
+  def defaultize(obj, mode=nil)
     defVals = DefaultValue.where(entity_name: obj.class.name)
+    defVals = defVals.where(mode: mode) if !mode.nil?
     defVals.each do |val|
       val_ = val.value
       if val.value_type == 'Amount'
@@ -135,6 +136,8 @@ class ApplicationController < ActionController::Base
         elsif obj.try(:ostatus) == 'Prospective Purchase'
           val_ = Contact.where(role: 'Counter-Party').pluck('id').sample
         end
+      elsif val.value_type == 'Random Seller'
+        val_ = Property.where(ownership_status: 'Purchased').pluck('id').sample
       end
       obj.try("#{val.attribute_name.underscore}=".to_sym, val_)
     end

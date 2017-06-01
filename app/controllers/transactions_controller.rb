@@ -95,7 +95,33 @@ class TransactionsController < ApplicationController
                        t1
                      else
                        params[:type] = 'sale'
-                       TransactionSale.new(transaction_main_id: @transaction_main.id)
+                      #  ts = defaultize TransactionSale.new
+                      #  entity_ = Entity.find(ts.relinquishing_seller_entity_id)
+                      #  if entity_.type_ == 1 or entity_.type_ == 4
+                      #    ts.seller_person_is = true
+                      #    ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                      #  elsif entity_.type_ > 4
+                      #    ts.seller_person_is = false
+                      #  elsif entity_.type_ == 2
+                      #    if entity_.name2.nil? || entity_.name2.blank?
+                      #      ts.seller_person_is = true
+                      #      ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                      #    else
+                      #      ts.seller_person_is = false
+                      #    end
+                      #   elsif entity_.type_ == 4
+                      #     p = Principal.where(entity_id: ts.relinquishing_seller_entity_id)
+                      #     if p.is_person
+                      #       ts.seller_person_is = true
+                      #       ts.relqn_seller_entity_id = ts.relinquishing_seller_entity_id
+                      #     else
+                      #       ts.seller_person_is = false
+                      #     end
+                      #  end
+                      #  ts.transaction_main_id = @transaction_main.id
+                      #  ts
+                       TransactionSale.new(transaction_main_id: @transaction_main.id) #,
+                      #  relinquishing_seller_entity_id: ts.relinquishing_seller_entity_id)
                      end
 
       @transaction.is_purchase = (params[:type] == 'sale' || params[:type].blank?) ? 0 : 1
@@ -403,6 +429,10 @@ class TransactionsController < ApplicationController
         if ! @transaction_property.transaction_property_offers.present?
           @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
         end
+      else
+        if ! @transaction_property.transaction_property_offers.present?
+          @transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+        end
       end
     else
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
@@ -686,7 +716,11 @@ class TransactionsController < ApplicationController
 
     possible_properties.each do |pp|
       unless existing_transaction_properties.include? pp.id
-        transaction.transaction_properties.build( property_id: pp.id, is_sale: (type=='sale') ? true : false, transaction_main_id: transaction.transaction_main_id )
+        type_ = type
+        type_ = 'buy' if type == 'purchase'
+        tp = defaultize TransactionProperty.new, type_
+        transaction.transaction_properties.build( property_id: pp.id, is_sale: (type=='sale') ? true : false,
+          transaction_main_id: transaction.transaction_main_id, cap_rate: tp.cap_rate, sale_price: tp.sale_price )
       end
     end
   end

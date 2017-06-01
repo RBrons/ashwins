@@ -151,7 +151,7 @@
           
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
-          span = @relinquishing_purchaser.try(:is_company) ? @relinquishing_purchaser.company_name : @relinquishing_purchaser.try(:first_name).to_s + ' ' + @relinquishing_purchaser.try(:last_name).to_s
+          span = @relinquishing_purchaser.try(:name) || 'Offeror'
           span &nbsp;is purchasing&nbsp;
           span = @property.title + " for "
           span = number_to_currency(get_sale_price(@transaction_property)) 

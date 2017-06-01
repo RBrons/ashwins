@@ -2,6 +2,10 @@ h1 Default Values
 
 = link_to 'Property - Add Default Value', new_property_admin_default_values_path, class: "#{edit_xs}"
 = link_to 'Terms - Add Default Value', new_terms_admin_default_values_path, class: "#{edit_xs}"
+= link_to 'Sell Property - Add Default Value', new_sell_property_admin_default_values_path, class: "#{edit_xs}"
+.clearfix
+= link_to 'Purchase Property - Add Default Value', new_purchase_property_admin_default_values_path, class: "#{edit_xs}"
+= link_to 'Sale Transaction - Add Default Value', new_sale_transaction_admin_default_values_path, class: "#{edit_xs}"
 
 h4 Note: For Dates use the format DD-MM-YYYY
 
@@ -23,6 +27,8 @@ table#data_table
       tr
         td
           = default_value.entity_name
+          - if !default_value.mode.blank?
+            = " (" + default_value.mode + ")"
         td
           = default_value.attribute_name
         td

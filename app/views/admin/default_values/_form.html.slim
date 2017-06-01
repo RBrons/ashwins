@@ -8,6 +8,7 @@ h4 Note: For Dates use the format DD-MM-YYYY
         - @default_value.errors.full_messages.each do |message|
           li = message
 
+  = f.hidden_field :mode
   .form-group.required
       = f.label "Entity/Table", class: "control-label"
       = f.select :entity_name, options_for_select(@entity, @default_value.entity_name)
