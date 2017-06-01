@@ -5,7 +5,7 @@
 
 - @relinquishing_purchaser = get_property_purchaser(@transaction_property.property_id, @transaction_property.transaction_id, 'sale')
 
-#negotiations_wrapper
+#negotiations_wrapper[data-transaction-type="#{@transaction_property.is_sale ? 'sale' : 'purchase'}"]
   input#negotiated_property[type="hidden" value="#{@property.title}"]
   div[role="tabpanel"]
     ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]

@@ -233,7 +233,7 @@ class TransactionsController < ApplicationController
       if @transaction.get_sale_purchase_text == 'sale'
         return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
       else
-        return redirect_to terms_transaction_path(@transaction, sub: 'parties', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+        return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
       end
 
     rescue Exception => e
@@ -283,9 +283,9 @@ class TransactionsController < ApplicationController
     end
     if @transaction.save && cflag #update(transaction_params)
       if params[:type] == 'purchase'
-        redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+        return redirect_to inspection_transaction_path(@transaction, sub: 'inspection', type: @transaction.get_sale_purchase_text, cur_property: params[:cur_property], main_id: params[:main_id])
       else
-        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id, status_alert: (CGI.escape(params[:status_alert]) rescue nil))
+        return redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id, status_alert: (CGI.escape(params[:status_alert]) rescue nil))
       end
     else
       render action: :edit
