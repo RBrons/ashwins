@@ -4,7 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  after_create :move_remove_entry_from_unregistered
+  after_create :move_remove_entry_from_unregistered, :create_default_tenants
+
+  has_many :tenants
 
   private
   def move_remove_entry_from_unregistered
@@ -18,6 +20,13 @@ class User < ApplicationRecord
   private
 
   public
+
+  def create_default_tenants
+    Property::TENANTS.each do |tenant|
+      self.tenants.create(name: tenant)
+    end
+  end
+
   def update_last_active
     self.update_column(:last_active, DateTime.now)
   end

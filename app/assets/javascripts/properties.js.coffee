@@ -61,7 +61,7 @@ $ ->
   setTitleValue = ->
     if $('#property_location_city').val().length > 0
       $(document).find('.tilte_basic_info').show()
-      property_title = $('#property_tenant_is').val() + ', ' + $('#property_location_city').val()
+      property_title = $("#property_tenant_id option[value='" + $('#property_tenant_id').val() + "']").text().trim() + ', ' + $('#property_location_city').val()
       $('#property_title').val(property_title)
 
   titleHideShow = ->
@@ -78,7 +78,7 @@ $ ->
   $(document).on 'keyup', '#property_location_city', ->
     titleHideShow()
 
-  $(document).on 'change', '#property_tenant_is', ->
+  $(document).on 'change', '#property_tenant_id', ->
     setTitleValue()
 
   $(document).on 'click', '.entity_owner', ->
@@ -169,3 +169,25 @@ $ ->
 
   $(document).on 'keyup', '#property_current_rent', ->
     autoPopulateCapRate()
+
+  $(document).on 'click', '.new-tenant-button', ->
+    $("#new-tenant .error-message").hide()
+    $("#new-tenant #new-tenant-name").val("")
+    $("#new-tenant").modal()
+
+  $(document).on 'click', '#save-new-tenant', ->
+    newTenantName = $("#new-tenant-name").val()
+
+    $.ajax
+      type: "POST"
+      url: "/xhr/add_new_tenant"
+      data: {name: newTenantName}
+      dataType: "json"
+      success: (response) ->
+        if (response.status == "success" && response.id)
+          $("#property_tenant_id").append("<option value='" + response.id + "'>" + newTenantName + "</option>")
+          $("#new-tenant").modal('hide')
+        else
+          $("#new-tenant .error-message").show()
+      error: (e) ->
+        console.log e
