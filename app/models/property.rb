@@ -16,6 +16,9 @@ class Property < ApplicationRecord
   has_many :group_members, :as => :gmember
   has_many :rent_tables
 
+  has_one :property_cover_image, ->{where(class_name: "PropertyCoverImage")}, class_name: "PropertyCoverImage"
+  has_many :property_images, ->{where(class_name: "PropertyImage")}, class_name: "PropertyImage"
+
   alias_attribute :name, :title
 
   validates_presence_of :title
