@@ -1,6 +1,6 @@
 
 div[role="tabpanel"]
-  ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+  ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li.active[role="presentation"]
           a#seller_documentation[href="#seller_documentation_section" role="tab" data-toggle="tab" aria-expanded="true"] Seller Documentation
       li[role="presentation"]
@@ -15,7 +15,7 @@ div[role="tabpanel"]
           a#inspection_zoning[href="#inspection_zoning_section" role="tab" data-toggle="tab" aria-expanded="false"] Zoning
   .tab-content
       #seller_documentation_section.active.tab-pane.fade.in[role="tabpanel"]
-        form
+        = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
                 label.control-label Seller Documentation
@@ -29,9 +29,14 @@ div[role="tabpanel"]
                 button.btn.btn-default
                   span.fa.fa-plus.margin-sm-right
                   | Add Document
+            
+            .clearfix
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
                       
       #environmental_section.tab-pane.fade[role="tabpanel"]
-        form
+        = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
                 label.control-label Correspondence
@@ -57,7 +62,12 @@ div[role="tabpanel"]
                         button#btn_invoice.btn-gdrive.btn.btn-default.border-blue[type="button"]
                             = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                             span.margin-md-left.blue Select in Google Drive
-              
+          
+            .clearfix
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
@@ -106,7 +116,7 @@ div[role="tabpanel"]
                       span Conference with Purchaser's Environmental Constaultant and Client Purchaser
 
       #lease_section.tab-pane.fade[role="tabpanel"]
-        form
+        = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
               label.control-label Correspondence
@@ -140,6 +150,11 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
+            
+            .clearfix
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
               
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
@@ -164,7 +179,7 @@ div[role="tabpanel"]
                     .right
                       span Send Documents to Purchaser
       #inspection_title_section.tab-pane.fade[role="tabpanel"]
-        form
+        = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
               label.control-label Correspondence
@@ -206,6 +221,10 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
+            .clearfix
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
               
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
@@ -220,7 +239,7 @@ div[role="tabpanel"]
                     /   span Comming soon
         
       #survey_section.tab-pane.fade[role="tabpanel"]
-        form
+        = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
               label.control-label Correspondence
@@ -262,6 +281,11 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
+            
+            .clearfix
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
               
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
@@ -276,7 +300,7 @@ div[role="tabpanel"]
                     /   span Comming soon
 
       #inspection_zoning_section.tab-pane.fade[role="tabpanel"]
-        form
+        = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
               label.control-label Correspondence
@@ -318,6 +342,11 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
+            
+            .clearfix
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
               
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
@@ -331,6 +360,3 @@ div[role="tabpanel"]
                     / .right
                     /   span Comming soon
 
-.divider
-button.btn.btn-default Back
-button.btn.btn-default.blue.border-blue Save & Next

@@ -441,7 +441,35 @@ class TransactionsController < ApplicationController
   end
 
   def inspection
+    if params[:cur_property].blank?
+      @property = get_transaction_properties(params[:main_id], params[:type]).first
+    else
+      @property = Property.find(params[:cur_property])
+    end
 
+    if @property.present?
+      params[:cur_property] = @property.id.to_s
+    else
+      params[:cur_property] = ""
+      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
+      return
+    end
+
+    @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
+    
+    #comming soon
+    
+  end
+
+  def inspection_update
+    #comming soon
+
+    respond_to do |format|
+      format.html {
+        redirect_to closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id])
+      }
+      format.json { render json: true }
+    end
   end
 
   def closing

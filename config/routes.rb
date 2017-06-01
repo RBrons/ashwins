@@ -267,7 +267,7 @@ Rails.application.routes.draw do
     member do
       get :edit_qualified_intermediary, :properties_edit, :qualified_intermediary,
         :terms, :inspection, :closing, :personnel, :get_status, :qi_status
-      patch :qualified_intermediary, :properties_update, :terms_update, :personnel_update, :set_status
+      patch :qualified_intermediary, :properties_update, :terms_update, :inspection_update, :personnel_update, :set_status
       post :closing
     end
     collection do

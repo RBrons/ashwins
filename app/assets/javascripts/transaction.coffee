@@ -2,6 +2,7 @@
 $ ->
   # Global Variables
   selected_offer_tab = $(document).find($(document).find('#offer_list li.active a').attr('href'))
+  selected_transaction_sub_tab = $(document).find($(document).find('#sale_buy_step_tab li.active a').attr('href'))
   last_counteroffer = ""
 
   #Transaction List
@@ -27,13 +28,20 @@ $ ->
     e.preventDefault()
     save_and_next_btn_in_step = $(document).find('.save_next_in_step')
     if save_and_next_btn_in_step.length > 1
-      save_and_next_btn_in_step = selected_offer_tab.find('.save_next_in_step')
-      save_and_next_btn_in_step.click()
+      save_and_next_btn_in_step = selected_transaction_sub_tab.find('.save_next_in_step')
+      if save_and_next_btn_in_step.length == 1
+        save_and_next_btn_in_step.click()
+      else if save_and_next_btn_in_step.length == 0
+        if $('#sale_buy_step_tab li.active').nextAll().length >= 1
+          $('#sale_buy_step_tab li.active').next().find('a').click()
+        else
+          next_step = $(document).find('ul.wizard_steps li.selected').next()
+          window.location.href = next_step.find('a').attr("href")    
     else if save_and_next_btn_in_step.length == 1
       save_and_next_btn_in_step.click()
-      
-    # next_step = $(document).find('ul.wizard_steps li.selected').next()
-    # window.location.href = next_step.find('a').attr("href")
+    else
+      next_step = $(document).find('ul.wizard_steps li.selected').next()
+      window.location.href = next_step.find('a').attr("href")
 
   # Sale
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
@@ -202,8 +210,9 @@ $ ->
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
     window.location.href = actionurl
 
-# Negotiations Step in Sale Wizard
-  # - Offer and Acceptance
+  # --- Negotiations Step in Sale Wizard --- #
+  
+  # - Offer and Acceptance -
   $(document).on 'click', '.nav-tabs #new_offer', (e)->
     e.preventDefault()
     index = $('#offer_list').children().length
@@ -278,31 +287,6 @@ $ ->
     selected_offer_tab.find('.individual-fields-wrapper').find('input').val('')
 
 
-  
-
-  # Enable 2nd Deposit
-  $(document).on 'ifChanged', '#enable-2nd-deposit', ->
-    if this.checked
-      $(this).parents().parent().parent().find('.right .form-control').prop( "disabled", false )
-      $(this).parent().siblings('.vertical-line').css({"border-color": "#3082ee"})
-    else
-      $(this).parent().parent().parent().find('.right .form-control').prop( "disabled", "disabled" )
-      $(this).parent().siblings('.vertical-line').css({"border-color": '#777'})
-
-  $(document).on 'click', (e) ->
-    container = $("div#TransactionTypeList")
-    if (!container.is(e.target) && (container.has(e.target).length == 0))
-      container.hide();
-
-  $(document).on 'nested:fieldAdded', (event) ->
-    field = event.field
-    $(document).find(field.find('.input-mask-currency')).inputmask
-      alias: 'currency',
-      rightAlign: false,
-      prefix: ''
-
-  # Offer and Acceptance
-
   $("#offer_list li").children('a').first().click()
   selected_offer_tab = $(document).find($("#offer_list li").children('a').first().attr('href'))
 
@@ -370,6 +354,9 @@ $ ->
       prefix: '$ '
       removeMaskOnSubmit: true
       positionCaretOnTab: true
+  
+  $(document).on 'click', '#sale_buy_step_tab li a', (e)->
+    selected_transaction_sub_tab = $(document).find($(this).attr('href'))
 
   $(document).on 'click', '#offer_list li a', (e)->
     selected_offer_tab = $(document).find($(this).attr('href'))
@@ -484,7 +471,6 @@ $ ->
           $.notify "Failed", "error"
 
 
-
   # Click Accept offer
   $(document).on "click", ".btn_accept_counteroffer", (e) ->
     e.preventDefault()
@@ -533,9 +519,41 @@ $ ->
           else
             $(document).find('#relinquishing_property_rat_race').val('')
 
-          $('#negotions_tab a#letter_of_intent').click()
+          $('#sale_buy_step_tab a#letter_of_intent').click()
         else
           $.notify "Failed", "error"
+
+  #- LOI(Letter of Intent)  -#
+
+  # Enable 2nd Deposit
+  $(document).on 'ifChanged', '#enable-2nd-deposit', ->
+    if this.checked
+      $(this).parents().parent().parent().find('.right .form-control').prop( "disabled", false )
+      $(this).parent().siblings('.vertical-line').css({"border-color": "#3082ee"})
+    else
+      $(this).parent().parent().parent().find('.right .form-control').prop( "disabled", "disabled" )
+      $(this).parent().siblings('.vertical-line').css({"border-color": '#777'})
+
+  $(document).on 'click', (e) ->
+    container = $("div#TransactionTypeList")
+    if (!container.is(e.target) && (container.has(e.target).length == 0))
+      container.hide();
+
+  $(document).on 'nested:fieldAdded', (event) ->
+    field = event.field
+    $(document).find(field.find('.input-mask-currency')).inputmask
+      alias: 'currency',
+      rightAlign: false,
+      prefix: ''
+  
+  $(document).on 'ajax:success', '.transaction_property_inspection_form', (e, data, status, xhr) ->
+    if $('#sale_buy_step_tab li.active').nextAll().length >= 1
+      $('#sale_buy_step_tab li.active').next().find('a').click()
+    else
+      next_step = $(document).find('ul.wizard_steps li.selected').next()
+      window.location.href = next_step.find('a').attr("href") 
+
+
 
   $(document).on 'ajax:success', '.transaction_property_term_form', (e, data, status, xhr) ->
     $.notify 'Success', 'success'
@@ -566,13 +584,16 @@ $ ->
     set_closing_date(psa_date, data.closing_days_after_inspection_period)
     $(document).find('#transaction_transaction_term_attributes_closing_days_after_inspection_period').val(data.closing_days_after_inspection_period)
 
-    $('#negotions_tab li.active').next().find('a').click()
+    if $('#sale_buy_step_tab li.active').nextAll().length >= 1
+      $('#sale_buy_step_tab li.active').next().find('a').click()
+    else
+      next_step = $(document).find('ul.wizard_steps li.selected').next()
+      window.location.href = next_step.find('a').attr("href") 
 
   $(document).on 'click', '.back_prev_step', (e) ->
     e.preventDefault()
-    $('#negotions_tab li.active').prev().find('a').click()
-    set_first_deposit_date_due(psa_date, first_deposit_days_after_psa)
-
+    $('#sale_buy_step_tab li.active').prev().find('a').click()
+    
   # Show modal for submenu of top menu
   $(document).on 'click', '.top-header ul li a > span', (e)->
     e.preventDefault()
@@ -589,7 +610,7 @@ $ ->
     modal_id = '#md-' + $(this).attr('id')
     $(modal_id).modal()
 
-  # Purcahse Sale Agreement
+  #- Purcahse Sale Agreement -#
   dateFormatYMD = (date)->
     des_dt = new Date(date)
     date_string = ""
