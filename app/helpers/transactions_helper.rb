@@ -58,9 +58,11 @@ module TransactionsHelper
         if transaction_property.present?
             accepted_offer = transaction_property.transaction_property_offers.where(is_accepted: true).first
             if accepted_offer.present?
-                return Contact.find(accepted_offer.relinquishing_purchaser_contact_id)
-            else
-                return false
+                if transaction_property.is_sale
+                    return Contact.find(accepted_offer.relinquishing_purchaser_contact_id)
+                else
+                    return transaction_property.owner
+                end
             end
         else
             return false

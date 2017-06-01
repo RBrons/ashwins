@@ -54,17 +54,17 @@ hr
             - $header_links[:properties] = persisted ? properties_edit_transaction_path(@transaction, sub: 'property', type: 'purchase', main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>What's being Bought?</span>".html_safe, $header_links[:properties]
 
-          li class=("#{'selected' if params[:sub] == 'parties' }")
-            - disabled = nil
-            - disabled = 'disabled' if params[:type] == 'status'
-            - $header_links[:parties] = persisted ? edit_transaction_path(@transaction, sub: 'parties', type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property]) : '#'
-            = link_to "<span class='step_no'>Who's Selling?</span>".html_safe, $header_links[:parties]
-
           li class=("#{'selected' if params[:sub] == 'terms'}")
             - disabled = nil
             - disabled = 'disabled' if params[:type] == 'status' || @transaction.new_record?
             - $header_links[:terms] = persisted ? terms_transaction_path(@transaction, sub: 'terms', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>Negotiations</span>".html_safe, $header_links[:terms]
+            
+          li class=("#{'selected' if params[:sub] == 'parties' }")
+            - disabled = nil
+            - disabled = 'disabled' if params[:type] == 'status'
+            - $header_links[:parties] = persisted ? edit_transaction_path(@transaction, sub: 'parties', type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property]) : '#'
+            = link_to "<span class='step_no'>Who's Seller?</span>".html_safe, $header_links[:parties]
 
           li class=("#{'selected' if params[:sub] == 'inspection'}")
             - disabled = nil
