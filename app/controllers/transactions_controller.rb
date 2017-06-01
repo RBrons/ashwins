@@ -168,6 +168,19 @@ class TransactionsController < ApplicationController
       @transaction.rplmnt_seller_contact_id = @transaction.replacement_seller_contact_id if @transaction.seller_person_is
       @transaction.rplmnt_purchaser_entity_id = @transaction.replacement_purchaser_entity_id if @transaction.purchaser_person_is
 
+      if params[:cur_property].blank?
+        @property = get_transaction_properties(params[:main_id], params[:type]).first
+      else
+        @property = Property.find(params[:cur_property])
+      end
+
+      if @property.present?
+        params[:cur_property] = @property.id.to_s
+      else
+        params[:cur_property] = ""
+        redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
+        return
+      end
 
     end
 
