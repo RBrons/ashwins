@@ -9,5 +9,7 @@
     == render 'properties/lease_form'
   - elsif params[:type_is] == 'ownership'
     == render 'properties/ownership_form'
+  - elsif params[:type_is] == 'photo_gallery'
+    == render 'properties/photo_gallery'
   - else
     == render 'properties/basic_info_form'

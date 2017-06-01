@@ -52,8 +52,8 @@
                 - else
                   input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=''
         .transaction-property-image
-          - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.cl_image_public_id.nil?
-            = cl_image_tag(transaction_property_form.object.property.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
+          - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
+            = cl_image_tag(transaction_property_form.object.property.property_cover_image.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
           - else
             = image_tag 'sale_house.jpg', class: "img-responsive width-100"
         .clearfix.margin-lg-top
@@ -115,8 +115,8 @@
                 - else
                   input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=''
         .transaction-property-image
-          - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.cl_image_public_id.nil?
-            = cl_image_tag(transaction_property_form.object.property.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
+          - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
+            = cl_image_tag(transaction_property_form.object.property.property_cover_image.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
           - else
             = image_tag 'sale_house.jpg', class: "img-responsive width-100"
         .clearfix.margin-lg-top

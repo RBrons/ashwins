@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170601071538) do
+=======
+ActiveRecord::Schema.define(version: 20170531164940) do
+>>>>>>> 7bdbd031c770b50175b692a81c778031f0d4c9ab
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +57,20 @@ ActiveRecord::Schema.define(version: 20170601071538) do
     t.datetime "deleted_at"
     t.string   "client_type"
     t.index ["deleted_at"], name: "index_clients_on_deleted_at", using: :btree
+  end
+
+  create_table "cloudinary_images", force: :cascade do |t|
+    t.integer  "property_id"
+    t.string   "cl_image_public_id"
+    t.integer  "cl_image_width"
+    t.integer  "cl_image_height"
+    t.string   "cl_image_format"
+    t.string   "cl_image_url"
+    t.string   "cl_image_url_secure"
+    t.string   "cl_image_original_filename"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "class_name"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -401,13 +419,6 @@ ActiveRecord::Schema.define(version: 20170601071538) do
     t.decimal  "lease_rent_increase_percentage",                                    precision: 5,  scale: 2
     t.integer  "lease_rent_slab_in_years"
     t.integer  "rent_table_version"
-    t.string   "cl_image_public_id"
-    t.integer  "cl_image_width"
-    t.integer  "cl_image_height"
-    t.string   "cl_image_format"
-    t.string   "cl_image_url"
-    t.string   "cl_image_url_secure"
-    t.string   "cl_image_original_filename"
     t.string   "zip"
     t.string   "st_address_suffix"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree

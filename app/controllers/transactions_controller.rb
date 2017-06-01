@@ -167,6 +167,8 @@ class TransactionsController < ApplicationController
     else
       @transaction.rplmnt_seller_contact_id = @transaction.replacement_seller_contact_id if @transaction.seller_person_is
       @transaction.rplmnt_purchaser_entity_id = @transaction.replacement_purchaser_entity_id if @transaction.purchaser_person_is
+
+
     end
 
   end
