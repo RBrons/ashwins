@@ -118,14 +118,10 @@
     .form-group
       = label_tag 'County'
       = f.text_field :location_county, class: 'form-control width-field-md'
-    - str = "Upload Picture/Image/Photo"
-    - if @property.cl_image_url
-      /img src="#{@property.cl_image_url}" /
-      = cl_image_tag(@property.cl_image_public_id, :height => 200, :crop => :scale)
-      - str = "Edit Picture/Image/Photo"
-    .form-group
-      label = str
-      = f.file_field :prop_img, class: 'form-control width-field-md'
+    - if @property.property_cover_image.present? && @property.property_cover_image.cl_image_url
+      .form-group
+        = label_tag "Cover Image"
+        = cl_image_tag(@property.property_cover_image.cl_image_url, :height => 200, :crop => :scale)
   .clearfix
   .form-group
     = f.submit 'Save', class: 'btn btn-sm btn-primary'
