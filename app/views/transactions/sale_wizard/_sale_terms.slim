@@ -8,7 +8,7 @@
 #negotiations_wrapper[data-transaction-type="#{@transaction_property.is_sale ? 'sale' : 'purchase'}"]
   input#negotiated_property[type="hidden" value="#{@property.title}"]
   div[role="tabpanel"]
-    ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+    ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li.active[role="presentation"]
           a#offer_and_acceptance[href="#offer_and_acceptance_section" role="tab" data-toggle="tab" aria-expanded="true"] Offer and Acceptance
           
@@ -235,7 +235,9 @@
                   .checkbox-inline
                       input.flat-icheck[type="checkbox" name=""]
                           span.margin-sm-left Executed
-            = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
         
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .note
@@ -398,8 +400,9 @@
                       input[type="checkbox" data-class="transaction_transaction_term_attributes_closing_date" class="manually_date_on_psa"]
 
             .clearfix
-            .margin-lg-top
-              = f.submit 'Save & Next', class: 'btn btn-primary prev-next'
+            .divider.margin-lg-top
+              button.back_prev_step.btn.btn-default Back
+              = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
       
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .note
@@ -465,8 +468,6 @@
                 span.fa.fa-plus.margin-sm-right
                 | Add Document
 .clearfix
-.divider
-button#back_prev_tab.btn.btn-default Back
 
 /! Offer and Acceptance Template
 #offer_and_acceptance_template[style="display: none"]
