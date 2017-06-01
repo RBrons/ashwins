@@ -416,6 +416,10 @@ class TransactionsController < ApplicationController
         if ! @transaction_property.transaction_property_offers.present?
           @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
         end
+      else
+        if ! @transaction_property.transaction_property_offers.present?
+          @transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+        end
       end
     else
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
