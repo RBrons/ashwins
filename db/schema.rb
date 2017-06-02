@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170601151857) do
+ActiveRecord::Schema.define(version: 20170602055038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -417,6 +417,8 @@ ActiveRecord::Schema.define(version: 20170601151857) do
     t.string   "zip"
     t.string   "st_address_suffix"
     t.integer  "tenant_id"
+    t.integer  "lease_slab_in_years"
+    t.boolean  "lease_is_pro_rated",                                                                         default: false
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
@@ -453,9 +455,11 @@ ActiveRecord::Schema.define(version: 20170601151857) do
     t.integer  "start_year"
     t.integer  "end_year"
     t.integer  "property_id"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
     t.integer  "version"
+    t.boolean  "is_option",                            default: false
+    t.integer  "option_slab"
     t.index ["property_id"], name: "index_rent_tables_on_property_id", using: :btree
   end
 

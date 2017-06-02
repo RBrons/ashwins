@@ -117,25 +117,80 @@ class PropertiesController < ApplicationController
 
           if @property.can_create_rent_table?
             rent_table_version = @property.rent_table_version
+
             base_rent = @property.lease_base_rent
             duration = @property.lease_duration_in_years
             percentage = @property.lease_rent_increase_percentage
             slab = @property.lease_rent_slab_in_years
-            start_year = Time.now.year
-            rent = base_rent
 
-            while start_year <= Time.now.year + duration - 1
+            rent = base_rent
+            prev_rent = rent
+            rent_start = @property.rent_commencement_date || Time.now
+            rent_start = Time.now if @property.rent_commencement_date_details == 'Date not certain'
+            start_year = rent_start.year
+            end_year = 0
+
+            count = 0
+
+            if @property.lease_is_pro_rated && @property.rent_commencement_date_details != 'Date not certain'
+              d = rent_start
+              # 1 - calculate the pro-rated rent for year 1
+              rent_first_year = rent * (((Date.parse("31/12/#{d.year}") - d.to_date).to_i) * 1.00/(d.year % 4 == 0 ? 366.00 : 365.00))
+              # 2 - add the rent table entry
+              @property.rent_tables.create(version: rent_table_version, start_year: d.year, end_year: d.year, rent: rent_first_year)
+              # 3 - decrease the duration by 1 and update rent
+              duration = duration - 1
+              start_year = d.year + 1
+              count = slab - 1
+              slab = slab - 1
+            end
+
+
+            while start_year <= rent_start.year + duration - 1
+              if count == 0
+                slab = @property.lease_rent_slab_in_years
+              else
+                count = 0
+              end
               end_year = start_year + slab - 1
 
-              if end_year >= Time.now.year + duration - 1
-                end_year = Time.now.year + duration - 1
+              if end_year >= rent_start.year + duration - 1
+                end_year = rent_start.year + duration - 1
               end
 
+              prev_rent = rent
               @property.rent_tables.create(version: rent_table_version, start_year: start_year, end_year: end_year, rent: rent)
 
               start_year = end_year + 1
               rent = rent + rent * percentage / 100
             end
+
+            if @property.number_of_option_period && @property.length_of_option_period &&
+                @property.number_of_option_period > 0 && @property.length_of_option_period > 0
+              duration = @property.number_of_option_period * @property.length_of_option_period
+              start_year = end_year + 1
+              rent_start = Date.parse("01/01/#{start_year}")
+              rent = prev_rent
+              slab = @property.length_of_option_period
+              count = 1
+               while start_year <= rent_start.year + duration - 1
+                end_year = start_year + slab - 1
+
+                if end_year >= rent_start.year + duration - 1
+                  end_year = rent_start.year + duration - 1
+                end
+
+                prev_rent = rent
+                @property.rent_tables.create(version: rent_table_version,
+                  start_year: start_year, end_year: end_year, rent: rent,
+                  is_option: true, option_slab: count)
+
+                start_year = end_year + 1
+                rent = rent + rent * percentage / 100
+                count = count + 1
+              end
+            end
+
           end
 
           format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }

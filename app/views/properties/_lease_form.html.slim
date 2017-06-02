@@ -74,6 +74,13 @@ div[role="tabpanel"]
 
             .clearfix
             .form-group
+              h2.heading
+                | Lease Slab In Years
+              .clearfix
+              =  f.text_field :lease_slab_in_years, class: 'form-control'
+
+            .clearfix
+            .form-group
               h2.heading Lease Rent Increase Type
               .clearfix
               =  f.text_field :lease_rent_increase_type, class: 'form-control'
@@ -104,6 +111,11 @@ div[role="tabpanel"]
             .clearfix
             .form-group
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: 'form-control select_auto'
+            .clearfix
+            .form-group
+              h2.heading
+                | Pro Rated Rent?
+              =  f.check_box :lease_is_pro_rated, class: 'form-control'
             .clearfix
               h2.heading
                 | Rent Commencement Date Details
@@ -166,7 +178,8 @@ div[role="tabpanel"]
                 tr
                   th Base Rent
                   th
-                    = @property.rent_tables.where(version: @property.rent_table_version).first.format_rent
+                    /= @property.rent_tables.where(version: @property.rent_table_version).first.format_rent
+                    = @property.lease_base_rent
               tbody
                 - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
                   tr

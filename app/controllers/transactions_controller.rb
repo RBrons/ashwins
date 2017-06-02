@@ -456,9 +456,9 @@ class TransactionsController < ApplicationController
     end
 
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
-    
+
     #comming soon
-    
+
   end
 
   def inspection_update
@@ -571,7 +571,7 @@ class TransactionsController < ApplicationController
     end
     params[:sub] = 'closing'
     params[:type] = 'qi_status'
-    @tproperties = TransactionProperty.where(transaction_main_id: @transaction_main.id)
+    @tproperties = TransactionProperty.where(transaction_main_id: @transaction_main.id, is_selected: true)
     @sales = []
     @purchases = []
     @tproperties.each do |prop|
