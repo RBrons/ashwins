@@ -77,44 +77,14 @@ div[role="tabpanel"]
                     .left
                       input.task_status.flat-icheck[type="checkbox"]    
                     .right
-                      span Received Phase I from seller
+                      span Send Environmental File to Buyer's Attorney
                 li
                   .field_list
                     .left
                       input.task_status.flat-icheck[type="checkbox"]
                     .right
-                      span Is there a Phase II?
-                li
-                  .field_list
-                    .left
-                      input.task_status.flat-icheck[type="checkbox"]
-                    .right
-                      span Select and Contract with Engineer
-                li
-                  .field_list
-                    .left
-                      input.task_status.flat-icheck[type="checkbox"]
-                    .right
-                      span Send Seller's Survey and 'As Built' Survey to Engineer(Sharing Issue)
-                li
-                  .field_list
-                    .left
-                      input.task_status.flat-icheck[type="checkbox"]
-                    .right
-                      span Completion of Purchaser's Phase I
-                li 
-                  .field_list
-                    .left
-                      input.task_status.flat-icheck[type="checkbox"]
-                    .right
-                      span Send Purchaser's Phase I to Purchaser's Environmental Consultant(Sharing Issue)
-                li
-                  .field_list
-                    .left
-                      input.task_status.flat-icheck[type="checkbox"]
-                    .right
-                      span Conference with Purchaser's Environmental Constaultant and Client Purchaser
-
+                      span Provide Tenant Site Contact to Buyer's Attorney
+                
       #lease_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
