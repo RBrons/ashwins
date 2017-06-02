@@ -63,10 +63,13 @@ class PropertiesController < ApplicationController
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
-        format.html { redirect_to properties_path }
+        flash[:success] = "Successfully created new property."
+        format.html { redirect_to edit_property_path(@property.key, type_is: 'basic_info') }
+        # format.html { redirect_to properties_path }
         format.js { render json: @property.to_json, status: :ok }
         format.json { render action: 'show', status: :created, location: @property }
       else
+        flash[:error] = "Failed to create new property."
         format.html { render action: 'new' }
         format.js { render action: 'new', status: :unprocessable_entity, layout: false }
         format.json { render json: @property.errors, status: :unprocessable_entity }

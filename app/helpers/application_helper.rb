@@ -728,4 +728,13 @@ module ApplicationHelper
     return result.html_safe
   end
 
+  def flash_class(level)
+    case level
+      when "notice" then "flash-message alert alert-info"
+      when "success" then "flash-message alert alert-success"
+      when "error" then "flash-message alert alert-error"
+      when "alert" then "flash-message alert alert-error"
+    end
+  end
+
 end

@@ -5,7 +5,7 @@ $ ->
     object_select_checkboxes = $('input#object_select')
     if !lastChecked
       lastChecked = this
-      
+
     if e.shiftKey
       start = object_select_checkboxes.index(this)
       end = object_select_checkboxes.index(lastChecked)
@@ -15,7 +15,7 @@ $ ->
         object_select_checkboxes.slice(start, end + 1).prop 'checked', false
     lastChecked = this
     checkbox_recheck()
-    
+
 
   checkbox_recheck = ->
     data = ''
@@ -69,7 +69,7 @@ $ ->
       input_object.hide()
       input_object.attr('name', null)
 
-  
+
   flat_icheckbox = ->
     $(document).find('input.flat-icheck').iCheck
       checkboxClass: 'icheckbox_flat-blue'
@@ -81,10 +81,10 @@ $ ->
       rightAlign: false,
       prefix: '',
       removeMaskOnSubmit: true
-  
+
   selectize_single = ->
     $(document).find('select.selectize-single').selectize
-      create: false      
+      create: false
 
   selectize_single_contact = ->
     $(document).find('select.selectize-single-contact').selectize
@@ -127,13 +127,13 @@ $ ->
   $(document).ajaxComplete ->
     selectize_single()
     selectize_single_contact()
-  
+
   #Select file in Google Drive
   $().gdrive 'init',
     'devkey': $('#google_api_dev_key').val()
     'appid': $('#google_api_app_id').val()
-  ### 
-   Difinition: 
+  ###
+   Difinition:
     Select in Google Drive Class name: select_in_gdrive
   ###
   init_select_in_google_drive = ->
@@ -182,4 +182,7 @@ $ ->
     'success': (new_data) ->
       new_data
 
-  
+  setTimeout (->
+    $('.flash-message').hide 'slow', ->
+      $('.flash-message').remove()
+  ), 3000
