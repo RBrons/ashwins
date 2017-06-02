@@ -42,8 +42,8 @@
                       - owner_name = @property.owner.name
                     - else
                       - owner_name = "No Owner"
-
-                    = "The Seller of <b>#{@property.name}</b> is <b>#{owner_name}</b> to be drawn from the Properties Module.".html_safe
+                    
+                    = "<b>#{owner_name}</b> is selling <b>#{@property.try(:title) || 'Untitled'}</b> to your client <b>#{@transaction.try(:relinquishing_seller_first_name)} #{@transaction.try(:relinquishing_seller_last_name)}</b> for #{number_to_currency(get_sale_price(@transaction_property))}.".html_safe
                 / .form-group
                   / label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
                   / .clearfix

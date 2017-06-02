@@ -182,6 +182,8 @@ class TransactionsController < ApplicationController
         return
       end
 
+      @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
+
     end
 
   end
