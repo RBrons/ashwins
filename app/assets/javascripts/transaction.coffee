@@ -40,8 +40,11 @@ $ ->
     else if save_and_next_btn_in_step.length == 1
       save_and_next_btn_in_step.click()
     else
-      next_step = $(document).find('ul.wizard_steps li.selected').next()
-      window.location.href = next_step.find('a').attr("href")
+      if $('#sale_buy_step_tab li.active').nextAll().length >= 1
+          $('#sale_buy_step_tab li.active').next().find('a').click()
+      else
+        next_step = $(document).find('ul.wizard_steps li.selected').next()
+        window.location.href = next_step.find('a').attr("href")    
 
   #---- Sale ----#
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
