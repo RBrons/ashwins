@@ -43,7 +43,7 @@ $ ->
       next_step = $(document).find('ul.wizard_steps li.selected').next()
       window.location.href = next_step.find('a').attr("href")
 
-  # Sale
+  #---- Sale ----#
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
     $(document).find('div.sale-tr-pr-detail').show()
     $(document).find('div.sale-tr-et-detail').hide()
@@ -79,7 +79,7 @@ $ ->
         $(".sale-step1-form input[type=submit]").show()
         $("#save-and-next").show()
 
-  # Purchase
+  #---- Purchase ----#
   $(document).on 'ifChecked', '#transaction_purchaser_person_is_true', ->
     if this.checked
       $(document).find('div.purchase-tr-pr-detail').show();
@@ -90,7 +90,22 @@ $ ->
       $(document).find('div.purchase-tr-pr-detail').hide();
       $(document).find('div.purchase-tr-et-detail').show();
 
+  # Accept Ask on Step1 Buy side
+  $(document).on 'ifChecked', '.transaction_properties_wrapper .accept_ask_price', ->
+    if this.checked
+      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_cap').iCheck('disable')
+      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_price').iCheck('disable')
+      $(this).closest('.fields').find('.transaction-property-calculation .price-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-price').val())
+                                                                                           .prop('readonly', 'readonly')
+      $(this).closest('.fields').find('.transaction-property-calculation .cap-rate-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-cap-rate').val())
+                                                                                        .prop('readonly', 'readonly')
 
+  $(document).on 'ifChecked', '.transaction_properties_wrapper .make_counteroffer', ->
+    if this.checked
+      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_cap').iCheck('enable')
+      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_price').iCheck('enable')
+      $(this).closest('.fields').find('.transaction-property-calculation input').prop('readonly', false)
+    
   sale_pre_loi_text = (seller)-> '<strong>Congratulations!</strong> You have just initiated a 1031 Exchange on behalf of <strong>'+seller+'</strong>. You can now identify the ' +
     ' property that you wish to relinquish, hire a Qualified Intermediary, set a sales price and input a broker. Please ' +
     'be sure to input the progress of your Exchange by updating the Status dropdown. All changes will be updated in ' +
@@ -210,6 +225,8 @@ $ ->
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
     window.location.href = actionurl
 
+  
+
   # --- Negotiations Step in Sale Wizard --- #
   
   # - Offer and Acceptance -
@@ -305,7 +322,10 @@ $ ->
             selected_offer_tab.find('.add_counteroffer').text('Buyer Counter')
             selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
           else
-            selected_offer_tab.find('.add_counteroffer').text('Client Counter')
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              selected_offer_tab.find('.add_counteroffer').text('Client Counter')
+            else
+              selected_offer_tab.find('.add_counteroffer').text('Seller Counter')
             selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
 
           selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
@@ -333,7 +353,10 @@ $ ->
             selected_offer_tab.find('.add_counteroffer').text('Buyer Counter')
             selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
           else
-            selected_offer_tab.find('.add_counteroffer').text('Client Counter')
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              selected_offer_tab.find('.add_counteroffer').text('Client Counter')
+            else
+              selected_offer_tab.find('.add_counteroffer').text('Seller Counter')
             selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
 
           selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
@@ -399,12 +422,19 @@ $ ->
       data: { transaction_property_offer_id: offer_id, offer_type: offeror, offered_date: date, offered_price: unformated_price }
       success: (data) ->
         if data.status
+          table_cell_offeror = offeror
+          if table_cell_offeror == 'Client'
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              table_cell_offeror = 'Client'
+            else
+              table_cell_offeror = 'Seller'
+          
           add_row_html = '<tr data-counteroffer-id="' + data.counteroffer_id + '">
                             <td width="150">
                                 <span class="editable-date" data-name="offered_date" data-url="/counteroffers/' + data.counteroffer_id + '" data-type="combodate" data-value="' + date + '" data-format="YYYY-MM-DD" data-viewformat="MM/DD/YYYY"></span>
                             </td>
                             <td width="300">
-                                <span>' + offeror + '</span>
+                                <span>' + table_cell_offeror + '</span>
                             </td>
                             <td>
                                 <span class="green editable-currency" data-name="offered_price" data-type="text" data-url="/counteroffers/' + data.counteroffer_id + '" data-value="' + price + '"></span>
