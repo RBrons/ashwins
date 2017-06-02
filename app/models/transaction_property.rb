@@ -31,4 +31,13 @@ class TransactionProperty < ApplicationRecord
   def closed?
     return !self.closing_date.nil?
   end
+
+  def asking_accepted?
+    accepted_offer = self.transaction_property_offers.where(:is_accepted => true).first
+    if accepted_offer.present?
+      return accepted_offer.is_ask_accepted?
+    else
+      return false
+    end
+  end
 end

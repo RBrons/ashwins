@@ -71,26 +71,23 @@
                 .row.counteroffer_action_buttons_wrapper
                   .col-md-4.col-xs-12.form-group
                     - last_counteroffer = transaction_property_offer.counteroffers.last
-                    input.last_counteroffer[type="hidden" value="#{last_counteroffer.try(:offer_type) || 'Client'}"]
+                    input.last_counteroffer[type="hidden" value="#{last_counteroffer.try(:offer_type) || 'Counter-Party'}"]
                     - if !transaction_property_offer.is_accepted
                       - if last_counteroffer.present?
                         - if last_counteroffer.try(:offered_date) && last_counteroffer.try(:offered_price)
-                          button.add_counteroffer.btn.btn-default.red.border-red #{ last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Client Counter' : 'Buyer Counter' }
+                          button.add_counteroffer.btn.btn-default.red.border-red #{ last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Seller Counter' : 'Buyer Counter' }
                         - else
                           button.add_counteroffer.btn.btn-default.red.border-red[disabled] #{ last_counteroffer.present? ? (last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Buyer Counter' : 'Client Counter') : 'Buyer Counter' }
                         = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Counter Accepted' : 'Accept Counter', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
                       - else
-                        button.add_counteroffer.btn.btn-default.red.border-red Buyer Counter
-                        = link_to 'Counter Accepted', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true, disabled: true
+                        button.add_counteroffer.btn.btn-default.red.border-red Seller Counter
+                        = link_to 'Accept Counter', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true, disabled: true
                     - else
                       -if transaction_property_offer.is_ask_accepted?
                         = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
                       - else
-                        = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Client\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
+                        = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Seller\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
                     
-                    button.ask_accepted.btn.btn-default.border-green.green[disabled=( @transaction_property.transaction_property_offers.where(is_accepted: true).count >= 1 ? 'disabled' : false ) style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Ask Accepted
-                    
-
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
           span = @replacement_seller.try(:name) || 'Seller'
