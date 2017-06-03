@@ -94,20 +94,29 @@ $ ->
       $(document).find('div.purchase-tr-et-detail').show();
 
   # Accept Ask on Step1 Buy side
-  $(document).on 'ifChecked', '.transaction_properties_wrapper .accept_ask_price', ->
+  $(document).on ' ifChecked', '.transaction_properties_wrapper .accept_ask_price', ->
     if this.checked
-      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_cap').iCheck('disable')
-      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_price').iCheck('disable')
       $(this).closest('.fields').find('.transaction-property-calculation .price-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-price').val())
-                                                                                           .prop('readonly', 'readonly')
       $(this).closest('.fields').find('.transaction-property-calculation .cap-rate-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-cap-rate').val())
-                                                                                        .prop('readonly', 'readonly')
-
-  $(document).on 'ifChecked', '.transaction_properties_wrapper .make_counteroffer', ->
+                                                                                        
+  $(document).on 'ifClicked ifChecked', '.transaction_properties_wrapper .make_counteroffer', ->
     if this.checked
-      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_cap').iCheck('enable')
-      $(this).closest('.fields').find('.transaction-property-calculation input.radio_edit_mode_price').iCheck('enable')
-      $(this).closest('.fields').find('.transaction-property-calculation input').prop('readonly', false)
+      $(this).closest('.fields').find('.md-make-counter').modal('show')
+  
+  $(document).on 'click', '.transaction_properties_wrapper .btn-cancel-make-counter', (e)->
+    e.preventDefault()
+    $(this).closest('.fields').find('.accept_ask_price').iCheck('check')
+    $(this).closest('.fields').find('.make_counteroffer').iCheck('uncheck')
+    $(this).closest('.fields').find('.md-make-counter').modal('hide')
+  
+  $(document).on 'click', '.transaction_properties_wrapper .btn-ok-make-counter', (e)->
+    e.preventDefault()
+    if parseFloat($(this).closest('.md-make-counter').find('.transaction-property-calculation .price-box input').val()) == 0 && parseFloat($(this).closest('.md-make-counter').find('.transaction-property-calculation .cap-rate-box input').val()) == 0
+      alert('Cap Rate or Asking Price should not be blank or zero.')
+      return
+    $(this).closest('.fields').find('.md-make-counter').modal('hide')
+
+      
     
   sale_pre_loi_text = (seller)-> '<strong>Congratulations!</strong> You have just initiated a 1031 Exchange on behalf of <strong>'+seller+'</strong>. You can now identify the ' +
     ' property that you wish to relinquish, hire a Qualified Intermediary, set a sales price and input a broker. Please ' +
