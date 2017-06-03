@@ -38,7 +38,12 @@
                 .row
                   .col-md-12
                       .col-md-3
-                          h4 Asking
+                          h4.asking_description.red
+                            - if @property.owner.present?
+                              - owner_name = @property.owner.name
+                            - else
+                              - owner_name = "No Owner Name"
+                            = "#{owner_name} is Asking".html_safe
                           h1.property-price.green.margin-lg-top
                             = number_to_currency(@transaction_property.try(:sale_price))
                           - if @property.try(:title).present?
@@ -48,7 +53,7 @@
                           - @property.property_images.each do |property_image|
                             = image_tag(property_image.try(:cl_image_url), :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
                         - else
-                          p There is no images available
+                          h4 There is no images available
                 .row
                   .col-md-12.margin-lg-top.form-group
                     input.last_counteroffer_price[type="hidden" value="#{get_recent_counteroffer_price(transaction_property_offer)}"]
