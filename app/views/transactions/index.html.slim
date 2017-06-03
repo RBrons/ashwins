@@ -57,7 +57,7 @@
           td = number_to_currency(var.funds_identified)
           td = number_to_currency(var.funds_to_identified)
           td
-            - var.transaction_properties.each do |p|
+            - var.transaction_properties.where(:is_selected => true).each do |p|
               = "#{p.name}"
               br
           td = var.psa_date.try(:to_string)
