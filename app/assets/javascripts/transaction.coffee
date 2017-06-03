@@ -435,12 +435,12 @@ $ ->
       success: (data) ->
         if data.status
           table_cell_offeror = offeror
-          if table_cell_offeror == 'Client'
-            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
-              table_cell_offeror = 'Client'
-            else
+          if $(document).find('#negotiations_wrapper').data('transaction-type') == 'purchase'
+            if table_cell_offeror == 'Client'
               table_cell_offeror = 'Seller'
-          
+            else
+              table_cell_offeror = 'Client'
+
           add_row_html = '<tr data-counteroffer-id="' + data.counteroffer_id + '">
                             <td width="150">
                                 <span class="editable-date" data-name="offered_date" data-url="/counteroffers/' + data.counteroffer_id + '" data-type="combodate" data-value="' + date + '" data-format="YYYY-MM-DD" data-viewformat="MM/DD/YYYY"></span>
