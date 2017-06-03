@@ -59,17 +59,24 @@
             h5
               | &nbsp;&nbsp;/&nbsp;&nbsp;
           .pull-left
-            - case params[:sub]
-              - when 'parties'
-                h5 = link_to " #{ params[:sub].present? ? (@transaction.Sale? ? 'Please select a Seller' : 'Please select a Buyer') : '#'}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
-              - when 'property'
-                h5 = link_to " #{params[:sub].present? ? (@transaction.Sale? ? 'Select Property to Sell' : 'Select Property to Buy' ) : '#'}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
-              - when 'terms'
-                h5 = link_to " #{params[:sub].present? ? (@transaction.Sale? ? 'Negotiate the Sales Price with the Prospective Purchaser' : params[:sub]) : ''}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
-              - when 'inspection'
-                h5 = link_to " #{params[:sub].present? ? params[:sub] : ''}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
-              - when 'closing'
-                h5 = link_to " #{params[:sub].present? ? params[:sub] : ''}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+            - if params[:sub].blank?
+              - if @transaction.Sale?
+                h5 = link_to " #{(@transaction.relinquishing_seller_entity_id ? '' : 'Identify the Relinquishing Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+            - else  
+              - case params[:sub]
+                - when 'parties'
+                  - if @transaction.Sale?
+                    h5 = link_to " #{(@transaction.relinquishing_seller_entity_id ? '' : 'Identify the Relinquishing Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+                  - else
+                    h5 = link_to " #{(@transaction.replacement_seller_contact_id ? '' : 'Identify the Replacement Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+                - when 'property'
+                  h5 = link_to " #{(@transaction.Sale? ? 'Select Property to Sell' : 'Select Property to Buy' )}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+                - when 'terms'
+                  h5 = link_to " #{(@transaction.Sale? ? 'Negotiate the Sales Price with the Prospective Purchaser' : params[:sub])}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+                - when 'inspection'
+                  h5 = link_to " #{params[:sub]}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+                - when 'closing'
+                  h5 = link_to " #{params[:sub]}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
         - if params[:type] == 'status'
           .pull-left
             h5
