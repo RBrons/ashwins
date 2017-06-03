@@ -45,39 +45,44 @@
                 
                 .row
                   - @purchaser = get_transaction_property_offeror(transaction_property_offer)
-                  form.relingquishing_offeror_form[remote="true" action="#{contact_path(@purchaser)}"]
-                    .col-md-4.form-group
-                      input[type="hidden" name="contact[role]" value="Counter-Party"]
-                      input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
-                      input[type="hidden" name="from_relinquishing_offeror" value="#{transaction_property_offer.id}"]
-                      
-                      h2.heading_without_padding_large Relinquishing Offeror
-                      .form-group
-                        .heading_blue.radio-inline
-                          span
-                            input.contact_is_company_false.form-control.flat-icheck.radiobuttons[type="radio" value="false" name="contact[is_company]" checked=( @purchaser.is_company ? false : 'checked' ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-                          span.margin-md-left Individual
-                        .heading_blue.radio-inline
-                          span.margin-md-left
-                            input.contact_is_company_true.form-control.flat-icheck.radiobuttons[type="radio" value="true" name="contact[is_company]" checked=( @purchaser.is_company ? 'checked' : false ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )] 
-                          span.margin-md-left Entity
-                      
-                      .company-fields-wrapper[style="#{'display: none' if !@purchaser.is_company}"]
+                  - if !transaction_property_offer.is_accepted?
+                    form.relingquishing_offeror_form[remote="true" action="#{contact_path(@purchaser)}"]
+                      .col-md-4.form-group
+                        input[type="hidden" name="contact[role]" value="Counter-Party"]
+                        input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+                        input[type="hidden" name="from_relinquishing_offeror" value="#{transaction_property_offer.id}"]
+                        
+                        h2.heading_without_padding_large Relinquishing Offeror
                         .form-group
-                          label Company Name
-                          input.form-control[type="text" name="contact[company_name]" value="#{@purchaser.try(:company_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-                      .individual-fields-wrapper[style="#{'display: none' if @purchaser.is_company}"]
-                        .form-group
-                          label First Name
-                          input.form-control[type="text" name="contact[first_name]" value="#{@purchaser.try(:first_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-                        .form-group
-                          label Last Name
-                          input.form-control[type="text" name="contact[last_name]" value="#{@purchaser.try(:last_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                          .heading_blue.radio-inline
+                            span
+                              input.contact_is_company_false.form-control.flat-icheck.radiobuttons[type="radio" value="false" name="contact[is_company]" checked=( @purchaser.is_company ? false : 'checked' ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                            span.margin-md-left Individual
+                          .heading_blue.radio-inline
+                            span.margin-md-left
+                              input.contact_is_company_true.form-control.flat-icheck.radiobuttons[type="radio" value="true" name="contact[is_company]" checked=( @purchaser.is_company ? 'checked' : false ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )] 
+                            span.margin-md-left Entity
+                        
+                        .company-fields-wrapper[style="#{'display: none' if !@purchaser.is_company}"]
+                          .form-group
+                            label Company Name
+                            input.form-control[type="text" name="contact[company_name]" value="#{@purchaser.try(:company_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                        .individual-fields-wrapper[style="#{'display: none' if @purchaser.is_company}"]
+                          .form-group
+                            label First Name
+                            input.form-control[type="text" name="contact[first_name]" value="#{@purchaser.try(:first_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
+                          .form-group
+                            label Last Name
+                            input.form-control[type="text" name="contact[last_name]" value="#{@purchaser.try(:last_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
                           
                 .row
                   .col-md-12
                       .col-md-3
-                          h4 Asking
+                          h4.asking_description.red
+                            - if !transaction_property_offer.is_accepted?
+                              = "#{@transaction.seller_name} is Asking".html_safe
+                            - else
+                              = "#{@transaction.seller_name} and #{@purchaser.name.blank? ? 'Purchaser(No Name)' : @purchaser.name} have agreed to the price of ".html_safe
                           h1.property-price.green.margin-lg-top
                             = number_to_currency(@transaction_property.try(:sale_price))
                           - if @property.try(:title).present?
@@ -87,7 +92,7 @@
                           - @property.property_images.each do |property_image|
                             = image_tag(property_image.try(:cl_image_url), :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
                         - else
-                          p There is no images available
+                          h4 There is no images available
                 .row
                   .col-md-12.margin-lg-top.form-group
                     button.initial_log_counteroffer.btn.btn-default[disabled=( @transaction_property.transaction_property_offers.where(is_accepted: true).count >= 1 ? 'disabled' : false ) style="#{ 'display: none' if transaction_property_offer.is_accepted || transaction_property_offer.counteroffers.count != 0 }"] Log Initial Counter Offer
@@ -147,6 +152,7 @@
                 #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
                   h2.heading_without_padding_large = "Relinquishing Purchaser".html_safe
                   input#relinquishing_purchaser_name.form-control[type="text" value="#{ (@relinquishing_purchaser.try(:is_company) ? @relinquishing_purchaser.company_name : @relinquishing_purchaser.try(:first_name).to_s + ' ' + @relinquishing_purchaser.try(:last_name).to_s) }" style="#{ 'display: none' if !@relinquishing_purchaser.present? }" readonly]
+                  input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.seller_name}"]
                 
                 #broker_section.tab-pane.fade[role="tabpanel"]
 
@@ -509,7 +515,8 @@
       .row
         .col-md-12
             .col-md-3
-                h4 Asking
+                h4.asking_description.red 
+                  = "#{@transaction.seller_name} is Asking".html_safe
                 h1.property-price.green.margin-lg-top
                   = number_to_currency(@transaction.transaction_properties.where(property_id: params[:cur_property]).first.sale_price)
                 - if @property.try(:title).present?
@@ -519,7 +526,7 @@
                 - @property.property_images.each do |property_image|
                   = image_tag(property_image.try(:cl_image_url), :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
               - else
-                p There is no images available
+                h4 There is no images available
       .row
         .col-md-12.margin-lg-top.form-group
             button.initial_log_counteroffer.btn.btn-default Log Initial Counter Offer

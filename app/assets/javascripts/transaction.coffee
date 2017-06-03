@@ -539,6 +539,9 @@ $ ->
             selected_offer_tab.find('.btn_accept_counteroffer').text('Ask Accepted')
             selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
 
+          selected_offer_tab.find('.asking_description').text($(document).find('#relinquishing_seller_name').val() + ' and ' + data.offer_name + ' have agreed to the price of')
+          selected_offer_tab.find('.relingquishing_offeror_form').hide()
+
           selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', 'disabled')
           selected_offer_tab.find('.add_counteroffer').attr('disabled', 'disabled')
                                                       .hide()
