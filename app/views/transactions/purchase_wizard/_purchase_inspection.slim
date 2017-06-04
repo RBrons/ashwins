@@ -36,6 +36,84 @@ div[role="tabpanel"]
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
             
       #environmental_section.tab-pane.fade[role="tabpanel"]
+        = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .form-group
+                label.control-label Correspondence
+                .input-group.select_in_gdrive
+                    input#file_correspondence.form-control[type="text"]
+                    span.input-group-btn
+                        button#btn_correspondence.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+            .form-group
+                label.control-label Proposal
+                .input-group.select_in_gdrive
+                    input#file_proposal.form-control[type="text"]
+                    span.input-group-btn
+                        button#btn_proposal.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+            .form-group
+                label.control-label Invoice
+                .input-group.select_in_gdrive
+                    input#file_invoice.form-control[type="text"]
+                    span.input-group-btn
+                        button#btn_invoice.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+          
+            .clearfix
+            .divider
+            button.back_prev_step.btn.btn-default Back
+            = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .note
+              h2 Tasks
+              ul.to_do
+                li 
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]    
+                    .right
+                      span Received Phase I from seller
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Is there a Phase II?
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Select and Contract with Engineer
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Send Seller's Survey and 'As Built' Survey to Engineer(Sharing Issue)
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Completion of Purchaser's Phase I
+                li 
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Send Purchaser's Phase I to Purchaser's Environmental Consultant(Sharing Issue)
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
+                    .right
+                      span Conference with Purchaser's Environmental Constaultant and Client Purchaser
                         
       #lease_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|

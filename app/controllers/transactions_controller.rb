@@ -182,6 +182,8 @@ class TransactionsController < ApplicationController
         return
       end
 
+      @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
+
     end
 
   end
@@ -227,6 +229,16 @@ class TransactionsController < ApplicationController
       TransactionSale.transaction do
         @transaction.save! if flag
         @transaction.update!(transaction_property_params)
+
+        if params[:type] == 'purchase'
+          @transaction.transaction_properties.each do |transaction_property|
+            if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == "accept_asking" && transaction_property.is_selected
+              if transaction_property.transaction_property_offers.destroy_all
+                transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
+              end
+            end
+          end
+        end
       end
 
       #return redirect_to personnel_transaction_path(@transaction, sub: 'personnel', type: params[:type], main_id: params[:main_id])

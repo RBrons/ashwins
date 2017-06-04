@@ -20,7 +20,7 @@
     .col-md-12
       .clearfix.margin-sm-top
         div[role="tabpanel"]
-          ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+          ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
             li.active[role="presentation"]
                 a#basic_info[href="#basic_info_section" role="tab" data-toggle="tab" aria-expanded="true"] Basic info
 
@@ -42,8 +42,8 @@
                       - owner_name = @property.owner.name
                     - else
                       - owner_name = "No Owner"
-
-                    = "The Seller of <b>#{@property.name}</b> is <b>#{owner_name}</b> to be drawn from the Properties Module.".html_safe
+                    
+                    = "<b>#{owner_name}</b> is selling <b>#{@property.try(:title) || 'Untitled'}</b> to your client <b>#{@transaction.try(:relinquishing_seller_first_name)} #{@transaction.try(:relinquishing_seller_last_name)}</b> for #{number_to_currency(get_sale_price(@transaction_property))}.".html_safe
                 / .form-group
                   / label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
                   / .clearfix
@@ -74,8 +74,8 @@
                 = f.hidden_field :rplmnt_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
                 = f.hidden_field :replacement_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
 
-                .form-group
-                  = f.submit 'Save & Next', class: 'btn btn-primary next-prev save_next_in_step'
+                / .form-group
+                /   = f.submit 'Save & Next', class: 'btn btn-primary next-prev save_next_in_step'
 
             #broker_section.tab-pane.fade[role="tabpanel"]
 

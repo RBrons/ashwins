@@ -114,35 +114,85 @@
                   input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=transaction_property_form.object.property.price
                 - else
                   input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=''
+            
+            .form-group.center.radio-box
+              .heading_blue.radio-inline
+                span
+                  input type='radio' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='accept_asking' class='form-control flat-icheck radiobuttons accept_ask_price' checked=(transaction_property_form.object.asking_accepted? ? 'checked' : false)  disabled=(transaction_property_form.object.asking_accepted? ? 'disabled' : false)
+                span.margin-md-left Accept Ask
+              .heading_blue.radio-inline
+                span
+                  input type='radio' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='making_counter' class='form-control flat-icheck radiobuttons make_counteroffer'  checked=(!transaction_property_form.object.asking_accepted? ? 'checked' : false)  disabled=(transaction_property_form.object.asking_accepted? ? 'disabled' : false)
+                span.margin-md-left Make Counter
+
         .transaction-property-image
           - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
             = cl_image_tag(transaction_property_form.object.property.property_cover_image.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
           - else
             = image_tag 'sale_house.jpg', class: "img-responsive width-100"
         .clearfix.margin-lg-top
-        .transaction-property-calculation
-          .form-group.center.radio-box
-            .heading_blue.radio-inline
-              span
-                input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
-              span.margin-md-left Input Cap Rate
-            .heading_blue.radio-inline
-              span
-                input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
-              span.margin-md-left Input Price
-          .form-group.center.cap-rate-box
-            label Propose a Cap Rate
-            .input-group
-              = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
-              .input-group-addon %
-          .form-group.center.price-box
-            - if params[:type] == 'purchase'
-              label This will result in a Purchase Price of
-            - else
-              label This will result in an Asking Price of
-            .input-group
-              .input-group-addon $
-              = transaction_property_form.text_field :sale_price, readonly: 'true', class: 'form-control input-mask-currency'
+        
+        - if params[:type] == 'purchase'
+          / Modal When hits Make Counter
+          .md-make-counter.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
+            .modal-dialog[role="document"]
+              .modal-content
+                .modal-header
+                  button.close[type="button" data-dismiss="modal" aria-label="Close"]
+                    span.btn-cancel-make-counter.lnr.lnr-cross
+                  h4.modal-title Input Counteroffer
+                .modal-body
+                  .transaction-property-calculation
+                    .form-group.center.radio-box
+                      .heading_blue.radio-inline
+                        span
+                          input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
+                        span.margin-md-left Input Cap Rate
+                      .heading_blue.radio-inline
+                        span
+                          input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
+                        span.margin-md-left Input Price
+                    .form-group.center.cap-rate-box
+                      label Propose a Cap Rate
+                      .input-group
+                        = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
+                        .input-group-addon %
+                    .form-group.center.price-box
+                      - if params[:type] == 'purchase'
+                        label This will result in a Purchase Price of
+                      - else
+                        label This will result in an Asking Price of
+                      .input-group
+                        .input-group-addon $
+                        = transaction_property_form.text_field :sale_price, readonly: 'true', class: 'form-control input-mask-currency'
+                .modal-footer
+                  button.btn-cancel-make-counter.btn.btn-default Cancel
+                  button.btn-ok-make-counter.btn.btn-primary.next-prev Ok
+        - else
+          .transaction-property-calculation
+            .form-group.center.radio-box
+              .heading_blue.radio-inline
+                span
+                  input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
+                span.margin-md-left Input Cap Rate
+              .heading_blue.radio-inline
+                span
+                  input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
+                span.margin-md-left Input Price
+            .form-group.center.cap-rate-box
+              label Propose a Cap Rate
+              .input-group
+                = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
+                .input-group-addon %
+            .form-group.center.price-box
+              - if params[:type] == 'purchase'
+                label This will result in a Purchase Price of
+              - else
+                label This will result in an Asking Price of
+              .input-group
+                .input-group-addon $
+                = transaction_property_form.text_field :sale_price, readonly: 'true', class: 'form-control input-mask-currency'  
+
         .clearfix
 
   .clearfix.margin-lg-top
