@@ -1,0 +1,70 @@
+= hidden_field_tag :int_action, 'Partners List'
+.heading
+  = "List of #{@entity.display_name}'s Partners"
+.clearfix
+table#data_table
+  thead
+    tr
+      th
+        | Entity Name
+      th
+        | Type
+      th
+        | Contact First Name
+      th
+        | Contact Last Name
+      th
+        | EIN / Social
+      th
+        | Client?
+      th
+        | Phone
+      th
+        | Email
+      th
+        | Partnership Interest
+      th
+        | Actions
+  tbody
+    - @partners.each do |partner|
+      - entity_flag = partner.entity.present?
+      - person_flag = true
+      tr
+        td
+          - if !partner.is_person?
+            - person_flag = false
+            - if entity_flag
+              = link_to partner.entity.try(:name), edit_entity_path(partner.entity.key)
+            - else
+              = link_to partner.contact.try(:name), edit_contact_path(partner.contact)
+        td
+          - if entity_flag
+            = MemberType.member_types[partner.member_type_id]
+          - else
+            = partner.contact.role
+        td
+          - if person_flag
+            - if partner.entity.present?
+              = link_to partner.first_name, edit_entity_path(partner.entity.key)
+            - elsif partner.contact.present?
+              = link_to partner.first_name, edit_contact_path(partner.contact)
+          - else
+            = partner.first_name
+        td
+          = partner.last_name
+        td
+          = partner.ein_or_ssn
+        td
+          - if partner.contact_id.nil?
+              = 'Yes'
+          - else
+              = 'No'
+        td
+          = partner.phone1
+        td
+          = partner.email
+        td
+          = partner.my_percentage
+        td.actions
+          = link_to 'Edit', entities_llp_partner_path(@entity.key, partner.id), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_llp_partner_path(partner.id), method: :delete, class: "#{delete_xs} entity-page-xhr"

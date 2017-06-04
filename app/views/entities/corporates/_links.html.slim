@@ -1,15 +1,15 @@
 - if @entity.key.present?
   = link_to "Basic info", entities_corporates_basic_info_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'basic_info' ? 'active' : ''}"
   = link_to "Contact info", entities_corporates_contact_info_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'contact_info' ? 'active' : ''}"
-  = link_to "Stockholders", entities_corporates_stockholders_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'stockholders' ? 'active' : ''}"
+  = link_to "Stockholders", entities_corporates_stockholders_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'stockholders' ? 'active' : ''}"
 
-  = link_to "+", entities_corporates_stockholder_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'stockholders' ? 'active' : ''}"
+  = link_to "+", entities_corporates_stockholder_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'stockholders' ? 'active' : ''}"
 
-  = link_to "Officers", entities_corporates_officers_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'officers' ? 'active' : ''}"
+  = link_to "Officers", entities_corporates_officers_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'officers' ? 'active' : ''}"
 
-  = link_to "+", entities_corporates_officer_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left  pull-leftofficer-add entity-page-xhr #{params[:action] == 'officers' ? 'active' : ''}"
+  = link_to "+", entities_corporates_officer_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left  pull-leftofficer-add entity-page-xhr #{params[:action] == 'officers' ? 'active' : ''}"
 
-  = link_to "Directors", entities_corporates_directors_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'directors' ? 'active' : ''}"
+  = link_to "Directors", entities_corporates_directors_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'directors' ? 'active' : ''}"
 
-  = link_to "+", entities_corporates_director_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left director-add entity-page-xhr #{params[:action] == 'directors' ? 'active' : ''}"
+  = link_to "+", entities_corporates_director_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left director-add entity-page-xhr #{params[:action] == 'directors' ? 'active' : ''}"
   = link_to "Owns", entities_corporates_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"

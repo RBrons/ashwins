@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     get "llc/contact_info/:entity_key" => "llc#contact_info", as: :llc_contact_info
     post "llc/contact_info/:entity_key" => "llc#contact_info"
     patch "llc/contact_info/:entity_key" => "llc#contact_info"
-    get "llc/managers:entity_key/(:id)" => "llc#managers", as: :llc_managers
+    get "llc/managers/:entity_key/(:id)" => "llc#managers", as: :llc_managers
     get "llc/manager/:entity_key/(:id)" => "llc#manager", as: :llc_manager
     post "llc/manager/:entity_key/(:id)" => "llc#manager"
     patch "llc/manager/:entity_key/(:id)" => "llc#manager"

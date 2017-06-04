@@ -1,35 +1,8 @@
-= hidden_field_tag :int_action, 'Officers List'
-.heading
-  = "List of #{@entity.display_name}'s Officers"
-.clearfix
-table#data_table
-  thead
-    tr
-      th
-        | First Name
-      th
-        | Last Name
-      th
-        | Office
-      th
-        | Email
-      th
-        | Phone1
-      th
-        | Actions
-  tbody
-    - @officers.each do |officer|
-      tr
-        td
-          = officer.first_name
-        td
-          = officer.last_name
-        td
-          = officer.office
-        td
-          = officer.email
-        td
-          = officer.email
-        th
-          = link_to 'Edit', entities_corporates_officer_path(@entity.key, officer.id), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_corporates_officer_path(officer.id), method: :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
+- if request.xhr?
+  == render partial: "entities/corporates/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/corporates/links"
+    .clearfix
+    .corporate-contact-form
+      == render partial: "entities/corporates/officers"

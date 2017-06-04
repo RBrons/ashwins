@@ -1,0 +1,37 @@
+= form_for @officer, url: entities_corporates_officer_path(@entity.key, @officer.id), html: {class: "entity-page-xhr"} do |f|
+  = hidden_field_tag :int_action, 'Add Officer'
+  - if @officer.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@officer.errors.count, "error")} prohibited this Officer from being saved:"
+      ul
+        - @officer.errors.full_messages.each do |message|
+          li = message
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    .form-group#officer_entity
+      = hidden_field_tag "officer[is_person]", true
+      = f.select :temp_id, options_html('officer', "true", @officer.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @officer.super_entity.id, clienttype: 'officer'}
+      = hidden_field_tag "officer[member_type_id]", MemberType.getCorporationId
+      = hidden_field_tag :cid, @officer.temp_id
+      .clearfix
+      div#linkbacks
+        = linkbacks f.object.temp_id
+        .add-list-entity-links.pull-right
+          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      = f.label "office", class: "control-label"
+      = f.text_field :office, class: "form-control"
+    .form-group
+      = f.submit 'Save', class: "btn btn-primary"
+
+/! Modal
+#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+        h4.modal-title New Entity for Officer
+      .model-body
+        | &nbsp;
+      .modal-footer
+        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
+          | close

@@ -1,0 +1,35 @@
+= hidden_field_tag :int_action, 'Managers List'
+.heading
+  = "List of #{@entity.display_name}'s Managers"
+.clearfix
+table#data_table
+  thead
+    tr
+      th
+        | First Name
+      th
+        | Last Name
+      th
+        | Email
+      th
+        | phone1
+      th
+        | Actions
+  tbody
+    - @managers.each do |manager|
+      tr
+        td
+          = manager.first_name
+        td
+          = manager.last_name
+        td
+          = manager.email
+        td
+          = manager.phone1
+        td
+          - if manager.is_a?(Manager)
+            = link_to 'Edit', entities_llc_manager_path(@entity.key, manager.id), class: "#{edit_xs} entity-page-xhr"
+            = link_to 'Delete', entities_llc_manager_path(manager.id), method: :delete, class: "#{delete_xs} entity-page-xhr"
+          - elsif manager.is_a?(Member)
+            = link_to 'Edit', entities_llc_member_path( @entity.key, manager.id ), class: "#{edit_xs} entity-page-xhr"
+            = link_to 'Delete', entities_llc_member_path( manager.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"

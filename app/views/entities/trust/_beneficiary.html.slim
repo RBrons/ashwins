@@ -1,0 +1,62 @@
+= form_for @beneficiary, url: entities_trust_beneficiary_path(@entity.key, @beneficiary.id), html: {class: "entity-page-xhr"} do |f|
+  = hidden_field_tag :int_action, 'Add Beneficiary'
+  - if @beneficiary.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@beneficiary.errors.count, "error")} prohibited this Beneficiary from being saved:"
+      ul
+        - override_active_record_errors(@beneficiary.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
+          li = message
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    .form-group
+      .option-1
+        = f.label "Individual"
+        = f.radio_button :is_person, true, checked: @beneficiary.is_person
+      .option-2
+        = f.label "Entity"
+        = f.radio_button :is_person, false, checked: !@beneficiary.is_person
+    .form-group#beneficiary_entity
+      label.is-person-hide style=("#{('display: none;' if @beneficiary.is_person)}") Beneficial Entity
+
+      - if @beneficiary.is_person
+        = f.select :temp_id, options_html('beneficiary', "true", @beneficiary.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @beneficiary.super_entity.id, clienttype: 'beneficiary'}
+      - else
+        = f.select :temp_id, options_html('beneficiary', "false", @beneficiary.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @beneficiary.super_entity.id, clienttype: 'beneficiary'}
+      = hidden_field_tag "beneficiary[member_type_id]", MemberType.getTrustId
+      = hidden_field_tag :cid, @beneficiary.temp_id
+      .clearfix
+      div#linkbacks
+        = linkbacks f.object.temp_id
+        .add-list-entity-links.pull-right
+          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+    .form-group
+      .col-sm-6
+        label Beneficiary Interest
+        br
+        = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
+        .percentage-text
+          | %
+      .col-sm-6
+        label Remaining Beneficiary Interest to be Assigned
+        br
+        = text_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest,
+                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control", "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage_was : 0)
+        .percentage-text
+          | %
+        = hidden_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest
+        = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
+    .form-group
+      .actions = f.submit "Save", class: "btn btn-primary"
+
+/! Modal
+#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+        h4.modal-title New Entity for Beneficiary
+      .model-body
+        | &nbsp;
+      .modal-footer
+        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
+          | close

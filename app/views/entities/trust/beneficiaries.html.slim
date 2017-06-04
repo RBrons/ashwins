@@ -1,71 +1,8 @@
-= hidden_field_tag :int_action, 'Beneficiaries List'
-.heading
-  = "List of #{@entity.name}'s Beneficiaries"
-.clearfix
-table#data_table
-  thead
-    tr
-      th
-        | Entity Name
-      th
-        | Type
-      th
-        | Contact First Name
-      th
-        | Contact Last Name
-      th
-        | EIN / Social
-      th
-        | Client?
-      th
-        | Phone
-      th
-        | Email
-      th
-        | Beneficial Interest
-      th
-        | Actions
-  tbody
-    - @beneficiaries.each do |beneficiary|
-      - entity_flag = beneficiary.entity.present?
-      - person_flag = true
-      tr
-        td
-          - if !beneficiary.is_person?            
-            - person_flag = false
-            - if entity_flag
-              = link_to beneficiary.entity.try(:name), edit_entity_path(beneficiary.entity.key)
-            - else 
-              = link_to beneficiary.contact.try(:name), edit_contact_path(beneficiary.contact)
-        td
-          - if entity_flag
-            = MemberType.member_types[beneficiary.member_type_id]
-          - else 
-            = beneficiary.contact.role          
-        td
-          - if person_flag
-            - if beneficiary.entity.present?
-              = link_to beneficiary.first_name, edit_entity_path(beneficiary.entity.key)
-            - elsif beneficiary.contact.present?
-              = link_to beneficiary.first_name, edit_contact_path(beneficiary.contact)
-          - else  
-            = beneficiary.first_name
-        td
-          = beneficiary.last_name
-        td
-          = beneficiary.ein_or_ssn
-        td
-          - if beneficiary.contact_id.nil?
-              = 'Yes'
-          - else
-              = 'No'
-        td
-          = beneficiary.phone1
-        td
-          = beneficiary.email
-        td
-          = beneficiary.my_percentage
-        td.actions
-          = link_to "Edit", entities_trust_beneficiary_path( @entity.key, beneficiary.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to "Delete", entities_trust_beneficiary_path( beneficiary.id ), method: :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
-
+- if request.xhr?
+  == render partial: "entities/trust/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/trust/links"
+    .clearfix
+    .corporate-contact-form
+      == render partial: "entities/trust/beneficiaries"

@@ -19,7 +19,8 @@ class Entities::IndividualsController < ApplicationController
       @entity.name = @entity.first_name + ' ' + @entity.last_name
       if @entity.save
         AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
-        return redirect_to clients_path
+        flash[:success] = "New Client Successfully Created. <a href='#{clients_path}'>Show in List</a>"
+        return redirect_to entities_individuals_basic_info_path(@entity.key)
       end
     elsif request.patch?
       @entity                 = Entity.find_by(key: key)
@@ -28,7 +29,8 @@ class Entities::IndividualsController < ApplicationController
       @entity.assign_attributes(individuals_params)
       @entity.name = @entity.first_name + ' ' + @entity.last_name
       if @entity.save
-        return redirect_to clients_path
+        flash[:success] = "This Client Successfully Updated. <a href='#{clients_path}'>Show in List</a>"
+        return redirect_to entities_individuals_basic_info_path(@entity.key)
       end
     else
       raise UnknownRequestFormat

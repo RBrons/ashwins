@@ -1,7 +1,7 @@
 class Entities::LlcController < ApplicationController
 
   before_action :current_page
-  before_action :check_xhr_page
+  # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
   before_action :add_breadcrum
 
@@ -20,7 +20,9 @@ class Entities::LlcController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        return render json: {redirect: view_context.entities_llc_basic_info_path( @entity.key ), just_created: true}
+        flash[:success] = "New Client Successfully Created. <a href='#{clients_path}'>Show in List</a>"
+        return redirect_to entities_llc_basic_info_path( @entity.key )
+        # return render json: {redirect: view_context.entities_llc_basic_info_path( @entity.key ), just_created: true}
         #return redirect_to clients_path
       end
     elsif request.patch?
@@ -67,24 +69,32 @@ class Entities::LlcController < ApplicationController
       @manager.use_temp_id
       if @manager.save
         @managers = @manager.super_entity.managers + @manager.super_entity.members.where(is_manager: true)
-        return render layout: false, template: "entities/llc/managers"
+        flash[:success] = "New Manager Successfully Created. <a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
+        return redirect_to entities_llc_manager_path( @entity.key, @manager.id )
+        # return render layout: false, template: "entities/llc/managers"
       else
         return render layout: false, template: "entities/llc/manager"
       end
     elsif request.patch?
       if @manager.update(manager_params)
         @manager.use_temp_id
+        @manager.save
         @managers = @manager.super_entity.managers + @manager.super_entity.members.where(is_manager: true)
-        return render layout: false, template: "entities/llc/managers"
+        # return render layout: false, template: "entities/llc/managers"
+        flash[:success] = "The Manager Successfully updated. <a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
+        return redirect_to entities_llc_manager_path( @entity.key, @manager.id )
       else
-        return render layout: false, template: "entities/llc/manager"
+        # return render layout: false, template: "entities/llc/manager"
+        return redirect_to entities_llc_manager_path( @entity.key, @manager.id )
       end
     elsif request.delete?
       manager = Manager.find(params[:id])
-      manager.delete
       @entity   = manager.super_entity
-      @managers = manager.super_entity.managers + @manager.super_entity.members.where(is_manager: true)
-      return render layout: false, template: "entities/llc/managers"
+      @managers = @entity.managers + @entity.members.where(is_manager: true)
+      manager.delete
+      # return render layout: false, template: "entities/llc/managers"
+      flash[:success] = "The Manager Successfully Deleted."
+      return redirect_to entities_llc_managers_path( @entity.key )
     end
     @manager.gen_temp_id
     render layout: false if request.xhr?
@@ -114,25 +124,32 @@ class Entities::LlcController < ApplicationController
       @member.use_temp_id
       if @member.save
         @members = @entity.members #.where(is_manager: false)
-        return render layout: false, template: "entities/llc/members"
+        flash[:success] = "New Member Successfully Created. <a href='#{entities_llc_members_path( @entity.key )}'>Show in List</a>"
+        return redirect_to entities_llc_member_path( @entity.key, @member.id )
       else
-        return render layout: false, template: "entities/llc/member"
+        return redirect_to entities_llc_member_path( @entity.key, @member.id )
       end
     elsif request.patch?
       if @member.update(member_params)
         @member.use_temp_id
+        @member.save
         @members = @entity.members #.where(is_manager: false)
-        return render layout: false, template: "entities/llc/members"
+        # return render layout: false, template: "entities/llc/members"
+        flash[:success] = "The Member Successfully updated. <a href='#{entities_llc_members_path( @entity.key )}'>Show in List</a>"
+        return redirect_to entities_llc_member_path( @entity.key, @member.id )
       else
-        return render layout: false, template: "entities/llc/member"
+        # return render layout: false, template: "entities/llc/member"
+        return redirect_to entities_llc_member_path( @entity.key, @member.id )
       end
     elsif request.delete?
       member = Member.find(params[:id])
-      member.delete
       @entity = Entity.find_by(key: member.super_entity.key)
       raise ActiveRecord::RecordNotFound if @entity.blank?
+      member.delete
       @members = @entity.members #.where(is_manager: false)
-      return render layout: false, template: "entities/llc/members"
+      # return render layout: false, template: "entities/llc/members"
+      flash[:success] = "The Member Successfully Deleted."
+      return redirect_to entities_llc_members_path( @entity.key )
     end
     @member.gen_temp_id
     render layout: false if request.xhr?
