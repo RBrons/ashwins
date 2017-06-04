@@ -84,6 +84,15 @@ class TransactionTerm < ApplicationRecord
   private
   def set_contract_deadline_date
     self.inspection_period_days = 30 if self.inspection_period_days.blank?
+    
+    if !self.first_deposit_days_after_psa.present?
+      if DefaultValue.where(entity_name: 'TransactionTerm').where(attribute_name: 'FirstDepositDaysAfterPsa').first.present?
+        self.first_deposit_days_after_psa = DefaultValue.where(entity_name: 'TransactionTerm').where(attribute_name: 'FirstDepositDaysAfterPsa').first.value.to_i if !self.first_deposit_days_after_psa.present?
+      else
+        #set manual default value
+        self.first_deposit_days_after_psa = 3
+      end    
+    end
 
     if !self.first_deposit_date_due.present?
       if self.psa_date.present?
@@ -92,18 +101,35 @@ class TransactionTerm < ApplicationRecord
         self.first_deposit_date_due = (Time.zone.now + eval("#{self.first_deposit_days_after_psa.to_i}.days")).to_date
       end
     else
-      self.first_deposit_days_after_psa = self.first_deposit_date_due - self.psa_date if self.psa_date
+      self.first_deposit_days_after_psa = self.first_deposit_date_due - self.psa_date if self.psa_date.present?
+    end
+
+    if !self.second_deposit_days_after_inspection_period.present?
+      if DefaultValue.where(entity_name: 'TransactionTerm').where(attribute_name: 'SecondDepositDaysAfterInspectionPeriod').first.present?
+        self.second_deposit_days_after_inspection_period = DefaultValue.where(entity_name: 'TransactionTerm').where(attribute_name: 'SecondDepositDaysAfterInspectionPeriod').first.value.to_i
+      else
+        #set manual default value
+
+      end
     end
 
     if self.second_deposit
       if !self.second_deposit_date_due.present?
-        if self.psa_date.present? && self.second_deposit_days_after_inspection_period.present?
+        if self.psa_date.present?
           self.second_deposit_date_due = (self.psa_date + eval("#{self.second_deposit_days_after_inspection_period}.days") + 3.days).to_date
         else
-          self.second_deposit_date_due = (Time.zone.now + eval("#{self.second_deposit_days_after_inspection_period}.days") + 3.days).to_date
+          self.second_deposit_date_due = (Time.zone.now + eval("#{self.second_deposit_days_after_inspection_period.to_i}.days") + 3.days).to_date
         end
       else
-        self.second_deposit_days_after_inspection_period = self.second_deposit_date_due - self.psa_date
+        self.second_deposit_days_after_inspection_period = self.second_deposit_date_due - self.psa_date if self.psa_date.present?
+      end
+    end
+
+    if !self.closing_days_after_inspection_period.present?
+      if DefaultValue.where(entity_name: 'TransactionTerm').where(attribute_name: 'ClosingDaysAfterInspectionPeriod').first.present?
+        self.closing_days_after_inspection_period = DefaultValue.where(entity_name: 'TransactionTerm').where(attribute_name: 'ClosingDaysAfterInspectionPeriod').first.value.to_i if !self.closing_days_after_inspection_period.present?
+      else
+        #set manual default value
       end
     end
 
@@ -114,7 +140,7 @@ class TransactionTerm < ApplicationRecord
         self.closing_date = (Time.zone.now + eval("#{self.closing_days_after_inspection_period.to_i}.days")).to_date
       end
     else
-      self.closing_days_after_inspection_period = self.closing_date - self.psa_date if self.psa_date
+      self.closing_days_after_inspection_period = self.closing_date - self.psa_date if self.psa_date.present?
     end
 
   end
