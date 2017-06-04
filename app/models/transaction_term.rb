@@ -69,6 +69,7 @@ class TransactionTerm < ApplicationRecord
   end
 
   before_create :set_defaul_contract_deadline_date
+  before_save :set_defaul_contract_deadline_date
 
   before_update :set_first_deposit_days_after_psa, if: :first_deposit_date_due_changed?
   before_update :set_second_deposit_days_after_inspection_period, if: :second_deposit_date_due_changed?
