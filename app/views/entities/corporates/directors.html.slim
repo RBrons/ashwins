@@ -1,31 +1,8 @@
-= hidden_field_tag :int_action, 'Directors List'
-.heading
-  = "List of #{@entity.display_name}'s Directors"
-.clearfix
-table#data_table
-  thead
-    tr
-      th
-        | First Name
-      th
-        | Last Name
-      th
-        | Email
-      th
-        | phone1
-      th
-        | Actions
-  tbody
-    - @directors.each do |director|
-      tr
-        td
-          = director.first_name
-        td
-          = director.last_name
-        td
-          = director.email
-        td
-          = director.phone1
-        td
-          = link_to 'Edit', entities_corporates_director_path(@entity.key, director.id), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_corporates_director_path(director.id), method: :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
+- if request.xhr?
+  == render partial: "entities/corporates/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/corporates/links"
+    .clearfix
+    .corporate-contact-form
+      == render partial: "entities/corporates/directors"

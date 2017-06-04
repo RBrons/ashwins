@@ -1,0 +1,70 @@
+= hidden_field_tag :int_action, 'Members List'
+.heading
+  = "List of #{@entity.display_name} 's Members"
+.clearfix
+table#data_table
+  thead
+    tr
+      th
+        | Entity Name
+      th
+        | Type
+      th
+        | Contact First Name
+      th
+        | Contact Last Name
+      th
+        | EIN / Social
+      th
+        | Client?
+      th
+        | Phone
+      th
+        | Email
+      th
+        | Membership Interest
+      th
+        | Actions
+  tbody
+    - @members.each do |member|
+      - entity_flag = member.entity.present?
+      - person_flag = true
+      tr
+        td
+          - if !member.is_person?
+            - person_flag = false
+            - if entity_flag
+              = link_to member.entity.try(:name), edit_entity_path(member.entity.key)
+            - else
+              = link_to member.contact.try(:name), edit_contact_path(member.contact)
+        td
+          - if entity_flag
+            = MemberType.member_types[member.member_type_id]
+          - else
+            = member.contact.role
+        td
+          - if person_flag
+            - if member.entity.present?
+              = link_to member.first_name, edit_entity_path(member.entity.key)
+            - elsif member.contact.present?
+              = link_to member.first_name, edit_contact_path(member.contact)
+          - else
+            = member.first_name
+        td
+          = member.last_name
+        td
+          = member.ein_or_ssn
+        td
+          - if member.contact_id.nil?
+              = 'Yes'
+          - else
+              = 'No'
+        td
+          = member.phone1
+        td
+          = member.email
+        td
+          = member.my_percentage
+        td.actions
+          = link_to 'Edit', entities_llc_member_path( @entity.key, member.id ), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_llc_member_path( member.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"

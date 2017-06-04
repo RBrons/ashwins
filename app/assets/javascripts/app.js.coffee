@@ -185,4 +185,4 @@ $ ->
   setTimeout (->
     $('.flash-message').hide 'slow', ->
       $('.flash-message').remove()
-  ), 3000
+  ), 10000

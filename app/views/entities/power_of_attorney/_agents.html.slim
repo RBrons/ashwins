@@ -1,0 +1,55 @@
+= hidden_field_tag :int_action, 'Agents List'
+.heading
+  = "List of #{@entity.name}'s Agents"
+.clearfix
+table#data_table
+  thead
+    tr
+      th
+        | Name
+      th
+        | Type
+      th
+        | EIN / Social
+      th
+        | Email
+      th
+        | Number of Share
+      th
+        | Actions
+  tbody
+    - @agents.each do |agent|
+      tr
+        td
+          - if agent.entity.present?
+            = agent.entity.try(:name)
+          - elsif agent.contact.present?
+            = agent.contact.try(:name)
+          - else
+            = "#{agent.first_name} #{agent.last_name}"
+        td
+          - if agent.entity.present?
+            = agent.entity.entity_type.try(:name)
+          - elsif agent.contact.present?
+            = agent.contact.try(:contact_type)
+          - else
+            = agent.type_
+        td
+          - if agent.entity.present?
+            = agent.entity.try(:ein_or_ssn)
+          - elsif agent.contact.present?
+            = agent.contact.try(:ein_or_ssn)
+          - else
+            = agent.ein_or_ssn
+        td
+          - if agent.entity.present?
+            = agent.entity.try(:email)
+          - elsif agent.contact.present?
+            = agent.contact.try(:email)
+          - else
+            = agent.email
+        td
+          = agent.my_percentage
+        td.actions
+          = link_to 'E', entities_power_of_attorney_agent_path(@entity.key, agent.id), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'D', entities_power_of_attorney_agent_path(agent.id), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"

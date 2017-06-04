@@ -1,64 +1,8 @@
-= form_for @member, url: entities_llc_member_path( @entity.key, @member.id ), remote: true, html: { class: "entity-page-xhr" } do |f|
-  = hidden_field_tag :int_action, 'Add Member'
-  - if @member.errors.any?
-    #error_explanation
-      h2 = "#{pluralize( @member.errors.count, "error" )} prohibited this Member from being saved:"
-      ul
-        - override_active_record_errors(@member.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
-          li = message
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @member.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@member.is_person
-
-    .form-group#member_entity
-      label.is-person-hide style=("#{('display: none;' if @member.is_person)}") Owning Entity
-
-      - if @member.is_person
-        = f.select :temp_id, options_html('member', "true", @member.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @member.super_entity.id, clienttype: 'member'}
-      - else
-        = f.select :temp_id, options_html('member', "false", @member.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @member.super_entity.id, clienttype: 'member'}
-      = hidden_field_tag "stock_holder[member_type_id]", MemberType.getLLCId
-      = hidden_field_tag :cid, @member.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-        label Manager?
-        = f.check_box :is_manager
-    .form-group
-      label Member Interest for this Member
-      = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
-    .form-group
-      label Remaining Member Interest to be Assigned
-      = text_field_tag "remaining_number_of_assets", @member.remaining_share_or_interest,
-              "disabled" => "disabled", "autocomplete" => "off", class: "assets-share",
-              "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
-      = hidden_field_tag "remaining_number_of_assets", @member.remaining_share_or_interest
-      = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
-    .form-group
-      label Tax Matters Member
-      = f.check_box :tax_member
-    .form-group
-      = f.submit 'Save', class: "btn btn-primary"
-
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Member
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close
+- if request.xhr?
+  == render partial: "entities/llc/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/llc/links"
+    .clearfix
+    .corporate-contact-form
+      == render partial: "entities/llc/member"

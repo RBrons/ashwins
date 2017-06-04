@@ -1,0 +1,94 @@
+= form_for @stockholder, url: entities_corporates_stockholder_path(@entity.key, @stockholder.id), html: {class: "entity-page-xhr"} do |f|
+  = hidden_field_tag :int_action, 'Add Stockholder'
+  - if @stockholder.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@stockholder.errors.count, "error")} prohibited this Stockholder from being saved:"
+      ul
+        - override_active_record_errors(@stockholder.errors.messages, {share_error: 'All Stock Share are assigned!'}).each do |message|
+          li = message
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    .form-group
+      .option-1
+        = f.label "Individual"
+        = f.radio_button :is_person, true, checked: @stockholder.is_person
+      .option-2
+        = f.label "Entity"
+        = f.radio_button :is_person, false, checked: !@stockholder.is_person
+
+    .form-group#stockholder_entity
+      label.is-person-hide style=("#{('display: none;' if @stockholder.is_person)}") Owning Entity
+
+      - if @stockholder.is_person
+        = f.select :temp_id, options_html('stockholder', "true", @stockholder.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @stockholder.super_entity.id, clienttype: 'stockholder'}
+      - else
+        = f.select :temp_id, options_html('stockholder', "false", @stockholder.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @stockholder.super_entity.id, clienttype: 'stockholder'}
+      .clearfix
+      div#linkbacks
+        = linkbacks f.object.temp_id
+        .add-list-entity-links.pull-right
+          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      = hidden_field_tag "stock_holder[member_type_id]", MemberType.getCorporationId
+      = hidden_field_tag :cid, @stockholder.temp_id
+    span#corporate_decimal_count style="display: none"
+      = @stockholder.super_entity.shares_decimal_count
+    .form-group
+      label Stock Share
+      = f.text_field :my_percentage_stockholder, "autocomplete" => "off", class: "form-control input-mask-integer"
+    .form-group
+      label Total Stock Share
+      = text_field_tag "number_of_assets", @stockholder.total_stock_share, "disabled" => "disabled", class: "form-control input-mask-integer"
+    .form-group
+      label Remaining Total Stock Share
+      = text_field_tag "remaining_number_of_assets", @stockholder.remaining_share_or_interest,
+              "disabled" => "disabled", "autocomplete" => "off", class: "form-control input-mask-integer",
+              "data-init" => (f.object.my_percentage_stockholder_was.present? ? f.object.my_percentage_stockholder : 0)
+      = hidden_field_tag "remaining_number_of_assets", @stockholder.remaining_share_or_interest
+      = hidden_field_tag "remaining_number_of_assets_warning", 'Stock Share Cannot Be Negative'
+    .form-group
+      = f.submit 'Save', class: "btn btn-primary"
+
+
+/! Modal
+#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+        h4.modal-title New Entity for Stockholder
+      .model-body
+        | &nbsp;
+      .modal-footer
+        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
+          | close
+
+javascript:
+  var decimalCount = $("#corporate_decimal_count").text().trim();
+  var realDecimalCount = 0;
+
+  if (isNaN(parseInt(decimalCount)) || parseInt(decimalCount) == 0) {
+    realDecimalCount = 0;
+  } else {
+    realDecimalCount = parseInt(decimalCount);
+  }
+
+  $(document).find('.input-mask-integer').inputmask({
+    'alias': 'decimal',
+    rightAlign: false,
+    'groupSeparator': ',',
+    'autoGroup': true,
+    digits: realDecimalCount,
+    removeMaskOnSubmit: true
+  })
+
+  $(document).find('.input-mask-integer').each(function(index){
+    var maskValue = $(this).val().replace(/\,/g, "");
+    var realMaskValue = 0.0;
+
+    if (isNaN(parseFloat(maskValue))) {
+      realMaskValue = 0;
+    } else {
+      realMaskValue = parseFloat(maskValue);
+    }
+    $(this).val(realMaskValue.toFixed(realDecimalCount));
+  });

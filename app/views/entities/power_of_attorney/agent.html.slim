@@ -1,49 +1,8 @@
-= form_for @agent, url: entities_power_of_attorney_agent_path( @entity.key, @agent.id ), remote: true, html: { class: "entity-page-xhr" } do |f|
-  = hidden_field_tag :int_action, 'Add Agent'
-  - if @agent.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@agent.errors.count, "error")} prohibited this Contact Info from being saved:"
-      ul
-        - @agent.errors.full_messages.each do |message|
-          li = message
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
-
-    .form-group
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @agent.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@agent.is_person
-
-    .form-group#agent_entity
-      label.is-person-hide style=("#{('display: none;' if @agent.is_person)}") Agent Entity
-
-      - if @agent.is_person
-        = f.select :temp_id, options_html('agent', "true", @agent.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @agent.super_entity.id, clienttype: 'agent'}
-      - else
-        = f.select :temp_id, options_html('agent', "false", @agent.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @agent.super_entity.id, clienttype: 'agent'}
-      = hidden_field_tag "agent[member_type_id]", MemberType.getPowerOfAttorneyId
-      = hidden_field_tag :cid, @agent.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-
-    .form-group
-      = f.submit 'Save', class: 'btn btn-sm btn-primary'
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Agent
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close
+- if request.xhr?
+  == render partial: "entities/power_of_attorney/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/power_of_attorney/links"
+    .clearfix
+    .corporate-contact-form
+      == render partial: "entities/power_of_attorney/agent"
