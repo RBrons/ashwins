@@ -1,7 +1,7 @@
 class Entities::LlpController < ApplicationController
 
   before_action :current_page
-  before_action :check_xhr_page
+  # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
   before_action :add_breadcrum
 
@@ -20,7 +20,9 @@ class Entities::LlpController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        return render json: {redirect: view_context.entities_llp_basic_info_path( @entity.key ), just_created: true}
+        flash[:success] = "New Client Successfully Created. <a href='#{clients_path}'>Show in List</a>"
+        return redirect_to entities_llp_basic_info_path( @entity.key )
+        # return render json: {redirect: view_context.entities_llp_basic_info_path( @entity.key ), just_created: true}
         #return redirect_to clients_path
       end
     elsif request.patch?
@@ -67,24 +69,32 @@ class Entities::LlpController < ApplicationController
       @partner.use_temp_id
       if @partner.save
         @partners = @partner.super_entity.partners
-        return render layout: false, template: "entities/llp/partners"
+        flash[:success] = "New Partner Successfully Created. <a href='#{entities_llp_partners_path( @entity.key )}'>Show in List</a>"
+        return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
+        # return render layout: false, template: "entities/llp/partners"
       else
-        return render layout: false, template: "entities/llp/partner"
+        return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
       end
     elsif request.patch?
       if @partner.update(partner_params)
         @partner.use_temp_id
+        @partner.save
         @partners = @partner.super_entity.partners
-        return render layout: false, template: "entities/llp/partners"
+        flash[:success] = "The Partner Successfully Updated. <a href='#{entities_llp_partners_path( @entity.key )}'>Show in List</a>"
+        return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
+        # return render layout: false, template: "entities/llp/partners"
       else
-        return render layout: false, template: "entities/llp/partner"
+        # return render layout: false, template: "entities/llp/partner"
+        return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
       end
     elsif request.delete?
       partner = Partner.find(params[:id])
       @entity = partner.super_entity
       partner.delete
       @partners = partner.super_entity.partners
-      return render layout: false, template: "entities/llp/partners"
+      # return render layout: false, template: "entities/llp/partners"
+      flash[:success] = "The Partner Successfully Deleted."
+      return redirect_to entities_llp_partners_path( @entity.key )
     end
     @partner.gen_temp_id
     render layout: false if request.xhr?

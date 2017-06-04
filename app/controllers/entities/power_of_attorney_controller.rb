@@ -1,7 +1,7 @@
 class Entities::PowerOfAttorneyController < ApplicationController
 
   before_action :current_page
-  before_action :check_xhr_page
+  # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
   before_action :add_breadcrum
 
@@ -39,8 +39,9 @@ class Entities::PowerOfAttorneyController < ApplicationController
           @entity.save
           @principal.gen_temp_id
           AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
-          return render json: {redirect: view_context.entities_power_of_attorney_basic_info_path( @entity.key ), just_created: true}
-          #return redirect_to clients_path
+          # return render json: {redirect: view_context.entities_power_of_attorney_basic_info_path( @entity.key ), just_created: true}
+          flash[:success] = "New Client Successfully Created. <a href='#{clients_path}'>Show in List</a>"
+          return redirect_to entities_power_of_attorney_basic_info_path( @entity.key )
         end
       else
         @principal = Principal.new
@@ -139,16 +140,20 @@ class Entities::PowerOfAttorneyController < ApplicationController
       @agent.class_name      = "Agent"
       if @agent.save
         @agents             = @agent.super_entity.agents
-        return render layout: false, template: "entities/power_of_attorney/agents"
+        flash[:success] = "New Agent Successfully Created. <a href='#{entities_power_of_attorney_agents_path(@entity.key, @agent.id)}'>Show in List</a>"
+        # return render layout: false, template: "entities/power_of_attorney/agents"
+        return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)
       else
-        return render layout: false, template: "entities/power_of_attorney/agent"
+        return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)
       end
     elsif request.patch?
       if @agent.update(agent_params)
+        @agent.use_temp_id
+        @agent.save
         @agents             = @agent.super_entity.agents
-        return render layout: false, template: "entities/power_of_attorney/agents"
+        return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)
       else
-        return render layout: false, template: "entities/power_of_attorney/agent"
+        return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)
       end
     elsif request.delete?
       agent = Agent.find(params[:id])
@@ -156,7 +161,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
       @entity = Entity.find_by(key: agent.super_entity.key)
       raise ActiveRecord::RecordNotFound if @entity.blank?
       @agents = @entity.agents
-      return render layout: false, template: "entities/power_of_attorney/agents"
+      return redirect_to entities_power_of_attorney_agents_path(@entity.key)
     end
     @agent.gen_temp_id
     render layout: false if request.xhr?

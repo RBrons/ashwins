@@ -1,7 +1,7 @@
 class Entities::TrustController < ApplicationController
 
   before_action :current_page
-  before_action :check_xhr_page
+  # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
   before_action :add_breadcrum
 
@@ -20,8 +20,10 @@ class Entities::TrustController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        return render json: {redirect: view_context.entities_trust_basic_info_path( @entity.key ), just_created: true}
+        # return render json: {redirect: view_context.entities_trust_basic_info_path( @entity.key ), just_created: true}
         #return redirect_to clients_path
+        flash[:success] = "New Client Successfully Created. <a href='#{clients_path}'>Show in List</a>"
+        return redirect_to entities_trust_basic_info_path( @entity.key )
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
@@ -67,24 +69,32 @@ class Entities::TrustController < ApplicationController
       @settlor.class_name      = "Settlor"
       if @settlor.save
         @settlors = @settlor.super_entity.settlors
-        return render layout: false, template: "entities/trust/settlors"
+        # return render layout: false, template: "entities/trust/settlors"
+        flash[:success] = "New Settlor Successfully Created. <a href='#{entities_trust_settlors_path(@entity.key)}'>Show in List</a>"
+        return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       else
-        return render layout: false, template: "entities/trust/settlor"
+        # return render layout: false, template: "entities/trust/settlor"
+        return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       end
     elsif request.patch?
       if @settlor.update(settlor_params)
         @settlor.use_temp_id
+        @settlor.save
         @settlors = @settlor.super_entity.settlors
-        return render layout: false, template: "entities/trust/settlors"
+        flash[:success] = "The Settlor Successfully Updated. <a href='#{entities_trust_settlors_path(@entity.key)}'>Show in List</a>"
+        # return render layout: false, template: "entities/trust/settlors"
+        return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       else
-        return render layout: false, template: "entities/trust/settlor"
+        # return render layout: false, template: "entities/trust/settlor"
+        return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       end
     elsif request.delete?
       settlor = Settlor.find(params[:id])
       @entity = settlor.super_entity
       settlor.delete
       @settlors = settlor.super_entity.settlors
-      return render layout: false, template: "entities/trust/settlors"
+      flash[:success] = "The Settlor Successfully Deleted."
+      return redirect_to entities_trust_settlors_path(@entity.key)
     end
     @settlor.gen_temp_id
     render layout: false if request.xhr?
@@ -113,24 +123,33 @@ class Entities::TrustController < ApplicationController
       @trustee.super_entity_id = @entity.id
       if @trustee.save
         @trustees = @trustee.super_entity.trustees
-        return render layout: false, template: "entities/trust/trustees"
+        # return render layout: false, template: "entities/trust/trustees"
+        flash[:success] = "New Trustee Successfully Created. <a href='#{entities_trust_trustees_path(@entity.key)}'>Show in List</a>"
+        return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       else
-        return render layout: false, template: "entities/trust/trustee"
+        # return render layout: false, template: "entities/trust/trustee"
+        return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       end
     elsif request.patch?
       if @trustee.update(trustee_params)
         @trustees = @trustee.super_entity.trustees
         @trustee.use_temp_id
-        return render layout: false, template: "entities/trust/trustees"
+        @trustee.save
+        # return render layout: false, template: "entities/trust/trustees"
+        flash[:success] = "The Trustee Successfully Updated. <a href='#{entities_trust_trustee_path(@entity.key)}'>Show in List</a>"
+        return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       else
-        return render layout: false, template: "entities/trust/trustee"
+        # return render layout: false, template: "entities/trust/trustee"
+        return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       end
     elsif request.delete?
       trustee = Trustee.find(params[:id])
       @entity = trustee.super_entity
       trustee.delete
       @trustees = trustee.super_entity.trustees
-      return render layout: false, template: "entities/trust/trustees"
+      # return render layout: false, template: "entities/trust/trustees"
+      flash[:success] = "The Trustee Successfully Deleted."
+      return redirect_to entities_trust_trustees_path(@entity.key)
     end
     @trustee.gen_temp_id
     render layout: false if request.xhr?
@@ -159,24 +178,33 @@ class Entities::TrustController < ApplicationController
       @beneficiary.super_entity_id = @entity.id
       if @beneficiary.save
         @beneficiaries = @beneficiary.super_entity.beneficiaries
-        return render layout: false, template: "entities/trust/beneficiaries"
+        # return render layout: false, template: "entities/trust/beneficiaries"
+        flash[:success] = "New Beneficiary Successfully Created. <a href='#{entities_trust_beneficiaries_path(@entity.key)}'>Show in List</a>"
+        return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       else
-        return render layout: false, template: "entities/trust/beneficiary"
+        # return render layout: false, template: "entities/trust/beneficiary"
+        return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       end
     elsif request.patch?
       if @beneficiary.update(beneficiary_params)
         @beneficiary.use_temp_id
+        @beneficiary.save
         @beneficiaries = @beneficiary.super_entity.beneficiaries
-        return render layout: false, template: "entities/trust/beneficiaries"
+        # return render layout: false, template: "entities/trust/beneficiaries"
+        flash[:success] = "The Beneficiary Successfully Updated. <a href='#{entities_trust_beneficiaries_path(@entity.key)}'>Show in List</a>"
+        return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       else
-        return render layout: false, template: "entities/trust/beneficiary"
+        # return render layout: false, template: "entities/trust/beneficiary"
+        return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       end
     elsif request.delete?
       beneficiary = Beneficiary.find(params[:id])
       @entity     = beneficiary.super_entity
       beneficiary.delete
       @beneficiaries = beneficiary.super_entity.beneficiaries
-      return render layout: false, template: "entities/trust/beneficiaries"
+      # return render layout: false, template: "entities/trust/beneficiaries"
+      flash[:success] = "The Beneficiary Successfully Deleted."
+      return redirect_to entities_trust_beneficiaries_path(@entity.key)
     end
     @beneficiary.gen_temp_id
     render layout: false if request.xhr?

@@ -1,0 +1,50 @@
+= hidden_field_tag :int_action, 'Settlors List'
+.heading
+  = "List of #{@entity.name}'s Settlors"
+.clearfix
+table#data_table
+  thead
+    tr
+      th
+        | Contact First Name
+      th
+        | Contact Last Name
+      th
+        | Social
+      th
+        | Client?
+      th
+        | Phone
+      th
+        | Email
+      th
+        | Actions
+  tbody
+    - @settlors.each do |settlor|
+      - entity_flag = settlor.entity.present?
+      - person_flag = true
+      tr
+        td
+          - if person_flag
+            - if settlor.entity.present?
+              = link_to settlor.first_name, edit_entity_path(settlor.entity.key)
+            - elsif settlor.contact.present?
+              = link_to settlor.first_name, edit_contact_path(settlor.contact)
+          - else
+            = settlor.first_name
+        td
+          = settlor.last_name
+        td
+          = settlor.ein_or_ssn
+        td
+          - if settlor.contact_id.nil?
+              = 'Yes'
+          - else
+              = 'No'
+        td
+          = settlor.phone1
+        td
+          = settlor.email
+        td.actions
+          = link_to "Edit", entities_trust_settlor_path( @entity.key, settlor.id ), class: "#{edit_xs} entity-page-xhr"
+          = link_to "Delete", entities_trust_settlor_path( settlor.id ), method: :delete, class: "#{delete_xs} entity-page-xhr"

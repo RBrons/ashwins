@@ -1,0 +1,47 @@
+= form_for @trustee, url: entities_trust_trustee_path(@entity.key, @trustee.id), html: {class: "entity-page-xhr"} do |f|
+  = hidden_field_tag :int_action, 'Add Trustee'
+  - if @trustee.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@trustee.errors.count, "error")} prohibited this Trustee from being saved:"
+      ul
+        - @trustee.errors.full_messages.each do |message|
+          li = message
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    .form-group
+      .option-1
+        = f.label "Individual"
+        = f.radio_button :is_person, true, checked: @trustee.is_person
+      .option-2
+        = f.label "Entity"
+        = f.radio_button :is_person, false, checked: !@trustee.is_person
+
+    .form-group#trustee_entity
+      label.is-person-hide style=("#{('display: none;' if @trustee.is_person)}") Trustee Entity
+
+      - if @trustee.is_person
+        = f.select :temp_id, options_html('trustee', "true", @trustee.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @trustee.super_entity.id, clienttype: 'trustee'}
+      - else
+        = f.select :temp_id, options_html('trustee', "false", @trustee.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @trustee.super_entity.id, clienttype: 'trustee'}
+      = hidden_field_tag "trustee[member_type_id]", MemberType.getTrustId
+      = hidden_field_tag :cid, @trustee.temp_id
+      .clearfix
+      div#linkbacks
+        = linkbacks f.object.temp_id
+        .add-list-entity-links.pull-right
+          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+    .form-group
+      = f.submit 'Save', class: "btn btn-primary"
+
+/! Modal
+#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+        h4.modal-title New Entity for Trustee
+      .model-body
+        | &nbsp;
+      .modal-footer
+        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
+          | close

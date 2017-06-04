@@ -1,48 +1,8 @@
-= form_for @manager, url: entities_llc_manager_path(@entity.key, @manager.id), remote: true, html: {class: "entity-page-xhr"} do |f|
-  = hidden_field_tag :int_action, 'Add Outside Manager'
-  - if @manager.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@manager.errors.count, "error")} prohibited this Manager from being saved:"
-      ul
-        - @manager.errors.full_messages.each do |message|
-          li = message
-
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @manager.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@manager.is_person
-
-    .form-group#manager_entity
-      label.is-person-hide style=("#{('display: none;' if @manager.is_person)}") Owning Entity
-
-      - if @manager.is_person
-        = f.select :temp_id, options_html('manager', "true", @manager.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @manager.super_entity.id, clienttype: 'manager'}
-      - else
-        = f.select :temp_id, options_html('manager', "false", @manager.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @manager.super_entity.id, clienttype: 'manager'}
-      = hidden_field_tag "stock_holder[member_type_id]", MemberType.getLLCId
-      = hidden_field_tag :cid, @manager.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      = f.submit 'Save', class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Manager
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close
+- if request.xhr?
+  == render partial: "entities/llc/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/llc/links"
+    .clearfix
+    .corporate-contact-form
+      == render partial: "entities/llc/manager"

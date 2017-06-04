@@ -1,70 +1,8 @@
-= hidden_field_tag :int_action, 'Stockholders List'
-.heading
-  = "List of #{@entity.display_name}'s Stockholders"
-.clearfix
-table#data_table
-  thead
-    tr
-      th
-        | Entity Name
-      th
-        | Type
-      th
-        | Contact First Name
-      th
-        | Contact Last Name
-      th
-        | EIN / Social
-      th
-        | Client?
-      th
-        | Phone
-      th
-        | Email
-      th
-        | Stock Shares
-      th
-        | Actions
-  tbody
-    - @stockholders.each do |stockholder|
-      - entity_flag = stockholder.entity.present?
-      - person_flag = true
-      tr
-        td
-          - if !stockholder.is_person?
-            - person_flag = false
-            - if entity_flag
-              = link_to stockholder.entity.try(:name), edit_entity_path(stockholder.entity.key)
-            - else
-              = link_to stockholder.contact.try(:name), edit_contact_path(stockholder.contact)
-        td
-          - if entity_flag
-            = MemberType.member_types[stockholder.member_type_id]
-          - else
-            = stockholder.contact.role
-        td
-          - if person_flag
-            - if stockholder.entity.present?
-              = link_to stockholder.first_name, edit_entity_path(stockholder.entity.key)
-            - elsif stockholder.contact.present?
-              = link_to stockholder.first_name, edit_contact_path(stockholder.contact)
-          - else
-            = stockholder.first_name
-        td
-          = stockholder.last_name
-        td
-          = stockholder.ein_or_ssn
-        td
-          - if stockholder.contact_id.nil?
-              = 'Yes'
-          - else
-              = 'No'
-        td
-          = stockholder.phone1
-        td
-          = stockholder.email
-        td
-          = stockholder.my_percentage_stockholder
-        td.actions
-          = link_to 'Edit', entities_corporates_stockholder_path(@entity.key, stockholder.id), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_corporates_stockholder_path(stockholder.id), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
+- if request.xhr?
+  == render partial: "entities/corporates/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/corporates/links"
+    .clearfix
+    .corporate-contact-form
+      == render partial: "entities/corporates/stockholders"
