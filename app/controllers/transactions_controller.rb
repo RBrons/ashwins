@@ -469,12 +469,12 @@ class TransactionsController < ApplicationController
 
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
 
-    #comming soon
+    #coming soon
 
   end
 
   def inspection_update
-    #comming soon
+    #coming soon
 
     respond_to do |format|
       format.html {
