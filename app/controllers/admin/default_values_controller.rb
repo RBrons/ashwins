@@ -111,8 +111,6 @@ class Admin::DefaultValuesController < ApplicationController
   end
 
   def random_mode
-    p "in random mode"
-    p params[:random_mode]
     if !params[:random_mode].nil?
       # activate random mode
       DefaultValue::RANDOM_MODE.each do |rec|
