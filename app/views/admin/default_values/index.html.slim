@@ -9,6 +9,18 @@ h1 Default Values
 
 h4 Note: For Dates use the format DD-MM-YYYY
 
+= form_tag(({controller: 'admin/default_values', action: 'random_mode'}), method: :post) do
+  .clearfix
+  .form-group
+      label.control-label Random Mode
+      .clearfix
+      = check_box_tag 'random_mode', true, @random_mode,:onclick=>"$('#random_info').toggle();"
+
+  .clearfix
+  = submit_tag 'Save', class: 'btn btn-sm btn-warning'
+  span id='random_info'  style="display: none"
+    | Changes not saved
+
 table#data_table
   thead
     tr

@@ -6,7 +6,7 @@ $ ->
   last_counteroffer = ""
 
   #Transaction List
-  $(document).on 'click', '#data_table.sale_mode tbody td.details-control', ->
+  $(document).on 'click', '#data_table.sale_mode tbody td.details-control, #data_table.purchase_mode tbody td.details-control', ->
     tr = $(this).closest('tr')
     if tr.hasClass 'shown'
       tr.nextUntil('.parent-row').hide()
