@@ -311,6 +311,7 @@ Rails.application.routes.draw do
       collection do
         get :new_property, :new_terms, :new_purchase_property, :new_sell_property,
             :new_sale_transaction
+        post :random_mode
       end
     end
 

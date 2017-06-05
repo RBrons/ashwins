@@ -4,7 +4,8 @@ class Admin::DefaultValuesController < ApplicationController
 
   # GET /default_values
   def index
-    @default_values = DefaultValue.all
+    @default_values = DefaultValue.where.not(entity_name: 'RandomMode')
+    @random_mode = DefaultValue.where(entity_name: 'RandomMode').count() == 1
   end
 
   # GET /default_values/1
@@ -77,11 +78,21 @@ class Admin::DefaultValuesController < ApplicationController
   def create
     @default_value = DefaultValue.new(default_value_params)
 
-    if @default_value.save
+    if cleanup_and_save
       redirect_to admin_default_values_url, notice: 'Default value was successfully created.'
     else
       render :new
     end
+  end
+
+  def cleanup_and_save
+    to_be_removed = DefaultValue.where(entity_name: @default_value.entity_name,
+                                    attribute_name: @default_value.attribute_name).pluck('id')
+    flag = @default_value.save
+
+    DefaultValue.where(id: to_be_removed).destroy_all if flag
+
+    return flag
   end
 
   # PATCH/PUT /default_values/1
@@ -97,6 +108,26 @@ class Admin::DefaultValuesController < ApplicationController
   def destroy
     @default_value.destroy
     redirect_to admin_default_values_url, notice: 'Default value was successfully destroyed.'
+  end
+
+  def random_mode
+    p "in random mode"
+    p params[:random_mode]
+    if !params[:random_mode].nil?
+      # activate random mode
+      DefaultValue::RANDOM_MODE.each do |rec|
+        @default_value = DefaultValue.new(entity_name: rec[:entity],
+                          attribute_name: rec[:attribute], value_type: rec[:vtype])
+        cleanup_and_save
+      end
+    else
+      # deactivate random mode
+      DefaultValue::RANDOM_MODE.each do |rec|
+        DefaultValue.where(entity_name: rec[:entity],
+                          attribute_name: rec[:attribute], value_type: rec[:vtype]).destroy_all
+      end
+    end
+    redirect_to admin_default_values_url
   end
 
   private

@@ -1,14 +1,24 @@
 class DefaultValue < ApplicationRecord
 
+  attr_accessor :random_mode
+
   PROPERTY_OPTIONS = ["Amount", "Date", "String", "Integer", "Random US City",
-                      "Random Tenant", "Random Rent", "Random Offerror",
-                      "Random Cap Rate", "Random Owner", "Random Seller"]
+                      "Random Tenant", "Random Rent",
+                      "Random Cap Rate", "Random Owner"]
 
   TRANSACTION_TERM_OPTIONS = ["Amount", "Date", "String", "Integer"]
 
   TRANSACTION_PROPERTY_OPTIONS = ["Amount", "Date", "String", "Integer"]
 
   TRANSACTION_SALE_OPTIONS = ["Amount", "Date", "String", "Integer", "Random Seller"]
+
+  RANDOM_MODE = [{entity: 'Property', attribute: 'LocationCity', vtype: 'Random US City'},
+                 {entity: 'Property', attribute: 'TenantIs', vtype: 'Random Tenant'},
+                 {entity: 'Property', attribute: 'CapRate', vtype: 'Random Cap Rate'},
+                 {entity: 'Property', attribute: 'CurrentRent', vtype: 'Random Rent'},
+                 {entity: 'Property', attribute: 'OwnerEntityId', vtype: 'Random Owner'},
+                 {entity: 'RandomMode', attribute: 'Random', vtype: 'True'}
+                ]
 
   def self.property_options
       return PROPERTY_OPTIONS
