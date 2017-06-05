@@ -13,7 +13,7 @@ class TransactionsController < ApplicationController
   include TransactionsHelper
 
   def index
-    params[:mode] = 'sale' if params[:mode].nil?
+    params[:mode] = user_session['worked_on'] || 'sale' if params[:mode].nil?
     klazz         = (params[:mode] == 'buy') ? 'TransactionPurchase' : 'TransactionSale'
     @transactions = klazz.constantize.with_deleted.joins(:transaction_main)
     @transactions = @transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
@@ -680,8 +680,10 @@ class TransactionsController < ApplicationController
   def for_sale_or_purchase_tab
     if params[:type].blank? || params[:type] == 'sale'
       @transaction = @transaction_main.sale
+      user_session['worked_on'] = 'sale'
     else
       @transaction = @transaction_main.purchase
+      user_session['worked_on'] = 'buy'
     end
   end
 
