@@ -140,7 +140,7 @@ class Entity < ApplicationRecord
               if result3[:nodes] == []
                 result3.reject! {|key| key == :nodes}
               end
-              result3[:nodes].push(result3)
+              result2[:nodes].push(result3)
             end
           end
         else
