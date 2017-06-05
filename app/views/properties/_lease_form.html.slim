@@ -68,22 +68,9 @@ div[role="tabpanel"]
 
             .clearfix
             .form-group
-              h2.heading Lease Duration In Years
+              h2.heading Duration of Base term
               .clearfix
               =  f.text_field :lease_duration_in_years, class: 'form-control'
-
-            .clearfix
-            .form-group
-              h2.heading
-                | Lease Slab In Years
-              .clearfix
-              =  f.text_field :lease_slab_in_years, class: 'form-control'
-
-            .clearfix
-            .form-group
-              h2.heading Lease Rent Increase Type
-              .clearfix
-              =  f.text_field :lease_rent_increase_type, class: 'form-control'
 
             .clearfix
             .form-group
@@ -95,7 +82,7 @@ div[role="tabpanel"]
             .clearfix
             .form-group
               h2.heading
-                | Lease Rent Slab In Years
+                | No of Years Before Rent Increase
               .clearfix
               =  f.text_field :lease_rent_slab_in_years, class: 'form-control'
 
@@ -115,19 +102,13 @@ div[role="tabpanel"]
             .form-group
               h2.heading
                 | Pro Rated Rent?
-              =  f.check_box :lease_is_pro_rated, class: 'form-control'
+                =  f.check_box :lease_is_pro_rated, class: 'form-control'
             .clearfix
               h2.heading
                 | Rent Commencement Date Details
             .clearfix
             .form-group
               = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
-            .clearfix
-              h2.heading
-                | Number Of Years in Term
-            .clearfix
-            .form-group
-              = f.text_field :number_of_years_in_term, class: 'form-control'
             .clearfix
               h2.heading
                 | Number Of Option Period
