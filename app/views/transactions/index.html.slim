@@ -23,6 +23,7 @@
         th QI Funds
         th Funds Identified
         th Funds to be Identified
+        th[data-orderable="false"]
         th Properties Identified
         th Date of PSA
         th Days to 45
@@ -39,42 +40,91 @@
         - next if maint.blank?
         - sale_closing_date = nil
         - today_ = Date.today #Time.now
-        tr
-          td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
-          td = var.purchaser_name
-          td = var.seller_name
-          td
-            - if !var.sale.try(:transaction_properties).nil?
-              - (var.sale.try(:transaction_properties).where(is_selected: true) || []).each do |p|
-                = "#{p.name}"
-                br
+        - if var.transaction_properties.count != 0
+          - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
+            tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
+              td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
+              td = var.purchaser_name
+              td = var.seller_name
+              td
+                - if !var.sale.try(:transaction_properties).nil?
+                  - (var.sale.try(:transaction_properties).where(is_selected: true) || []).each do |relinquished_p|
+                    = "#{relinquished_p.name} (#{relinquished_p.closing_date.try(:strftime, '%b-%d-%Y')})"
+                    br
 
-          td 
-            - sale_closing_date = maint.identification_deadline 
-            - if !sale_closing_date.nil?
-              - sale_closing_date = sale_closing_date - 45.days
-            = sale_closing_date.try(:strftime, '%d-%b-%Y')
-          td = number_to_currency(maint.qi_funds)
-          td = number_to_currency(var.funds_identified)
-          td = number_to_currency(var.funds_to_identified)
-          td
-            - var.transaction_properties.where(:is_selected => true).each do |p|
-              = "#{p.name}"
-              br
-          td = var.psa_date.try(:to_string)
-          td 
-            - if !sale_closing_date.nil?
-              = (maint.identification_deadline.to_date - today_).to_i            
-          td 
-            - if !sale_closing_date.nil?
-              = (maint.transaction_deadline.to_date - today_).to_i  
-          td = (var.first_deposit_date_due.days_gone rescue '')
-          td = var.end_of_inspection.try(:to_string)
-          td = (var.second_deposit_date_due.days_gone rescue '')
-          td = var.closing_date.try(:days_gone)
-          td
-            = link_to 'Edit', properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-            = link_to 'Delete', transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+              td 
+                - sale_closing_date = maint.identification_deadline 
+                - if !sale_closing_date.nil?
+                  - sale_closing_date = sale_closing_date - 45.days
+                = sale_closing_date.try(:strftime, '%d-%b-%Y')
+              td = number_to_currency(maint.qi_funds)
+              td = number_to_currency(var.funds_identified)
+              td = number_to_currency(var.funds_to_identified)
+              td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
+              td 
+                = "#{p.name}"
+                - if p.closed?
+                  span.label.label-danger.pull-right closed
+                - elsif p.is_in_contract?
+                  span.label.label-warning.pull-right In contract
+                - else
+                    span.label.label-success.pull-right Not in contract
+              td = p.try(:psa_date)
+              td 
+                - if !sale_closing_date.nil?
+                  = (maint.identification_deadline.to_date - today_).to_i            
+              td 
+                - if !sale_closing_date.nil?
+                  = (maint.transaction_deadline.to_date - today_).to_i  
+              td = (p.first_deposit_date_due - today_).to_i if p.first_deposit_date_due.present?
+              td = (p.inspection_period_days - (today_ - p.psa_date).to_i) if p.psa_date.present?
+              td 
+                - if p.second_deposit_date_due.present? 
+                 = (p.second_deposit_date_due - today_).to_i
+                - else
+                  = 'N/A'
+              td = (p.closing_date.to_date - today_).to_i if p.closing_date.present?
+              td
+                = link_to 'Edit', properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to 'Delete', transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+        - else
+          tr.parent-row
+            td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
+            td = var.purchaser_name
+            td = var.seller_name
+            td
+              - if !var.sale.try(:transaction_properties).nil?
+                - (var.sale.try(:transaction_properties).where(is_selected: true) || []).each do |p|
+                  = "#{p.name}"
+                  br
+
+            td 
+              - sale_closing_date = maint.identification_deadline 
+              - if !sale_closing_date.nil?
+                - sale_closing_date = sale_closing_date - 45.days
+              = sale_closing_date.try(:strftime, '%d-%b-%Y')
+            td = number_to_currency(maint.qi_funds)
+            td = number_to_currency(var.funds_identified)
+            td = number_to_currency(var.funds_to_identified)
+            td
+            td
+              - var.transaction_properties.where(:is_selected => true).each do |relinquished_p|
+                = "#{relinquished_p.name}"
+                br
+            td = var.psa_date.try(:to_string)
+            td 
+              - if !sale_closing_date.nil?
+                = (maint.identification_deadline.to_date - today_).to_i            
+            td 
+              - if !sale_closing_date.nil?
+                = (maint.transaction_deadline.to_date - today_).to_i  
+            td = (var.first_deposit_date_due.days_gone rescue '')
+            td = var.end_of_inspection.try(:to_string)
+            td = (var.second_deposit_date_due.days_gone rescue '')
+            td = var.closing_date.try(:days_gone)
+            td
+              = link_to 'Edit', properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+              = link_to 'Delete', transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
 
 - else
   table#data_table.sale_mode
