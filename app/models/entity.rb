@@ -127,7 +127,7 @@ class Entity < ApplicationRecord
               result3 = {text: "#{super_entity2.display_name} - #{percentage(paf2)} (#{paf_name(super_entity2, paf2)})", nodes: []}
 
               unless ([7, 8, 9].include? super_entity2.type_)
-                PeopleAndFirm.where.not(class_name: ["Settlor", "Director", "Officer", "Agent", "Judge", "Guardian", "Manager", "Spouse"]).where(entity_id: super_entity.id).each do |paf3|
+                PeopleAndFirm.where.not(class_name: ["Settlor", "Director", "Officer", "Agent", "Judge", "Guardian", "Manager", "Spouse"]).where(entity_id: super_entity2.id).each do |paf3|
                   unless paf3.super_entity_id.nil? || !Entity.exists?(id: paf3.super_entity_id)
                     super_entity3 = Entity.find(paf3.super_entity_id)
                     result3[:nodes].push({text: "#{super_entity3.display_name} - #{percentage(paf3)} (#{paf_name(super_entity3, paf3)})"})
