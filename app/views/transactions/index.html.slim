@@ -44,9 +44,10 @@
           td = var.purchaser_name
           td = var.seller_name
           td
-            - (var.sale.try(:transaction_properties) || []).each do |p|
-              = "#{p.name}"
-              br
+            - if !var.sale.try(:transaction_properties).nil?
+              - (var.sale.try(:transaction_properties).where(is_selected: true) || []).each do |p|
+                = "#{p.name}"
+                br
 
           td 
             - sale_closing_date = maint.identification_deadline 
