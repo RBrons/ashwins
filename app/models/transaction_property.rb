@@ -1,7 +1,7 @@
 class TransactionProperty < ApplicationRecord
 
-  belongs_to :transaction_sale, primary_key: :transaction_id
-  belongs_to :transaction_purchase, primary_key: :transaction_id
+  belongs_to :transaction_sale, touch: true
+  belongs_to :transaction_purchase, touch: true
   
   belongs_to :property
   delegate :name, to: :property, allow_nil: true
@@ -24,6 +24,18 @@ class TransactionProperty < ApplicationRecord
   delegate :measured_days_to_closing, to: :transaction_term, allow_nil: true
   delegate :last_day_for_buyer_to_receive_deposit, to: :transaction_term, allow_nil: true
   
+  after_touch :update_transaction
+  after_update :update_transaction
+  after_save :update_transaction
+  
+  def update_transaction
+    if self.is_sale
+      TransactionSale.find(self.transaction_id).touch
+    else
+      TransactionPurchase.find(self.transaction_id).touch
+    end
+  end
+
   def is_in_contract?
     return !self.psa_date.nil?
   end

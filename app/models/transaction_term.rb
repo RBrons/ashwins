@@ -1,5 +1,7 @@
 class TransactionTerm < ApplicationRecord
 
+  belongs_to :transaction_property, touch: true
+
   def sale
     TransactionSale.find_by(id: self.transaction_id)
   end
