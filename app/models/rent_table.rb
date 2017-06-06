@@ -3,13 +3,22 @@ class RentTable < ApplicationRecord
 
   def format_year
     if self.is_option
-      "Option #{self.option_slab} (#{self.start_year} - #{self.end_year})"
+      "Rent for Option #{self.option_slab} (#{self.start_year} - #{self.end_year})"
     else
-      "#{self.start_year} - #{self.end_year}"
+      "Rent for #{self.start_year} - #{self.end_year}"
     end
   end
 
   def format_rent
     "$ #{self.rent}"
   end
+
+  def display_info
+    if self.description.nil? || self.description.blank?
+      self.format_year
+    else
+      self.description
+    end
+  end
+
 end

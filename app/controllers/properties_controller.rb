@@ -127,6 +127,9 @@ class PropertiesController < ApplicationController
             slab = @property.lease_rent_slab_in_years
 
             rent = base_rent
+            @property.rent_tables.create(version: rent_table_version, rent: base_rent, description: 'Base Annual Rent')
+            @property.rent_tables.create(version: rent_table_version, rent: base_rent / 12.00, description: 'Base Monthly Rent (approx.)')
+            @property.rent_tables.create(version: rent_table_version, rent: base_rent/ 365.00, description: 'Base Daily Rent (approx.)')
             prev_rent = rent
             rent_start = @property.rent_commencement_date || Time.now
             rent_start = Time.now if @property.rent_commencement_date_details == 'Date not certain'
@@ -137,6 +140,20 @@ class PropertiesController < ApplicationController
 
             if @property.lease_is_pro_rated && @property.rent_commencement_date_details != 'Date not certain'
               d = rent_start
+
+              # 0 fill in the pro rated fields for the property and save
+              @property.pro_rated_month = d.month
+              @property.pro_rated_month_name = Date::MONTHNAMES[d.month]
+              @property.pro_rated_day = d.day
+              @property.pro_rated_year = d.year
+              @property.pro_rated_day_date = d.to_date
+              @property.pro_rated_day_rent = (base_rent / 365.00)
+              @property.pro_rated_month_rent = (base_rent / 12.00) - ((d.day - 1) * @property.pro_rated_day_rent)
+              @property.save
+
+              @property.rent_tables.create(version: rent_table_version, rent: @property.pro_rated_month_rent,
+                description: "Pro-rated Rent for #{Date::MONTHNAMES[d.month]} #{d.year}")
+
               # 1 - calculate the pro-rated rent for year 1
               rent_first_year = rent * (((Date.parse("31/12/#{d.year}") - d.to_date).to_i) * 1.00/(d.year % 4 == 0 ? 366.00 : 365.00))
               # 2 - add the rent table entry

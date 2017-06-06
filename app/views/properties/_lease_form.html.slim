@@ -59,6 +59,34 @@ div[role="tabpanel"]
                   = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
 
               .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+      #lease_rent_table_section.tab-pane.fade[role="tabpanel"]
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Date Of Lease
+              .clearfix
+              .pull-left
+                = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
+                = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}"
+              .pull-right
+                .pull-left
+                  label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                .pull-right
+                  = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
+
+              .clearfix
 
             .form-group
               h2.heading Lease Base Rent
@@ -144,7 +172,7 @@ div[role="tabpanel"]
           .clearfix
           .form-group
             = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_rent_table_section.tab-pane.fade[role="tabpanel"]
+          .clearfix
         - if @property.rent_tables.present?
           .clearfix
           .col-sm-4
@@ -157,17 +185,15 @@ div[role="tabpanel"]
             table.table.table-striped.table-bordered#rent-table
               thead
                 tr
-                  th Base Rent
-                  th
-                    /= @property.rent_tables.where(version: @property.rent_table_version).first.format_rent
-                    = @property.lease_base_rent
+                  th Particulars
+                  th Amount
               tbody
                 - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
                   tr
                     td
-                      = rent_row.format_year
+                      = rent_row.display_info
                     td
-                      = rent_row.format_rent
+                      = number_to_currency rent_row.rent
         - else
           p Rent Table is not available right now.
       #lease_rent_details_section.tab-pane.fade[role="tabpanel"]

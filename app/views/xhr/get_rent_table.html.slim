@@ -1,13 +1,12 @@
 table.table.table-striped.table-bordered#rent-table
   thead
     tr
-      th Base Rent
-      th
-        = @rent_tables.first.format_rent
+      th Particulars
+      th Amount
   tbody
     - @rent_tables.each do |rent_row|
       tr
         td
-          = rent_row.format_year
+          = rent_row.display_info
         td
-          = rent_row.format_rent
+          = number_to_currency rent_row.rent

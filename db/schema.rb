@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602055038) do
+ActiveRecord::Schema.define(version: 20170606051622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,7 +202,7 @@ ActiveRecord::Schema.define(version: 20170602055038) do
     t.boolean  "m_date_of_appointment",                 default: false
     t.boolean  "m_date_of_commission",                  default: false
     t.integer  "user_id"
-    t.boolean  "has_comma",                             default: false
+    t.boolean  "has_comma"
     t.integer  "shares_decimal_count"
     t.index ["deleted_at"], name: "index_entities_on_deleted_at", using: :btree
     t.index ["user_id"], name: "index_entities_on_user_id", using: :btree
@@ -419,6 +419,13 @@ ActiveRecord::Schema.define(version: 20170602055038) do
     t.integer  "tenant_id"
     t.integer  "lease_slab_in_years"
     t.boolean  "lease_is_pro_rated",                                                                         default: false
+    t.integer  "pro_rated_month"
+    t.string   "pro_rated_month_name"
+    t.integer  "pro_rated_year"
+    t.integer  "pro_rated_day"
+    t.date     "pro_rated_day_date"
+    t.decimal  "pro_rated_day_rent",                                                precision: 15, scale: 2
+    t.decimal  "pro_rated_month_rent",                                              precision: 15, scale: 2
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
@@ -460,6 +467,7 @@ ActiveRecord::Schema.define(version: 20170602055038) do
     t.integer  "version"
     t.boolean  "is_option",                            default: false
     t.integer  "option_slab"
+    t.string   "description"
     t.index ["property_id"], name: "index_rent_tables_on_property_id", using: :btree
   end
 
