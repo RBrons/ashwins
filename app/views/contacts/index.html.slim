@@ -22,9 +22,9 @@ table#data_table
         | Notes
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @contacts.each do |contact|
-      tr
+      tr data-id=contact.id
         td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => contact.id
         td
           = (contact.try(:company_name) || "") + " " + (contact.try(:legal_ending) || "")

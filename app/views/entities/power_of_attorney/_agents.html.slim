@@ -17,9 +17,9 @@ table#data_table
         | Number of Share
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @agents.each do |agent|
-      tr
+      tr data-id=agent.id
         td
           - if agent.entity.present?
             = agent.entity.try(:name)

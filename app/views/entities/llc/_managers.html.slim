@@ -15,9 +15,9 @@ table#data_table
         | phone1
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @managers.each do |manager|
-      tr
+      tr data-id=manager.id
         td
           = manager.first_name
         td

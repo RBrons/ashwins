@@ -23,16 +23,16 @@ class ClientsController < ApplicationController
             grp_.group_members.create!(gmember: e)
           rescue => exception
             # add exception handling code
-          end          
+          end
         end
       elsif params[:form_type] == 'removemultifromgroup' && params[:group_id] && params[:group_id] != '0'
         grp_ = Group.where(id: params[:group_id]).first
         ids    = params[:multi_remove_entities].split(',').map(&:to_i).compact
-        GroupMember.where(group_id: grp_.id, gmember_id: ids, 
+        GroupMember.where(group_id: grp_.id, gmember_id: ids,
           gmember_type: 'Entity').delete_all if !grp_.nil?
       end
-        @current_grp = grp_.id.to_s      
-        params[:grp] = @current_grp      
+        @current_grp = grp_.id.to_s
+        params[:grp] = @current_grp
     end
     if @current_grp != '0'
       grp_ = Group.where(id: @current_grp).first
@@ -47,16 +47,17 @@ class ClientsController < ApplicationController
       @entities   = @entities.where(deleted_at: nil) unless params[:trashed].to_b
       @entities   = @entities.where.not(deleted_at: nil) if params[:trashed].to_b
     end
-    @entities   = @entities.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)    
+    @entities   = @entities.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
+    @activeId = params[:active_id]
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/clients\">List </a></h4></div>".html_safe
     render layout: false if request.xhr?
   end
-  
+
   # GET /clients/1
   # GET /clients/1.json
   def show;
   end
-  
+
   # GET /clients/new
   def new
     @client     = Client.new
@@ -66,12 +67,12 @@ class ClientsController < ApplicationController
     end
     render layout: false, template: "contacts/new" if request.xhr?
   end
-  
+
   # GET /clients/1/edit
   def edit
     @youarehere = [view_context.link_to("Clients", view_context.clients_path), "Edit"] ## You Are Here ##
   end
-  
+
   # POST /clients
   # POST /clients.json
   def create
@@ -90,7 +91,7 @@ class ClientsController < ApplicationController
       end
     end
   end
-  
+
   # PATCH/PUT /clients/1
   # PATCH/PUT /clients/1.json
   def update
@@ -104,7 +105,7 @@ class ClientsController < ApplicationController
       end
     end
   end
-  
+
   # DELETE /clients/1
   # DELETE /clients/1.json
   def destroy
@@ -114,7 +115,7 @@ class ClientsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
   def address
     val      = params[:val]
     @clients = Client.where('info LIKE ?', "%#{val}%")
@@ -123,28 +124,28 @@ class ClientsController < ApplicationController
     end
     render layout: false
   end
-  
+
   def multi_delete
     common_multi_delete
   end
-  
+
   private
   def current_page
     @current_page = 'client'
   end
-  
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_client
     @client = Client.find_by(key: params[:id])
   end
-  
+
   # Never trust parameters from the scary internet, only allow the white list through.
   def client_params
     params.require(:client).permit(:first_name, :last_name, :entity_id, :phone1, :phone2, :fax, :email, :postal_address,
                                    :notes, :city, :state, :zip, :is_person, :ein_or_ssn, :honorific, :is_honorific, :client_type)
   end
-  
+
   def add_breadcrum
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/clients\">Clients </a></h4></div>".html_safe
   end

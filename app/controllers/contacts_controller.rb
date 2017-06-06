@@ -30,7 +30,7 @@ class ContactsController < ApplicationController
             TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.first_name} #{@contact.last_name}")
           end
         end
-        flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path}'>Show in List</a>"
+        flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>"
         format.html { redirect_to edit_contact_path(@contact) }
         # format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
@@ -85,6 +85,7 @@ class ContactsController < ApplicationController
     @contacts = @contacts.where(deleted_at: nil) unless params[:trashed].to_b
     @contacts = @contacts.where.not(deleted_at: nil) if params[:trashed].to_b
     @contacts = @contacts.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
+    @activeId = params[:active_id]
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\"> List </a></h4></div>".html_safe
   end

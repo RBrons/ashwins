@@ -15,9 +15,9 @@ table#data_table
       th Time Remaining in Term
       th Status
       th Action
-  tbody
+  tbody data-active-id=@activeId
     - @properties.each do |property|
-      tr
+      tr data-id=property.id
         td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => property.id
         td = property.ownership_status
         td
