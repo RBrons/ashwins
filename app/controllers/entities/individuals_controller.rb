@@ -19,7 +19,7 @@ class Entities::IndividualsController < ApplicationController
       @entity.name = @entity.first_name + ' ' + @entity.last_name
       if @entity.save
         AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
-        flash[:success] = "New Client Successfully Created. <a href='#{clients_path}'>Show in List</a>"
+        flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path}'>Show in List</a>"
         return redirect_to entities_individuals_basic_info_path(@entity.key)
       end
     elsif request.patch?
@@ -29,7 +29,7 @@ class Entities::IndividualsController < ApplicationController
       @entity.assign_attributes(individuals_params)
       @entity.name = @entity.first_name + ' ' + @entity.last_name
       if @entity.save
-        flash[:success] = "This Client Successfully Updated. <a href='#{clients_path}'>Show in List</a>"
+        flash[:success] = "This Client Successfully Updated.</br><a href='#{clients_path}'>Show in List</a>"
         return redirect_to entities_individuals_basic_info_path(@entity.key)
       end
     else

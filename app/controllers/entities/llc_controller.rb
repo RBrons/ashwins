@@ -20,7 +20,7 @@ class Entities::LlcController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        flash[:success] = "New Client Successfully Created. <a href='#{clients_path}'>Show in List</a>"
+        flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path}'>Show in List</a>"
         return redirect_to entities_llc_basic_info_path( @entity.key )
         # return render json: {redirect: view_context.entities_llc_basic_info_path( @entity.key ), just_created: true}
         #return redirect_to clients_path
@@ -69,7 +69,7 @@ class Entities::LlcController < ApplicationController
       @manager.use_temp_id
       if @manager.save
         @managers = @manager.super_entity.managers + @manager.super_entity.members.where(is_manager: true)
-        flash[:success] = "New Manager Successfully Created. <a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "New Manager Successfully Created.</br><a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
         return redirect_to entities_llc_manager_path( @entity.key, @manager.id )
         # return render layout: false, template: "entities/llc/managers"
       else
@@ -81,7 +81,7 @@ class Entities::LlcController < ApplicationController
         @manager.save
         @managers = @manager.super_entity.managers + @manager.super_entity.members.where(is_manager: true)
         # return render layout: false, template: "entities/llc/managers"
-        flash[:success] = "The Manager Successfully updated. <a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "The Manager Successfully updated.</br><a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
         return redirect_to entities_llc_manager_path( @entity.key, @manager.id )
       else
         # return render layout: false, template: "entities/llc/manager"
@@ -124,7 +124,7 @@ class Entities::LlcController < ApplicationController
       @member.use_temp_id
       if @member.save
         @members = @entity.members #.where(is_manager: false)
-        flash[:success] = "New Member Successfully Created. <a href='#{entities_llc_members_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "New Member Successfully Created.</br><a href='#{entities_llc_members_path( @entity.key )}'>Show in List</a>"
         return redirect_to entities_llc_member_path( @entity.key, @member.id )
       else
         return redirect_to entities_llc_member_path( @entity.key, @member.id )
@@ -135,7 +135,7 @@ class Entities::LlcController < ApplicationController
         @member.save
         @members = @entity.members #.where(is_manager: false)
         # return render layout: false, template: "entities/llc/members"
-        flash[:success] = "The Member Successfully updated. <a href='#{entities_llc_members_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "The Member Successfully updated.</br><a href='#{entities_llc_members_path( @entity.key )}'>Show in List</a>"
         return redirect_to entities_llc_member_path( @entity.key, @member.id )
       else
         # return render layout: false, template: "entities/llc/member"
