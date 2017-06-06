@@ -86,8 +86,9 @@
                   = 'N/A'
               td = (p.closing_date.to_date - today_).to_i if p.closing_date.present?
               td
-                = link_to 'Edit', properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-                = link_to 'Delete', transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+                .btn-group.btn-group-xs
+                  = link_to '<i class="lnr lnr-trash"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
         - else
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
@@ -108,8 +109,9 @@
             td
             td
             td
-              = link_to 'Edit', properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-              = link_to 'Delete', transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+              .btn-group.btn-group-xs
+                = link_to '<i class="lnr lnr-trash"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
 
 - else
   table#data_table.sale_mode
@@ -164,8 +166,9 @@
               td = var.try(:type_is)
               td = var.try(:type_is)
               td
-                = link_to 'Edit', edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
-                = link_to 'Delete', transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+                .btn-group.btn-group-xs
+                  = link_to '<i class="lnr lnr-trash"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
       
         - else
           tr.parent-row
@@ -182,8 +185,9 @@
             td
             td
             td
-              = link_to 'Edit', edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
-              = link_to 'Delete', transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+              .btn-group.btn-group-xs
+                = link_to '<i class="lnr lnr-trash"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
 
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: { local_path: multi_delete_transactions_path, klazz: [TransactionSale, TransactionPurchase], index_path: transactions_path(trashed: !params[:trashed].to_b, mode: params[:mode]) }
