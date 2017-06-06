@@ -182,7 +182,7 @@
               .form-group
                   label.control-lable Cap Rate
                   .input-group
-                    = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent.to_f / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
+                    = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent.to_f * 100 / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
                     span.input-group-btn
                       button.btn.btn-default[type="button"] %
               .form-group
@@ -355,18 +355,20 @@
               
               .clearfix
               .form-group
+                .pull-right
+                  .pull-left
+                    label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                  .pull-right
+                    input[type="checkbox" data-class="editable-date-field-on-psa" class="manually_date_on_psa"]
+              
+              .clearfix
+              .form-group
                   label.control-lable First Deposit To Be Received By
                   .clearfix
-                  .pull-left
-                    = transaction_term_form.hidden_field :first_deposit_days_after_psa
-                    = transaction_term_form.text_field :first_deposit_date_due, readonly: true, class: 'form-control'
-                    = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto transaction_transaction_term_attributes_first_deposit_date_due", style: "display: none"
-                  .pull-right
-                    .pull-left
-                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                    .pull-right
-                      input[type="checkbox" data-class="transaction_transaction_term_attributes_first_deposit_date_due" class="manually_date_on_psa"]
-              
+                  = transaction_term_form.hidden_field :first_deposit_days_after_psa
+                  = transaction_term_form.text_field :first_deposit_date_due, readonly: true, class: 'form-control editable-date-field-on-psa'
+                  = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", style: "display: none"
+                  
               .clearfix
               .form-group
                   label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
@@ -378,16 +380,10 @@
               .form-group.transaction_transaction_term_attributes_second_deposit_wrapper[style="#{transaction_term_form.object.second_deposit ? '' : 'display: none'}"]
                   label.control-lable Second Deposit To Be Received By
                   .clearfix
-                  .pull-left
-                    = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: !transaction_term_form.object.second_deposit
-                    = transaction_term_form.text_field :second_deposit_date_due, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control'
-                    = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto transaction_transaction_term_attributes_second_deposit_date_due", disabled: !transaction_term_form.object.second_deposit, style: "display: none"
-                  .pull-right
-                    .pull-left
-                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                    .pull-right
-                      input[type="checkbox" data-class="transaction_transaction_term_attributes_second_deposit_date_due" class="manually_date_on_psa"]
-                      
+                  = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: !transaction_term_form.object.second_deposit
+                  = transaction_term_form.text_field :second_deposit_date_due, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control editable-date-field-on-psa'
+                  = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: !transaction_term_form.object.second_deposit, style: "display: none"
+                  
               .clearfix
               .form-group
                   label.control-lable Definition Of Holidays
@@ -398,16 +394,10 @@
               .form-group
                   label.control-lable Approximate Date Of Closing
                   .clearfix
-                  .pull-left
-                    = transaction_term_form.hidden_field :closing_days_after_inspection_period
-                    = transaction_term_form.text_field :closing_date, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control'
-                    = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto transaction_transaction_term_attributes_closing_date", style: "display: none"
-                  .pull-right
-                    .pull-left
-                      label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                    .pull-right
-                      input[type="checkbox" data-class="transaction_transaction_term_attributes_closing_date" class="manually_date_on_psa"]
-
+                  = transaction_term_form.hidden_field :closing_days_after_inspection_period
+                  = transaction_term_form.text_field :closing_date, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control editable-date-field-on-psa'
+                  = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", style: "display: none"
+                  
             .clearfix
             .divider.margin-lg-top
             button.back_prev_step.btn.btn-default Back

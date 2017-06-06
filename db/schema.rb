@@ -202,7 +202,7 @@ ActiveRecord::Schema.define(version: 20170606051622) do
     t.boolean  "m_date_of_appointment",                 default: false
     t.boolean  "m_date_of_commission",                  default: false
     t.integer  "user_id"
-    t.boolean  "has_comma"
+    t.boolean  "has_comma",                             default: false
     t.integer  "shares_decimal_count"
     t.index ["deleted_at"], name: "index_entities_on_deleted_at", using: :btree
     t.index ["user_id"], name: "index_entities_on_user_id", using: :btree
