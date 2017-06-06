@@ -726,7 +726,7 @@ $ ->
     set_closing_date(psa_date, closing_days_after_inspection_period)
 
   $(document).on 'change', 'input.manually_date_on_psa', ->
-    input_object = $(document).find("input##{$(this).data('class')}")
+    input_object = $(document).find("input.#{$(this).data('class')}")
     select_object = $(document).find("select.#{$(this).data('class')}")
       
     if this.checked
