@@ -20,7 +20,7 @@ class Entities::CorporatesController < ApplicationController
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
         # return render json: { redirect: view_context.entities_corporates_basic_info_path(@entity.key), just_created: true }
-        flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path}'>Show in List</a>"
+        flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_corporates_basic_info_path( @entity.key )
       end
     elsif request.patch?
@@ -68,7 +68,7 @@ class Entities::CorporatesController < ApplicationController
       if @director.save
         @directors = @entity.directors
         # return render layout: false, template: "entities/corporates/directors"
-        flash[:success] = "New Director Successfully Created.</br><a href='#{entities_corporates_directors_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "New Director Successfully Created.</br><a href='#{entities_corporates_directors_path( @entity.key, active_id: @director.id )}'>Show in List</a>"
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
       else
         # return render layout: false, template: "entities/corporates/director"
@@ -80,7 +80,7 @@ class Entities::CorporatesController < ApplicationController
         @directors = @director.entity.directors
         @director.save
         # return render layout: false, template: "entities/corporates/directors"
-        flash[:success] = "The Director Successfully Updated.</br><a href='#{entities_corporates_directors_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "The Director Successfully Updated.</br><a href='#{entities_corporates_directors_path( @entity.key, active_id: @director.id )}'>Show in List</a>"
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
       else
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
@@ -104,6 +104,7 @@ class Entities::CorporatesController < ApplicationController
     @entity = Entity.find_by(key: params[:entity_key])
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @directors = @entity.directors
+    @activeId = params[:active_id]
     render layout: false if request.xhr?
   end
 
@@ -125,7 +126,7 @@ class Entities::CorporatesController < ApplicationController
       @officer.use_temp_id
       if @officer.save
         @officers = @entity.officers
-        flash[:success] = "New Officer Successfully Created.</br><a href='#{entities_corporates_officers_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "New Officer Successfully Created.</br><a href='#{entities_corporates_officers_path( @entity.key, active_id: @officer.id )}'>Show in List</a>"
         return redirect_to entities_corporates_officer_path( @entity.key, @officer.id )
         # return render layout: false, template: "entities/corporates/officers"
       else
@@ -137,7 +138,7 @@ class Entities::CorporatesController < ApplicationController
         @officer.use_temp_id
         @officer.save
         @officers = @officer.entity.officers
-        flash[:success] = "The Officer Successfully Updated.</br><a href='#{entities_corporates_officers_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "The Officer Successfully Updated.</br><a href='#{entities_corporates_officers_path( @entity.key, @officer.id )}'>Show in List</a>"
         return redirect_to entities_corporates_officer_path( @entity.key, @officer.id )
         # return render layout: false, template: "entities/corporates/officers"
       else
@@ -163,6 +164,7 @@ class Entities::CorporatesController < ApplicationController
     @entity = Entity.find_by(key: params[:entity_key])
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @officers = @entity.officers
+    @activeId = params[:active_id]
     render layout: false if request.xhr?
   end
 
@@ -184,7 +186,7 @@ class Entities::CorporatesController < ApplicationController
       @stockholder.class_name      = "StockHolder"
       if (@stockholder.entity.present? || @stockholder.contact.present?) && @stockholder.save
         @stockholders = @entity.stockholders
-        flash[:success] = "New Stockholder Successfully Created.</br><a href='#{entities_corporates_stockholders_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "New Stockholder Successfully Created.</br><a href='#{entities_corporates_stockholders_path( @entity.key, active_id: @stockholder.id )}'>Show in List</a>"
         return redirect_to entities_corporates_stockholder_path( @entity.key, @stockholder.id )
         # return render layout: false, template: "entities/corporates/stockholders"
       else
@@ -198,7 +200,7 @@ class Entities::CorporatesController < ApplicationController
       if (@stockholder.entity.present? || @stockholder.contact.present?) && @stockholder.save
         @stockholders = @entity.stockholders
         # return render layout: false, template: "entities/corporates/stockholders"
-        flash[:success] = "The Stockholder Successfully Updated.</br><a href='#{entities_corporates_stockholders_path( @entity.key )}'>Show in List</a>"
+        flash[:success] = "The Stockholder Successfully Updated.</br><a href='#{entities_corporates_stockholders_path( @entity.key, active_id: @stockholder.id )}'>Show in List</a>"
         return redirect_to entities_corporates_stockholder_path( @entity.key, @stockholder.id )
       else
         @stockholder.errors.add(:stockholder, "problem updating. Check data and try again.")
@@ -224,6 +226,7 @@ class Entities::CorporatesController < ApplicationController
     @entity = Entity.find_by(key: entity_key)
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @stockholders = @entity.stockholders
+    @activeId = params[:active_id]
     render layout: false if request.xhr?
   end
 

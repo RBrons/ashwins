@@ -25,11 +25,11 @@ table#data_table
         | Beneficial Interest
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @beneficiaries.each do |beneficiary|
       - entity_flag = beneficiary.entity.present?
       - person_flag = true
-      tr
+      tr data-id=beneficiary.id
         td
           - if !beneficiary.is_person?
             - person_flag = false

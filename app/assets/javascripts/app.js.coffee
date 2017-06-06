@@ -186,3 +186,7 @@ $ ->
     $('.flash-message.normal_hide').hide 'slow', ->
       $('.flash-message.normal_hide').remove()
   ), 10000
+
+  activeItem = $("#data_table tbody").attr('data-active-id')
+  if (activeItem)
+    $("#data_table tr[data-id='" + activeItem + "']").addClass('active-item')

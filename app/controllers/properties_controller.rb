@@ -19,6 +19,7 @@ class PropertiesController < ApplicationController
       end
     end
     @properties = @properties.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
+    @activeId = params[:active_id]
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> List </a></h4></div>".html_safe
 
     render template: 'properties/xhr_list', layout: false if request.xhr?
@@ -63,7 +64,7 @@ class PropertiesController < ApplicationController
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
-        flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path}'>Show in List</a>"
+        flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
         format.html { redirect_to edit_property_path(@property.key, type_is: 'basic_info') }
         # format.html { redirect_to properties_path }
         format.js { render json: @property.to_json, status: :ok }

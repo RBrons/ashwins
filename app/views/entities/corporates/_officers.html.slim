@@ -17,9 +17,9 @@ table#data_table
         | Phone1
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @officers.each do |officer|
-      tr
+      tr data-id=officer.id
         td
           = officer.first_name
         td
