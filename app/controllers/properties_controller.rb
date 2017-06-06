@@ -63,7 +63,7 @@ class PropertiesController < ApplicationController
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
-        flash[:success] = "New Property Successfully Created. <a href='#{properties_path}'>Show in List</a>"
+        flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path}'>Show in List</a>"
         format.html { redirect_to edit_property_path(@property.key, type_is: 'basic_info') }
         # format.html { redirect_to properties_path }
         format.js { render json: @property.to_json, status: :ok }

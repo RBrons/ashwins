@@ -8,7 +8,7 @@ class ContactsController < ApplicationController
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\">Add #{(params[:contact_type] || "contact").titleize} </a></h4></div>".html_safe
     render layout: false, template: "contacts/new" if request.xhr?
   end
-  
+
   def create
     @contact = Contact.new(contact_params)
     params[:contact_type] = "company" if !@contact.company_name.nil?
@@ -20,7 +20,7 @@ class ContactsController < ApplicationController
     elsif @contact.contact_type == "Personnel"
       @contact.role = @contact.per_role
     end
-    
+
     respond_to do |format|
       if @contact.save
         if params[:from_relinquishing_offeror].present?
@@ -30,7 +30,9 @@ class ContactsController < ApplicationController
             TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.first_name} #{@contact.last_name}")
           end
         end
-        format.html { redirect_to contacts_path }
+        flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path}'>Show in List</a>"
+        format.html { redirect_to edit_contact_path(@contact) }
+        # format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
         format.json { render json: @contact }
       else
@@ -57,7 +59,7 @@ class ContactsController < ApplicationController
     elsif @contact.contact_type == "Personnel"
       @contact.role = @contact.per_role
     end
-    
+
     respond_to do |format|
       if @contact.save
         if params[:from_relinquishing_offeror].present?
@@ -77,7 +79,7 @@ class ContactsController < ApplicationController
       end
     end
   end
-  
+
   def index
     @contacts = Contact.with_deleted
     @contacts = @contacts.where(deleted_at: nil) unless params[:trashed].to_b
@@ -104,29 +106,29 @@ class ContactsController < ApplicationController
     ctype_ = "Company" if @contact.is_company
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\">Edit #{ctype_} Contact: #{@contact.name} </a></h4></div>".html_safe
-    
+
   end
 
   def destroy
-    @contact = Contact.find_by(id: params[:id])    
+    @contact = Contact.find_by(id: params[:id])
     @contact.try(:destroy)
     respond_to do |format|
       format.html { redirect_to :back }
       format.json { head :no_content }
     end
   end
-    
+
   def multi_delete
     common_multi_delete
   end
 
   private
-  
+
   def current_page
     @current_page = 'contacts'
   end
 
-  
+
   def contact_params
     params.require(:contact).permit!
   end
