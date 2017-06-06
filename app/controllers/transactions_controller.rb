@@ -22,17 +22,17 @@ class TransactionsController < ApplicationController
     del_transaction_ids = []
     if params[:mode] == 'sale'
       # filter out the transaction which have a closed property
-      @transactions.each do |transaction|
-        tprops = transaction.transaction_properties
-        del_flag = false
-        tprops.each do |prop|
-          if prop.closed?
-            del_flag = true
-            break
-          end
-        end
-        del_transaction_ids << transaction.id if del_flag
-      end
+      # @transactions.each do |transaction|
+      #   tprops = transaction.transaction_properties
+      #   del_flag = false
+      #   tprops.each do |prop|
+      #     if prop.closed?
+      #       del_flag = true
+      #       break
+      #     end
+      #   end
+      #   del_transaction_ids << transaction.id if del_flag
+      # end
     elsif params[:mode] == 'buy'
       # check for 'already sold' transactions beacuse created_at <
       # created_at for a complimentary sale transaction else
@@ -58,7 +58,7 @@ class TransactionsController < ApplicationController
 
       end
     end
-    @transactions = @transactions.where.not('transactions.id in (?)', del_transaction_ids)
+    @transactions = @transactions.where.not('transactions.id in (?)', del_transaction_ids) if del_transaction_ids.count > 0
     @transactions = @transactions.order('transactions.updated_at DESC, transactions.created_at DESC').paginate(page: params[:page], per_page: sessioned_per_page)
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/transactions\">List </a></h4></div>".html_safe
   end
