@@ -1,5 +1,5 @@
 class TransactionPropertyOffer < ApplicationRecord
-  belongs_to :transaction_property, primary_key: :transaction_property_id
+  belongs_to :transaction_property, touch: true
   has_many :counteroffers, foreign_key: :transaction_property_offer_id, dependent: :destroy
 
   belongs_to :contact, primary_key: :relinquishing_purchaser_contact_id, dependent: :destroy

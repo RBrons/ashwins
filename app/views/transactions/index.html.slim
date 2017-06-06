@@ -63,6 +63,7 @@
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
               td 
                 = "#{p.name}"
+                br
                 - if p.closed?
                   span.label.label-danger.pull-right closed
                 - elsif p.is_in_contract?
@@ -85,46 +86,32 @@
                   = 'N/A'
               td = (p.closing_date.to_date - today_).to_i if p.closing_date.present?
               td
-                = link_to 'Edit', properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-                = link_to 'Delete', transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+                .btn-group.btn-group-xs
+                  = link_to '<i class="lnr lnr-trash"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
         - else
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
             td = var.purchaser_name
             td = var.seller_name
             td
-              - if !var.sale.try(:transaction_properties).nil?
-                - (var.sale.try(:transaction_properties).where(is_selected: true) || []).each do |p|
-                  = "#{p.name}"
-                  br
-
-            td 
-              - sale_closing_date = maint.identification_deadline 
-              - if !sale_closing_date.nil?
-                - sale_closing_date = sale_closing_date - 45.days
-              = sale_closing_date.try(:strftime, '%d-%b-%Y')
-            td = number_to_currency(maint.qi_funds)
-            td = number_to_currency(var.funds_identified)
-            td = number_to_currency(var.funds_to_identified)
             td
             td
-              - var.transaction_properties.where(:is_selected => true).each do |relinquished_p|
-                = "#{relinquished_p.name}"
-                br
-            td = var.psa_date.try(:to_string)
-            td 
-              - if !sale_closing_date.nil?
-                = (maint.identification_deadline.to_date - today_).to_i            
-            td 
-              - if !sale_closing_date.nil?
-                = (maint.transaction_deadline.to_date - today_).to_i  
-            td = (var.first_deposit_date_due.days_gone rescue '')
-            td = var.end_of_inspection.try(:to_string)
-            td = (var.second_deposit_date_due.days_gone rescue '')
-            td = var.closing_date.try(:days_gone)
             td
-              = link_to 'Edit', properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-              = link_to 'Delete', transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+            td
+            td
+            td
+            td
+            td
+            td
+            td
+            td
+            td
+            td
+            td
+              .btn-group.btn-group-xs
+                = link_to '<i class="lnr lnr-trash"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
 
 - else
   table#data_table.sale_mode
@@ -151,27 +138,56 @@
         - var = transaction
         - today_ = Date.today
         - next if var.main.blank?
-        - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
-          tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
+        - if var.transaction_properties.count != 0
+          - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
+            tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
+              td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
+              td = var.relinquishing_seller_entity.display_name
+              td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
+              td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
+              td 
+                = "#{p.name}"
+                br
+                - if p.closed?
+                  span.label.label-danger.pull-right closed
+                - elsif p.is_in_contract?
+                  span.label.label-warning.pull-right In contract
+                - else
+                    span.label.label-success.pull-right Not in contract
+              td = p.try(:psa_date)
+              td
+                span = "#{ p.try(:measured_days_to_1st_deposit) }"
+              td 
+                span = "#{ p.try(:measured_days_to_end_of_inspection) }"
+              td 
+                span = "#{ p.try(:measured_days_to_2nd_deposit) }"
+              td
+                span = "#{ p.try(:measured_days_to_closing) }"
+              td = var.try(:type_is)
+              td = var.try(:type_is)
+              td
+                .btn-group.btn-group-xs
+                  = link_to '<i class="lnr lnr-trash"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+      
+        - else
+          tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
-            td = var.relinquishing_seller_entity.display_name
-            td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
-            td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
-            td = p.name
-            td = p.try(:psa_date)
+            td = var.seller_name
+            td = var.purchaser_name
             td
-              span = "#{ p.try(:measured_days_to_1st_deposit) }"
-            td 
-              span = "#{ p.try(:measured_days_to_end_of_inspection) }"
-            td 
-              span = "#{ p.try(:measured_days_to_2nd_deposit) }"
             td
-              span = "#{ p.try(:measured_days_to_closing) }"
-            td = var.try(:type_is)
-            td = var.try(:type_is)
             td
-              = link_to 'Edit', edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
-              = link_to 'Delete', transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+            td
+            td
+            td
+            td
+            td
+            td
+            td
+              .btn-group.btn-group-xs
+                = link_to '<i class="lnr lnr-trash"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
 
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: { local_path: multi_delete_transactions_path, klazz: [TransactionSale, TransactionPurchase], index_path: transactions_path(trashed: !params[:trashed].to_b, mode: params[:mode]) }

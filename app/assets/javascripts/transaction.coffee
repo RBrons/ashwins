@@ -560,7 +560,7 @@ $ ->
           accepted_price = Number(selected_offer_tab.find('.last_counteroffer_price').val().replace(/[^0-9\.]+/g,""))
           current_rent = Number($(document).find('#relinquishing_property_current_rent').val().replace(/[^0-9\.]+/g,""))
           if accepted_price != 0
-            $(document).find('#relinquishing_property_rat_race').val((current_rent/accepted_price).toFixed(2))
+            $(document).find('#relinquishing_property_rat_race').val((current_rent * 100 / accepted_price).toFixed(2))
           else
             $(document).find('#relinquishing_property_rat_race').val('')
 
