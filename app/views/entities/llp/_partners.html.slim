@@ -25,11 +25,11 @@ table#data_table
         | Partnership Interest
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @partners.each do |partner|
       - entity_flag = partner.entity.present?
       - person_flag = true
-      tr
+      tr data-id=partner.id
         td
           - if !partner.is_person?
             - person_flag = false

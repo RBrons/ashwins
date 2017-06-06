@@ -7,7 +7,7 @@ hr
   .clearfix.margin-lg-top
     - persisted = @transaction.persisted?
     - if @transaction.is_a?(TransactionSale)
-      
+
       .form_wizard.wizard_horizontal
         ul.wizard_steps
           li class=("#{'selected' if params[:sub] == 'parties' || params[:sub].blank? }")
@@ -15,7 +15,7 @@ hr
             - disabled = 'disabled' if params[:type] == 'status'
             - $header_links[:parties] = persisted ? edit_transaction_path(@transaction, sub: 'parties', type: 'sale', main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>Who's Selling?</span>".html_safe, $header_links[:parties]
-              
+
           li class=("#{'selected' if params[:sub] == 'property'}")
             - disabled = nil
             - disabled = 'disabled' if params[:type] == 'status' || @transaction.new_record?
@@ -33,19 +33,19 @@ hr
             - disabled = 'disabled' if params[:type] == 'status' || @transaction.new_record?
             - $header_links[:inspection] = persisted ? inspection_transaction_path(@transaction, sub: 'inspection', type: 'sale', cur_property: params[:cur_property], main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>Inspection</span>".html_safe, $header_links[:inspection]
-          
+
           - pclosed = is_property_closed?(@transaction_main.sale.try(:id) || 0, params[:cur_property])
           li (class="#{ pclosed ? 'closed' : params[:sub] == 'closing' ? 'selected' : '' }")
             - disabled = nil
             - disabled = 'disabled' if params[:type] == 'status' || @transaction.new_record?
             - $header_links[:closing] = persisted ? closing_transaction_path(@transaction, sub: 'closing', type: 'sale', cur_property: params[:cur_property], main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>Closing</span>".html_safe, $header_links[:closing]
-          - if params[:type] != 'qi_status'
+          - if params[:type] != 'qi_status' && params[:sub] != 'closing'
             li
               button#save-and-next.btn.btn-default.border-blue.blue[href=""] Save & Next
-      
+
     - else @transaction.is_a?(TransactionPurchase)
-    
+
       .form_wizard.wizard_horizontal
         ul.wizard_steps
           li class=("#{'selected' if params[:sub] == 'property' || params[:sub].blank?}")
@@ -59,7 +59,7 @@ hr
             - disabled = 'disabled' if params[:type] == 'status' || @transaction.new_record?
             - $header_links[:terms] = persisted ? terms_transaction_path(@transaction, sub: 'terms', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>Negotiations</span>".html_safe, $header_links[:terms]
-            
+
           li class=("#{'selected' if params[:sub] == 'parties' }")
             - disabled = nil
             - disabled = 'disabled' if params[:type] == 'status'
@@ -71,13 +71,13 @@ hr
             - disabled = 'disabled' if params[:type] == 'status' || @transaction.new_record?
             - $header_links[:inspection] = persisted ? inspection_transaction_path(@transaction, sub: 'inspection', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>Inspection</span>".html_safe, $header_links[:inspection]
-            
+
           li class=("#{'selected' if params[:sub] == 'closing'}")
             - disabled = nil
             - disabled = 'disabled' if params[:type] == 'status' || @transaction.new_record?
             - $header_links[:closing] = persisted ? closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id]) : '#'
             = link_to "<span class='step_no'>Closing</span>".html_safe, $header_links[:closing]
-            
-          - if params[:type] != 'qi_status'
+
+          - if params[:type] != 'qi_status' && params[:sub] != 'closing'
             li
               button#save-and-next.btn.btn-default.border-blue.blue[href=""] Save & Next

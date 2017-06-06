@@ -19,11 +19,11 @@ table#data_table
         | Email
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @settlors.each do |settlor|
       - entity_flag = settlor.entity.present?
       - person_flag = true
-      tr
+      tr data-id=settlor.id
         td
           - if person_flag
             - if settlor.entity.present?

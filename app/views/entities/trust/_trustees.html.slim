@@ -23,11 +23,11 @@ table#data_table
         | Email
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @trustees.each do |trustee|
       - entity_flag = trustee.entity.present?
       - person_flag = true
-      tr
+      tr data-id=trustee.id
         td
           - if !trustee.is_person?
             - person_flag = false

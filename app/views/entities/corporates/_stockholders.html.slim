@@ -25,11 +25,11 @@ table#data_table
         | Stock Shares
       th
         | Actions
-  tbody
+  tbody data-active-id=@activeId
     - @stockholders.each do |stockholder|
       - entity_flag = stockholder.entity.present?
       - person_flag = true
-      tr
+      tr data-id=stockholder.id
         td
           - if !stockholder.is_person?
             - person_flag = false

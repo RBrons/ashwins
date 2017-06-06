@@ -187,7 +187,6 @@ $ ->
       $('.flash-message.normal_hide').remove()
   ), 10000
 
-  setTimeout (->
-    $('.flash-message.duration_6sec').hide 'slow', ->
-      $('.flash-message.duration_6sec').remove()
-  ), 6000
+  activeItem = $("#data_table tbody").attr('data-active-id')
+  if (activeItem)
+    $("#data_table tr[data-id='" + activeItem + "']").addClass('active-item')

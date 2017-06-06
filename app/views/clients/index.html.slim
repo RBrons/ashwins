@@ -45,9 +45,9 @@ div#entities-list.pull-right style=style_str
           | Email
         th
           | Actions
-    tbody
+    tbody data-active-id=@activeId
       - @entities.each do |entity|
-        tr
+        tr data-id=entity.id
           td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => entity.id
           td
             = client_entity(entity)
