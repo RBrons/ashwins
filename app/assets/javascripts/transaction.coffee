@@ -833,7 +833,7 @@ $ ->
     currentRent = $(this).parents('.fields').find('.transaction-property-calculation-readonly .current-rent').val().replace(/\,/g, '')
     currentCapRate = $(this).val().replace(/\,/g, '')
 
-    $(this).parents('.transaction-property-calculation').find("input[name*='sale_price']").val(parseFloat(currentRent) * parseFloat(currentCapRate))
+    $(this).parents('.transaction-property-calculation').find("input[name*='sale_price']").val(parseFloat(currentRent) * 100 / parseFloat(currentCapRate))
 
   $(document).on 'keyup', ".transaction-property-calculation input[name*='sale_price']", (e)->
     currentRent = $(this).parents('.fields').find('.transaction-property-calculation-readonly .current-rent').val().replace(/\,/g, '')
