@@ -61,6 +61,13 @@ div[role="tabpanel"]
               .clearfix
           .clearfix
           .form-group
+              h2.heading Lease Base Rent
+              .input-group
+                .input-group-addon $
+                = f.text_field :lease_base_rent, class: 'form-control input-mask-currency'
+
+          .clearfix
+          .form-group
             = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_rent_table_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
@@ -92,7 +99,7 @@ div[role="tabpanel"]
               h2.heading Lease Base Rent
               .input-group
                 .input-group-addon $
-                = f.text_field :lease_base_rent, class: 'form-control input-mask-currency'
+                = f.text_field :lease_base_rent, class: 'form-control input-mask-currency', :readonly => true
 
             .clearfix
             .form-group
@@ -194,6 +201,55 @@ div[role="tabpanel"]
                       = rent_row.display_info
                     td
                       = number_to_currency rent_row.rent
+
+          .clearfix
+          .clearfix
+          div#monthly-rent-table-wrapper
+            table.table.table-striped.table-bordered
+              thead
+                tr
+                  th Year
+                  th Jan
+                  th Feb
+                  th Mar
+                  th Apr
+                  th May
+                  th Jun
+                  th Jul
+                  th Aug
+                  th Sep
+                  th Oct
+                  th Nov
+                  th Dec
+              tbody
+                - @property.monthly_rent_table.each do |row|
+                  tr
+                    td
+                      = row[0]
+                    td
+                      = number_to_currency row[1]
+                    td
+                      = number_to_currency row[2]
+                    td
+                      = number_to_currency row[3]
+                    td
+                      = number_to_currency row[4]
+                    td
+                      = number_to_currency row[5]
+                    td
+                      = number_to_currency row[6]
+                    td
+                      = number_to_currency row[7]
+                    td
+                      = number_to_currency row[8]
+                    td
+                      = number_to_currency row[9]
+                    td
+                      = number_to_currency row[10]
+                    td
+                      = number_to_currency row[11]
+                    td
+                      = number_to_currency row[12]
         - else
           p Rent Table is not available right now.
       #lease_rent_details_section.tab-pane.fade[role="tabpanel"]

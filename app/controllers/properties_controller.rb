@@ -153,7 +153,7 @@ class PropertiesController < ApplicationController
               @property.save
 
               @property.rent_tables.create(version: rent_table_version, rent: @property.pro_rated_month_rent,
-                description: "Pro-rated Rent for #{Date::MONTHNAMES[d.month]} #{d.year}")
+                description: "Pro-rated Rent for :#{Date::MONTHNAMES[d.month]} #{d.year}")
 
               # 1 - calculate the pro-rated rent for year 1
               rent_first_year = rent * (((Date.parse("31/12/#{d.year}") - d.to_date).to_i) * 1.00/(d.year % 4 == 0 ? 366.00 : 365.00))
