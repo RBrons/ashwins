@@ -52,8 +52,8 @@
                     = "#{relinquished_p.name} (#{relinquished_p.closing_date.try(:strftime, '%b-%d-%Y')})"
                     br
 
-              td 
-                - sale_closing_date = maint.identification_deadline 
+              td
+                - sale_closing_date = maint.identification_deadline
                 - if !sale_closing_date.nil?
                   - sale_closing_date = sale_closing_date - 45.days
                 = sale_closing_date.try(:strftime, '%d-%b-%Y')
@@ -61,7 +61,7 @@
               td = number_to_currency(var.funds_identified)
               td = number_to_currency(var.funds_to_identified)
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
-              td 
+              td
                 = "#{p.name}"
                 br
                 - if p.closed?
@@ -71,16 +71,16 @@
                 - else
                     span.label.label-success.pull-right Not in contract
               td = p.try(:psa_date)
-              td 
+              td
                 - if !sale_closing_date.nil?
-                  = (maint.identification_deadline.to_date - today_).to_i            
-              td 
+                  = (maint.identification_deadline.to_date - today_).to_i
+              td
                 - if !sale_closing_date.nil?
-                  = (maint.transaction_deadline.to_date - today_).to_i  
+                  = (maint.transaction_deadline.to_date - today_).to_i
               td = (p.first_deposit_date_due - today_).to_i if p.first_deposit_date_due.present?
               td = (p.inspection_period_days - (today_ - p.psa_date).to_i) if p.psa_date.present?
-              td 
-                - if p.second_deposit_date_due.present? 
+              td
+                - if p.second_deposit_date_due.present?
                  = (p.second_deposit_date_due - today_).to_i
                 - else
                   = 'N/A'
@@ -88,7 +88,7 @@
               td
                 .btn-group.btn-group-xs
                   = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-                  = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+                  = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
         - else
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
@@ -111,7 +111,7 @@
             td
               .btn-group.btn-group-xs
                 = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-                = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+                = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
 
 - else
   table#data_table.sale_mode
@@ -145,7 +145,7 @@
               td = var.seller_name
               td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
-              td 
+              td
                 = "#{p.name}"
                 br
                 - if p.closed?
@@ -157,19 +157,23 @@
               td = p.try(:psa_date)
               td
                 span = "#{ p.try(:measured_days_to_1st_deposit) }"
-              td 
+              td
                 span = "#{ p.try(:measured_days_to_end_of_inspection) }"
-              td 
+              td
                 span = "#{ p.try(:measured_days_to_2nd_deposit) }"
               td
                 span = "#{ p.try(:measured_days_to_closing) }"
-              td = var.try(:type_is)
-              td = var.try(:type_is)
+              td
+                - if p.sale_inspection_lease_tasks_estoppel
+                  | Yes
+              td
+                - if p.sale_inspection_lease_tasks_rofr
+                  | Yes
               td
                 .btn-group.btn-group-xs
                   = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
                   = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
-      
+
         - else
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
@@ -195,4 +199,3 @@
   = render template: 'shared/per_page_set'
   .pull-right
     = will_paginate @transactions
-    
