@@ -173,7 +173,7 @@
         - else
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
-            td = var.seller_name
+            td = var.relinquishing_seller_entity.display_name
             td = var.purchaser_name
             td
             td
