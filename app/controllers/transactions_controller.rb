@@ -561,6 +561,7 @@ class TransactionsController < ApplicationController
       #return redirect_to edit_transaction_path(@transaction, type: 'sale', main_id: @transaction.transaction_main_id)
       unless params[:type] == "purchase" || @transaction_property.nil?
         flash[:success] = "Congratulations on your sale of <b>#{Property.find(@transaction_property.property_id).name}</b> to <b>#{@transaction.relinquishing_seller_entity.display_name}</b>. <b>#{ActionController::Base.helpers.number_to_currency(@transaction_property.closing_proceeds)}</b> is being transferred to your Qualified Intermediary. <b>#{Property.find(@transaction_property.property_id).name}</b> is now being reclassified from a Purchased Property to a Sold Property. Please proceed to the Purchase Module as you only have 45 days to identify one or more Replacement Properties to Buy. It might be a good idea to go to your Account Settings so that you can receive warning alerts by email, SMS message or both."
+        @transaction_property.property.update_attribute("ownership_status", "Sold")
       end
       return redirect_to qi_status_transaction_path(@transaction, main_id: @transaction.main.id)
     elsif request.get?
