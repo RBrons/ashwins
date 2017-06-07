@@ -196,4 +196,75 @@ class Property < ApplicationRecord
     self.lease_base_rent.present? && self.lease_duration_in_years.present? && self.lease_rent_increase_percentage.present? && self.lease_rent_slab_in_years.present?
   end
 
+  def monthly_rent_table
+    ret = []
+
+    start_year = self.rent_commencement_date.year
+    start_month = self.rent_commencement_date.month
+
+    lease_end_date = self.date_of_lease + self.lease_duration_in_years.years
+    end_year = lease_end_date.year
+    end_month = lease_end_date.month
+
+    total_no_of_months = (end_year * 12 + end_month) - (start_year * 12 + start_month)
+    rent_slab = self.lease_rent_slab_in_years
+    switch_years = []
+
+    year_ = start_year
+    while true do
+      year_ = year_ + rent_slab
+      if year_ > end_year
+        break
+      end
+      switch_years << year_
+    end
+
+    base_rent = self.lease_base_rent
+    base_monthly_rent = self.lease_base_rent / 12.00
+    first_rent = self.lease_is_pro_rated ? self.pro_rated_month_rent : base_monthly_rent
+    current_rent = base_monthly_rent
+    switch_month = self.lease_is_pro_rated ? self.pro_rated_month : 1
+
+    current_year = start_year
+    months_remaining = total_no_of_months
+
+    year_rent_arr = []
+    year_rent_arr[0] = current_year
+    year_indx_count = 1
+    (1...start_month).each do |i|
+      year_rent_arr[year_indx_count] = 0
+      year_indx_count = year_indx_count + 1
+    end
+
+    year_rent_arr[year_indx_count] = first_rent
+    year_indx_count = year_indx_count + 1
+    months_remaining = months_remaining - 1
+
+    while months_remaining > 0 do
+      year_indx_count = 0 if year_indx_count >= 13
+      if year_indx_count == 0
+        ret << year_rent_arr
+        year_rent_arr = []
+        current_year = current_year + 1
+        year_rent_arr[year_indx_count] = current_year
+        year_indx_count = year_indx_count + 1
+      end
+      if year_indx_count == switch_month && switch_years.include?(current_year)
+        current_rent = current_rent * ((100.00 + self.lease_rent_increase_percentage) / 100.00)
+      end
+      year_rent_arr[year_indx_count] = current_rent
+      year_indx_count = year_indx_count + 1
+      months_remaining = months_remaining - 1
+    end
+
+    while year_indx_count <= 12 do
+      year_rent_arr[year_indx_count] = 0
+      year_indx_count = year_indx_count + 1
+    end
+
+    ret << year_rent_arr
+
+    ret
+  end
+
 end
