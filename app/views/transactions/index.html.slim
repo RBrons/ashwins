@@ -166,9 +166,13 @@
               td
                 - if p.sale_inspection_lease_tasks_estoppel
                   | Yes
+                - else
+                  | Not yet
               td
                 - if p.sale_inspection_lease_tasks_rofr
                   | Yes
+                - else
+                  | Not yet
               td
                 .btn-group.btn-group-xs
                   = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
