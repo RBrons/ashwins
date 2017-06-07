@@ -29,12 +29,12 @@ div[role="tabpanel"]
                 button.btn.btn-default
                   span.fa.fa-plus.margin-sm-right
                   | Add Document
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-                      
+
       #environmental_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -46,7 +46,7 @@ div[role="tabpanel"]
                         button#btn_correspondence.btn-gdrive.btn.btn-default.border-blue[type="button"]
                             = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                             span.margin-md-left.blue Select in Google Drive
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
@@ -56,10 +56,10 @@ div[role="tabpanel"]
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Send Environmental File to Buyer's Attorney
                 li
@@ -68,7 +68,7 @@ div[role="tabpanel"]
                       input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Provide Tenant Site Contact to Buyer's Attorney
-                
+
       #lease_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -104,32 +104,34 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      / input.task_status.flat-icheck[type="checkbox"]
+                      = f.check_box :sale_inspection_lease_tasks_estoppel, class: 'task_status flat-icheck'
                     .right
                       span Acquire Estoppel Certificate from Tenant
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      / input.task_status.flat-icheck[type="checkbox"]
+                      = f.check_box :sale_inspection_lease_tasks_rofr, class: 'task_status flat-icheck'
                     .right
                       span Acquire Waiver of Tenant's Right of First Refusal(if applicable)
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Send Documents to Purchaser
       #inspection_title_section.tab-pane.fade[role="tabpanel"]
@@ -179,19 +181,19 @@ div[role="tabpanel"]
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Sell Side Title Tasks if applicable
               ul.to_do
-                li 
+                li
                   .field_list
                     span Coming soon
                     / .left
-                    /   input.task_status.flat-icheck[type="checkbox" checked]    
+                    /   input.task_status.flat-icheck[type="checkbox" checked]
                     / .right
                     /   span Coming soon
-        
+
       #survey_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -235,21 +237,21 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     span Coming soon
                     / .left
-                    /   input.task_status.flat-icheck[type="checkbox" checked]    
+                    /   input.task_status.flat-icheck[type="checkbox" checked]
                     / .right
                     /   span Coming soon
 
@@ -296,21 +298,21 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     span Coming soon
                     / .left
-                    /   input.task_status.flat-icheck[type="checkbox" checked]    
+                    /   input.task_status.flat-icheck[type="checkbox" checked]
                     / .right
                     /   span Coming soon
 

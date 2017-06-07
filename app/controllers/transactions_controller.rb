@@ -2,7 +2,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy, :edit_qualified_intermediary,
                                          :qualified_intermediary, :properties_edit, :properties_update,
                                          :terms, :terms_update, :inspection, :closing, :personnel,
-                                         :personnel_update, :get_status, :set_status, :qi_status]
+                                         :personnel_update, :get_status, :set_status, :qi_status, :inspection_update]
   before_action :current_page
   before_action :add_breadcrum, only: [:index]
   # GET /project
@@ -475,12 +475,16 @@ class TransactionsController < ApplicationController
 
   def inspection_update
     #coming soon
-
+    @transaction_property = @transaction.transaction_properties.where(property_id: params[:cur_property]).first
     respond_to do |format|
-      format.html {
-        redirect_to closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id])
-      }
-      format.json { render json: true }
+      if @transaction_property.update(transaction_inspection_params)
+        format.html {
+          redirect_to closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id])
+        }
+        format.json { render json: true }
+      else
+
+      end
     end
   end
 
@@ -729,6 +733,10 @@ class TransactionsController < ApplicationController
                                            :first_deposit_days_after_psa,
                                            :second_deposit_days_after_inspection_period,
                                            :closing_days_after_inspection_period, :closing_date_note])
+  end
+
+  def transaction_inspection_params
+    params.require(:transaction).permit(:sale_inspection_lease_tasks_estoppel, :sale_inspection_lease_tasks_rofr)
   end
 
   def transaction_personnels_params
