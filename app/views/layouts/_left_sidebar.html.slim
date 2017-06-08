@@ -18,15 +18,15 @@
             - prev_step = get_property_step(sale_properties.first.id, params[:main_id], true)
             - case prev_step.current_step
               - when 'terms'
-                = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction, type: 'sale', sub: 'terms', cur_property: sale_properties.first.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
+                = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction_main.sale, type: 'sale', sub: 'terms', cur_property: sale_properties.first.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                   = image_tag('icons/icon-sale.svg', class:'icon')
                   | Sale
               - when 'inspection'
-                = link_to @transaction_main.sale.present? ? inspection_transaction_path(@transaction, type: 'sale', sub: 'inspection', cur_property: sale_properties.first.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
+                = link_to @transaction_main.sale.present? ? inspection_transaction_path(@transaction_main.sale, type: 'sale', sub: 'inspection', cur_property: sale_properties.first.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                   = image_tag('icons/icon-sale.svg', class:'icon')
                   | Sale
               - when 'closing'
-                = link_to @transaction_main.sale.present? ? closing_transaction_path(@transaction, type: 'sale', sub: 'closing', cur_property: sale_properties.first.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do 
+                = link_to @transaction_main.sale.present? ? closing_transaction_path(@transaction_main.sale, type: 'sale', sub: 'closing', cur_property: sale_properties.first.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do 
                   = image_tag('icons/icon-sale.svg', class:'icon')
                   | Sale
               - else
@@ -48,22 +48,22 @@
                 - prev_step = get_property_step(property.id, params[:main_id], true) 
                 - case prev_step.current_step 
                   - when 'terms'
-                    = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction, type: 'sale', sub: 'terms', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
+                    = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction_main.sale, type: 'sale', sub: 'terms', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
                   - when 'inspection'
-                    = link_to @transaction_main.sale.present? ? inspection_transaction_path(@transaction, type: 'sale', sub: 'inspection', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
+                    = link_to @transaction_main.sale.present? ? inspection_transaction_path(@transaction_main.sale, type: 'sale', sub: 'inspection', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
                   - when 'closing'
-                    = link_to @transaction_main.sale.present? ? closing_transaction_path(@transaction, type: 'sale', sub: 'closing', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
+                    = link_to @transaction_main.sale.present? ? closing_transaction_path(@transaction_main.sale, type: 'sale', sub: 'closing', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
                   - else
-                    = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction, type: 'sale', sub: 'terms', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
+                    = link_to @transaction_main.sale.present? ? terms_transaction_path(@transaction_main.sale, type: 'sale', sub: 'terms', cur_property: property.id, main_id: @transaction_main.id): new_transaction_path(type: 'sale', main_id: @transaction_main.id) do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
@@ -82,15 +82,15 @@
             - prev_step = get_property_step(buy_properties.first.id, params[:main_id], false)
             - case prev_step.current_step
               - when 'terms'
-                = link_to @transaction_main.purchase.present? ? terms_transaction_path(@transaction, type: 'purchase', sub: 'terms', main_id: @transaction_main, cur_property: buy_properties.first.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+                = link_to @transaction_main.purchase.present? ? terms_transaction_path(@transaction_main.purchase, type: 'purchase', sub: 'terms', main_id: @transaction_main, cur_property: buy_properties.first.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
                   = image_tag('icons/icon-purchase.svg', class: 'icon')
                   |  Purchase
               - when 'inspection'
-                = link_to @transaction_main.purchase.present? ? inspection_transaction_path(@transaction, type: 'purchase', sub: 'inspection', main_id: @transaction_main, cur_property: buy_properties.first.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+                = link_to @transaction_main.purchase.present? ? inspection_transaction_path(@transaction_main.purchase, type: 'purchase', sub: 'inspection', main_id: @transaction_main, cur_property: buy_properties.first.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
                   = image_tag('icons/icon-purchase.svg', class: 'icon')
                   |  Purchase
               - when 'closing'
-                = link_to @transaction_main.purchase.present? ? closing_transaction_path(@transaction, type: 'purchase', sub: 'closing', main_id: @transaction_main, cur_property: buy_properties.first.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+                = link_to @transaction_main.purchase.present? ? closing_transaction_path(@transaction_main.purchase, type: 'purchase', sub: 'closing', main_id: @transaction_main, cur_property: buy_properties.first.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
                   = image_tag('icons/icon-purchase.svg', class: 'icon')
                   |  Purchase
               - else
@@ -112,24 +112,24 @@
                 - prev_step = get_property_step(property.id, params[:main_id], false) 
                 - case prev_step.current_step
                   - when 'terms'
-                    = link_to @transaction_main.purchase.present? ? terms_transaction_path(@transaction, type: 'purchase', sub: 'terms', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+                    = link_to @transaction_main.purchase.present? ? terms_transaction_path(@transaction_main.purchase, type: 'purchase', sub: 'terms', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="purchase"]
 
                   - when 'inspection'
-                    = link_to @transaction_main.purchase.present? ? inspection_transaction_path(@transaction, type: 'purchase', sub: 'inspection', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+                    = link_to @transaction_main.purchase.present? ? inspection_transaction_path(@transaction_main.purchase, type: 'purchase', sub: 'inspection', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="purchase"]
 
                   - when 'closing'
-                    = link_to @transaction_main.purchase.present? ? closing_transaction_path(@transaction, type: 'purchase', sub: 'closing', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+                    = link_to @transaction_main.purchase.present? ? closing_transaction_path(@transaction_main.purchase, type: 'purchase', sub: 'closing', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="purchase"]
                   - else
-                    = link_to @transaction_main.purchase.present? ? terms_transaction_path(@transaction, type: 'purchase', sub: 'terms', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+                    = link_to @transaction_main.purchase.present? ? terms_transaction_path(@transaction_main.purchase, type: 'purchase', sub: 'terms', main_id: @transaction_main, cur_property: property.id) : new_transaction_path(type: 'purchase', main_id: @transaction_main), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
                       = property.title
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="purchase"]
