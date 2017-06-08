@@ -95,6 +95,14 @@ div[role="tabpanel"]
 
               .clearfix
 
+            .clearfix
+            .form-group
+              h2.heading Starting Date Of Lease Amendment
+              .clearfix
+              .pull-left
+                = f.date_select :starting_date_of_lease_amendment, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease"
+
+            .clearfix
             .form-group
               h2.heading Lease Base Rent
               .input-group
