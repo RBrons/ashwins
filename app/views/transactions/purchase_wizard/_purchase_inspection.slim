@@ -163,15 +163,27 @@ div[role="tabpanel"]
                 li
                   .field_list
                     .left
-                      / input.task_status.flat-icheck[type="checkbox"]
-                      = f.check_box :purchase_inspection_lease_tasks_abstract, class: 'task_status flat-icheck'
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Prepare Lease Abstract
                 li
                   .field_list
                     .left
                       / input.task_status.flat-icheck[type="checkbox"]
-                      = f.check_box :purchase_inspection_lease_tasks_conference_with_clients, class: 'task_status flat-icheck'
+                      = f.check_box :purchase_inspection_lease_tasks_estoppel, class: 'task_status flat-icheck'
+                    .right
+                      span Acquire Estoppel Certificate from Seller
+                li
+                  .field_list
+                    .left
+                      / input.task_status.flat-icheck[type="checkbox"]
+                      = f.check_box :purchase_inspection_lease_tasks_rofr, class: 'task_status flat-icheck'
+                    .right
+                      span Acquire Waiver of Tenant's Right of First Refusal from Seller(if applicable)
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Conference with Client
                 li

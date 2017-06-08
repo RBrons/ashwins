@@ -32,8 +32,8 @@
         th Days to End of Inspection
         th Days to 2nd Deposit
         th Days to Closing
-        th Prepare Lease Abstract
-        th Conference with Client
+        th Seller Estoppel
+        th Walver of Tenant's First Refusal from Seller
         th Action
     tbody
       - @transactions.each do |transaction|
@@ -88,12 +88,12 @@
                   = 'N/A'
               td = (p.closing_date.to_date - today_).to_i if p.closing_date.present?
               td
-                - if p.purchase_inspection_lease_tasks_abstract
+                - if p.purchase_inspection_lease_tasks_estoppel
                   | Yes
                 - else
                   | Not yet
               td
-                - if p.purchase_inspection_lease_tasks_conference_with_clients
+                - if p.purchase_inspection_lease_tasks_rofr
                   | Yes
                 - else
                   | Not yet
