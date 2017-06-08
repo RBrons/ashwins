@@ -9,7 +9,7 @@
     span.margin-md-left Show Deadline Details
 
 - if params[:mode] == 'buy'
-  table#data_table.purchase_mode
+  table#data_table[class="purchase_mode purchase_mode_#{params[:page]}"]
     thead
       tr
         th = check_box_tag :object_all, false, false
@@ -43,8 +43,8 @@
         - sale_closing_date = nil
         - today_ = Date.today #Time.now
         - if var.transaction_properties.count != 0
-          - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
-            tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
+          - var.transaction_properties.where(is_selected: true).order(created_at: :desc, updated_at: :desc).each_with_index do |p, index|
+            tr[class="#{index == 0 ? 'parent-row' : 'child-row'}" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
                 = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
@@ -137,7 +137,7 @@
             td
             td
 - else
-  table#data_table.sale_mode
+  table#data_table[class="sale_mode sale_mode_#{params[:page]}"]
     thead
       tr
         th[data-orderable="false"] = check_box_tag :object_all, false, false
@@ -163,7 +163,7 @@
         - maint = var.main
         - next if var.main.blank?
         - if var.transaction_properties.count != 0
-          - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
+          - var.transaction_properties.where(is_selected: true).order(created_at: :desc, updated_at: :desc).each_with_index do |p, index|
             tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
@@ -171,7 +171,7 @@
                 br
                 = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
                 br
-                = link_to 'Buy Side'.html_safe, maint.purchase.present? ? properties_edit_transaction_path(maint.purchase, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'purchase', main_id: transaction.main.id), class: "#{switch_xs}"
+                = link_to 'Buy Side'.html_safe, maint.purchase.present? ? properties_edit_transaction_path(maint.purchase, sub: 'property', type: 'purchase', main_id: transaction.main.id) : new_transaction_path(type: 'purchase', main_id: transaction.main.id), class: "#{switch_xs}"
               td = var.seller_name
               td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
@@ -211,7 +211,7 @@
               br
               = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
               br
-              = link_to 'Buy Side'.html_safe, maint.purchase.present? ? properties_edit_transaction_path(maint.purchase, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'purchase', main_id: transaction.main.id), class: "#{switch_xs}"
+              = link_to 'Buy Side'.html_safe, maint.purchase.present? ? properties_edit_transaction_path(maint.purchase, sub: 'property', type: 'purchase', main_id: transaction.main.id) : new_transaction_path(type: 'purchase', main_id: transaction.main.id), class: "#{switch_xs}"
             td = var.seller_name
             td = var.purchaser_name
             td
