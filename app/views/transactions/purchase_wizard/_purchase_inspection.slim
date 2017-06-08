@@ -29,12 +29,12 @@ div[role="tabpanel"]
                 button.btn.btn-default
                   span.fa.fa-plus.margin-sm-right
                   | Add Document
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-            
+
       #environmental_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -62,7 +62,7 @@ div[role="tabpanel"]
                         button#btn_invoice.btn-gdrive.btn.btn-default.border-blue[type="button"]
                             = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                             span.margin-md-left.blue Select in Google Drive
-          
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
@@ -72,10 +72,10 @@ div[role="tabpanel"]
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Received Phase I from seller
                 li
@@ -102,7 +102,7 @@ div[role="tabpanel"]
                       input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Completion of Purchaser's Phase I
-                li 
+                li
                   .field_list
                     .left
                       input.task_status.flat-icheck[type="checkbox"]
@@ -114,7 +114,7 @@ div[role="tabpanel"]
                       input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Conference with Purchaser's Environmental Constaultant and Client Purchaser
-                        
+
       #lease_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -150,32 +150,46 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Prepare Lease Abstract
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      / input.task_status.flat-icheck[type="checkbox"]
+                      = f.check_box :purchase_inspection_lease_tasks_estoppel, class: 'task_status flat-icheck'
+                    .right
+                      span Acquire Estoppel Certificate from Seller
+                li
+                  .field_list
+                    .left
+                      / input.task_status.flat-icheck[type="checkbox"]
+                      = f.check_box :purchase_inspection_lease_tasks_rofr, class: 'task_status flat-icheck'
+                    .right
+                      span Acquire Waiver of Tenant's Right of First Refusal from Seller(if applicable)
+                li
+                  .field_list
+                    .left
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Conference with Client
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Conference with Seller's Attorney
 
@@ -222,71 +236,71 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     .left
                       input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Select Title Company
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Get Contact Info
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Receive Title Commitment
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Review Title Commitment
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Forward Survey to Title Company
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Substitute Survey Reading Exception for Survey Absence
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Review Exceptions
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Prepare Memo
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Conference with Client
-        
+
       #survey_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
@@ -335,51 +349,51 @@ div[role="tabpanel"]
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Receive Survey from Seller
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Is Survey 'As Built'?
                 li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Make Proposal
                 li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Contract with Surveyor
                 li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Supply Title Commitment to Surveyor
                 li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Survey Completion
                 li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Supply Survey to Title Company
 
@@ -426,56 +440,56 @@ div[role="tabpanel"]
                   button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                     = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                     span.margin-md-left.blue Select in Google Drive
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-              
+
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .note
               h2 Tasks
               ul.to_do
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Contact Zoning Consultant
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Send Seller's Survey
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Send 'As Built'
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Receive Preliminary Report
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Receive Final Report
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Review Final Report
-                li 
+                li
                   .field_list
                     .left
-                      input.task_status.flat-icheck[type="checkbox"]    
+                      input.task_status.flat-icheck[type="checkbox"]
                     .right
                       span Conference Call with Client
 

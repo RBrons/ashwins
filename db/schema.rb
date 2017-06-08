@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606051622) do
+ActiveRecord::Schema.define(version: 20170608141400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -426,6 +426,7 @@ ActiveRecord::Schema.define(version: 20170606051622) do
     t.date     "pro_rated_day_date"
     t.decimal  "pro_rated_day_rent",                                                precision: 15, scale: 2
     t.decimal  "pro_rated_month_rent",                                              precision: 15, scale: 2
+    t.datetime "starting_date_of_lease_amendment"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
@@ -516,9 +517,13 @@ ActiveRecord::Schema.define(version: 20170606051622) do
     t.integer  "transaction_main_id"
     t.string   "current_step"
     t.datetime "closing_date"
-    t.decimal  "closing_proceeds",    precision: 15, scale: 2
+    t.decimal  "closing_proceeds",                         precision: 15, scale: 2
     t.decimal  "cap_rate"
-    t.boolean  "is_selected",                                  default: false
+    t.boolean  "is_selected",                                                       default: false
+    t.boolean  "sale_inspection_lease_tasks_estoppel",                              default: false
+    t.boolean  "sale_inspection_lease_tasks_rofr",                                  default: false
+    t.boolean  "purchase_inspection_lease_tasks_estoppel",                          default: false
+    t.boolean  "purchase_inspection_lease_tasks_rofr",                              default: false
     t.index ["property_id", "transaction_id"], name: "index_transaction_properties_on_property_id_and_transaction_id", unique: true, using: :btree
     t.index ["property_id"], name: "index_transaction_properties_on_property_id", using: :btree
     t.index ["transaction_id"], name: "index_transaction_properties_on_transaction_id", using: :btree

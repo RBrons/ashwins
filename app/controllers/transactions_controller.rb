@@ -2,7 +2,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :edit, :update, :destroy, :edit_qualified_intermediary,
                                          :qualified_intermediary, :properties_edit, :properties_update,
                                          :terms, :terms_update, :inspection, :closing, :personnel,
-                                         :personnel_update, :get_status, :set_status, :qi_status]
+                                         :personnel_update, :get_status, :set_status, :qi_status, :inspection_update]
   before_action :current_page
   before_action :add_breadcrum, only: [:index]
   # GET /project
@@ -475,12 +475,16 @@ class TransactionsController < ApplicationController
 
   def inspection_update
     #coming soon
-
+    @transaction_property = @transaction.transaction_properties.where(property_id: params[:cur_property]).first
     respond_to do |format|
-      format.html {
-        redirect_to closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id])
-      }
-      format.json { render json: true }
+      if @transaction_property.update(transaction_inspection_params)
+        format.html {
+          redirect_to closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id])
+        }
+        format.json { render json: true }
+      else
+
+      end
     end
   end
 
@@ -557,6 +561,7 @@ class TransactionsController < ApplicationController
       #return redirect_to edit_transaction_path(@transaction, type: 'sale', main_id: @transaction.transaction_main_id)
       unless params[:type] == "purchase" || @transaction_property.nil?
         flash[:success] = "Congratulations on your sale of <b>#{Property.find(@transaction_property.property_id).name}</b> to <b>#{@transaction.relinquishing_seller_entity.display_name}</b>. <b>#{ActionController::Base.helpers.number_to_currency(@transaction_property.closing_proceeds)}</b> is being transferred to your Qualified Intermediary. <b>#{Property.find(@transaction_property.property_id).name}</b> is now being reclassified from a Purchased Property to a Sold Property. Please proceed to the Purchase Module as you only have 45 days to identify one or more Replacement Properties to Buy. It might be a good idea to go to your Account Settings so that you can receive warning alerts by email, SMS message or both."
+        @transaction_property.property.update_attribute("ownership_status", "Sold")
       end
       return redirect_to qi_status_transaction_path(@transaction, main_id: @transaction.main.id)
     elsif request.get?
@@ -729,6 +734,10 @@ class TransactionsController < ApplicationController
                                            :first_deposit_days_after_psa,
                                            :second_deposit_days_after_inspection_period,
                                            :closing_days_after_inspection_period, :closing_date_note])
+  end
+
+  def transaction_inspection_params
+    params.require(:transaction).permit(:sale_inspection_lease_tasks_estoppel, :sale_inspection_lease_tasks_rofr, :purchase_inspection_lease_tasks_estoppel, :purchase_inspection_lease_tasks_rofr)
   end
 
   def transaction_personnels_params
