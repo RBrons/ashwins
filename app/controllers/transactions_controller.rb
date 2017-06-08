@@ -737,7 +737,7 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_inspection_params
-    params.require(:transaction).permit(:sale_inspection_lease_tasks_estoppel, :sale_inspection_lease_tasks_rofr, :purchase_inspection_lease_tasks_conference_with_clients, :purchase_inspection_lease_tasks_abstract)
+    params.require(:transaction).permit(:sale_inspection_lease_tasks_estoppel, :sale_inspection_lease_tasks_rofr, :purchase_inspection_lease_tasks_estoppel, :purchase_inspection_lease_tasks_rofr)
   end
 
   def transaction_personnels_params
