@@ -47,9 +47,12 @@
             tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
-                .btn-group.btn-group-xs
-                  = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-                  = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+                = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                br
+                = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+                br
+                = link_to 'Sell Side'.html_safe, maint.sale.present? ? properties_edit_transaction_path(maint.sale, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'sale', main_id: transaction.main.id), class: "#{switch_xs}"
+                
               td = var.purchaser_name
               td = var.seller_name
               / td
@@ -109,9 +112,12 @@
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
             td
-              .btn-group.btn-group-xs
-                = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
-                = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+              = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+              br
+              = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+              br
+              = link_to 'Sell Side'.html_safe, maint.sale.present? ? properties_edit_transaction_path(maint.sale, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'sale', main_id: transaction.main.id), class: "#{switch_xs}"
+              
             td = var.purchaser_name
             td = var.seller_name
             / td
@@ -154,15 +160,18 @@
       - @transactions.each do |transaction|
         - var = transaction
         - today_ = Date.today
+        - maint = var.main
         - next if var.main.blank?
         - if var.transaction_properties.count != 0
           - var.transaction_properties.where(is_selected: true).each_with_index do |p, index|
             tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
-                .btn-group.btn-group-xs
-                  = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
-                  = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+                = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                br
+                = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+                br
+                = link_to 'Buy Side'.html_safe, maint.purchase.present? ? properties_edit_transaction_path(maint.purchase, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'purchase', main_id: transaction.main.id), class: "#{switch_xs}"
               td = var.seller_name
               td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
@@ -198,9 +207,11 @@
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
             td
-              .btn-group.btn-group-xs
-                = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
-                = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+              = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+              br
+              = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
+              br
+              = link_to 'Buy Side'.html_safe, maint.purchase.present? ? properties_edit_transaction_path(maint.purchase, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'purchase', main_id: transaction.main.id), class: "#{switch_xs}"
             td = var.seller_name
             td = var.purchaser_name
             td
