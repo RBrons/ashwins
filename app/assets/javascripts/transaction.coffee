@@ -5,6 +5,11 @@ $ ->
   selected_transaction_sub_tab = $(document).find($(document).find('#sale_buy_step_tab li.active a').attr('href'))
   last_counteroffer = ""
 
+  sub_tab_id = $("#sub_tab_val").val()
+  console.log sub_tab_id
+  if sub_tab_id
+    $("#" + sub_tab_id).click()
+
   #Transaction List
   $(document).on 'click', '#data_table.sale_mode tbody td.details-control, #data_table.purchase_mode tbody td.details-control', ->
     tr = $(this).closest('tr')
@@ -16,7 +21,7 @@ $ ->
       tr.nextUntil('.parent-row').show()
       tr.nextUntil('.parent-row').addClass('striped-row')
       tr.addClass 'shown'
-  
+
   $(document).on 'ifChanged', '#show-transaction-deadline', ->
     if this.checked
       $(document).find('#data_table.sale_mode tbody tr td span.deadline-detail').show()
@@ -36,7 +41,7 @@ $ ->
           $('#sale_buy_step_tab li.active').next().find('a').click()
         else
           next_step = $(document).find('ul.wizard_steps li.selected').next()
-          window.location.href = next_step.find('a').attr("href")    
+          window.location.href = next_step.find('a').attr("href")
     else if save_and_next_btn_in_step.length == 1
       save_and_next_btn_in_step.click()
     else
@@ -44,7 +49,7 @@ $ ->
           $('#sale_buy_step_tab li.active').next().find('a').click()
       else
         next_step = $(document).find('ul.wizard_steps li.selected').next()
-        window.location.href = next_step.find('a').attr("href")    
+        window.location.href = next_step.find('a').attr("href")
 
   #---- Sale ----#
   $(document).on 'ifChecked', '#transaction_seller_person_is_true', ->
@@ -98,17 +103,17 @@ $ ->
     if this.checked
       $(this).closest('.fields').find('.transaction-property-calculation .price-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-price').val())
       $(this).closest('.fields').find('.transaction-property-calculation .cap-rate-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-cap-rate').val())
-                                                                                        
+
   $(document).on 'ifClicked ifChecked', '.transaction_properties_wrapper .make_counteroffer', ->
     if this.checked
       $(this).closest('.fields').find('.md-make-counter').modal('show')
-  
+
   $(document).on 'click', '.transaction_properties_wrapper .btn-cancel-make-counter', (e)->
     e.preventDefault()
     $(this).closest('.fields').find('.accept_ask_price').iCheck('check')
     $(this).closest('.fields').find('.make_counteroffer').iCheck('uncheck')
     $(this).closest('.fields').find('.md-make-counter').modal('hide')
-  
+
   $(document).on 'click', '.transaction_properties_wrapper .btn-ok-make-counter', (e)->
     e.preventDefault()
     if parseFloat($(this).closest('.md-make-counter').find('.transaction-property-calculation .price-box input').val()) == 0 && parseFloat($(this).closest('.md-make-counter').find('.transaction-property-calculation .cap-rate-box input').val()) == 0
@@ -116,8 +121,8 @@ $ ->
       return
     $(this).closest('.fields').find('.md-make-counter').modal('hide')
 
-      
-    
+
+
   sale_pre_loi_text = (seller)-> '<strong>Congratulations!</strong> You have just initiated a 1031 Exchange on behalf of <strong>'+seller+'</strong>. You can now identify the ' +
     ' property that you wish to relinquish, hire a Qualified Intermediary, set a sales price and input a broker. Please ' +
     'be sure to input the progress of your Exchange by updating the Status dropdown. All changes will be updated in ' +
@@ -237,10 +242,10 @@ $ ->
     actionurl = '/transactions/delete_transaction_property?main_id=' + $(this).data('tran-mainid') + '&property_id=' + $(this).data('tran-propid') + '&type=' + $(this).data('tran-type')
     window.location.href = actionurl
 
-  
+
 
   # --- Negotiations Step in Sale Wizard --- #
-  
+
   # - Offer and Acceptance -
   $(document).on 'click', '.nav-tabs #new_offer', (e)->
     e.preventDefault()
@@ -389,9 +394,22 @@ $ ->
       prefix: '$ '
       removeMaskOnSubmit: true
       positionCaretOnTab: true
-  
+
   $(document).on 'click', '#sale_buy_step_tab li a', (e)->
     selected_transaction_sub_tab = $(document).find($(this).attr('href'))
+    curPropertyId = $("#cur_property_id").val()
+    selectedTabId = $(this).attr("id")
+
+    if !isNaN(parseInt(curPropertyId)) && parseInt(curPropertyId) > 0
+      $.ajax
+        type: "POST"
+        url: "/xhr/save_transaction_subtab"
+        data: {id: curPropertyId, subtab: selectedTabId}
+        dataType: "json"
+        success: (val) ->
+          console.log val
+        error: (e) ->
+          console.log e
 
   $(document).on 'click', '#offer_list li a', (e)->
     selected_offer_tab = $(document).find($(this).attr('href'))
@@ -590,13 +608,13 @@ $ ->
       alias: 'currency',
       rightAlign: false,
       prefix: ''
-  
+
   $(document).on 'ajax:success', '.transaction_property_inspection_form', (e, data, status, xhr) ->
     if $('#sale_buy_step_tab li.active').nextAll().length >= 1
       $('#sale_buy_step_tab li.active').next().find('a').click()
     else
       next_step = $(document).find('ul.wizard_steps li.selected').next()
-      window.location.href = next_step.find('a').attr("href") 
+      window.location.href = next_step.find('a').attr("href")
 
 
 
@@ -633,12 +651,12 @@ $ ->
       $('#sale_buy_step_tab li.active').next().find('a').click()
     else
       next_step = $(document).find('ul.wizard_steps li.selected').next()
-      window.location.href = next_step.find('a').attr("href") 
+      window.location.href = next_step.find('a').attr("href")
 
   $(document).on 'click', '.back_prev_step', (e) ->
     e.preventDefault()
     $('#sale_buy_step_tab li.active').prev().find('a').click()
-    
+
   # Show modal for submenu of top menu
   $(document).on 'click', '.top-header ul li a > span', (e)->
     e.preventDefault()
@@ -669,7 +687,7 @@ $ ->
       date_string += '0' + des_dt.getDate()
     else
       date_string += des_dt.getDate()
-    
+
     return date_string
 
   set_first_deposit_date_due = (psa_date, offset = 0) ->
@@ -687,7 +705,7 @@ $ ->
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_1i').val(inspection_period_end.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_2i').val(inspection_period_end.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_3i').val(inspection_period_end.getDate())
-    
+
 
   set_second_deposit_date_due = (psa_date, offset = 0) ->
     second_deposit_date_due = new Date(psa_date)
@@ -728,7 +746,7 @@ $ ->
   $(document).on 'change', 'input.manually_date_on_psa', ->
     input_object = $(document).find("input.#{$(this).data('class')}")
     select_object = $(document).find("select.#{$(this).data('class')}")
-      
+
     if this.checked
       input_object.hide()
       input_object.prop('disabled', 'disabled')

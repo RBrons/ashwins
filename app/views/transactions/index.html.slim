@@ -99,7 +99,7 @@
                   | Not yet
               td
                 .btn-group.btn-group-xs
-                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, properties_edit_transaction_path(var, sub: p.current_step, type: 'purchase', main_id: transaction.main.id, cur_property: p.property_id, sub_tab: p.current_step_subtab ,where: 'list'), class: "#{edit_xs}"
                   = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
         - else
           tr.parent-row
@@ -124,7 +124,7 @@
             td
             td
               .btn-group.btn-group-xs
-                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, properties_edit_transaction_path(var, type: 'purchase', main_id: transaction.main.id, where: 'list'), class: "#{edit_xs}"
                 = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
 
 - else
@@ -189,7 +189,7 @@
                   | Not yet
               td
                 .btn-group.btn-group-xs
-                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                  = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id, sub: p.current_step, sub_tab: p.current_step_subtab, cur_property: p.property_id, where: 'list'), class: "#{edit_xs}"
                   = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
 
         - else
@@ -208,7 +208,7 @@
             td
             td
               .btn-group.btn-group-xs
-                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to '<i class="lnr lnr-pencil"></i>'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id, where: 'list'), class: "#{edit_xs}"
                 = link_to '<i class="lnr lnr-trash"></i>'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
 
 .margin-lg-top

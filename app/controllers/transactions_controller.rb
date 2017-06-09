@@ -162,6 +162,9 @@ class TransactionsController < ApplicationController
   # GET /project/1/edit
   def edit
     if params["type"] == "sale"
+      if params[:where] == "list"
+        redirect_to_saved_step
+      end
       @transaction.relqn_seller_entity_id = @transaction.relinquishing_seller_entity_id if @transaction.seller_person_is
       @transaction.relqn_purchaser_contact_id = @transaction.relinquishing_purchaser_contact_id if @transaction.purchaser_person_is
     else
@@ -183,7 +186,7 @@ class TransactionsController < ApplicationController
       end
 
       @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
-
+      @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
     end
 
   end
@@ -194,6 +197,9 @@ class TransactionsController < ApplicationController
       @transaction.prop_owner = @transaction.relinquishing_seller_entity_id || 0
       @transaction.prop_status = "Purchased"
     else
+      if params[:where] == "list"
+        redirect_to_saved_step
+      end
       @transaction.prop_owner = @transaction.replacement_seller_contact_id || 0
       @transaction.prop_status = "Prospective Purchase"
     end
@@ -446,6 +452,8 @@ class TransactionsController < ApplicationController
           @transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => false, :transaction_property_id => @transaction_property.id])
         end
       end
+
+      @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
     else
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
     end
@@ -468,7 +476,7 @@ class TransactionsController < ApplicationController
     end
 
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
-
+    @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
     #coming soon
 
   end
@@ -701,8 +709,84 @@ class TransactionsController < ApplicationController
     if params[:cur_property]
       if params[:type] == 'sale'
         TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step: params[:sub])
+        # For sub tabs
+        if params[:sub] == "terms"
+          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'offer_and_acceptance')
+        elsif params[:sub] == "inspection"
+          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'seller_documentation')
+        end
       else
         TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step: params[:sub])
+        #For sub tabs
+        if params[:sub] == "terms"
+          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'offer_and_acceptance')
+        elsif params[:sub] == "inspection"
+          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'seller_documentation')
+        elsif params[:sub] == "parties"
+          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'basic_info')
+        end
+      end
+    end
+  end
+
+  def redirect_to_saved_step
+    if params[:type] == 'purchase'
+      if params[:sub]
+        case params[:sub]
+        when 'property'
+          redirect_to properties_edit_transaction_path(TransactionPurchase.find(params[:id]), sub: params[:sub], type: 'purchase', main_id: params[:main_id])
+        when 'terms'
+          if params[:sub_tab].present?
+            redirect_to terms_transaction_path(TransactionPurchase.find(params[:id]), sub: params[:sub], type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property], sub_tab: params[:sub_tab])
+          else
+            redirect_to terms_transaction_path(TransactionPurchase.find(params[:id]), sub: params[:sub], type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property])
+          end
+        when 'parties'
+          if params[:sub_tab].present?
+            redirect_to edit_transaction_path(TransactionPurchase.find(params[:id]), type: 'purchase', main_id: params[:main_id], sub: params[:sub], cur_property: params[:cur_property], sub_tab: params[:sub_tab])
+          else
+            redirect_to edit_transaction_path(TransactionPurchase.find(params[:id]), type: 'purchase', main_id: params[:main_id], sub: params[:sub], cur_property: params[:cur_property])
+          end
+        when 'inspection'
+          if params[:sub_tab].present?
+            redirect_to inspection_transaction_path(TransactionPurchase.find(params[:id]), sub: params[:sub], type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property], sub_tab: params[:sub_tab])
+          else
+            redirect_to inspection_transaction_path(TransactionPurchase.find(params[:id]), sub: params[:sub], type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property])
+          end
+        when 'closing'
+          redirect_to closing_transaction_path(TransactionPurchase.find(params[:id]), sub: params[:sub], type: 'purchase', main_id: params[:main_id], cur_property: params[:cur_property])
+        else
+          # To do
+        end
+      else
+        # To do
+      end
+    else
+      if params[:sub]
+        case params[:sub]
+        when 'property'
+          redirect_to properties_edit_transaction_path(TransactionSale.find(params[:id]), sub: params[:sub], type: 'sale', main_id: params[:main_id])
+        when 'terms'
+          if params[:sub_tab].present?
+            redirect_to terms_transaction_path(TransactionSale.find(params[:id]), sub: params[:sub], type: 'sale', main_id: params[:main_id], cur_property: params[:cur_property], sub_tab: params[:sub_tab])
+          else
+            redirect_to terms_transaction_path(TransactionSale.find(params[:id]), sub: params[:sub], type: 'sale', main_id: params[:main_id], cur_property: params[:cur_property])
+          end
+        when 'parties'
+          redirect_to edit_transaction_path(TransactionSale.find(params[:id]), type: 'sale', main_id: params[:main_id], sub: params[:sub])
+        when 'inspection'
+          if params[:sub_tab].present?
+            redirect_to inspection_transaction_path(TransactionSale.find(params[:id]), sub: params[:sub], type: 'sale', main_id: params[:main_id], cur_property: params[:cur_property], sub_tab: params[:sub_tab])
+          else
+            redirect_to inspection_transaction_path(TransactionSale.find(params[:id]), sub: params[:sub], type: 'sale', main_id: params[:main_id], cur_property: params[:cur_property])
+          end
+        when 'closing'
+          redirect_to closing_transaction_path(TransactionSale.find(params[:id]), sub: params[:sub], type: 'sale', main_id: params[:main_id], cur_property: params[:cur_property])
+        else
+          # To do
+        end
+      else
+        # To do
       end
     end
   end
