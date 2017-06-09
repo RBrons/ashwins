@@ -1,11 +1,10 @@
 module TransactionsHelper
     def get_transaction_properties(transaction)
-        
         if transaction.present?
             transaction_property_ids = transaction.transaction_properties.where(is_selected: true).pluck(:property_id)
             properties = Property.where(id: transaction_property_ids).order(created_at: :desc)
         else
-            properties = nil
+            properties = []
         end
 
         return properties

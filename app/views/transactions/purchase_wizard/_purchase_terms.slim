@@ -12,16 +12,16 @@
   div[role="tabpanel"]
     ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li.active[role="presentation"]
-          a#offer_and_acceptance[href="#offer_and_acceptance_section" role="tab" data-toggle="tab" aria-expanded="true"] Offer and Acceptance
+        a#offer_and_acceptance[href="#offer_and_acceptance_section" role="tab" data-toggle="tab" aria-expanded="true"] Offer and Acceptance
 
       li[role="presentation"]
-          a#letter_of_intent[href="#letter_of_intent_section" role="tab" data-toggle="tab" aria-expanded="false"] Letter of intent
+        a#letter_of_intent[href="#letter_of_intent_section" role="tab" data-toggle="tab" aria-expanded="false"] Letter of intent
 
       li[role="presentation"]
-          a#purchase_sale_agreement[href="#purchase_sale_agreement_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchase Sale Agreement
+        a#purchase_sale_agreement[href="#purchase_sale_agreement_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchase Sale Agreement
 
       li[role="presentation"]
-          a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
+        a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
 
     .tab-content
       #offer_and_acceptance_section.tab-pane.fade.active.in[role="tabpanel"]
@@ -36,7 +36,6 @@
             .tab-pane.fade.active.in[role="tabpanel" id="#{'seller_' + transaction_property_offer.id.to_s}"]
               .col-md-12.col-xs-12
                 input.cur_offer_id[type="hidden" value="#{transaction_property_offer.id}"]
-
                 .row
                   .col-md-12
                       .col-md-3

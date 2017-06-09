@@ -3,7 +3,9 @@ $ ->
   # Global Variables
   selected_offer_tab = $(document).find($(document).find('#offer_list li.active a').attr('href'))
   selected_transaction_sub_tab = $(document).find($(document).find('#sale_buy_step_tab li.active a').attr('href'))
+  property_identification_table = $(document).find('.property_identification_table').DataTable()
   last_counteroffer = ""
+  alert_for_three_property_rule = "Because you selected three property rule, you can not select any more properties to buy"
 
   sub_tab_id = $("#sub_tab_val").val()
   console.log sub_tab_id
@@ -98,31 +100,7 @@ $ ->
       $(document).find('div.purchase-tr-pr-detail').hide();
       $(document).find('div.purchase-tr-et-detail').show();
 
-  # Accept Ask on Step1 Buy side
-  $(document).on ' ifChecked', '.transaction_properties_wrapper .accept_ask_price', ->
-    if this.checked
-      $(this).closest('.fields').find('.transaction-property-calculation .price-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-price').val())
-      $(this).closest('.fields').find('.transaction-property-calculation .cap-rate-box input').val($(this).closest('.fields').find('.transaction-property-calculation-readonly .current-cap-rate').val())
-
-  $(document).on 'ifClicked ifChecked', '.transaction_properties_wrapper .make_counteroffer', ->
-    if this.checked
-      $(this).closest('.fields').find('.md-make-counter').modal('show')
-
-  $(document).on 'click', '.transaction_properties_wrapper .btn-cancel-make-counter', (e)->
-    e.preventDefault()
-    $(this).closest('.fields').find('.accept_ask_price').iCheck('check')
-    $(this).closest('.fields').find('.make_counteroffer').iCheck('uncheck')
-    $(this).closest('.fields').find('.md-make-counter').modal('hide')
-
-  $(document).on 'click', '.transaction_properties_wrapper .btn-ok-make-counter', (e)->
-    e.preventDefault()
-    if parseFloat($(this).closest('.md-make-counter').find('.transaction-property-calculation .price-box input').val()) == 0 && parseFloat($(this).closest('.md-make-counter').find('.transaction-property-calculation .cap-rate-box input').val()) == 0
-      alert('Cap Rate or Asking Price should not be blank or zero.')
-      return
-    $(this).closest('.fields').find('.md-make-counter').modal('hide')
-
-
-
+  
   sale_pre_loi_text = (seller)-> '<strong>Congratulations!</strong> You have just initiated a 1031 Exchange on behalf of <strong>'+seller+'</strong>. You can now identify the ' +
     ' property that you wish to relinquish, hire a Qualified Intermediary, set a sales price and input a broker. Please ' +
     'be sure to input the progress of your Exchange by updating the Status dropdown. All changes will be updated in ' +
@@ -799,19 +777,78 @@ $ ->
       $(".transaction-photo-gallery input[type=submit]").show()
   checkShowButton()
 
-  $(document).on 'ifChecked', '.is_selected_property', ->
-    if $(this).is(":checked")
+  #--- Created by DeskStar ---
+  $(document).on 'ifChanged', '.is_selected_property', ->
+    el = $(this)
+    if this.checked
       $(this).parents(".fields").removeClass('property-unchecked')
+      selected_property_count = $(document).find(".fields").length - $(document).find(".fields.property-unchecked").length
+      console.log selected_property_count
+      if $(document).find('#property_identification_rule').val() == 'three_property'
+        if selected_property_count > 3
+          setTimeout (->
+            el.iCheck('uncheck')
+            
+          ), 10
+          sweetAlert("", alert_for_three_property_rule, "warning")
+          return
+      add_property_to_identification($(this).parents(".fields"))
     else
       $(this).parents(".fields").addClass('property-unchecked')
+      delete_property_to_identification($(this).parents(".fields"))
     checkShowButton()
 
-  $(document).on 'ifUnchecked', '.is_selected_property', ->
-    if $(this).is(":checked")
-      $(this).parents(".fields").removeClass('property-unchecked')
-    else
-      $(this).parents(".fields").addClass('property-unchecked')
-    checkShowButton()
+  add_property_to_identification = (selected_property)->
+    console.log selected_property.find('.transaction-property-select input[type=hidden]').val()
+    property_identification_table.row.add( [
+                    selected_property.find('.transaction-property-select h3').text(),
+                    '$' + selected_property.find('.transaction-property-calculation-readonly .current-rent').val(),
+                    selected_property.find('.transaction-property-calculation-readonly .current-cap-rate').val(),
+                    '$' + selected_property.find('.transaction-property-calculation-readonly .current-price').val(),
+                    '<input type="text" class="counter-cap-rate input-mask-currency" />',
+                    '$ <input type="text" class="counter-price input-mask-currency" />'
+                ]).draw()
+                  .nodes()
+                  .to$()
+                  .attr( 'id', 'property_' + selected_property.find('.transaction-property-select input[type=hidden]').val())
+                  .find('td:first-child')
+                  .addClass('green')
+
+    $(document).find('.property_identification_table .input-mask-currency').inputmask
+      alias: 'currency',
+      rightAlign: false,
+      prefix: ''
+
+  delete_property_to_identification = (selected_property)->
+    property_identification_table.row( $('tr#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()) )
+                                .remove()
+                                .draw()
+
+  $(document).on 'keydown', '.property_identification_table .counter-cap-rate', (e)->
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_asking_mode').val(0)
+
+  $(document).on 'keydown', '.property_identification_table .counter-price', (e)->
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_asking_mode').val(0)
+  
+  $(document).on 'keyup', ".property_identification_table .counter-cap-rate", (e)->
+    currentRent = $(this).closest('tr').find('td').eq(1).text().replace(/[^0-9\.]+/g,'')
+    counterCapRate = $(this).val().replace(/\,/g, '')
+    counterPrice = parseFloat(currentRent) * 100 / parseFloat(counterCapRate)
+    $(this).closest('tr').find("td input.counter-price").val(counterPrice)
+    # set value for form fields
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
+
+  $(document).on 'keyup', ".property_identification_table .counter-price", (e)->
+    currentRent = $(this).closest('tr').find('td').eq(1).text().replace(/[^0-9\.]+/g,'')
+    counterPrice = $(this).val().replace(/\,/g, '')
+    counterCapRate = parseFloat(currentRent) / parseFloat(counterPrice) * 100
+    $(this).closest('tr').find("td input.counter-cap-rate").val(counterCapRate)
+    # set value for form fields
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
+  
+  #--- end ---
 
   $(document).on 'ifChecked', '.radio_edit_mode_cap', ->
     $(this).parents(".transaction-property-calculation").find("input[name*='cap_rate']").prop('readonly', false)
