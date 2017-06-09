@@ -62,7 +62,7 @@ class TransactionsController < ApplicationController
     if params[:page].blank?
       params[:page] = 1
     end
-    @transactions = @transactions.order('transactions.created_at DESC, transactions.updated_at DESC').paginate(page: params[:page], per_page: sessioned_per_page)
+    @transactions = @transactions.order('transactions.updated_at DESC, transactions.created_at DESC').paginate(page: params[:page], per_page: sessioned_per_page)
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/transactions\">List </a></h4></div>".html_safe
   end
 
