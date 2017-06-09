@@ -426,6 +426,7 @@ ActiveRecord::Schema.define(version: 20170608165350) do
     t.date     "pro_rated_day_date"
     t.decimal  "pro_rated_day_rent",                                                precision: 15, scale: 2
     t.decimal  "pro_rated_month_rent",                                              precision: 15, scale: 2
+    t.datetime "starting_date_of_lease_amendment"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end

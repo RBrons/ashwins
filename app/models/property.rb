@@ -202,7 +202,15 @@ class Property < ApplicationRecord
     start_year = self.rent_commencement_date.year
     start_month = self.rent_commencement_date.month
 
-    lease_end_date = self.date_of_lease + self.lease_duration_in_years.years
+    free_year_start = self.starting_date_of_lease_amendment.try(:year) || start_year
+
+    if free_year_start < start_year
+      for i in (free_year_start...start_year) do
+        ret << ([i] + Array.new(12, 0))
+      end
+    end
+
+    lease_end_date = self.starting_date_of_lease_amendment + self.lease_duration_in_years.years
     end_year = lease_end_date.year
     end_month = lease_end_date.month
 

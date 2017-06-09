@@ -637,11 +637,8 @@ $ ->
     $(document).find('#transaction_transaction_term_attributes_second_deposit_days_after_inspection_period').val(data.second_deposit_days_after_inspection_period)
     if (data.second_deposit)
       $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper').show()
-      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper input').prop('disabled', false)
-      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper select').prop('disabled', false)
     else
       $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper').hide()
-      $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper input').prop('disabled', 'disabled')
       $(document).find('.transaction_transaction_term_attributes_second_deposit_wrapper select').prop('disabled', 'disabled')
 
     set_closing_date(psa_date, data.closing_days_after_inspection_period)
@@ -744,18 +741,11 @@ $ ->
     set_closing_date(psa_date, closing_days_after_inspection_period)
 
   $(document).on 'change', 'input.manually_date_on_psa', ->
-    input_object = $(document).find("input.#{$(this).data('class')}")
     select_object = $(document).find("select.#{$(this).data('class')}")
 
     if this.checked
-      input_object.hide()
-      input_object.prop('disabled', 'disabled')
-      select_object.show()
       select_object.prop('disabled', false)
     else
-      input_object.show()
-      input_object.prop('disabled', false)
-      select_object.hide()
       select_object.prop('disabled', 'disabled')
 
 #-- End of Alex's code --#

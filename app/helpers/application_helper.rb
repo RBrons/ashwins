@@ -55,6 +55,10 @@ module ApplicationHelper
     "btn btn-default btn-xs btn-danger buttons-margin"
   end
 
+  def switch_xs
+    "btn btn-default btn-xs btn-primary buttons-margin"
+  end
+
   def sumup_values val1, val2
     (val1 || 0) + (val2 || 0) rescue 0
   end
