@@ -175,7 +175,7 @@ class TransactionsController < ApplicationController
       @transaction.rplmnt_purchaser_entity_id = @transaction.replacement_purchaser_entity_id if @transaction.purchaser_person_is
 
       if params[:cur_property].blank?
-        @property = get_transaction_properties(params[:main_id], params[:type]).first
+        @property = get_transaction_properties(@transaction).first
       else
         @property = Property.find(params[:cur_property])
       end
@@ -425,7 +425,7 @@ class TransactionsController < ApplicationController
 
   def terms
     if params[:cur_property].blank?
-      @property = get_transaction_properties(params[:main_id], params[:type]).first
+      @property = get_transaction_properties(@transaction).first
     else
       @property = Property.find(params[:cur_property])
     end
@@ -465,7 +465,7 @@ class TransactionsController < ApplicationController
 
   def inspection
     if params[:cur_property].blank?
-      @property = get_transaction_properties(params[:main_id], params[:type]).first
+      @property = get_transaction_properties(@transaction).first
     else
       @property = Property.find(params[:cur_property])
     end

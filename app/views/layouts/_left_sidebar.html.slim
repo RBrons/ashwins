@@ -1,7 +1,7 @@
 #sidebar-menu.main_menu_side.hidden-print.main_menu
   .menu_section
-    - sale_properties = get_transaction_properties(params[:main_id], 'sale')
-    - buy_properties = get_transaction_properties(params[:main_id], 'purchase')
+    - sale_properties = get_transaction_properties(@transaction_main.sale)
+    - buy_properties = get_transaction_properties(@transaction_main.purchase)
     
     ul.nav.side-menu
       / Sale Menu 
