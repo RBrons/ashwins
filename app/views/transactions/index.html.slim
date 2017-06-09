@@ -43,7 +43,7 @@
         - sale_closing_date = nil
         - today_ = Date.today #Time.now
         - if var.transaction_properties.count != 0
-          - var.transaction_properties.where(is_selected: true).order(created_at: :desc, updated_at: :desc).each_with_index do |p, index|
+          - var.transaction_properties.where(is_selected: true).order(updated_at: :desc, created_at: :desc).each_with_index do |p, index|
             tr[class="#{index == 0 ? 'parent-row' : 'child-row'}" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
@@ -162,7 +162,7 @@
         - maint = var.main
         - next if var.main.blank?
         - if var.transaction_properties.count != 0
-          - var.transaction_properties.where(is_selected: true).order(created_at: :desc, updated_at: :desc).each_with_index do |p, index|
+          - var.transaction_properties.where(is_selected: true).order(updated_at: :desc, created_at: :desc).each_with_index do |p, index|
             tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
