@@ -47,12 +47,12 @@
             tr[class="#{index == 0 ? 'parent-row' : 'child-row'}" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
-                = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: p.current_step, type: 'purchase', main_id: transaction.main.id, cur_property: p.property_id, sub_tab: p.current_step_subtab ,where: 'list'), class: "#{edit_xs}"
                 br
-                = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+                = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
                 br
                 = link_to 'Sell Side'.html_safe, maint.sale.present? ? properties_edit_transaction_path(maint.sale, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'sale', main_id: transaction.main.id), class: "#{switch_xs}"
-                
+
               td = var.purchaser_name
               td = var.seller_name
               / td
@@ -93,7 +93,7 @@
                  = (p.second_deposit_date_due - today_).to_i
                 - else
                   = 'N/A'
-              td 
+              td
                 = (p.closing_date.to_date - today_).to_i if p.closing_date.present?
                 br
                 = p.closing_date.strftime('%b-%d-%Y') if p.closing_date.present?
@@ -107,17 +107,16 @@
                   | Yes
                 - else
                   | Not yet
-              
         - else
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
             td
-              = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, sub: 'property', type: 'purchase', main_id: transaction.main.id), class: "#{edit_xs}"
+              = link_to 'Edit'.html_safe, properties_edit_transaction_path(var, type: 'purchase', main_id: transaction.main.id, where: 'list'), class: "#{edit_xs}"
               br
-              = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }  
+              = link_to 'Delete'.html_safe, transaction_path(var, type: 'purchase', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
               br
               = link_to 'Sell Side'.html_safe, maint.sale.present? ? properties_edit_transaction_path(maint.sale, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'sale', main_id: transaction.main.id), class: "#{switch_xs}"
-              
+
             td = var.purchaser_name
             td = var.seller_name
             / td
@@ -167,7 +166,7 @@
             tr[class="#{index == 0 ? 'parent-row' : 'child-row' }" style="#{'display: none' if index != 0  }"]
               td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
               td
-                = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+                = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id, sub: p.current_step, sub_tab: p.current_step_subtab, cur_property: p.property_id, where: 'list'), class: "#{edit_xs}"
                 br
                 = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
                 br
@@ -207,7 +206,7 @@
           tr.parent-row
             td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => var.id
             td
-              = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id), class: "#{edit_xs}"
+              = link_to 'Edit'.html_safe, edit_transaction_path(var, type: 'sale', main_id: transaction.main.id, where: 'list'), class: "#{edit_xs}"
               br
               = link_to 'Delete'.html_safe, transaction_path(var, type: 'sale', main_id: transaction.main.id), method: :delete, class: "#{delete_xs}", data: { confirm: 'Are you sure ?' }
               br
@@ -223,7 +222,6 @@
             td
             td
             td
-            
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: { local_path: multi_delete_transactions_path, klazz: [TransactionSale, TransactionPurchase], index_path: transactions_path(trashed: !params[:trashed].to_b, mode: params[:mode]) }
   .clearfix

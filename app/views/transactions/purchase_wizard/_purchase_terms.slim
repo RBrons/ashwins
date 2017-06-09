@@ -7,6 +7,8 @@
 
 #negotiations_wrapper[data-transaction-type="#{@transaction_property.is_sale ? 'sale' : 'purchase'}"]
   input#negotiated_property[type="hidden" value="#{@property.title}"]
+  input#cur_property_id[type="hidden" value="#{@transaction_property.id}"]
+  input#sub_tab_val[type="hidden" value="#{@sub_tab}"]
   div[role="tabpanel"]
     ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li.active[role="presentation"]
@@ -28,7 +30,7 @@
             li[role="presentation" class=( transaction_property_offer.is_accepted ? 'done' : '' )]
               a[href="#{ '#seller_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
                 = transaction_property_offer.offer_name
-        
+
         .tab-content
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
             .tab-pane.fade.active.in[role="tabpanel" id="#{'seller_' + transaction_property_offer.id.to_s}"]
@@ -95,7 +97,7 @@
                         = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
                       - else
                         = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Seller\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
-                    
+
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
           span = @replacement_seller.try(:name) || 'Seller'
@@ -182,7 +184,7 @@
                   .checkbox-inline
                       input.flat-icheck[type="checkbox" name=""]
                           span.margin-sm-left Executed
-            
+
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
@@ -233,7 +235,7 @@
         .col-md-6.col-sm-12.col-xs-12
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
-              
+
               .form-group
                   .field_list
                     label.control-label Purchase Sales Agreement
@@ -244,23 +246,23 @@
                           = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                           span.margin-md-left.blue Select in Google Drive
                     .checkbox-inline
-                        input.flat-icheck[type="checkbox" name=""] 
+                        input.flat-icheck[type="checkbox" name=""]
                             span.margin-sm-left Directory
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name="" checked]
-                            span.margin-sm-left Draft                            
+                            span.margin-sm-left Draft
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
                             span.margin-sm-left Executable
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
                             span.margin-sm-left Executed
-                    
+
                     .clearfix.margin-sm-top
                     button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
-                    
-                  button#add_purchase_sale_agreement.btn.btn-default 
-                    i.fa.fa-plus 
+
+                  button#add_purchase_sale_agreement.btn.btn-default
+                    i.fa.fa-plus
                     | &nbsp;Add Document
 
                   #purchase_sales_agreement_template[style="display: none"]
@@ -273,11 +275,11 @@
                             = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                             span.margin-md-left.blue Select in Google Drive
                       .checkbox-inline
-                          input.flat-icheck[type="checkbox" name=""] 
+                          input.flat-icheck[type="checkbox" name=""]
                               span.margin-sm-left Directory
                       .checkbox-inline
                           input.flat-icheck[type="checkbox" name="" checked]
-                              span.margin-sm-left Draft                            
+                              span.margin-sm-left Draft
                       .checkbox-inline
                           input.flat-icheck[type="checkbox" name=""]
                               span.margin-sm-left Executable
@@ -286,13 +288,13 @@
                               span.margin-sm-left Executed
                       .clearfix.margin-sm-top
                       button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
-                    
+
               .clearfix
               .form-group
                 label.control-label Date of Purchase Sale Agreement
                 .clearfix
                 = transaction_term_form.date_select :psa_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2 }, class: "form-control select_auto transaction_transaction_term_attributes_psa_date"
-              
+
               .clearfix
               .form-group
                 .pull-right
@@ -300,28 +302,28 @@
                     label Input Data Manually &nbsp; &nbsp; &nbsp; &nbsp;
                   .pull-right
                     input[type="checkbox" data-class="editable-date-field-on-psa" class="manually_date_on_psa"]
-              
+
               .clearfix
               .form-group
                 label.control-lable First Deposit To Be Received By
                 .clearfix
-                = transaction_term_form.hidden_field :first_deposit_days_after_psa, disabled: true
-                = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: true
-              
+                = transaction_term_form.hidden_field :first_deposit_days_after_psa
+                = transaction_term_form.text_field :first_deposit_date_due, readonly: true, class: 'form-control editable-date-field-on-psa'
+                = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", style: "display: none"
               .clearfix
               .form-group
                 label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
                 .clearfix
                 = transaction_term_form.hidden_field :inspection_period_days, disabled: true
                 = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", disabled: true
-              
+
               .clearfix
               .form-group.transaction_transaction_term_attributes_second_deposit_wrapper[style="#{transaction_term_form.object.second_deposit ? '' : 'display: none'}"]
                 label.control-lable Second Deposit To Be Received By
                 .clearfix
-                = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: true
-                = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: !transaction_term_form.object.second_deposit, disabled: true
-                      
+                = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: !transaction_term_form.object.second_deposit
+                = transaction_term_form.text_field :second_deposit_date_due, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control editable-date-field-on-psa'
+                = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: !transaction_term_form.object.second_deposit, style: "display: none"
               .clearfix
               .form-group
                   label.control-lable Definition Of Holidays
@@ -339,7 +341,7 @@
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-            
+
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .note
             h2 Tasks
@@ -407,4 +409,3 @@
           .clearfix
           .divider
           button.back_prev_step.btn.btn-default Back
-          
