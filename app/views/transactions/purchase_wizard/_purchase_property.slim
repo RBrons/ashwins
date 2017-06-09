@@ -1,164 +1,206 @@
 - if @transaction.persisted?
-  - options = %w(Active Completed InActive)
+    - options = %w(Active Completed InActive)
 - else
-  - options = [ 'Active']
+    - options = [ 'Active']
 
 = nested_form_for(@transaction, as: :transaction, url: properties_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type]), html: {class: 'transaction-photo-gallery'}) do |f|
-  - if @transaction.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
-      ul
-        - @transaction.errors.full_messages.each do |message|
-          li = message
-  .transaction-note
-    p style="padding: 0 10px;"
-      ="<b>Note: </b> Please select one or more properties to purchase, propose a cap rate or purchase price and then hit Save & Next".html_safe
-  .transaction_properties_wrapper
-    = f.fields_for :transaction_properties do |transaction_property_form|
-      = transaction_property_form.hidden_field :transaction_main_id, :value => params[:main_id]
-      = transaction_property_form.hidden_field(:is_sale, :value => params[:type] == 'sale' ? 'true' : 'false')
-      - if transaction_property_form.object.closed?
-        .margin-lg-top
-        .transaction-property-select.form-group.center
-          h3 = transaction_property_form.object.property.name
-          / = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {disabled: 'disabled'}, class: 'form-control'
-        .transaction-property-calculation-readonly
-          .form-group.center
-            label Current Rent
-            .input-group
-                .input-group-addon $
-                - unless transaction_property_form.object.property.nil?
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=transaction_property_form.object.property.current_rent
-                - else
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=''
-          .form-group.center
-            label Asking Cap Rate
-            .input-group
-                - unless transaction_property_form.object.property.nil?
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=transaction_property_form.object.property.cap_rate
-                - else
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=''
-                .input-group-addon %
-          .form-group.center
-            label Asking Price
-            .input-group
-                .input-group-addon $
-                - unless transaction_property_form.object.property.nil?
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=transaction_property_form.object.property.price
-                - else
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=''
-        .transaction-property-image
-          - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
-            = cl_image_tag(transaction_property_form.object.property.property_cover_image.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
-          - else
-            = image_tag 'sale_house.jpg', class: "img-responsive width-100"
-        .clearfix.margin-lg-top
-        .transaction-property-calculation
-            .form-group.center
-                label Proposed a Cap Rate
-                .input-group
-                    = transaction_property_form.text_field :cap_rate, :readonly => true, class: 'form-control input-mask-currency'
-                    .input-group-addon %
-            .form-group.center
-                label A Proposed Purchase Price
-                .input-group
-                    .input-group-addon $
-                    = transaction_property_form.text_field :sale_price, :readonly => true, class: 'form-control input-mask-currency'
-      -else
-        .transaction-property-header
-            / = link_to "◇", "#", class: 'pull-left'
-            = transaction_property_form.check_box :is_selected, disabled: transaction_property_form.object.is_selected, class: 'pull-left flat-icheck is_selected_property'
-            / = transaction_property_form.link_to_remove '⊗', class: 'pull-right'
-            .clearfix
+    div[role="tabpanel"]
+        ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+            li.active[role="presentation"]
+                a#seller_documentation[href="#properties_for_sale" role="tab" data-toggle="tab" aria-expanded="true"] Properties for Sale
+            li[role="presentation"]
+                a#environmental[href="#properties_identification" role="tab" data-toggle="tab" aria-expanded="false"] Identification
         
-        .margin-lg-top
+        .tab-content
         
-        .transaction-property-select.form-group.center
-            h3 = transaction_property_form.object.property.name
-            = transaction_property_form.hidden_field :property_id
-            / - if @transaction.prop_owner == 0
-                / = transaction_property_form.select :property_id, options_for_select(Property.where('ownership_status = ? and title is not null', @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-purchase'
-            / - else
-                / = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-sale'
-        .transaction-form-validation.center
-            p Cap Rate or Asking Price should not be blank or zero.
-        .transaction-property-calculation-readonly
-          .form-group.center
-            label Current Rent
-            .input-group
-              .input-group-addon $
-              - unless transaction_property_form.object.property.nil?
-                input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=transaction_property_form.object.property.current_rent
-              - else
-                input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=''
-              / = transaction_property_form.text_field :cap_rate, disabled: 'disabled', class: 'form-control input-mask-currency'
-          
-          .form-group.center
-            label Asking Cap Rate
-            .input-group
-                - unless transaction_property_form.object.property.nil?
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=transaction_property_form.object.property.cap_rate
-                - else
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=''
-                .input-group-addon %
-          .form-group.center
-            label Asking Price
-            .input-group
-                .input-group-addon $
-                - unless transaction_property_form.object.property.nil?
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=transaction_property_form.object.property.price
-                - else
-                    input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=''
-        
-          .form-group.center.radio-box
-            .heading_blue.radio-inline
-                span
-                    input type='radio' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='accept_asking' class='form-control flat-icheck radiobuttons accept_ask_price' checked=(transaction_property_form.object.asking_accepted? ? 'checked' : false)  disabled=(transaction_property_form.object.asking_accepted? ? 'disabled' : false)
-                span.margin-md-left Accept Ask
-            .heading_blue.radio-inline
-                span
-                    input type='radio' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='making_counter' class='form-control flat-icheck radiobuttons make_counteroffer'  checked=(!transaction_property_form.object.asking_accepted? ? 'checked' : false)  disabled=(transaction_property_form.object.asking_accepted? ? 'disabled' : false)
-                span.margin-md-left Make Counter
+            #properties_for_sale.active.tab-pane.fade.in[role="tabpanel"]
+                
+                - if @transaction.errors.any?
+                    #error_explanation
+                    h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
+                    ul
+                        - @transaction.errors.full_messages.each do |message|
+                        li = message
+                .transaction-note
+                    p style="padding: 0 10px;"
+                        ="<b>Note: </b> Please select one or more properties to purchase, propose a cap rate or purchase price and then hit Save & Next".html_safe
+                .transaction_properties_wrapper
+                    = f.fields_for :transaction_properties do |transaction_property_form|
+                        = transaction_property_form.hidden_field :transaction_main_id, :value => params[:main_id]
+                        = transaction_property_form.hidden_field(:is_sale, :value => params[:type] == 'sale' ? 'true' : 'false')
+                        - if transaction_property_form.object.closed?
+                            .margin-lg-top
+                            .transaction-property-select.form-group.center
+                                h3 = transaction_property_form.object.property.name
+                                / = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {disabled: 'disabled'}, class: 'form-control'
+                            .transaction-property-calculation-readonly
+                                .form-group.center
+                                    label Current Rent
+                                    .input-group
+                                        .input-group-addon $
+                                        - unless transaction_property_form.object.property.nil?
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=transaction_property_form.object.property.current_rent
+                                        - else
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=''
+                                .form-group.center
+                                    label Asking Cap Rate
+                                    .input-group
+                                        - unless transaction_property_form.object.property.nil?
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=transaction_property_form.object.property.cap_rate
+                                        - else
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=''
+                                        .input-group-addon %
+                                .form-group.center
+                                    label Asking Price
+                                    .input-group
+                                        .input-group-addon $
+                                        - unless transaction_property_form.object.property.nil?
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=transaction_property_form.object.property.price
+                                        - else
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=''
+                            .transaction-property-image
+                                - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
+                                    = cl_image_tag(transaction_property_form.object.property.property_cover_image.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
+                                - else
+                                    = image_tag 'sale_house.jpg', class: "img-responsive width-100"
+                            .clearfix.margin-lg-top
+                            .transaction-property-calculation
+                                .form-group.center
+                                    label Proposed a Cap Rate
+                                    .input-group
+                                        = transaction_property_form.text_field :cap_rate, :readonly => true, class: 'form-control input-mask-currency'
+                                        .input-group-addon %
+                                .form-group.center
+                                    label A Proposed Purchase Price
+                                    .input-group
+                                        .input-group-addon $
+                                        = transaction_property_form.text_field :sale_price, :readonly => true, class: 'form-control input-mask-currency'
+                        -else
+                            .transaction-property-header
+                                / = link_to "◇", "#", class: 'pull-left'
+                                = transaction_property_form.check_box :is_selected, disabled: transaction_property_form.object.is_selected, class: 'pull-left flat-icheck is_selected_property'
+                                / = transaction_property_form.link_to_remove '⊗', class: 'pull-right'
+                                .clearfix
+                            
+                            .margin-lg-top
+                            
+                            .transaction-property-select.form-group.center
+                                h3 = transaction_property_form.object.property.name
+                                = transaction_property_form.hidden_field :property_id
+                                / - if @transaction.prop_owner == 0
+                                    / = transaction_property_form.select :property_id, options_for_select(Property.where('ownership_status = ? and title is not null', @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-purchase'
+                                / - else
+                                    / = transaction_property_form.select :property_id, options_for_select(Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', @transaction.prop_owner, @transaction.prop_status).pluck(:title, :id), transaction_property_form.object.property_id), {prompt: 'Select One...'}, class: 'form-control for-sale'
+                            .transaction-form-validation.center
+                                p Cap Rate or Asking Price should not be blank or zero.
+                            .transaction-property-calculation-readonly
+                                .form-group.center
+                                    label Current Rent
+                                    .input-group
+                                        .input-group-addon $
+                                        - unless transaction_property_form.object.property.nil?
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=transaction_property_form.object.property.current_rent
+                                        - else
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=''
+                                        / = transaction_property_form.text_field :cap_rate, disabled: 'disabled', class: 'form-control input-mask-currency'
+                                .form-group.center
+                                    label Asking Cap Rate
+                                    .input-group
+                                        - unless transaction_property_form.object.property.nil?
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=transaction_property_form.object.property.cap_rate
+                                        - else
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-cap-rate' value=''
+                                        .input-group-addon %
+                                .form-group.center
+                                    label Asking Price
+                                    .input-group
+                                        .input-group-addon $
+                                        - unless transaction_property_form.object.property.nil?
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=transaction_property_form.object.property.price
+                                        - else
+                                            input type='text' disabled='disabled' class='form-control input-mask-currency current-price' value=''
+                            
+                            .transaction-property-image
+                                - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
+                                    = cl_image_tag(transaction_property_form.object.property.property_cover_image.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
+                                - else
+                                    = image_tag 'sale_house.jpg', class: "img-responsive width-100"
+                            .clearfix.margin-lg-top
+                            input type='hidden' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='1' id='property_#{transaction_property_form.object.property_id.to_s}_asking_mode'
+                            = transaction_property_form.hidden_field :cap_rate, id: 'property_' + transaction_property_form.object.property_id.to_s + '_cap_rate'
+                            = transaction_property_form.hidden_field :sale_price, id: 'property_' + transaction_property_form.object.property_id.to_s + '_price'
+                            / Modal When hits Make Counter
+                            / .md-make-counter.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
+                            /     .modal-dialog[role="document"]
+                            /         .modal-content
+                            /             .modal-header
+                            /                 button.close[type="button" data-dismiss="modal" aria-label="Close"]
+                            /                     span.btn-cancel-make-counter.lnr.lnr-cross
+                            /                 h4.modal-title Input Counteroffer
+                            /             .modal-body
+                            /                 .transaction-property-calculation
+                            /                     .form-group.center.radio-box
+                            /                         .heading_blue.radio-inline
+                            /                             span
+                            /                                 input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
+                            /                             span.margin-md-left Input Cap Rate
+                            /                         .heading_blue.radio-inline
+                            /                             span
+                            /                                 input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
+                            /                             span.margin-md-left Input Price
+                            /                     .form-group.center.cap-rate-box
+                            /                         label Propose a Cap Rate
+                            /                         .input-group
+                            /                             = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
+                            /                             .input-group-addon %
+                            /                     .form-group.center.price-box
+                            /                         label This will result in a Purchase Price of
+                            /                         .input-group
+                            /                             .input-group-addon $
+                            /                             = transaction_property_form.text_field :sale_price, readonly: 'true', class: 'form-control input-mask-currency'
+                            /             .modal-footer
+                            /                 button.btn-cancel-make-counter.btn.btn-default Cancel
+                            /                 button.btn-ok-make-counter.btn.btn-primary.next-prev Ok
+                
+            #properties_identification.tab-pane.fade[role="tabpanel"]
+                .col-md-4.col-xs-12
+                    .form-group
+                        label.control-label Identification Rule
+                        select#property_identification_rule.form-control.width-field-md
+                            option[value="three_property"] Three Properties
+                            option[value="200_percent"] 200%
+                            option[value="95_percent"] 95%
 
-        .transaction-property-image
-          - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
-            = cl_image_tag(transaction_property_form.object.property.property_cover_image.cl_image_public_id, class: "img-responsive width-100", :crop => :scale)
-          - else
-            = image_tag 'sale_house.jpg', class: "img-responsive width-100"
-        .clearfix.margin-lg-top
-        / Modal When hits Make Counter
-        .md-make-counter.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
-            .modal-dialog[role="document"]
-                .modal-content
-                    .modal-header
-                        button.close[type="button" data-dismiss="modal" aria-label="Close"]
-                            span.btn-cancel-make-counter.lnr.lnr-cross
-                        h4.modal-title Input Counteroffer
-                    .modal-body
-                        .transaction-property-calculation
-                            .form-group.center.radio-box
-                                .heading_blue.radio-inline
-                                    span
-                                        input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
-                                    span.margin-md-left Input Cap Rate
-                                .heading_blue.radio-inline
-                                    span
-                                        input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
-                                    span.margin-md-left Input Price
-                            .form-group.center.cap-rate-box
-                                label Propose a Cap Rate
-                                .input-group
-                                    = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
-                                    .input-group-addon %
-                            .form-group.center.price-box
-                                label This will result in a Purchase Price of
-                                .input-group
-                                    .input-group-addon $
-                                    = transaction_property_form.text_field :sale_price, readonly: 'true', class: 'form-control input-mask-currency'
-                    .modal-footer
-                        button.btn-cancel-make-counter.btn.btn-default Cancel
-                        button.btn-ok-make-counter.btn.btn-primary.next-prev Ok
-  .clearfix.margin-lg-top
-  / = f.link_to_add "Add Property", :transaction_properties, data: {target: ".transaction_properties_wrapper"}, class: 'btn btn-primary next-prev margin-sm-right'
-  = link_to 'Back', '#', class: 'btn btn-default'
-  = f.submit 'Save & Next', class: 'btn btn-primary next-prev margin-sm-right save_next_in_step'
+                table#data_table.property_identification_table
+                    thead
+                        tr
+                            th Property Title
+                            th Current Rent
+                            th Asking Cap Rate
+                            th Asking Price
+                            th Cap Rate Counter
+                            th Price Counter
+                    tbody
+                        - @transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
+                            tr[id="#{'property_' + transaction_property.property_id.to_s}"]
+                                td.green = transaction_property.property.title
+                                td = number_to_currency(transaction_property.property.current_rent)
+                                td = transaction_property.property.cap_rate
+                                td = number_to_currency(transaction_property.property.price)
+                                td 
+                                    - if transaction_property.is_in_contract? || transaction_property.closed?
+                                        = transaction_property.cap_rate
+                                    - else
+                                        input[type="text" class="counter-cap-rate input-mask-currency" value="#{transaction_property.cap_rate}"]
+                                td 
+                                    - if transaction_property.is_in_contract? || transaction_property.closed?
+                                        = number_to_currency(transaction_property.sale_price)
+                                    - else
+                                        span $&nbsp;
+                                        input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price}"]
+            
+    .clearfix
+    .divider
+    / = f.link_to_add "Add Property", :transaction_properties, data: {target: ".transaction_properties_wrapper"}, class: 'btn btn-primary next-prev margin-sm-right'
+    = link_to 'Back', '#', class: 'btn btn-default'
+    = f.submit 'Save & Next', class: 'btn btn-primary next-prev margin-sm-right save_next_in_step'

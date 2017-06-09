@@ -241,7 +241,7 @@ class TransactionsController < ApplicationController
 
         if params[:type] == 'purchase'
           @transaction.transaction_properties.each do |transaction_property|
-            if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == "accept_asking" && transaction_property.is_selected
+            if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == 1 && transaction_property.is_selected
               if transaction_property.transaction_property_offers.destroy_all
                 transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
               end
