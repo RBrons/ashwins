@@ -184,7 +184,7 @@ class Entity < ApplicationRecord
     if level <= 4
       # initialize a new node
       name = if paf
-        "#{super_entity.display_name} - #{percentage(paf)} (#{paf_name(super_entity, paf)})"
+        "#{entity.display_name} - #{percentage(paf)} (#{paf_name(entity, paf)})"
       else
         entity.display_name
       end
@@ -195,10 +195,10 @@ class Entity < ApplicationRecord
         node[:nodes].push({text: "#{p.name} (#{p.ownership_status} Property)"})
       end
       # check for owned entities
-      PeopleAndFirm.where.not(class_name: never_owners).where(entity_id: entity.id).each do |paf|
-        super_entity = Entity.where.not(type_: [7,8,9]).where(id: paf.super_entity_id).first
+      PeopleAndFirm.where.not(class_name: never_owners).where(entity_id: entity.id).each do |paf0|
+        super_entity = Entity.where.not(type_: [7,8,9]).where(id: paf0.super_entity_id).first
         if super_entity
-          node[:nodes] << build_ownership_tree_json0(super_entity, paf, level + 1)
+          node[:nodes] << build_ownership_tree_json0(super_entity, paf0, level + 1)
         end
       end
       node.except!(:nodes) if node[:nodes].empty?
