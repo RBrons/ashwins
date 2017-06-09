@@ -9,6 +9,12 @@ class XhrController < ApplicationController
   #   render :json => result
   # end
 
+  def save_transaction_subtab
+    tp_id = params[:id]
+    TransactionProperty.find(tp_id).update(current_step_subtab: params[:subtab])
+    render :json => {status: 'success'}
+  end
+
   def add_new_tenant
     if new_tenant = current_user.tenants.create(name: params[:name])
       render :json => {status: "success", id: new_tenant.id}

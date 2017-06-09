@@ -113,7 +113,7 @@ class Entity < ApplicationRecord
     }
   end
 
-  def build_ownership_tree_json
+  def build_ownership_tree_json_old
     result = [{text: self.display_name, nodes:[]}]
 
     PeopleAndFirm.where.not(class_name: ["Settlor", "Director", "Officer", "Agent", "Judge", "Guardian", "Manager", "Spouse"]).where(entity_id: self.id).each do |paf|
@@ -161,7 +161,49 @@ class Entity < ApplicationRecord
     if result[0][:nodes] == []
       result[0].reject! {|key| key == :nodes}
     end
+    # p "lets compare "
+    # p result
+    # p "now"
+    # p self.build_ownership_tree_json1
     result
+  end
+
+  def build_ownership_tree_json
+    # result = [{text: self.display_name, nodes:[]}]
+    # Property.where(owner_entity_id: self.id).each do |p|
+    #  result[:nodes].push({text: "#{p.name} (#{p.ownership_status} Property)"})
+    # end
+    # result[:nodes] << build_ownership_tree_json0(self, result[:nodes], 2)
+    # result.except!(:nodes) if result[:nodes].empty?
+    # result
+    [build_ownership_tree_json0(self, nil, 0)]
+  end
+
+  def build_ownership_tree_json0(entity, paf, level)
+    never_owners = ["Settlor", "Director", "Officer", "Agent", "Judge", "Guardian", "Manager", "Spouse"]
+    if level <= 4
+      # initialize a new node
+      name = if paf
+        "#{super_entity.display_name} - #{percentage(paf)} (#{paf_name(super_entity, paf)})"
+      else
+        entity.display_name
+      end
+      # name = "#{super_entity.display_name} - #{percentage(paf)} (#{paf_name(super_entity, paf)})"
+      node = {text: name, nodes: []}
+      # check for properties
+      Property.where(owner_entity_id: entity.id).each do |p|
+        node[:nodes].push({text: "#{p.name} (#{p.ownership_status} Property)"})
+      end
+      # check for owned entities
+      PeopleAndFirm.where.not(class_name: never_owners).where(entity_id: entity.id).each do |paf|
+        super_entity = Entity.where.not(type_: [7,8,9]).where(id: paf.super_entity_id).first
+        if super_entity
+          node[:nodes] << build_ownership_tree_json0(super_entity, paf, level + 1)
+        end
+      end
+      node.except!(:nodes) if node[:nodes].empty?
+      return node
+    end
   end
 
   def self.PurchasedPropertyEntity
