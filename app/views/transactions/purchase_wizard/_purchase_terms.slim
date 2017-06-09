@@ -307,9 +307,8 @@
               .form-group
                 label.control-lable First Deposit To Be Received By
                 .clearfix
-                = transaction_term_form.hidden_field :first_deposit_days_after_psa
-                = transaction_term_form.text_field :first_deposit_date_due, readonly: true, class: 'form-control editable-date-field-on-psa'
-                = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", style: "display: none"
+                = transaction_term_form.hidden_field :first_deposit_days_after_psa, disabled: true
+                = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: true
               .clearfix
               .form-group
                 label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
@@ -321,9 +320,8 @@
               .form-group.transaction_transaction_term_attributes_second_deposit_wrapper[style="#{transaction_term_form.object.second_deposit ? '' : 'display: none'}"]
                 label.control-lable Second Deposit To Be Received By
                 .clearfix
-                = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: !transaction_term_form.object.second_deposit
-                = transaction_term_form.text_field :second_deposit_date_due, placeholder: 'YYYY-MM-DD', readonly: true, class: 'form-control editable-date-field-on-psa'
-                = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: !transaction_term_form.object.second_deposit, style: "display: none"
+                = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: true
+                = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: !transaction_term_form.object.second_deposit, disabled: true
               .clearfix
               .form-group
                   label.control-lable Definition Of Holidays
