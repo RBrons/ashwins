@@ -81,18 +81,29 @@
                     span.label.label-success.pull-right Not in contract
               td = p.try(:psa_date)
               td
-                - if !sale_closing_date.nil?
-                  = (maint.identification_deadline.to_date - today_).to_i
+                - unless p.closed?
+                  - if !sale_closing_date.nil?
+                    = (maint.identification_deadline.to_date - today_).to_i
               td
-                - if !sale_closing_date.nil?
-                  = (maint.transaction_deadline.to_date - today_).to_i
-              td = (p.first_deposit_date_due - today_).to_i if p.first_deposit_date_due.present?
-              td = (p.inspection_period_days - (today_ - p.psa_date).to_i) if p.psa_date.present?
+                - unless p.closed?
+                  - if !sale_closing_date.nil?
+                    = (maint.transaction_deadline.to_date - today_).to_i
               td
-                - if p.second_deposit_date_due.present?
-                 = (p.second_deposit_date_due - today_).to_i
-                - else
-                  = 'N/A'
+                - unless p.closed?
+                  = (p.first_deposit_date_due - today_).to_i if p.first_deposit_date_due.present?
+              td
+                - unless p.closed?
+                  - if p.psa_date.present?
+                    - if (p.inspection_period_days - (today_ - p.psa_date).to_i )> 0
+                      = (p.inspection_period_days - (today_ - p.psa_date).to_i)
+                    - else
+                      = 'Expired'
+              td
+                - unless p.closed?
+                  - if p.second_deposit_date_due.present?
+                   = (p.second_deposit_date_due - today_).to_i
+                  - else
+                    = 'N/A'
               td
                 = (p.closing_date.to_date - today_).to_i if p.closing_date.present?
                 br
@@ -185,11 +196,20 @@
                     span.label.label-success.pull-right Not in contract
               td = p.try(:psa_date)
               td
-                span = "#{ p.try(:measured_days_to_1st_deposit) }"
+                - unless p.closed?
+                  span = "#{ p.try(:measured_days_to_1st_deposit) }"
               td
-                span = "#{ p.try(:measured_days_to_end_of_inspection) }"
+                - unless p.closed?
+                  span
+                    - if p.psa_date.present?
+                      - if (p.inspection_period_days - (today_ - p.psa_date).to_i )> 0
+                        = (p.inspection_period_days - (today_ - p.psa_date).to_i)
+                      - else
+                        = 'Expired'
+                    /= "#{ p.try(:measured_days_to_end_of_inspection) }"
               td
-                span = "#{ p.try(:measured_days_to_2nd_deposit) }"
+                - unless p.closed?
+                  span = "#{ p.try(:measured_days_to_2nd_deposit) }"
               td
                 span = "#{ p.try(:measured_days_to_closing) }"
               td
