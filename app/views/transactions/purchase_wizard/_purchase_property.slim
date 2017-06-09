@@ -127,8 +127,8 @@
                                     = image_tag 'sale_house.jpg', class: "img-responsive width-100"
                             .clearfix.margin-lg-top
                             input type='hidden' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='1' id='property_#{transaction_property_form.object.property_id.to_s}_asking_mode'
-                            = transaction_property_form.hidden_field :cap_rate, id: 'property_' + transaction_property_form.object.property_id.to_s + '_cap_rate'
-                            = transaction_property_form.hidden_field :sale_price, id: 'property_' + transaction_property_form.object.property_id.to_s + '_price'
+                            = transaction_property_form.hidden_field :cap_rate, id: 'property_' + transaction_property_form.object.property_id.to_s + '_cap_rate', value: transaction_property_form.object.cap_rate || transaction_property_form.object.property.cap_rate
+                            = transaction_property_form.hidden_field :sale_price, id: 'property_' + transaction_property_form.object.property_id.to_s + '_price', value: transaction_property_form.object.sale_price || transaction_property_form.object.property.price
                             / Modal When hits Make Counter
                             / .md-make-counter.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
                             /     .modal-dialog[role="document"]
