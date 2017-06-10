@@ -6,7 +6,7 @@
         = select_date(@closing_date, { order: [:month, :day, :year] }, { :class => "form-control select_auto",  disabled: true })
     .clearfix
     .form-group
-        label Closing Proceeds
+        label Closing Outlay
         .input-group
             .input-group-addon $
             = text_field_tag :closing_proceeds, @closing_proceeds, :readonly => true, class: 'form-control input-mask-currency width-field-sm'
@@ -20,7 +20,7 @@
             = select_date(@closing_date, {order: [:month, :day, :year]}, {:class => "form-control select_auto"} )
         .clearfix
         .form-group
-            label.control-label Closing Proceeds
+            label.control-label Closing Outlay
             .input-group
                 .input-group-addon $
                 = text_field_tag :closing_proceeds, @closing_proceeds, class: 'form-control input-mask-currency width-field-md'
