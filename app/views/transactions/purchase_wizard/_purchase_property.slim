@@ -12,9 +12,7 @@
                 a#environmental[href="#properties_identification" role="tab" data-toggle="tab" aria-expanded="false"] Identification
         
         .tab-content
-        
             #properties_for_sale.active.tab-pane.fade.in[role="tabpanel"]
-                
                 - if @transaction.errors.any?
                     #error_explanation
                     h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
@@ -166,39 +164,103 @@
                 .col-md-4.col-xs-12
                     .form-group
                         label.control-label Identification Rule
-                        select#property_identification_rule.form-control.width-field-md
+                        select#transaction_identification_rule.form-control.width-field-md
                             option[value="three_property"] Three Properties
                             option[value="200_percent"] 200%
                             option[value="95_percent"] 95%
+                .clearfix
+                section#200_percent_measure[style="display: none"]
+                    - est_bugdets = get_est_identification_bugdets(@transaction_main.sale)
+                    - purchase_costs = get_purchase_property_costs(@transaction_main.purchase)
+                    .toolbar-btn-action.pull-right
+                        a.btn.btn-success Save this basket
+                        a.btn.btn-danger Identify this basket to QI
+                    .clearfix
+                    .x-panel
+                        .x-title 
+                            h2 Identification Budget
+                        .x-content
+                            table#identification_budget.table.table-bordered
+                                thead
+                                    tr
+                                        th Sum of All Properties Closed x 2
+                                        th Sum of All Properties Closed and Contract x 2
+                                        th Sum of All Properties Closed and Contract or Asking x 2
+                                tbody
+                                    tr
+                                        td 
+                                            span.red = number_to_currency(est_bugdets[0])
+                                        td 
+                                            span.orange = number_to_currency(est_bugdets[1])
 
-                table#data_table.property_identification_table
-                    thead
-                        tr
-                            th Property Title
-                            th Current Rent
-                            th Asking Cap Rate
-                            th Asking Price
-                            th Cap Rate Counter
-                            th Price Counter
-                    tbody
-                        - @transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
-                            tr[id="#{'property_' + transaction_property.property_id.to_s}"]
-                                td.green = transaction_property.property.title
-                                td = number_to_currency(transaction_property.property.current_rent)
-                                td = transaction_property.property.cap_rate
-                                td = number_to_currency(transaction_property.property.price)
-                                td 
-                                    - if transaction_property.is_in_contract? || transaction_property.closed?
-                                        = transaction_property.cap_rate
-                                    - else
-                                        input[type="text" class="counter-cap-rate input-mask-currency" value="#{transaction_property.cap_rate}"]
-                                td 
-                                    - if transaction_property.is_in_contract? || transaction_property.closed?
-                                        = number_to_currency(transaction_property.sale_price)
-                                    - else
-                                        span $&nbsp;
-                                        input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price}"]
-            
+                                        td 
+                                            span.green = number_to_currency(est_bugdets[2])
+                    .x-panel
+                        .x-title    
+                            h2 Underage (Positive Number) or Overage(Negative Number)
+                        .x-content
+                            table.table.table-bordered
+                                thead
+                                    tr
+                                        th Caculated by Cost of All Properties in Contract
+                                        th Caculated by Cost of All Properties Selected or in Contract
+                                tbody
+                                    tr
+                                        td 
+                                            span.red = "#{number_to_currency(est_bugdets[0] - purchase_costs[0])}, "
+                                            span.orange = "#{number_to_currency(est_bugdets[1] - purchase_costs[0])}, "
+                                            span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[0])}"
+                                        td 
+                                            span.red = "#{number_to_currency(est_bugdets[0] - purchase_costs[1])}, "
+                                            span.orange = "#{number_to_currency(est_bugdets[1] - purchase_costs[1])}, "
+                                            span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[1])}"
+                                
+                    .x-panel
+                        .x-title    
+                        .x-content
+                            table.table.table-bordered
+                                thead
+                                    tr
+                                        th Purchase Cost of All Properties in Contract
+                                        th Purchase Cost of All Properties Selected or in Contract
+                                tbody
+                                    tr
+                                        td
+                                            span.orange = number_to_currency(purchase_costs[0])
+                                        td
+                                            span.green = number_to_currency(purchase_costs[1])
+
+                section#three-property-measure
+                    table#data_table.property_identification_table
+                        thead
+                            tr
+                                th Property Title
+                                th Current Rent
+                                th Asking Cap Rate
+                                th Asking Price
+                                th Cap Rate Counter
+                                th Price Counter
+                        tbody
+                            - @transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
+                                tr[id="#{'property_' + transaction_property.property_id.to_s}"]
+                                    td.green = transaction_property.property.title
+                                    td = number_to_currency(transaction_property.property.current_rent)
+                                    td = transaction_property.property.cap_rate
+                                    td = number_to_currency(transaction_property.property.price)
+                                    td 
+                                        - if transaction_property.is_in_contract? || transaction_property.closed?
+                                            = transaction_property.cap_rate
+                                        - else
+                                            input[type="text" class="counter-cap-rate input-mask-currency" value="#{transaction_property.cap_rate}"]
+                                    td 
+                                        - if transaction_property.is_in_contract? || transaction_property.closed?
+                                            = number_to_currency(transaction_property.sale_price)
+                                        - else
+                                            span $&nbsp;
+                                            input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price}"]
+                
+                
+                                
     .clearfix
     .divider
     / = f.link_to_add "Add Property", :transaction_properties, data: {target: ".transaction_properties_wrapper"}, class: 'btn btn-primary next-prev margin-sm-right'

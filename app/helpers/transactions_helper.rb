@@ -88,4 +88,45 @@ module TransactionsHelper
       return retVal
     end
 
+    def get_purchase_property_costs(transaction)
+        total_purchase_cost_of_contracted = 0
+        total_purchase_cost_of_contracted_selected = 0
+        transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
+            
+            if transaction_property.closed?
+                # do something
+            elsif transaction_property.is_in_contract?
+                total_purchase_cost_of_contracted += transaction_property.sale_price || 0
+                total_purchase_cost_of_contracted_selected += transaction_property.sale_price || 0
+            else
+                total_purchase_cost_of_contracted_selected += transaction_property.sale_price || 0
+            end
+            
+        end
+    
+        return [total_purchase_cost_of_contracted, total_purchase_cost_of_contracted_selected]
+    end
+
+    def get_est_identification_bugdets(transaction)
+        total_est_budget_of_closed = 0
+        total_est_budget_of_closed_contracted = 0
+        total_est_budget_of_closed_contracted_selected = 0
+        transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
+            
+            if transaction_property.closed?
+                total_est_budget_of_closed += transaction_property.closing_proceeds || 0
+                total_est_budget_of_closed_contracted += transaction_property.closing_proceeds || 0
+                total_est_budget_of_closed_contracted_selected += transaction_property.closing_proceeds || 0
+            elsif transaction_property.is_in_contract?
+                total_est_budget_of_closed_contracted += transaction_property.sale_price * 0.1 || 0
+                total_est_budget_of_closed_contracted_selected += transaction_property.sale_price * 0.1 || 0
+            else
+                total_est_budget_of_closed_contracted_selected += transaction_property.sale_price * 0.1 || 0
+            
+            end
+        end
+        
+        return [total_est_budget_of_closed * 2, total_est_budget_of_closed_contracted * 2, total_est_budget_of_closed_contracted_selected * 2]
+    end
+
 end

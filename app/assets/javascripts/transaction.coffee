@@ -778,13 +778,22 @@ $ ->
   checkShowButton()
 
   #--- Created by DeskStar ---
+  $(document).on 'change', 'select#transaction_identification_rule', ->
+    switch $(this).val()
+      when 'three_property'
+        $(document).find('section#200_percent_measure').hide()
+      when '200_percent'
+        $(document).find('section#200_percent_measure').show()
+      when '95_percent'
+        $(document).find('section#200_percent_measure').hide()
+
   $(document).on 'ifChanged', '.is_selected_property', ->
     el = $(this)
     if this.checked
       $(this).parents(".fields").removeClass('property-unchecked')
       selected_property_count = $(document).find(".fields").length - $(document).find(".fields.property-unchecked").length
       console.log selected_property_count
-      if $(document).find('#property_identification_rule').val() == 'three_property'
+      if $(document).find('#transaction_identification_rule').val() == 'three_property'
         if selected_property_count > 3
           setTimeout (->
             el.iCheck('uncheck')
