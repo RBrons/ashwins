@@ -98,6 +98,7 @@
                         = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Seller\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
 
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
+        input.is_passed[type="hidden" value="#{@transaction_property.transaction_term.purchase_price.present? ? true : false}"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
           span = @replacement_seller.try(:name) || 'Seller'
           span &nbsp;is selling&nbsp;

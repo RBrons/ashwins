@@ -161,6 +161,7 @@
                 #attorney_section.tab-pane.fade[role="tabpanel"]
 
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
+        input.is_passed[type="hidden" value="#{@transaction_property.transaction_term.purchase_price.present? ? true : false}"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
           span = @relinquishing_purchaser.try(:name) || 'Offeror'
           span &nbsp;is purchasing&nbsp;
