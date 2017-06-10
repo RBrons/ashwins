@@ -97,6 +97,7 @@ class PropertiesController < ApplicationController
       end
 
       respond_to do |format|
+        flash[:success] = "New Images Successfully Uploaded.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
         format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }
         format.json { render action: 'show', status: :created, location: @property }
       end
@@ -213,6 +214,8 @@ class PropertiesController < ApplicationController
             end
 
           end
+
+          flash[:success] = "The Property Successfully Updated.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
 
           format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }
           format.json { render action: 'show', status: :created, location: @property }

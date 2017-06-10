@@ -111,7 +111,7 @@
                   .input-group
                       span.input-group-btn
                           button.btn.btn-default[type="button"] $
-                      = transaction_term_form.text_field :purchase_price, value: get_sale_price(@transaction_property), class: 'form-control input-mask-currency', id: 'relinquishing_property_sale_price', readonly: true
+                      = transaction_term_form.text_field :purchase_price, value: @transaction_property.sale_price, class: 'form-control input-mask-currency', id: 'relinquishing_property_sale_price', readonly: true
               .form-group
                   label.control-lable Current Annual Rent
                   .input-group
@@ -121,7 +121,7 @@
               .form-group
                   label.control-lable Cap Rate
                   .input-group
-                    = transaction_term_form.text_field :cap_rate, value: (number_with_precision(@property.current_rent.to_f * 100 / get_sale_price(@transaction_property).to_f, precision: 2) if get_sale_price(@transaction_property).to_f != 0), class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
+                    = transaction_term_form.text_field :cap_rate, value: @transaction_property.cap_rate, class: 'form-control', id: 'relinquishing_property_rat_race', readonly: true
                     span.input-group-btn
                       button.btn.btn-default[type="button"] %
               .form-group
