@@ -6,6 +6,7 @@ $ ->
   property_identification_table = $(document).find('.property_identification_table').DataTable()
   last_counteroffer = ""
   alert_for_three_property_rule = "Because you selected three property rule, you can not select any more properties to buy"
+  not_passed_LOI = 'You are proceeding to contract without completing the LOI. Are you sure you want to do this? User will have the option to proceed'
 
   sub_tab_id = $("#sub_tab_val").val()
   console.log sub_tab_id
@@ -374,6 +375,11 @@ $ ->
       positionCaretOnTab: true
 
   $(document).on 'click', '#sale_buy_step_tab li a', (e)->
+    if $(this).attr('id') == 'purchase_sale_agreement'
+      if $(document).find('#letter_of_intent_section .is_passed').val() == 'false'
+        sweetAlert('', not_passed_LOI, 'warning')
+        return
+    
     selected_transaction_sub_tab = $(document).find($(this).attr('href'))
     curPropertyId = $("#cur_property_id").val()
     selectedTabId = $(this).attr("id")
@@ -602,6 +608,7 @@ $ ->
       psa_date = new Date(data.psa_date)
       $(document).find('.side-menu>li>.nav.child_menu>li.current-page').addClass('in-contract')
     else
+      $(document).find('#letter_of_intent_section .is_passed').val(true)
       psa_date = new Date()
 
     console.log psa_date
