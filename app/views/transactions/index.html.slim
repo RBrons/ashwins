@@ -62,9 +62,9 @@
               /       br
 
               / td
-              /   - sale_closing_date = maint.identification_deadline
-              /   - if !sale_closing_date.nil?
-              /     - sale_closing_date = sale_closing_date - 45.days
+              - sale_closing_date = maint.identification_deadline
+              - if !sale_closing_date.nil?
+                - sale_closing_date = sale_closing_date - 45.days
               /   = sale_closing_date.try(:strftime, '%d-%b-%Y')
               td = number_to_currency(maint.qi_funds)
               td = number_to_currency(var.funds_identified)
@@ -81,13 +81,11 @@
                     span.label.label-success.pull-right Not in contract
               td = p.try(:psa_date)
               td
-                - unless p.closed?
-                  - if !sale_closing_date.nil?
-                    = (maint.identification_deadline.to_date - today_).to_i
+                - if !sale_closing_date.nil?
+                  = (maint.identification_deadline.to_date - today_).to_i
               td
-                - unless p.closed?
-                  - if !sale_closing_date.nil?
-                    = (maint.transaction_deadline.to_date - today_).to_i
+                - if !sale_closing_date.nil?
+                  = (maint.transaction_deadline.to_date - today_).to_i
               td
                 - unless p.closed?
                   = (p.first_deposit_date_due - today_).to_i if p.first_deposit_date_due.present?
