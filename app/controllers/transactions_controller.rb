@@ -485,13 +485,16 @@ class TransactionsController < ApplicationController
     #coming soon
     @transaction_property = @transaction.transaction_properties.where(property_id: params[:cur_property]).first
     respond_to do |format|
-      if @transaction_property.update(transaction_inspection_params)
-        format.html {
-          redirect_to closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id])
-        }
-        format.json { render json: true }
+      if params[:transaction]
+        if @transaction_property.update(transaction_inspection_params)
+          format.html {
+            redirect_to closing_transaction_path(@transaction, sub: 'closing', type: 'purchase', cur_property: params[:cur_property], main_id: params[:main_id])
+          }
+          format.json { render json: true }
+        else
+        end
       else
-
+        format.json { render json: true }
       end
     end
   end
