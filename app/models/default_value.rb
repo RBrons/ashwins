@@ -13,7 +13,7 @@ class DefaultValue < ApplicationRecord
   TRANSACTION_SALE_OPTIONS = ["Amount", "Date", "String", "Integer", "Random Seller"]
 
   RANDOM_MODE = [{entity: 'Property', attribute: 'LocationCity', vtype: 'Random US City'},
-                 {entity: 'Property', attribute: 'TenantIs', vtype: 'Random Tenant'},
+                 {entity: 'Property', attribute: 'TenantId', vtype: 'Random Tenant'},
                  {entity: 'Property', attribute: 'CapRate', vtype: 'Random Cap Rate'},
                  {entity: 'Property', attribute: 'CurrentRent', vtype: 'Random Rent'},
                  {entity: 'Property', attribute: 'OwnerEntityId', vtype: 'Random Owner'},
