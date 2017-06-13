@@ -68,6 +68,13 @@ div[role="tabpanel"]
 
           .clearfix
           .form-group
+            h2.heading Current Monthly Rent
+            .input-group
+              .input-group-addon $
+              = f.text_field :current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+
+          .clearfix
+          .form-group
             = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_rent_table_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
@@ -108,6 +115,13 @@ div[role="tabpanel"]
               .input-group
                 .input-group-addon $
                 = f.text_field :lease_base_rent, class: 'form-control input-mask-currency', :readonly => true
+
+            .clearfix
+            .form-group
+              h2.heading Current Monthly Rent
+              .input-group
+                .input-group-addon $
+                = f.text_field :current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
 
             .clearfix
             .form-group
