@@ -41,6 +41,9 @@
         - maint = var.main
         - next if maint.blank?
         - sale_closing_date = nil
+        - sale_closing_date = maint.identification_deadline
+        - if !sale_closing_date.nil?
+          - sale_closing_date = sale_closing_date - 45.days
         - today_ = Date.today #Time.now
         - if var.transaction_properties.count != 0
           - var.transaction_properties.where(is_selected: true).order(updated_at: :desc, created_at: :desc).each_with_index do |p, index|
@@ -62,9 +65,6 @@
               /       br
 
               / td
-              - sale_closing_date = maint.identification_deadline
-              - if !sale_closing_date.nil?
-                - sale_closing_date = sale_closing_date - 45.days
               /   = sale_closing_date.try(:strftime, '%d-%b-%Y')
               td = number_to_currency(maint.qi_funds)
               td = number_to_currency(var.funds_identified)
@@ -128,8 +128,6 @@
 
             td = var.purchaser_name
             td = var.seller_name
-            / td
-            / td
             td
             td
             td
@@ -137,7 +135,11 @@
             td
             td
             td
+              - if !sale_closing_date.nil?
+                = (maint.identification_deadline.to_date - today_).to_i
             td
+              - if !sale_closing_date.nil?
+                = (maint.transaction_deadline.to_date - today_).to_i
             td
             td
             td
