@@ -193,7 +193,22 @@ class Property < ApplicationRecord
   end
 
   def can_create_rent_table?
-    self.lease_base_rent.present? && self.lease_duration_in_years.present? && self.lease_rent_increase_percentage.present? && self.lease_rent_slab_in_years.present?
+    self.lease_base_rent.present? && self.lease_duration_in_years.present? &&
+      self.lease_rent_increase_percentage.present? && self.lease_rent_slab_in_years.present? &&
+      self.starting_date_of_lease_amendment.present? && self.rent_commencement_date.present?
+  end
+
+  def current_monthly_rent
+    return 0 if !self.can_create_rent_table?
+    start_date = self.rent_commencement_date
+    end_date = self.starting_date_of_lease_amendment + self.lease_duration_in_years.years
+    today = Date.today
+    return 0 if today.year < start_date.year || today.year > end_date.year
+    return 0 if today.month < start_date.month && today.year == start_date.year
+    return 0 if today.month > end_date.month && today.year == end_date.year
+    return self.pro_rated_month_rent if today.month == self.pro_rated_month &&
+                                        today.year == start_date.year
+    return (self.lease_base_rent / 12.00)
   end
 
   def monthly_rent_table

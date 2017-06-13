@@ -176,10 +176,10 @@ class Entity < ApplicationRecord
     # result[:nodes] << build_ownership_tree_json0(self, result[:nodes], 2)
     # result.except!(:nodes) if result[:nodes].empty?
     # result
-    [build_ownership_tree_json0(self, nil, 0)]
+    [build_ownership_tree_json0(self, nil, 0, 100)]
   end
 
-  def build_ownership_tree_json0(entity, paf, level)
+  def build_ownership_tree_json0(entity, paf, level, pc = 0)
     never_owners = ["Settlor", "Director", "Officer", "Agent", "Judge", "Guardian", "Manager", "Spouse"]
     if level <= 4
       # initialize a new node
@@ -189,19 +189,33 @@ class Entity < ApplicationRecord
         entity.display_name
       end
       # name = "#{super_entity.display_name} - #{percentage(paf)} (#{paf_name(super_entity, paf)})"
-      node = {text: name, nodes: []}
+      node = {text: name, nodes: [], amount: 0.00}
       # check for properties
       Property.where(owner_entity_id: entity.id).each do |p|
-        node[:nodes].push({text: "#{p.name} (#{p.ownership_status} Property)"})
+        current_rent = p.current_monthly_rent
+        add_str = ""
+        if current_rent > 0
+          add_str = " Monthly Rent: #{ActionController::Base.helpers.number_to_currency current_rent}"
+          node[:amount] = node[:amount] + ((pc * current_rent) / 100.00)
+        end
+        node[:nodes].push({text: "#{p.name} (#{p.ownership_status} Property)" + add_str})
       end
       # check for owned entities
       PeopleAndFirm.where.not(class_name: never_owners).where(entity_id: entity.id).each do |paf0|
         super_entity = Entity.where.not(type_: [7,8,9]).where(id: paf0.super_entity_id).first
         if super_entity
-          node[:nodes] << build_ownership_tree_json0(super_entity, paf0, level + 1)
+          node[:nodes] << build_ownership_tree_json0(super_entity, paf0, level + 1, (pc*percentage(paf)) / 100 )
+          node[:nodes].each do |n|
+            node[:amount] = node[:amount] + n[:amount]
+          end
         end
       end
       node.except!(:nodes) if node[:nodes].empty?
+      add_str = ""
+      if node[:amount] > 0
+        add_str = " Cumulative Monthly Income : #{ActionController::Base.helpers.number_to_currency node[:amount]}"
+      end
+      node[:text] = name + add_str
       return node
     end
   end
