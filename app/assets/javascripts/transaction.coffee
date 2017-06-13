@@ -32,6 +32,9 @@ $ ->
       $(document).find('#data_table.sale_mode tbody tr td span.deadline-detail').hide()
 
   # Save & Next button
+  $(document).on 'click', '.no-submit-form', -> 
+    $('#sale_buy_step_tab li.active').next().find('a').click()
+  
   $(document).on 'click', '#save-and-next', (e) ->
     e.preventDefault()
     save_and_next_btn_in_step = $(document).find('.save_next_in_step')
