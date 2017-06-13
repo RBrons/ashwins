@@ -206,7 +206,7 @@ class Entity < ApplicationRecord
         if super_entity
           node[:nodes] << build_ownership_tree_json0(super_entity, paf0, level + 1, (pc*percentage(paf)) / 100 )
           node[:nodes].each do |n|
-            node[:amount] = node[:amount] + n[:amount]
+            node[:amount] = node[:amount] + (n[:amount] || 0.00)
           end
         end
       end
