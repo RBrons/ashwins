@@ -308,10 +308,11 @@ class Entity < ApplicationRecord
   private
 
   def percentage paf
+    return 0 if paf.nil?
     if paf.class_name == "StockHolder"
       paf.my_percentage_stockholder
     else
-    paf.my_percentage
+      paf.my_percentage
     end
   end
 
