@@ -44,7 +44,11 @@
                               - owner_name = @property.owner.name
                             - else
                               - owner_name = "No Owner Name"
-                            = "#{owner_name} is Asking".html_safe
+                            
+                            - if !transaction_property_offer.is_accepted?
+                              = "#{@transaction.seller_name} is Asking".html_safe
+                            - else
+                              = "#{@transaction.seller_name.blank? ? 'Seller(No Name)' : @transaction.seller_name} and #{@transaction.purchaser_name.blank? ? 'Purchaser(No Name)' : @transaction.purchaser_name} have agreed to the price of ".html_safe
                           h1.property-price.green.margin-lg-top
                             = number_to_currency(@transaction_property.try(:sale_price))
                           - if @property.try(:title).present?
@@ -65,7 +69,11 @@
                             td[width="150"]
                               span.editable-date[data-name="offered_date" data-type="combodate" data-value="#{counteroffer.offered_date}" data-format="YYYY-MM-DD" data-viewformat="MM/DD/YYYY" data-url="#{counteroffer_path(counteroffer.id)}"]
                             td[width="300"]
-                              span = counteroffer.offer_type
+                              span 
+                                - if counteroffer.offer_type == 'Client'
+                                  = "Seller".html_safe
+                                - else
+                                  = "Client".html_safe
                             td[width="300"]
                               span.green.editable-currency[data-name="offered_price" data-type="text" data-value="#{number_to_currency(counteroffer.offered_price)}" data-url="#{counteroffer_path(counteroffer.id)}"]
                             td
