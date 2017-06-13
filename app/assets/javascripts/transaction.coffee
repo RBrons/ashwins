@@ -418,7 +418,6 @@ $ ->
             $(document).find('#offer_list li.active a').text(data.first_name)
           else
             $(document).find('#offer_list li.active a').text(data.company_name)
-          $.notify "Success!", "success"
         else
           $.notify "Failed!", "error"
 
