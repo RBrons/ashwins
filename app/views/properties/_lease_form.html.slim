@@ -64,14 +64,14 @@ div[role="tabpanel"]
               h2.heading Lease Base Rent
               .input-group
                 .input-group-addon $
-                = f.text_field :lease_base_rent, class: 'form-control input-mask-currency'
+                = f.text_field :current_rent, class: 'form-control input-mask-currency'
 
           .clearfix
           .form-group
             h2.heading Current Monthly Rent
             .input-group
               .input-group-addon $
-              = f.text_field :current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+              = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
 
           .clearfix
           .form-group
@@ -114,14 +114,14 @@ div[role="tabpanel"]
               h2.heading Lease Base Rent
               .input-group
                 .input-group-addon $
-                = f.text_field :lease_base_rent, class: 'form-control input-mask-currency', :readonly => true
+                = f.text_field :current_rent, class: 'form-control input-mask-currency', :readonly => true
 
             .clearfix
             .form-group
               h2.heading Current Monthly Rent
               .input-group
                 .input-group-addon $
-                = f.text_field :current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+                = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
 
             .clearfix
             .form-group
