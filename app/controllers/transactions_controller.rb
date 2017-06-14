@@ -156,6 +156,9 @@ class TransactionsController < ApplicationController
     end
     params[:main_id] = @transaction_main.id
     build_gallery_transaction_properties @transaction, params[:type]
+    if params[:type] == 'purchase'
+      @transaction.transaction_baskets.build
+    end
 
   end
 
