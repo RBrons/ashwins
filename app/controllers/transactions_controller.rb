@@ -206,6 +206,11 @@ class TransactionsController < ApplicationController
     # if @transaction.transaction_properties.blank?
     #   @transaction.transaction_properties.build
     # end
+    if params[:type] == 'purchase'
+      if @transaction.transaction_baskets.blank?
+        @transaction.transaction_baskets.build
+      end
+    end
     @transaction.entity_info = @transaction.seller_name || @transaction.purchaser_name
     # @transaction.transaction_properties.build
     build_gallery_transaction_properties @transaction, params[:type]

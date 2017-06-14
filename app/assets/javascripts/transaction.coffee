@@ -2,8 +2,9 @@
 $ ->
   # Global Variables
   selected_offer_tab = $(document).find($(document).find('#offer_list li.active a').attr('href'))
+  selected_basket_tab = $(document).find($(document).find('#basket_list li.active a').attr('href'))
   selected_transaction_sub_tab = $(document).find($(document).find('#sale_buy_step_tab li.active a').attr('href'))
-  property_identification_table = $(document).find('.property_identification_table').DataTable()
+  property_identification_table = $(document).find('#property_identification_table_wrapper #data_table').DataTable()
   last_counteroffer = ""
   alert_for_three_property_rule = "Because you selected three property rule, you can not select any more properties to buy"
   not_passed_LOI = 'You are proceeding to contract without completing the LOI. Are you sure you want to do this? User will have the option to proceed'
@@ -303,8 +304,11 @@ $ ->
     selected_offer_tab.find('.individual-fields-wrapper').find('input').val('')
 
 
-  $("#offer_list li").children('a').first().click()
-  selected_offer_tab = $(document).find($("#offer_list li").children('a').first().attr('href'))
+  $("#offer_list li").first().children('a').click()
+  selected_offer_tab = $(document).find($("#offer_list li").first().children('a').attr('href'))
+
+  $("#basket_list li").first().children('a').click()
+  selected_basket_tab = $(document).find($("#basket_list li").first().children('a').attr('href'))
 
   initialize_editable_date_field = ->
     $(document).find('.editable-date').editable
@@ -400,6 +404,9 @@ $ ->
 
   $(document).on 'click', '#offer_list li a', (e)->
     selected_offer_tab = $(document).find($(this).attr('href'))
+
+  $(document).on 'click', '#basket_list li a', (e)->
+    selected_basket_tab = $(document).find($(this).attr('href'))
 
   $(document).on 'change', '.relingquishing_offeror_form input', ->
     if selected_offer_tab.find('.relingquishing_offeror_form').attr('action') != ""
@@ -811,13 +818,40 @@ $ ->
           sweetAlert("", alert_for_three_property_rule, "warning")
           return
       add_property_to_identification($(this).parents(".fields"))
+      add_property_to_basket($(this).parents(".fields"))
     else
       $(this).parents(".fields").addClass('property-unchecked')
       delete_property_to_identification($(this).parents(".fields"))
     checkShowButton()
+  
+  calculate_purchase_costs = ->
+    purchase_cost_in_contract = 0
+    purchase_cost_in_contract_selected = 0
+    selected_basket_tab.find('.basket_property_table tr').each ->
+      if $(this).find('input.object_select').is(':checked')
+        if $(this).find('td').eq(1).text() == 'Closed'
+          # Nothing yet
+        else if $(this).find('td').eq(1).text() == 'In Contract'
+          purchase_cost_in_contract += parseInt($(this).find('td').eq(5).data('property_price'))
+          purchase_cost_in_contract_selected += parseFloat($(this).find('td').eq(5).data('property_price'))
+        else
+          purchase_cost_in_contract_selected += parseFloat($(this).find('td').eq(5).data('property_price'))
+    
+    selected_basket_tab.find('.purchase_property_cost_table tr:first-child td span.orange').text('$' + purchase_cost_in_contract.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
+    selected_basket_tab.find('.purchase_property_cost_table tr:first-child td span.green').text('$' + purchase_cost_in_contract_selected.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
+
+    est_identification_budget1 = parseFloat(selected_basket_tab.find('.identification_budget_table tr:first-child td').eq(0).data('closed_total_price'))
+    est_identification_budget2 = parseFloat(selected_basket_tab.find('.identification_budget_table tr:first-child td').eq(1).data('closed_contract_total_price'))
+    est_identification_budget3 = parseFloat(selected_basket_tab.find('.identification_budget_table tr:first-child td').eq(2).data('closed_contract_asking_total_price'))
+    selected_basket_tab.find('.underage_or_overage_table tr:first-child td span.red').text('$' + (est_identification_budget1 - purchase_cost_in_contract).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' | ')
+    selected_basket_tab.find('.underage_or_overage_table tr:first-child td span.orange').text('$' + (est_identification_budget2 - purchase_cost_in_contract).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' | ')
+    selected_basket_tab.find('.underage_or_overage_table tr:first-child td span.green').text('$' + (est_identification_budget3 - purchase_cost_in_contract).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
+
+    selected_basket_tab.find('.underage_or_overage_table tr:first-child td span.red').text('$' + (est_identification_budget1 - purchase_cost_in_contract_selected).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' | ')
+    selected_basket_tab.find('.underage_or_overage_table tr:first-child td span.orange').text('$' + (est_identification_budget2 - purchase_cost_in_contract_selected).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' | ')
+    selected_basket_tab.find('.underage_or_overage_table tr:first-child td span.green').text('$' + (est_identification_budget3 - purchase_cost_in_contract_selected).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
 
   add_property_to_identification = (selected_property)->
-    console.log selected_property.find('.transaction-property-select input[type=hidden]').val()
     property_identification_table.row.add( [
                     selected_property.find('.transaction-property-select h3').text(),
                     '$' + selected_property.find('.transaction-property-calculation-readonly .current-rent').val(),
@@ -831,16 +865,66 @@ $ ->
                   .attr( 'id', 'property_' + selected_property.find('.transaction-property-select input[type=hidden]').val())
                   .find('td:first-child')
                   .addClass('green')
-
-    $(document).find('.property_identification_table .input-mask-currency').inputmask
+    $(document).find('#property_identification_table_wrapper .input-mask-currency').inputmask
       alias: 'currency',
       rightAlign: false,
       prefix: ''
+    
+  add_property_to_basket = (selected_property)->
+    row_id = '#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()
+    selected_basket_tab.find('.basket_property_table').find(row_id).find('input.object_select').prop('checked', 'checked')
+    calculate_purchase_costs()
 
   delete_property_to_identification = (selected_property)->
     property_identification_table.row( $('tr#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()) )
                                 .remove()
                                 .draw()
+    
+    row_id = '#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()
+    selected_basket_tab.find('.basket_property_table').find(row_id).find('input.object_select').prop('checked', false)
+    calculate_purchase_costs()
+  
+  $(document).on 'change', '.basket_property_table td input.object_select', ->
+    if !$(this).is(':checked')
+      $(this).removeAttr('checked')
+    else
+      $(this).attr('checked', 'checked')
+    calculate_purchase_costs()
+
+  $(document).on 'click', '.save_this_basket', ->
+    console.log 'click Save this basket button'
+    index = $('#basket_list').children().length
+    if selected_basket_tab.data('basket_id')
+      ajax_url = '/transaction_baskets/' + selected_basket_tab.data('basket_id')
+      ajax_type = 'PUT'
+    else
+      ajax_url = '/transaction_baskets/'
+      ajax_type = 'POST'
+    property_ids = []
+    selected_basket_tab.find('.basket_property_table tr').each ->
+      if $(this).find('input.object_select').is(':checked')
+        property_ids.push($(this).data('property_id'))
+    $.ajax
+      url: ajax_url
+      type: ajax_type
+      dataType: 'json'
+      data: { basket_name: 'Basket ' + index, transaction_id: selected_basket_tab.data('transaction_id'), property_ids: property_ids}
+      success: (data) ->
+        if data.status
+          selected_basket_tab.data('basket_id', data.basket.id)
+
+          $('#basket_list li').last().after '<li><a data-toggle="tab" aria-expanded="true" href="#basket_' + (index + 1) + '_section">Basket '+ (index + 1) + ' </a></li>'
+          tabId = 'basket_' + (index + 1) + '_section'
+          $('#properties_identification .tab-content').append '<div class="tab-pane" id="' + tabId + '"  data-basket_id="" data-transaction_id="' + selected_basket_tab.data('transaction_id') + '">' + selected_basket_tab.html() + '</div>'
+          $('#basket_list li:last-child a').click()
+          
+          $.notify "Successfully saved", "success"
+        else
+          $.notify "Failed", "error"
+
+
+  $(document).on 'click', '.save_identify_this_basket_to_qi', ->
+    console.log 'click Save identify this basket to qi' 
 
   $(document).on 'keydown', '.property_identification_table .counter-cap-rate', (e)->
     $(document).find('#' + $(this).closest("tr").attr("id") + '_asking_mode').val(0)

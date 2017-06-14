@@ -88,20 +88,29 @@ module TransactionsHelper
       return retVal
     end
 
-    def get_purchase_property_costs(transaction)
+    def get_purchase_property_costs(transaction, transaction_basket = nil)
         total_purchase_cost_of_contracted = 0
         total_purchase_cost_of_contracted_selected = 0
-        transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
-            
-            if transaction_property.closed?
-                # do something
-            elsif transaction_property.is_in_contract?
-                total_purchase_cost_of_contracted += transaction_property.sale_price || 0
-                total_purchase_cost_of_contracted_selected += transaction_property.sale_price || 0
-            else
-                total_purchase_cost_of_contracted_selected += transaction_property.sale_price || 0
+        if transaction_basket.nil?
+            basket_properties = transaction.transaction_properties.where(is_selected: true).pluck(:property_id)
+        else
+            basket_properties = transaction_basket.transaction_basket_properties.pluck(:property_id)
+        end
+        transaction.transaction_properties.each do |transaction_property|
+            if basket_properties.include? transaction_property.property_id
+                if transaction_property.closed?
+                    # do something
+                elsif transaction_property.is_in_contract?
+                    total_purchase_cost_of_contracted += transaction_property.sale_price || 0
+                    total_purchase_cost_of_contracted_selected += transaction_property.sale_price || 0
+                else
+                    if transaction_property.is_selected
+                        total_purchase_cost_of_contracted_selected += transaction_property.sale_price || 0
+                    else
+                        total_purchase_cost_of_contracted_selected += transaction_property.property.price || 0
+                    end
+                end
             end
-            
         end
     
         return [total_purchase_cost_of_contracted, total_purchase_cost_of_contracted_selected]
@@ -112,7 +121,6 @@ module TransactionsHelper
         total_est_budget_of_closed_contracted = 0
         total_est_budget_of_closed_contracted_selected = 0
         transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
-            
             if transaction_property.closed?
                 total_est_budget_of_closed += transaction_property.closing_proceeds || 0
                 total_est_budget_of_closed_contracted += transaction_property.closing_proceeds || 0
