@@ -46,7 +46,7 @@
                               - owner_name = "No Owner Name"
                             
                             - if !transaction_property_offer.is_accepted?
-                              = "#{@transaction.seller_name} is Asking".html_safe
+                              = "#{@transaction.seller_name || 'Seller(No Name)'} is Asking".html_safe
                             - else
                               = "#{@transaction.seller_name.blank? ? 'Seller(No Name)' : @transaction.seller_name} and #{@transaction.purchaser_name.blank? ? 'Purchaser(No Name)' : @transaction.purchaser_name} have agreed to the price of ".html_safe
                           h1.property-price.green.margin-lg-top

@@ -263,6 +263,8 @@ Rails.application.routes.draw do
   resources :transaction_property_offers
   resources :counteroffers
 
+  resources :transaction_baskets
+
   resources :transactions do
     member do
       get :edit_qualified_intermediary, :properties_edit, :qualified_intermediary,

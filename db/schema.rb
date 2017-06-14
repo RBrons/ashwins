@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608165350) do
+ActiveRecord::Schema.define(version: 20170613185727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -486,6 +486,20 @@ ActiveRecord::Schema.define(version: 20170608165350) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "transaction_basket_properties", force: :cascade do |t|
+    t.integer "transaction_basket_id"
+    t.integer "property_id"
+    t.decimal "est_price",             precision: 15, scale: 2
+    t.decimal "est_cap_rate",          precision: 15, scale: 2
+  end
+
+  create_table "transaction_baskets", force: :cascade do |t|
+    t.string  "basket_name"
+    t.integer "transaction_id"
+    t.string  "identification_rule"
+    t.boolean "is_identified_to_qi"
   end
 
   create_table "transaction_mains", force: :cascade do |t|

@@ -22,6 +22,9 @@ class TransactionPurchase < ApplicationRecord
   
   has_many :transaction_properties, foreign_key: :transaction_id, dependent: :destroy
   accepts_nested_attributes_for :transaction_properties, :reject_if => :all_blank, allow_destroy: true
+
+  has_many :transaction_baskets, foreign_key: :transaction_id, dependent: :destroy
+  accepts_nested_attributes_for :transaction_baskets, :reject_if => :all_blank, allow_destroy: true
   
   has_one :transaction_term, foreign_key: :transaction_id, dependent: :destroy
   accepts_nested_attributes_for :transaction_term, :reject_if => :all_blank
