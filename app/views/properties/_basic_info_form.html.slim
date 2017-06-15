@@ -1,6 +1,12 @@
 = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
   = hidden_field_tag :type_is, params[:type_is]
   = f.hidden_field :ownership_status, value: @property.ostatus
+  /! These values are defaultized so need to carry them through this action
+  = f.hidden_field :lease_duration_in_years, value: @property.lease_duration_in_years
+  = f.hidden_field :lease_rent_increase_percentage, value: @property.lease_rent_increase_percentage
+  = f.hidden_field :lease_rent_slab_in_years, value: @property.lease_rent_slab_in_years
+  = f.hidden_field :number_of_option_period, value: @property.number_of_option_period
+  = f.hidden_field :length_of_option_period, value: @property.length_of_option_period
 
   - if @property.errors.any?
     #error_explanation
