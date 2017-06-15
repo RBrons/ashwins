@@ -263,7 +263,11 @@ Rails.application.routes.draw do
   resources :transaction_property_offers
   resources :counteroffers
 
-  resources :transaction_baskets
+  resources :transaction_baskets do
+    collection do
+      post :identify_basket_to_qi
+    end
+  end
 
   resources :transactions do
     member do

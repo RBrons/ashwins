@@ -38,4 +38,30 @@ class TransactionBasketsController < ApplicationController
     end
   end
 
+  #Custom Action
+  def identify_basket_to_qi
+    basket = TransactionBasket.find(params[:id])
+    basket_properties = basket.transaction_basket_properties
+    @transaction_purchase = TransactionPurchase.find(params[:transaction_id])
+    
+    @transaction_purchase.transaction_properties.destroy_all
+    begin
+      basket_properties.each do |property|
+        @transaction_purchase.transaction_properties.create({
+          property_id: property.property_id,
+          transaction_id: @transaction_purchase.id,
+          is_sale: false,
+          transaction_main_id: @transaction_purchase.main.id,
+          is_selected: true
+        })
+      end
+      basket.update(is_identified_to_qi: true)
+      
+      render json: {status: true}
+    rescue Exception => e
+      render json: {status: fasle, error: e.message}
+    end
+
+  end
+
 end
