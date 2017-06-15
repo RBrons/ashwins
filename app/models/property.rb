@@ -221,7 +221,7 @@ class Property < ApplicationRecord
 
     if free_year_start < start_year
       for i in (free_year_start...start_year) do
-        ret << ([i] + Array.new(12, 0))
+        ret << ([i] + Array.new(13, 0))
       end
     end
 
@@ -266,6 +266,7 @@ class Property < ApplicationRecord
     while months_remaining > 0 do
       year_indx_count = 0 if year_indx_count >= 13
       if year_indx_count == 0
+        year_rent_arr[13] = year_rent_arr[1, 12].reduce(0, :+)
         ret << year_rent_arr
         year_rent_arr = []
         current_year = current_year + 1
@@ -285,6 +286,7 @@ class Property < ApplicationRecord
       year_indx_count = year_indx_count + 1
     end
 
+    year_rent_arr[13] = year_rent_arr[1, 12].reduce(0, :+)
     ret << year_rent_arr
 
     ret

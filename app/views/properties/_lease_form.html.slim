@@ -243,6 +243,7 @@ div[role="tabpanel"]
                   th Oct
                   th Nov
                   th Dec
+                  th Annual
               tbody
                 - @property.monthly_rent_table.each do |row|
                   tr
@@ -272,6 +273,8 @@ div[role="tabpanel"]
                       = number_to_currency row[11]
                     td
                       = number_to_currency row[12]
+                    td
+                      = number_to_currency row[13]
         - else
           p Rent Table is not available right now.
       #lease_rent_details_section.tab-pane.fade[role="tabpanel"]
