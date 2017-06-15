@@ -8,6 +8,7 @@ $ ->
   last_counteroffer = ""
   alert_for_three_property_rule = "Because you selected three property rule, you can not select any more properties to buy"
   not_passed_LOI = 'You are proceeding to contract without completing the LOI. Are you sure you want to do this? User will have the option to proceed'
+  success_identify_property_to_qi = "Now that you have Identified one or more properties to your QI, please make a counter offer to a seller and hit Save and Next"
 
   sub_tab_id = $("#sub_tab_val").val()
   console.log sub_tab_id
@@ -973,8 +974,7 @@ $ ->
       data: {transaction_id: selected_basket_tab.data('transaction_id')}
       success: (data) ->
         if data.status
-          
-          $.notify "Successfully identified", "success"
+          sweetAlert '', success_identify_property_to_qi, 'info'
         else
           $.notify "Failed", "error"
 
