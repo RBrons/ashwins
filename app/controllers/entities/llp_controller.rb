@@ -61,6 +61,16 @@ class Entities::LlpController < ApplicationController
       @partner                 = Partner.find(id) if id.present?
       @partner                 ||= Partner.new
       @partner.super_entity_id = @entity.id
+
+      if request.get?
+        if @partner.new_record?
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Partner </a></h4></div>".html_safe
+        else
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Partner </a></h4></div>".html_safe
+        end
+      else
+        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Partner </a></h4></div>".html_safe
+      end
     end
     if request.post?
       @partner                 = Partner.new(partner_params)
