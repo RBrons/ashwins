@@ -310,6 +310,11 @@ $ ->
 
   $("#basket_list li").first().children('a').click()
   selected_basket_tab = $(document).find($("#basket_list li").first().children('a').attr('href'))
+  if selected_basket_tab.find('.is_identified_to_qi').val() == 'true'
+      $(document).find('.is_selected_property').iCheck('disable')
+    else
+      $(document).find('.is_selected_property').iCheck('enable')
+  
 
   initialize_editable_date_field = ->
     $(document).find('.editable-date').editable
