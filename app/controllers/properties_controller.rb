@@ -34,8 +34,8 @@ class PropertiesController < ApplicationController
   # GET /properties/new
   def new
     @property = defaultize(Property.new({ostatus: params[:ostatus]}))
-    @property.current_rent = @property.lease_base_rent
-    #@property.ostatus = params["ostatus"]
+    @property.lease_base_rent = @property.current_rent
+    # @property.ostatus = params["ostatus"]
     @property.check_price_current_rent_cap_rate
     add_breadcrumb ("<div class=\"pull-left\"><h4><a href=\'" + new_property_path(ostatus: params["ostatus"]) +
       "\'> Add Property - " + params["ostatus"] + " </a></h4></div>").html_safe
@@ -84,7 +84,7 @@ class PropertiesController < ApplicationController
   # PATCH/PUT /properties/1.json
   def update
     @property = Property.find(params[:id])
-    @property.lease_base_rent = @property.current_rent
+
     if params[:type_is] == "photo_gallery"
       #Cover Image Save
       if params["property"]["prop_cover_img"]
@@ -106,6 +106,7 @@ class PropertiesController < ApplicationController
       end
     else
       @property.assign_attributes(property_params)
+      @property.lease_base_rent = @property.current_rent
 
       if !@property.owner_person_is.nil?
         @property.owner_entity_id = @property.owner_entity_id_indv if @property.owner_person_is

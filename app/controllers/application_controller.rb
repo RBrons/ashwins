@@ -127,7 +127,7 @@ class ApplicationController < ActionController::Base
       elsif val.value_type == 'Random Tenant'
         val_ = Tenant.where.not(name: 'No Tenant').pluck('id').sample
       elsif val.value_type == 'Random Rent'
-        val_ =  500 + rand(9500) # (500..10000).to_a.sample
+        val_ =  5000 + rand(95000) # (500..10000).to_a.sample
       elsif val.value_type == 'Random Cap Rate'
         val_ = 1 + rand(10)
       elsif val.value_type == 'Random Owner'
