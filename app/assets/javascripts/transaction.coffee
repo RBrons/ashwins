@@ -967,7 +967,7 @@ $ ->
     $('.basket_property_table tbody tr#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()).remove()
 
   create_new_basket = (basket_index)->
-    $('#basket_list li').last().after '<li><a data-toggle="tab" aria-expanded="true" href="#basket_' + basket_index + '_section">Basket '+ basket_index + ' </a></li>'
+    $('#basket_list li').last().after '<li><a data-toggle="tab" aria-expanded="true" href="#basket_' + basket_index + '_section"><i>Basket '+ basket_index + ' </i></a></li>'
     tabId = 'basket_' + basket_index + '_section'
     $('#properties_identification .tab-content').append '<div class="tab-pane" id="' + tabId + '"  data-basket_id="" data-transaction_id="' + selected_basket_tab.data('transaction_id') + '">' + $('#basket_template').html() + '</div>'
     $('#basket_list li:last-child a').click()
