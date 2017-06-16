@@ -44,7 +44,7 @@
                               - owner_name = @property.owner.name
                             - else
                               - owner_name = "No Owner Name"
-                            
+
                             - if !transaction_property_offer.is_accepted?
                               = "#{@transaction.seller_name || 'Seller(No Name)'} is Asking".html_safe
                             - else
@@ -69,7 +69,7 @@
                             td[width="150"]
                               span.editable-date[data-name="offered_date" data-type="combodate" data-value="#{counteroffer.offered_date}" data-format="YYYY-MM-DD" data-viewformat="MM/DD/YYYY" data-url="#{counteroffer_path(counteroffer.id)}"]
                             td[width="300"]
-                              span 
+                              span
                                 - if counteroffer.offer_type == 'Client'
                                   = "Seller".html_safe
                                 - else
