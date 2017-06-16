@@ -34,9 +34,9 @@ $ ->
       $(document).find('#data_table.sale_mode tbody tr td span.deadline-detail').hide()
 
   # Save & Next button
-  $(document).on 'click', '.no-submit-form', -> 
+  $(document).on 'click', '.no-submit-form', ->
     $('#sale_buy_step_tab li.active').next().find('a').click()
-  
+
   $(document).on 'click', '#save-and-next', (e) ->
     e.preventDefault()
     save_and_next_btn_in_step = $(document).find('.save_next_in_step')
@@ -106,7 +106,7 @@ $ ->
       $(document).find('div.purchase-tr-pr-detail').hide();
       $(document).find('div.purchase-tr-et-detail').show();
 
-  
+
   sale_pre_loi_text = (seller)-> '<strong>Congratulations!</strong> You have just initiated a 1031 Exchange on behalf of <strong>'+seller+'</strong>. You can now identify the ' +
     ' property that you wish to relinquish, hire a Qualified Intermediary, set a sales price and input a broker. Please ' +
     'be sure to input the progress of your Exchange by updating the Status dropdown. All changes will be updated in ' +
@@ -385,9 +385,43 @@ $ ->
   $(document).on 'click', '#sale_buy_step_tab li a', (e)->
     if $(this).attr('id') == 'purchase_sale_agreement'
       if $(document).find('#letter_of_intent_section .is_passed').val() == 'false'
-        sweetAlert('', not_passed_LOI, 'warning')
-        return
-    
+        # sweetAlert('', not_passed_LOI, 'warning')
+
+        swalFunction = ->
+          swal {
+            title: 'Are you sure?'
+            text: not_passed_LOI
+            type: 'warning'
+            showCancelButton: true
+            cancelButtonText: "Close"
+            confirmButtonColor: '#DD6B55'
+            confirmButtonText: 'Save LOI and Next'
+            closeOnConfirm: false
+          }, (isConfirm)->
+            if isConfirm
+              console.log "Save Button"
+              $('#letter_of_intent').click()
+              $('#save-and-next').click()
+              swal.close()
+            else
+              console.log "Close Button"
+            return
+          return
+
+        swalExtend
+          swalFunction: swalFunction
+          hasCancelButton: true
+          buttonNum: 1
+          buttonNames: [
+            'Back'
+          ]
+          clickFunctionList: [
+            ->
+              console.log 'Back Button'
+              $('#letter_of_intent').click()
+              return
+          ]
+
     selected_transaction_sub_tab = $(document).find($(this).attr('href'))
     curPropertyId = $("#cur_property_id").val()
     selectedTabId = $(this).attr("id")
@@ -817,7 +851,7 @@ $ ->
         if selected_property_count > 3
           setTimeout (->
             el.iCheck('uncheck')
-            
+
           ), 10
           sweetAlert("", alert_for_three_property_rule, "warning")
           return
@@ -829,7 +863,7 @@ $ ->
       $(this).parents(".fields").addClass('property-unchecked')
       delete_property_to_identification($(this).parents(".fields"))
     checkShowButton()
-  
+
   calculate_purchase_costs = ->
     purchase_cost_in_contract = 0
     purchase_cost_in_contract_selected = 0
@@ -841,7 +875,7 @@ $ ->
         purchase_cost_in_contract_selected += parseFloat($(this).find('td').eq(5).data('property_price'))
       else
         purchase_cost_in_contract_selected += parseFloat($(this).find('td').eq(5).data('property_price'))
-    
+
     selected_basket_tab.find('.purchase_property_cost_table tr:first-child td span.orange').text('$' + purchase_cost_in_contract.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
     selected_basket_tab.find('.purchase_property_cost_table tr:first-child td span.green').text('$' + purchase_cost_in_contract_selected.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
 
@@ -874,7 +908,7 @@ $ ->
       alias: 'currency',
       rightAlign: false,
       prefix: ''
-    
+
   add_property_to_basket = (selected_property)->
     row_id = 'property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()
     if selected_basket_tab.find('.basket_property_table tbody tr#' + row_id).length == 0
@@ -893,7 +927,7 @@ $ ->
                         </td>
                         <td>' + selected_property.find('.transaction-property-calculation-readonly .current-cap-rate').val() + '</td>
                         <td data-property_price="' + selected_property.find('.transaction-property-calculation-readonly .current-price').val().replace(/\,/g, '') + '">
-                          $' + selected_property.find('.transaction-property-calculation-readonly .current-price').val() + 
+                          $' + selected_property.find('.transaction-property-calculation-readonly .current-price').val() +
                         '</td>
                         <td>
                             <input type="text" class="counter-cap-rate input-mask-currency" value="' + selected_property.find('.transaction-property-calculation-readonly .current-cap-rate').val() + '" disabled />
@@ -904,12 +938,12 @@ $ ->
                     </tr>'
 
       selected_basket_tab.find('.basket_property_table tbody').append(add_row_html)
-      
+
       $(document).find('.basket_property_table .input-mask-currency').inputmask
         alias: 'currency',
         rightAlign: false,
         prefix: ''
-      
+
       calculate_purchase_costs()
 
   delete_property_to_identification = (selected_property)->
@@ -926,7 +960,7 @@ $ ->
     $.each $(document).find('.is_selected_property'), ->
       if $(this).is(":checked")
         add_property_to_basket($(this).closest('.fields'))
-  
+
   $(document).on 'click', '.remove_property_from_basket', ->
     $(this).closest('tr').remove()
     calculate_purchase_costs()
@@ -959,11 +993,11 @@ $ ->
           $('#basket_list li.active a i').addClass('red')
 
           create_new_basket(index+1)
-          
+
           $.notify "Successfully saved", "success"
         else
           $.notify "Failed", "error"
-  
+
 
   $(document).on 'click', '.save_identify_this_basket_to_qi', ->
     console.log 'click Save identify this basket to qi'
@@ -983,7 +1017,7 @@ $ ->
 
   $(document).on 'keydown', '.property_identification_table .counter-price', (e)->
     $(document).find('#' + $(this).closest("tr").attr("id") + '_asking_mode').val(0)
-  
+
   $(document).on 'keyup', ".property_identification_table .counter-cap-rate", (e)->
     currentRent = $(this).closest('tr').find('td').eq(1).text().replace(/[^0-9\.]+/g,'')
     counterCapRate = $(this).val().replace(/\,/g, '')
@@ -1001,7 +1035,7 @@ $ ->
     # set value for form fields
     $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
-  
+
   #--- end ---
 
   $(document).on 'ifChecked', '.radio_edit_mode_cap', ->

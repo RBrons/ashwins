@@ -45,8 +45,16 @@
       .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is?)}")
         = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single width-field-lg'
 
+        - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
+          - owner_entity = Entity.find(@property.owner_entity_id)
+          = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank'
+
       .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is?)}")
         = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single width-field-lg'
+
+        - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
+          - owner_entity = Entity.find(@property.owner_entity_id)
+          = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank'
 
     - else
       label Owner
@@ -61,8 +69,16 @@
       .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is?)}")
         = f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("company"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
 
+        - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
+          - owner_contact = Contact.find(@property.owner_entity_id)
+          = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank'
+
       .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is?)}")
         = f.select :owner_entity_id_indv, options_for_select(Contact.TransactionContacts("individual"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+
+        - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
+          - owner_contact = Contact.find(@property.owner_entity_id)
+          = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank'
       /= f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("all"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
 
     .form-group
