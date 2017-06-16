@@ -442,6 +442,10 @@ $ ->
 
   $(document).on 'click', '#basket_list li a', (e)->
     selected_basket_tab = $(document).find($(this).attr('href'))
+    if selected_basket_tab.find('.is_identified_to_qi').val() == 'true'
+      $(document).find('.is_selected_property').iCheck('disable')
+    else
+      $(document).find('.is_selected_property').iCheck('enable')
 
   $(document).on 'change', '.relingquishing_offeror_form input', ->
     if selected_offer_tab.find('.relingquishing_offeror_form').attr('action') != ""
@@ -1027,6 +1031,9 @@ $ ->
         if data.status
           $('.left_col #sidebar-menu').replaceWith(data.content)
           $(document).find('.basket_property_table tbody tr td .go_to_negotiations').attr('disabled', false)
+          selected_basket_tab.find('.is_identified_to_qi').val("true")
+          $(document).find('.is_selected_property').iCheck('disable')
+          
           sweetAlert '', success_identify_property_to_qi, 'info'
         else
           $.notify "Failed", "error"
