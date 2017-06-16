@@ -224,31 +224,59 @@ class TransactionsController < ApplicationController
     flag = false
     p_count = @transaction.transaction_properties.length
 
-    (0..p_count-1).each do |p_index|
-      pid = params[:transaction][:transaction_properties_attributes]["#{p_index}".to_sym][:property_id]
+    # (0..p_count-1).each do |p_index|
+    #   pid = params[:transaction][:transaction_properties_attributes]["#{p_index}".to_sym][:property_id]
 
-      if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil?
-        property = Property.where(id: pid).first
-        if !property.owner_entity_id.nil?
-          contact = Contact.where(id: property.owner_entity_id).first
-          @transaction.replacement_seller_contact_id = contact.id
-          @transaction.replacement_seller_first_name = contact.company_name || contact.first_name
-          @transaction.replacement_seller_last_name = contact.last_name
-          flag = true
-        end
-      end
-    end
+    #   if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil?
+    #     property = Property.where(id: pid).first
+    #     if !property.owner_entity_id.nil?
+    #       contact = Contact.where(id: property.owner_entity_id).first
+    #       @transaction.replacement_seller_contact_id = contact.id
+    #       @transaction.replacement_seller_first_name = contact.company_name || contact.first_name
+    #       @transaction.replacement_seller_last_name = contact.last_name
+    #       flag = true
+    #     end
+    #   end
+    # end
 
     begin
       TransactionSale.transaction do
         @transaction.save! if flag
-        @transaction.update!(transaction_property_params)
-
-        if params[:type] == 'purchase'
-          @transaction.transaction_properties.each do |transaction_property|
-            if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == 1 && transaction_property.is_selected
-              if transaction_property.transaction_property_offers.destroy_all
-                transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
+        
+        if params[:type] == 'sale'
+          @transaction.update!(transaction_property_params)
+        else
+          if params[:identification_rule] == '200_percent'
+            if params[:basket_id].present?
+              basket = @transaction.transaction_baskets.find(params[:basket_id])
+              if basket.present?
+                @basket_properties = basket.transaction_basket_properties.pluck(:property_id)
+              else
+                @basket_properties = []
+              end
+            else
+              @basket_properties = []
+            end
+            
+            @transaction.transaction_properties.each do |transaction_property|
+              if @basket_properties.include? transaction_property.property_id
+                transaction_property.transaction_property_offers.destroy_all
+                if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == "1"
+                  transaction_property.transaction_property_offers.destroy_all
+                  transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
+                end
+                transaction_property.update(cap_rate: params[:counter_cap_rate]["#{transaction_property.property_id}".to_sym])
+                transaction_property.update(sale_price: params[:counter_price]["#{transaction_property.property_id}".to_sym])
+              
+              end
+            end
+          else
+            @transaction.update!(transaction_property_params)
+            @transaction.transaction_properties.each do |transaction_property|
+              if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == "1" && transaction_property.is_selected
+                if transaction_property.transaction_property_offers.destroy_all
+                  transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
+                end
               end
             end
           end
@@ -259,7 +287,7 @@ class TransactionsController < ApplicationController
       if @transaction.get_sale_purchase_text == 'sale'
         return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
       else
-        return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+        return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id, cur_property: params[:cur_property])
       end
 
     rescue Exception => e

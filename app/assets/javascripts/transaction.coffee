@@ -4,7 +4,7 @@ $ ->
   selected_offer_tab = $(document).find($(document).find('#offer_list li.active a').attr('href'))
   selected_basket_tab = $(document).find($(document).find('#basket_list li.active a').attr('href'))
   selected_transaction_sub_tab = $(document).find($(document).find('#sale_buy_step_tab li.active a').attr('href'))
-  property_identification_table = $(document).find('#no_200_percent_measure #data_table').DataTable()
+  property_identification_table = $(document).find('#no_200_percent_measure .property_identification_table').DataTable()
   last_counteroffer = ""
   alert_for_three_property_rule = "Because you selected three property rule, you can not select any more properties to buy"
   not_passed_LOI = 'You are proceeding to contract without completing the LOI. Are you sure you want to do this? User will have the option to proceed'
@@ -834,12 +834,18 @@ $ ->
       when 'three_property'
         $(document).find('section#200_percent_measure').hide()
         $(document).find('section#no_200_percent_measure').show()
+        $(document).find('.save_next_in_step').attr('disabled', false)
+                                              .removeClass('hidden')
       when '200_percent'
         $(document).find('section#200_percent_measure').show()
         $(document).find('section#no_200_percent_measure').hide()
+        $(document).find('.save_next_in_step').attr('disabled', 'disabled')
+                                              .addClass('hidden')
       when '95_percent'
         $(document).find('section#200_percent_measure').hide()
         $(document).find('section#no_200_percent_measure').show()
+        $(document).find('.save_next_in_step').attr('disabled', false)
+                                              .removeClass('hidden')
 
   $(document).on 'ifChanged', '.is_selected_property', ->
     el = $(this)
@@ -856,12 +862,15 @@ $ ->
           sweetAlert("", alert_for_three_property_rule, "warning")
           return
       if $(document).find('#transaction_identification_rule').val() == '200_percent'
-        add_property_to_basket($(this).parents(".fields"))
+        add_property_to_identification($(this).parents(".fields"))
+        if selected_basket_tab.find('.disable_adding_property').val() != "true"
+          add_property_to_basket($(this).parents(".fields"))
       else
         add_property_to_identification($(this).parents(".fields"))
     else
       $(this).parents(".fields").addClass('property-unchecked')
-      delete_property_to_identification($(this).parents(".fields"))
+      delete_property_on_identification($(this).parents(".fields"))
+      delete_property_on_basket($(this).parents(".fields"))
     checkShowButton()
 
   calculate_purchase_costs = ->
@@ -891,19 +900,19 @@ $ ->
     selected_basket_tab.find('.underage_or_overage_table tr:first-child td span.green').text('$' + (est_identification_budget3 - purchase_cost_in_contract_selected).toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
 
   add_property_to_identification = (selected_property)->
-    property_identification_table.row.add( [
+    property_row = property_identification_table.row.add( [
                     selected_property.find('.transaction-property-select h3').text(),
                     '$' + selected_property.find('.transaction-property-calculation-readonly .current-rent').val(),
                     selected_property.find('.transaction-property-calculation-readonly .current-cap-rate').val(),
                     '$' + selected_property.find('.transaction-property-calculation-readonly .current-price').val(),
-                    '<input type="text" class="counter-cap-rate input-mask-currency" />',
-                    '$ <input type="text" class="counter-price input-mask-currency" />'
+                    '<input type="text" class="counter-cap-rate input-mask-currency" value="' + selected_property.find('.transaction-property-calculation-readonly .current-cap-rate').val() + '" />',
+                    '$ <input type="text" class="counter-price input-mask-currency" value="' + selected_property.find('.transaction-property-calculation-readonly .current-price').val() + '" />'
                 ]).draw()
-                  .nodes()
-                  .to$()
-                  .attr( 'id', 'property_' + selected_property.find('.transaction-property-select input[type=hidden]').val())
-                  .find('td:first-child')
-                  .addClass('green')
+    property_row.nodes().to$()
+                .attr( 'id', 'property_' + selected_property.find('.transaction-property-select input[type=hidden]').val())
+                .find('td:first-child').addClass('green')
+    property_row.nodes().to$().find('td:nth-child(2)').addClass('current-rent')
+    property_row.nodes().to$().find('td:nth-child(3)').addClass('cap-rate')
     $(document).find('#no_200_percent_measure .input-mask-currency').inputmask
       alias: 'currency',
       rightAlign: false,
@@ -914,7 +923,7 @@ $ ->
     if selected_basket_tab.find('.basket_property_table tbody tr#' + row_id).length == 0
       add_row_html = '<tr id="' + row_id + '" data-property_id="' + selected_property.find('.transaction-property-select input[type=hidden]').val() + '">
                         <td class="text-center">
-                            <a class="remove_property_from_basket" href="javascript:;"><span class="lnr lnr-cross"></span></a>
+                            <a href="javascript:;"><span class="remove_property_from_basket lnr lnr-cross"></span></a>
                         </td>
                         <td>
                             <span class="label label-success"></span>
@@ -922,10 +931,10 @@ $ ->
                         <td>
                             <span class="green">' + selected_property.find('.transaction-property-select h3').text() + '</span>
                         </td>
-                        <td>
+                        <td class="current-rent">
                             $' + selected_property.find('.transaction-property-calculation-readonly .current-rent').val() + '
                         </td>
-                        <td>' + selected_property.find('.transaction-property-calculation-readonly .current-cap-rate').val() + '</td>
+                        <td class="cap-rate">' + selected_property.find('.transaction-property-calculation-readonly .current-cap-rate').val() + '</td>
                         <td data-property_price="' + selected_property.find('.transaction-property-calculation-readonly .current-price').val().replace(/\,/g, '') + '">
                           $' + selected_property.find('.transaction-property-calculation-readonly .current-price').val() +
                         '</td>
@@ -934,6 +943,9 @@ $ ->
                         </td>
                         <td>
                             $ <input type="text" class="counter-price input-mask-currency" value="' + selected_property.find('.transaction-property-calculation-readonly .current-price').val().replace(/\,/g, '') + '" disabled />
+                        </td>
+                        <td>
+                            <a href="javascript:;" class="go_to_negotiations btn btn-danger btn-sm" disabled>Accept and Proceed</a>
                         </td>
                     </tr>'
 
@@ -946,10 +958,13 @@ $ ->
 
       calculate_purchase_costs()
 
-  delete_property_to_identification = (selected_property)->
+  delete_property_on_identification = (selected_property)->
     property_identification_table.row( $('tr#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()) )
                                 .remove()
                                 .draw()
+  
+  delete_property_on_basket = (selected_property)->
+    $('.basket_property_table tbody tr#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()).remove()
 
   create_new_basket = (basket_index)->
     $('#basket_list li').last().after '<li><a data-toggle="tab" aria-expanded="true" href="#basket_' + basket_index + '_section">Basket '+ basket_index + ' </a></li>'
@@ -988,10 +1003,12 @@ $ ->
       success: (data) ->
         if data.status
           selected_basket_tab.data('basket_id', data.basket.id)
+          selected_basket_tab.find('.disable_adding_property').val("true")
           selected_basket_tab.find('.save_this_basket').hide()
-          selected_basket_tab.find('.basket_property_table tbody tr td').find('.remove_property_from_basket').remove()
+          selected_basket_tab.find('.save_identify_this_basket_to_qi').attr('disabled', false)
+          $(document).find('.basket_property_table tbody tr td .input-mask-currency').attr('disabled', false)
           $('#basket_list li.active a i').addClass('red')
-
+          $('.basket_property_table tbody tr td:first-child a').html('<span class="glyphicon glyphicon-ok"></span>')
           create_new_basket(index+1)
 
           $.notify "Successfully saved", "success"
@@ -1008,18 +1025,22 @@ $ ->
       data: {transaction_id: selected_basket_tab.data('transaction_id')}
       success: (data) ->
         if data.status
+          $('.left_col #sidebar-menu').replaceWith(data.content)
+          $(document).find('.basket_property_table tbody tr td .go_to_negotiations').attr('disabled', false)
           sweetAlert '', success_identify_property_to_qi, 'info'
         else
           $.notify "Failed", "error"
 
-  $(document).on 'keydown', '.property_identification_table .counter-cap-rate', (e)->
+  $(document).on 'change', '.property_identification_table .counter-cap-rate, .basket_property_table .counter-cap-rate', (e)->
     $(document).find('#' + $(this).closest("tr").attr("id") + '_asking_mode').val(0)
+    $(this).closest('tr').find('.go_to_negotiations').text('Counter and Proceed')
 
-  $(document).on 'keydown', '.property_identification_table .counter-price', (e)->
+  $(document).on 'change', '.property_identification_table .counter-price, .basket_property_table .counter-price', (e)->
     $(document).find('#' + $(this).closest("tr").attr("id") + '_asking_mode').val(0)
-
-  $(document).on 'keyup', ".property_identification_table .counter-cap-rate", (e)->
-    currentRent = $(this).closest('tr').find('td').eq(1).text().replace(/[^0-9\.]+/g,'')
+    $(this).closest('tr').find('.go_to_negotiations').text('Counter and Proceed')
+  
+  $(document).on 'keyup', ".property_identification_table .counter-cap-rate, .basket_property_table .counter-cap-rate", (e)->
+    currentRent = $(this).closest('tr').find('td.current-rent').text().replace(/[^0-9\.]+/g,'')
     counterCapRate = $(this).val().replace(/\,/g, '')
     counterPrice = parseFloat(currentRent) * 100 / parseFloat(counterCapRate)
     $(this).closest('tr').find("td input.counter-price").val(counterPrice)
@@ -1027,14 +1048,27 @@ $ ->
     $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
 
-  $(document).on 'keyup', ".property_identification_table .counter-price", (e)->
-    currentRent = $(this).closest('tr').find('td').eq(1).text().replace(/[^0-9\.]+/g,'')
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_cap_rate').val(counterCapRate)
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_price').val(counterPrice)
+
+  $(document).on 'keyup', ".property_identification_table .counter-price, .basket_property_table .counter-price", (e)->
+    currentRent = $(this).closest('tr').find('td.current-rent').text().replace(/[^0-9\.]+/g,'')
     counterPrice = $(this).val().replace(/\,/g, '')
     counterCapRate = parseFloat(currentRent) / parseFloat(counterPrice) * 100
     $(this).closest('tr').find("td input.counter-cap-rate").val(counterCapRate)
     # set value for form fields
     $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
+
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_cap_rate').val(counterCapRate)
+    $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_price').val(counterPrice)
+
+  $(document).on 'click', '.basket_property_table .go_to_negotiations', ->
+    basket_id = selected_basket_tab.data('basket_id')
+    cur_property_id = $(this).closest('tr').data('property_id')
+    action_url = $(document).find('form.transaction-photo-gallery').attr('action') + '&basket_id=' + basket_id + '&cur_property=' + cur_property_id + '&identification_rule=200_percent'
+    $(document).find('form.transaction-photo-gallery').attr('action', action_url)
+    $(document).find('form.transaction-photo-gallery').submit()
 
   #--- end ---
 

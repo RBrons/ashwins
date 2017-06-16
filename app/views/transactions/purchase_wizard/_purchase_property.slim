@@ -125,6 +125,10 @@
                                     = image_tag 'sale_house.jpg', class: "img-responsive width-100"
                             .clearfix.margin-lg-top
                             input type='hidden' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='1' id='property_#{transaction_property_form.object.property_id.to_s}_asking_mode'
+                            / For 200 percent rule
+                            input type='hidden' name="counter_price[#{transaction_property_form.object.property.id}]" value='#{transaction_property_form.object.sale_price || transaction_property_form.object.property.price }' id='property_#{transaction_property_form.object.property_id.to_s}_counter_price'
+                            input type='hidden' name="counter_cap_rate[#{transaction_property_form.object.property.id}]" value='#{transaction_property_form.object.cap_rate || transaction_property_form.object.property.cap_rate }' id='property_#{transaction_property_form.object.property_id.to_s}_counter_cap_rate'
+                            / No 200 percent rule
                             = transaction_property_form.hidden_field :cap_rate, id: 'property_' + transaction_property_form.object.property_id.to_s + '_cap_rate', value: transaction_property_form.object.cap_rate || transaction_property_form.object.property.cap_rate
                             = transaction_property_form.hidden_field :sale_price, id: 'property_' + transaction_property_form.object.property_id.to_s + '_price', value: transaction_property_form.object.sale_price || transaction_property_form.object.property.price
                             / Modal When hits Make Counter
@@ -181,13 +185,14 @@
                                             option[value="95_percent"] 95%
                                 .clearfix
                                 section#200_percent_measure
+                                    input[type="hidden" class="disable_adding_property" value="#{basket.id.present?}"]
                                     - est_bugdets = get_est_identification_bugdets(@transaction_main.sale)
                                     - purchase_costs = get_purchase_property_costs(@transaction_main.purchase, basket)
                                     .toolbar-btn-action.pull-right
                                         - if !basket.id.present?
                                             a.save_this_basket.btn.btn-success Save this basket 
-                                        - if !basket.is_identified_to_qi
-                                            a.save_identify_this_basket_to_qi.btn.btn-danger Identify this basket to QI
+                                        / - if !basket.is_identified_to_qi
+                                        a.save_identify_this_basket_to_qi.btn.btn-danger[disabled=(!basket.is_identified_to_qi ? false : 'disabled')] Identify this basket to QI
                                     .clearfix
                                     .x-panel
                                         .x-title 
@@ -257,15 +262,19 @@
                                                         th Asking Price
                                                         th Cap Rate Counter
                                                         th Price Counter
+                                                        th Action
                                                 tbody
                                                     - basket_properties = basket.transaction_basket_properties.pluck(:property_id)
                                                     - @transaction.transaction_properties.each do |transaction_property|
                                                         - if basket_properties.include? transaction_property.property_id
                                                             tr[id="#{'property_' + transaction_property.property_id.to_s}" data-property_id="#{transaction_property.property_id}"]
                                                                 td.text-center
-                                                                    a.remove_property_from_basket[href="javascript:;"]
-                                                                        span.lnr.lnr-cross
-                                                                td
+                                                                    a[href="javascript:;"]
+                                                                        - if !basket.id.present?
+                                                                            span.remove_property_from_basket.lnr.lnr-cross
+                                                                        - else
+                                                                            span.glyphicon.glyphicon-ok
+                                                                td          
                                                                     - if transaction_property.closed?
                                                                         span.label.label-danger Closed
                                                                     - elsif transaction_property.is_in_contract?
@@ -273,25 +282,28 @@
                                                                     - else
                                                                         span.label.label-success Selected
                                                                 td.green = transaction_property.property.title
-                                                                td = number_to_currency(transaction_property.property.current_rent)
-                                                                td = transaction_property.property.cap_rate.to_s + '%'
+                                                                td.current-rent = number_to_currency(transaction_property.property.current_rent)
+                                                                td.cap-rate = transaction_property.property.cap_rate.to_s + '%'
                                                                 td[data-property_price="#{transaction_property.property.price}"] 
                                                                     = number_to_currency(transaction_property.property.price)
                                                                 td 
                                                                     - if transaction_property.is_in_contract? || transaction_property.closed?
                                                                         = transaction_property.cap_rate.to_s + '%'
                                                                     - else
-                                                                        input[type="text" class="counter-cap-rate input-mask-currency" value="#{transaction_property.cap_rate}" disabled=(basket.id.present? ? false : 'disabled')] %
+                                                                        input[type="text" class="counter-cap-rate input-mask-currency" value="#{transaction_property.cap_rate || transaction_property.property.cap_rate}" disabled=(basket.id.present? ? false : 'disabled')] %
                                                                 td 
                                                                     - if transaction_property.is_in_contract? || transaction_property.closed?
                                                                         = number_to_currency(transaction_property.sale_price)
                                                                     - else
                                                                         span $&nbsp;
-                                                                        input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price}" disabled=(basket.id.present? ? false : 'disabled')]
+                                                                        input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price || transaction_property.property.price}" disabled=(basket.id.present? ? false : 'disabled')]
+                                                                td
+                                                                    = link_to 'Accept and Proceed', 'javascript:;', class: "go_to_negotiations btn btn-danger btn-sm", disabled: basket.is_identified_to_qi ? false : true
+                                                                    
                     .clearfix.margin-lg-top
 
                     section#no_200_percent_measure[style="display: none"]
-                        table#data_table
+                        table#data_table.property_identification_table
                             thead
                                 tr
                                     th Property Title
@@ -304,8 +316,8 @@
                                 - @transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
                                     tr[id="#{'property_' + transaction_property.property_id.to_s}"]
                                         td.green = transaction_property.property.title
-                                        td = number_to_currency(transaction_property.property.current_rent)
-                                        td = transaction_property.property.cap_rate.to_s + '%'
+                                        td.current-rent = number_to_currency(transaction_property.property.current_rent)
+                                        td.cap-rate = transaction_property.property.cap_rate.to_s + '%'
                                         td = number_to_currency(transaction_property.property.price)
                                         td 
                                             - if transaction_property.is_in_contract? || transaction_property.closed?
@@ -323,7 +335,7 @@
                     .divider
                     
                     = link_to 'Back', '#', class: 'back_prev_step btn btn-default'
-                    / = f.submit 'Save & Next', class: 'btn btn-primary next-prev margin-sm-right save_next_in_step'
+                    = f.submit 'Save & Next', class: 'btn btn-primary next-prev margin-sm-right save_next_in_step hidden', disabled: true
 
 /! Basket Template
 #basket_template[style="display: none"]
@@ -340,7 +352,7 @@
         - purchase_costs = get_purchase_property_costs(@transaction_main.purchase)
         .toolbar-btn-action.pull-right
             a.save_this_basket.btn.btn-success Save this basket 
-            a.save_identify_this_basket_to_qi.btn.btn-danger Identify this basket to QI
+            a.save_identify_this_basket_to_qi.btn.btn-danger[disabled="disabled"] Identify this basket to QI
         .clearfix
         .x-panel
             .x-title 
@@ -410,5 +422,6 @@
                             th Asking Price
                             th Cap Rate Counter
                             th Price Counter
+                            th Action
                     tbody
                         
