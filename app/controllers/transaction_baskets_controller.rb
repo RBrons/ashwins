@@ -42,24 +42,28 @@ class TransactionBasketsController < ApplicationController
   def identify_basket_to_qi
     basket = TransactionBasket.find(params[:id])
     basket_properties = basket.transaction_basket_properties
-    @transaction_purchase = TransactionPurchase.find(params[:transaction_id])
-    
-    @transaction_purchase.transaction_properties.destroy_all
+    @transaction = TransactionPurchase.find(params[:transaction_id])
+    @transaction_main = @transaction.main
+    @transaction.transaction_properties.destroy_all
     begin
       basket_properties.each do |property|
-        @transaction_purchase.transaction_properties.create({
+        @transaction.transaction_properties.create({
           property_id: property.property_id,
-          transaction_id: @transaction_purchase.id,
+          transaction_id: @transaction.id,
           is_sale: false,
-          transaction_main_id: @transaction_purchase.main.id,
+          transaction_main_id: @transaction.main.id,
           is_selected: true
         })
       end
       basket.update(is_identified_to_qi: true)
-      
-      render json: {status: true}
+      params[:type] = 'purchase'
+      params[:main_id] = @transaction_main.id
+      render json: {
+        status: true,
+        content: (render_to_string partial: '/layouts/left_sidebar', layout: false )
+      }
     rescue Exception => e
-      render json: {status: fasle, error: e.message}
+      render json: {status: false, error: e.message}
     end
 
   end
