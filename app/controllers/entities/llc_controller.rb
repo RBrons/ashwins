@@ -61,6 +61,16 @@ class Entities::LlcController < ApplicationController
       @manager                 = Manager.find(id) if id.present?
       @manager                 ||= Manager.new
       @manager.super_entity_id = @entity.id
+
+      if request.get?
+        if @manager.new_record?
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Manager </a></h4></div>".html_safe
+        else
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Manager </a></h4></div>".html_safe
+        end
+      else
+        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Manager </a></h4></div>".html_safe
+      end
     end
     if request.post?
       @manager                 = Manager.new(manager_params)
@@ -117,6 +127,16 @@ class Entities::LlcController < ApplicationController
       @member                 ||= Member.new
       @member.super_entity_id = @entity.id
       @member.class_name      = "Member"
+
+      if request.get?
+        if @member.new_record?
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Member </a></h4></div>".html_safe
+        else
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Member </a></h4></div>".html_safe
+        end
+      else
+        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Member </a></h4></div>".html_safe
+      end
     end
     if request.post?
       @member                 = Member.new(member_params)

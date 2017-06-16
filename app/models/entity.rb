@@ -191,7 +191,7 @@ class Entity < ApplicationRecord
       # name = "#{super_entity.display_name} - #{percentage(paf)} (#{paf_name(super_entity, paf)})"
       node = {text: name, nodes: [], amount: 0.00}
       # check for properties
-      Property.where(owner_entity_id: entity.id).each do |p|
+      Property.where.not(ownership_status: 'Sold').where(owner_entity_id: entity.id).each do |p|
         current_rent = p.current_monthly_rent
         add_str = ""
         if current_rent > 0

@@ -50,7 +50,7 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def director
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Director </a></h4></div>".html_safe
+    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Director </a></h4></div>".html_safe
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
       id      = params[:id]
@@ -59,6 +59,16 @@ class Entities::CorporatesController < ApplicationController
       @director ||= Director.new
       @director.super_entity_id = @entity.id
       @director.class_name      = "Director"
+
+      if request.get?
+        if @director.new_record?
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
+        else
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
+        end
+      else
+        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Director </a></h4></div>".html_safe
+      end
     end
     if request.post?
       @director           = Director.new(director_params)
@@ -100,7 +110,7 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def directors
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Directors </a></h4></div>".html_safe
+    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Directors </a></h4></div>".html_safe
     @entity = Entity.find_by(key: params[:entity_key])
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @directors = @entity.directors
@@ -109,7 +119,7 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def officer
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officer </a></h4></div>".html_safe
+    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officer </a></h4></div>".html_safe
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
       id      = params[:id]
@@ -118,6 +128,16 @@ class Entities::CorporatesController < ApplicationController
       @officer ||= Officer.new
       @officer.super_entity_id = @entity.id
       @officer.class_name      = "Officer"
+
+      if request.get?
+        if @officer.new_record?
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Officer </a></h4></div>".html_safe
+        else
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Officer </a></h4></div>".html_safe
+        end
+      else
+        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officer </a></h4></div>".html_safe
+      end
     end
     if request.post?
       @officer           = Officer.new(officer_params)
@@ -160,7 +180,7 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def officers
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officers </a></h4></div>".html_safe
+    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officers </a></h4></div>".html_safe
     @entity = Entity.find_by(key: params[:entity_key])
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @officers = @entity.officers
@@ -169,7 +189,7 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def stockholder
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
+    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
       id      = params[:id]
@@ -178,7 +198,18 @@ class Entities::CorporatesController < ApplicationController
       @stockholder                 ||= StockHolder.new
       @stockholder.super_entity_id = @entity.id
       @stockholder.class_name      = "StockHolder"
+
+      if request.get?
+        if @stockholder.new_record?
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Stockholder </a></h4></div>".html_safe
+        else
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Stockholder </a></h4></div>".html_safe
+        end
+      else
+        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
+      end
     end
+
     if request.post?
       @stockholder                 = StockHolder.new(stockholder_params)
       @stockholder.use_temp_id
@@ -222,7 +253,7 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def stockholders(entity_key = params[:entity_key])
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholders </a></h4></div>".html_safe
+    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholders </a></h4></div>".html_safe
     @entity = Entity.find_by(key: entity_key)
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @stockholders = @entity.stockholders
