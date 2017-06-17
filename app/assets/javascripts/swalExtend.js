@@ -1,5 +1,3 @@
-// Andrew Mestas 2016
-
 function swalExtend(params){
   // console.log(params);
   params.classNames = params.classNames || [];

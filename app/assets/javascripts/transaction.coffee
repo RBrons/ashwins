@@ -233,44 +233,116 @@ $ ->
   # - Offer and Acceptance -
   $(document).on 'click', '.nav-tabs #new_offer', (e)->
     e.preventDefault()
-    index = $('#offer_list').children().length
     elem = $(this)
 
-    $.ajax
-      url: '/transaction_property_offers/'
-      type: 'POST'
-      dataType: 'json'
-      data: { offer_name: 'Offeror ' + index, transaction_property_id: $(this).data('tran-prop-id'), is_accepted: false }
-      success: (data) ->
-        if data.status
-          elem.closest('li').before '<li><a data-toggle="tab" data-offer-id="' + data.offer_id + '" aria-expanded="true" href="#offer_' + data.offer_id + '_content">Offer '+ index + ' <span class="delete_offer fa fa-times"></span></a></li>'
-          tabId = 'offer_' + data.offer_id + '_content'
-          $('#offer_and_acceptance_section .tab-content').append '<div class="tab-pane" id="' + tabId + '">' + $('#offer_and_acceptance_template').html() + '</div>'
-          $('#offer_list li:nth-child(' + index + ') a').click()
+    swalFunction = ->
+      swal {
+        title: 'Are you sure?'
+        text: 'The 1st Accepted Offer has fallen through.'
+        type: 'warning'
+        showCancelButton: true
+        cancelButtonText: "Close"
+        confirmButtonColor: '#DD6B55'
+        confirmButtonText: 'Delete the First Accepted Offer'
+        closeOnConfirm: false
+      }, (isConfirm)->
+        if isConfirm
+          console.log "1st Button"
 
-          initialize_editable_currency_field()
-          initialize_editable_date_field()
-          selected_offer_tab.find('.contact_is_company_false').iCheck
-            checkboxClass: 'icheckbox_flat-blue'
-            radioClass: 'iradio_flat-blue'
-          selected_offer_tab.find('.contact_is_company_true').iCheck
-            checkboxClass: 'icheckbox_flat-blue'
-            radioClass: 'iradio_flat-blue'
+          # Add new offer
+          index = $('#offer_list').children().length
 
-          selected_offer_tab.find('input.cur_offer_id').val(data.offer_id)
-          selected_offer_tab.find('.from_relinquishing_offeror').val(data.offer_id)
-          selected_offer_tab.find('.relingquishing_offeror_form').attr('action', '/contacts/' + data.offeror_contact_id)
+          $.ajax
+            url: '/transaction_property_offers/'
+            type: 'POST'
+            dataType: 'json'
+            data: { offer_name: 'Offeror ' + index, transaction_property_id: elem.data('tran-prop-id'), is_accepted: false }
+            success: (data) ->
+              if data.status
+                elem.closest('li').before '<li><a data-toggle="tab" data-offer-id="' + data.offer_id + '" aria-expanded="true" href="#offer_' + data.offer_id + '_content">Offer '+ index + ' <span class="delete_offer fa fa-times"></span></a></li>'
+                tabId = 'offer_' + data.offer_id + '_content'
+                $('#offer_and_acceptance_section .tab-content').append '<div class="tab-pane" id="' + tabId + '">' + $('#offer_and_acceptance_template').html() + '</div>'
+                $('#offer_list li:nth-child(' + index + ') a').click()
 
-          if $(document).find('ul#offer_list li.done').length >= 1
-            selected_offer_tab.find('.initial_log_counteroffer').prop('disabled', 'disabled')
-            selected_offer_tab.find('.ask_accepted').prop('disabled', 'disabled')
+                initialize_editable_currency_field()
+                initialize_editable_date_field()
+                selected_offer_tab.find('.contact_is_company_false').iCheck
+                  checkboxClass: 'icheckbox_flat-blue'
+                  radioClass: 'iradio_flat-blue'
+                selected_offer_tab.find('.contact_is_company_true').iCheck
+                  checkboxClass: 'icheckbox_flat-blue'
+                  radioClass: 'iradio_flat-blue'
 
-          $.notify "Successfully added", "success"
+                selected_offer_tab.find('input.cur_offer_id').val(data.offer_id)
+                selected_offer_tab.find('.from_relinquishing_offeror').val(data.offer_id)
+                selected_offer_tab.find('.relingquishing_offeror_form').attr('action', '/contacts/' + data.offeror_contact_id)
 
+                if $(document).find('ul#offer_list li.done').length >= 1
+                  selected_offer_tab.find('.initial_log_counteroffer').prop('disabled', 'disabled')
+                  selected_offer_tab.find('.ask_accepted').prop('disabled', 'disabled')
+
+                $.notify "Successfully added", "success"
+
+                # Delete 1st offer
+                $("#offer_list li").first().children('a').find("span.delete_offer").click()
+              else
+                $.notify "Failed", "error"
+          swal.close()
         else
-          $.notify "Failed", "error"
+          console.log "3rd Button"
+          $("#offer_list li").first().children('a').click()
+          selected_offer_tab = $(document).find($("#offer_list li").first().children('a').attr('href'))
+        return
+      return
 
+    swalExtend
+      swalFunction: swalFunction
+      hasCancelButton: true
+      buttonNum: 1
+      buttonNames: [
+        'Leave and Proceed'
+      ]
+      clickFunctionList: [
+        ->
+          console.log '2th Button'
 
+          index = $('#offer_list').children().length
+
+          $.ajax
+            url: '/transaction_property_offers/'
+            type: 'POST'
+            dataType: 'json'
+            data: { offer_name: 'Offeror ' + index, transaction_property_id: elem.data('tran-prop-id'), is_accepted: false }
+            success: (data) ->
+              if data.status
+                elem.closest('li').before '<li><a data-toggle="tab" data-offer-id="' + data.offer_id + '" aria-expanded="true" href="#offer_' + data.offer_id + '_content">Offer '+ index + ' <span class="delete_offer fa fa-times"></span></a></li>'
+                tabId = 'offer_' + data.offer_id + '_content'
+                $('#offer_and_acceptance_section .tab-content').append '<div class="tab-pane" id="' + tabId + '">' + $('#offer_and_acceptance_template').html() + '</div>'
+                $('#offer_list li:nth-child(' + index + ') a').click()
+
+                initialize_editable_currency_field()
+                initialize_editable_date_field()
+                selected_offer_tab.find('.contact_is_company_false').iCheck
+                  checkboxClass: 'icheckbox_flat-blue'
+                  radioClass: 'iradio_flat-blue'
+                selected_offer_tab.find('.contact_is_company_true').iCheck
+                  checkboxClass: 'icheckbox_flat-blue'
+                  radioClass: 'iradio_flat-blue'
+
+                selected_offer_tab.find('input.cur_offer_id').val(data.offer_id)
+                selected_offer_tab.find('.from_relinquishing_offeror').val(data.offer_id)
+                selected_offer_tab.find('.relingquishing_offeror_form').attr('action', '/contacts/' + data.offeror_contact_id)
+
+                if $(document).find('ul#offer_list li.done').length >= 1
+                  selected_offer_tab.find('.initial_log_counteroffer').prop('disabled', 'disabled')
+                  selected_offer_tab.find('.ask_accepted').prop('disabled', 'disabled')
+
+                $.notify "Successfully added", "success"
+
+              else
+                $.notify "Failed", "error"
+          return
+      ]
 
   $(document).on 'click', '#offer_list li span.delete_offer', (e)->
     anchor = $(this).parent('a')
@@ -314,7 +386,7 @@ $ ->
       $(document).find('.is_selected_property').iCheck('disable')
     else
       $(document).find('.is_selected_property').iCheck('enable')
-  
+
 
   initialize_editable_date_field = ->
     $(document).find('.editable-date').editable
@@ -443,7 +515,8 @@ $ ->
           console.log e
 
   $(document).on 'click', '#offer_list li a', (e)->
-    selected_offer_tab = $(document).find($(this).attr('href'))
+    if $(this).attr("id") != 'new_offer'
+      selected_offer_tab = $(document).find($(this).attr('href'))
 
   $(document).on 'click', '#basket_list li a', (e)->
     selected_basket_tab = $(document).find($(this).attr('href'))
@@ -971,7 +1044,7 @@ $ ->
     property_identification_table.row( $('tr#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()) )
                                 .remove()
                                 .draw()
-  
+
   delete_property_on_basket = (selected_property)->
     $('.basket_property_table tbody tr#property_' + selected_property.find('.transaction-property-select input[type=hidden]').val()).remove()
 
@@ -1038,7 +1111,7 @@ $ ->
           $(document).find('.basket_property_table tbody tr td .go_to_negotiations').attr('disabled', false)
           selected_basket_tab.find('.is_identified_to_qi').val("true")
           $(document).find('.is_selected_property').iCheck('disable')
-          
+
           sweetAlert '', success_identify_property_to_qi, 'info'
         else
           $.notify "Failed", "error"
@@ -1050,7 +1123,7 @@ $ ->
   $(document).on 'change', '.property_identification_table .counter-price, .basket_property_table .counter-price', (e)->
     $(document).find('#' + $(this).closest("tr").attr("id") + '_asking_mode').val(0)
     $(this).closest('tr').find('.go_to_negotiations').text('Counter and Proceed')
-  
+
   $(document).on 'keyup', ".property_identification_table .counter-cap-rate, .basket_property_table .counter-cap-rate", (e)->
     currentRent = $(this).closest('tr').find('td.current-rent').text().replace(/[^0-9\.]+/g,'')
     counterCapRate = $(this).val().replace(/\,/g, '')
