@@ -185,7 +185,7 @@
                                             option[value="95_percent"] 95%
                                 .clearfix
                                 section#200_percent_measure
-                                    input[type="hidden" class="disable_adding_property" value="#{basket.id.present?}"]
+                                    input[type="hidden" class="disable_editing_property" value="#{basket.id.present?}"]
                                     input[type="hidden" class="is_identified_to_qi" value="#{basket.is_identified_to_qi == true}"]
                                     - est_bugdets = get_est_identification_bugdets(@transaction_main.sale)
                                     - purchase_costs = get_purchase_property_costs(@transaction_main.purchase, basket)
