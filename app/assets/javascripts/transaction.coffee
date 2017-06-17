@@ -580,7 +580,7 @@ $ ->
                                 <span class="green editable-currency" data-name="offered_price" data-type="text" data-url="/counteroffers/' + data.counteroffer_id + '" data-value="' + price + '"></span>
                             </td>
                             <td>
-                                <a href="#" class="delete_counteroffer btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></a>
+                                <a href="javascript:;" class="delete_counteroffer btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></a>
                             </td>
                         </tr>'
 
@@ -627,6 +627,21 @@ $ ->
         if data
           selected_offer_tab.find('.last_counteroffer_price').val(table_tr.prev().children().find('span.editable-currency').text())
           table_tr.remove()
+          if last_counteroffer == 'Client'
+            last_counteroffer = 'Counter-Party'
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Client Counter')
+            else
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Seller Counter')
+            selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Accept Counter')
+          else
+            last_counteroffer = 'Client'
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Buyer Counter')
+            else
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Buyer Counter')
+            selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Counter Accepted')
+
           if selected_offer_tab.find('.counteroffer_history tr').length == 1
             selected_offer_tab.find('.initial_log_counteroffer').show()
             selected_offer_tab.find('.ask_accepted').show()
@@ -634,7 +649,7 @@ $ ->
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper').hide()
             else
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').attr('disabled', 'disabled')
-
+              
           selected_offer_tab.find('.add_counteroffer').attr('disabled', false)
           $.notify "Successfully deleted", "success"
         else
@@ -945,14 +960,17 @@ $ ->
           return
       if $(document).find('#transaction_identification_rule').val() == '200_percent'
         add_property_to_identification($(this).parents(".fields"))
-        if selected_basket_tab.find('.disable_adding_property').val() != "true"
+        if selected_basket_tab.find('.disable_editing_property').val() != "true"
           add_property_to_basket($(this).parents(".fields"))
       else
         add_property_to_identification($(this).parents(".fields"))
     else
       $(this).parents(".fields").addClass('property-unchecked')
+      if selected_basket_tab.find('.disable_editing_property').val() != "true"
+        delete_property_on_basket($(this).parents(".fields"))
+
       delete_property_on_identification($(this).parents(".fields"))
-      delete_property_on_basket($(this).parents(".fields"))
+      
     checkShowButton()
 
   calculate_purchase_costs = ->
@@ -1085,7 +1103,7 @@ $ ->
       success: (data) ->
         if data.status
           selected_basket_tab.data('basket_id', data.basket.id)
-          selected_basket_tab.find('.disable_adding_property').val("true")
+          selected_basket_tab.find('.disable_editing_property').val("true")
           selected_basket_tab.find('.save_this_basket').hide()
           selected_basket_tab.find('.save_identify_this_basket_to_qi').attr('disabled', false)
           $(document).find('.basket_property_table tbody tr td .input-mask-currency').attr('disabled', false)

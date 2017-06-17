@@ -46,11 +46,13 @@ class TransactionBasketsController < ApplicationController
     @transaction_main = @transaction.main
     @transaction.transaction_properties.destroy_all
     begin
-      basket_properties.each do |property|
+      basket_properties.each do |basket_property|
         @transaction.transaction_properties.create({
-          property_id: property.property_id,
+          property_id: basket_property.property_id,
           transaction_id: @transaction.id,
           is_sale: false,
+          sale_price: basket_property.property.price,
+          cap_rate: basket_property.property.cap_rate,
           transaction_main_id: @transaction.main.id,
           is_selected: true
         })
