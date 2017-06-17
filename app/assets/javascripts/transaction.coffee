@@ -7,7 +7,7 @@ $ ->
   property_identification_table = $(document).find('#no_200_percent_measure .property_identification_table').DataTable()
   last_counteroffer = ""
   alert_for_three_property_rule = "Because you selected three property rule, you can not select any more properties to buy"
-  not_passed_LOI = 'You are proceeding to contract without completing the LOI. Are you sure you want to do this? User will have the option to proceed'
+  not_passed_LOI = 'You are proceeding to contract without completing the LOI. Are you sure you want to do this?'
   success_identify_property_to_qi = "Now that you have Identified one or more properties to your QI, please make a counter offer to a seller and hit Save and Next"
 
   sub_tab_id = $("#sub_tab_val").val()
@@ -1149,7 +1149,7 @@ $ ->
 
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_price').val(counterPrice)
-    
+
     calculate_purchase_costs()
 
   $(document).on 'click', '.basket_property_table .go_to_negotiations', ->
