@@ -401,13 +401,17 @@ $ ->
         if response.counteroffer.offered_date && response.counteroffer.offered_price
           if last_counteroffer  == "Client"
             selected_offer_tab.find('.add_counteroffer').text('Buyer Counter')
-            selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
+            else
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
           else
             if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
               selected_offer_tab.find('.add_counteroffer').text('Client Counter')
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
             else
               selected_offer_tab.find('.add_counteroffer').text('Seller Counter')
-            selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
 
           selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
           selected_offer_tab.find('.add_counteroffer').attr("disabled", false)
@@ -432,13 +436,17 @@ $ ->
         if response.counteroffer.offered_date && response.counteroffer.offered_price
           if last_counteroffer  == "Client"
             selected_offer_tab.find('.add_counteroffer').text('Buyer Counter')
-            selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
+            if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
+            else
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
           else
             if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
               selected_offer_tab.find('.add_counteroffer').text('Client Counter')
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
             else
               selected_offer_tab.find('.add_counteroffer').text('Seller Counter')
-            selected_offer_tab.find('.btn_accept_counteroffer').text('Accept Counter')
+              selected_offer_tab.find('.btn_accept_counteroffer').text('Counter Accepted')
 
           selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
           selected_offer_tab.find('.add_counteroffer').attr("disabled", false)
@@ -619,6 +627,7 @@ $ ->
 
   $(document).on 'click', '.delete_counteroffer', (e)->
     table_tr = $(this).parent().parent('tr')
+    last_counteroffer = if last_counteroffer == "" then selected_offer_tab.find('.last_counteroffer').val() else last_counteroffer
     $.ajax
       url: '/counteroffers/' + table_tr.data('counteroffer-id')
       type: 'DELETE'
@@ -631,16 +640,18 @@ $ ->
             last_counteroffer = 'Counter-Party'
             if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Client Counter')
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Accept Counter')
             else
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Seller Counter')
-            selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Accept Counter')
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Counter Accepted')
           else
             last_counteroffer = 'Client'
             if $(document).find('#negotiations_wrapper').data('transaction-type') == 'sale'
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Buyer Counter')
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Counter Accepted')
             else
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper .add_counteroffer').text('Buyer Counter')
-            selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Counter Accepted')
+              selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').text('Accept Counter')
 
           if selected_offer_tab.find('.counteroffer_history tr').length == 1
             selected_offer_tab.find('.initial_log_counteroffer').show()
@@ -1130,6 +1141,7 @@ $ ->
           $(document).find('.basket_property_table tbody tr td .go_to_negotiations').attr('disabled', false)
           selected_basket_tab.find('.is_identified_to_qi').val("true")
           $(document).find('.is_selected_property').iCheck('disable')
+          $('#basket_list li.active a i').text('Identified')
 
           sweetAlert '', success_identify_property_to_qi, 'info'
         else
