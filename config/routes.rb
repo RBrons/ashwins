@@ -310,7 +310,9 @@ Rails.application.routes.draw do
     end
 
     resources :properties do
-
+      collection do
+        get :sold_to_purchased
+      end
     end
 
     resources :default_values do
