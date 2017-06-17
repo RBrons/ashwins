@@ -59,5 +59,8 @@
             .notice=raw notice
           - if alert
             .alert=raw alert
+          - flash.each do |key, value|
+            %div{class: "#{flash_class(key)}"}
+              = value.html_safe
           = yield
         %div.col-md-1

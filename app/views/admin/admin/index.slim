@@ -1,4 +1,6 @@
 .clearfix.margin-lg-top
+- if resource_class_with_condition == Property
+  = link_to 'All Sold Properties to Purchased', sold_to_purchased_admin_properties_path, class: "#{edit_xs}"
 - if resources.present?
   = display_standard_table(resources.first.class, resources, {table_id: 'data_table'})
 
