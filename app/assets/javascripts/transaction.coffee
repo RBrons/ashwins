@@ -962,10 +962,10 @@ $ ->
       if $(this).find('td').eq(1).text() == 'Closed'
         # Nothing yet
       else if $(this).find('td').eq(1).text() == 'In Contract'
-        purchase_cost_in_contract += parseInt($(this).find('td').eq(5).data('property_price'))
-        purchase_cost_in_contract_selected += parseFloat($(this).find('td').eq(5).data('property_price'))
+        purchase_cost_in_contract += parseInt($(this).find('td .counter-price').val().replace(/\,/g, '') || 0)
+        purchase_cost_in_contract_selected += parseFloat($(this).find('td .counter-price').val().replace(/\,/g, '') || 0)
       else
-        purchase_cost_in_contract_selected += parseFloat($(this).find('td').eq(5).data('property_price'))
+        purchase_cost_in_contract_selected += parseFloat($(this).find('td .counter-price').val().replace(/\,/g, '') || 0)
 
     selected_basket_tab.find('.purchase_property_cost_table tr:first-child td span.orange').text('$' + purchase_cost_in_contract.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
     selected_basket_tab.find('.purchase_property_cost_table tr:first-child td span.green').text('$' + purchase_cost_in_contract_selected.toFixed(2).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
@@ -1135,6 +1135,7 @@ $ ->
 
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_price').val(counterPrice)
+    calculate_purchase_costs()
 
   $(document).on 'keyup', ".property_identification_table .counter-price, .basket_property_table .counter-price", (e)->
     currentRent = $(this).closest('tr').find('td.current-rent').text().replace(/[^0-9\.]+/g,'')
@@ -1147,6 +1148,8 @@ $ ->
 
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_price').val(counterPrice)
+    
+    calculate_purchase_costs()
 
   $(document).on 'click', '.basket_property_table .go_to_negotiations', ->
     basket_id = selected_basket_tab.data('basket_id')
