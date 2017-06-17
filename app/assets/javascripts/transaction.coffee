@@ -584,7 +584,7 @@ $ ->
                             <td width="300">
                                 <span>' + table_cell_offeror + '</span>
                             </td>
-                            <td>
+                            <td width="300">
                                 <span class="green editable-currency" data-name="offered_price" data-type="text" data-url="/counteroffers/' + data.counteroffer_id + '" data-value="' + price + '"></span>
                             </td>
                             <td>
