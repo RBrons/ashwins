@@ -1123,10 +1123,14 @@ $ ->
       data: { basket_name: 'Basket ' + index, transaction_id: selected_basket_tab.data('transaction_id'), property_ids: property_ids}
       success: (data) ->
         if data.status
+          $('.left_col #sidebar-menu').replaceWith(data.content)
+
+          $(document).find('#basket_list li.active').addClass('saved')
           selected_basket_tab.data('basket_id', data.basket.id)
           selected_basket_tab.find('.disable_editing_property').val("true")
           selected_basket_tab.find('.save_this_basket').hide()
           selected_basket_tab.find('.save_identify_this_basket_to_qi').attr('disabled', false)
+
           $(document).find('.basket_property_table tbody tr td .input-mask-currency').attr('disabled', false)
           $('#basket_list li.active a i').addClass('red')
           $('.basket_property_table tbody tr td:first-child a').html('<span class="glyphicon glyphicon-ok"></span>')
@@ -1148,13 +1152,15 @@ $ ->
       success: (data) ->
         if data.status
           $('.left_col #sidebar-menu').replaceWith(data.content)
-          $(document).find('#200_percent_measure .save_identify_this_basket_to_qi').attr('disabled', 'disabled')
+          $(document).find('#properties_identification .tab-content .save_identify_this_basket_to_qi').attr('disabled', 'disabled')
           $(document).find('.basket_property_table tbody tr td .go_to_negotiations').attr('disabled', false)
-          selected_basket_tab.find('.is_identified_to_qi').val("true")
-          $(document).find('#basket_list li.active').addClass('identified')
-          $(document).find('.is_selected_property').iCheck('disable')
-          $('#basket_list li.active a i').text('Identified')
 
+          $(document).find('#basket_list li.active').addClass('identified')
+          $('#basket_list li.active a i').text('Identified')
+          selected_basket_tab.find('.is_identified_to_qi').val("true")
+          
+          $(document).find('.is_selected_property').iCheck('disable')
+          
           sweetAlert '', success_identify_property_to_qi, 'info'
         else
           $.notify "Failed", "error"
