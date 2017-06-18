@@ -29,9 +29,13 @@
           - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
             li[role="presentation" class=( transaction_property_offer.is_accepted ? 'done' : '' )]
               a[href="#{ '#seller_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
-                = transaction_property_offer.offer_name
+                - if transaction_property_offer.is_accepted
+                  = '<i class="red">Accepted</i>'.html_safe
+                - else  
+                  = transaction_property_offer.offer_name
 
         .tab-content
+          input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.purchaser_name}"]
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
             .tab-pane.fade.active.in[role="tabpanel" id="#{'seller_' + transaction_property_offer.id.to_s}"]
               .col-md-12.col-xs-12
