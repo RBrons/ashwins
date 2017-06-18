@@ -523,15 +523,22 @@ $ ->
           console.log e
 
   $(document).on 'click', '#offer_list li a', (e)->
-    if $(this).attr("id") != 'new_offer'
+    if $(this).attr("id") != 'new_offer' 
       selected_offer_tab = $(document).find($(this).attr('href'))
 
   $(document).on 'click', '#basket_list li a', (e)->
-    selected_basket_tab = $(document).find($(this).attr('href'))
-    if selected_basket_tab.find('.is_identified_to_qi').val() == 'true'
+    if $(document).find('#basket_list li.identified').length > 0 
+      console.log 'frozen basket'
       $(document).find('.is_selected_property').iCheck('disable')
+      if !$(this).parent('li').hasClass('identified')
+        sweetAlert '', 'One basket already Identified', 'info'
+      return
     else
       $(document).find('.is_selected_property').iCheck('enable')
+
+    selected_basket_tab = $(document).find($(this).attr('href'))
+    
+      
 
   $(document).on 'change', '.relingquishing_offeror_form input', ->
     if selected_offer_tab.find('.relingquishing_offeror_form').attr('action') != ""
@@ -1138,8 +1145,10 @@ $ ->
       success: (data) ->
         if data.status
           $('.left_col #sidebar-menu').replaceWith(data.content)
+          $(document).find('#200_percent_measure .save_identify_this_basket_to_qi').attr('disabled', 'disabled')
           $(document).find('.basket_property_table tbody tr td .go_to_negotiations').attr('disabled', false)
           selected_basket_tab.find('.is_identified_to_qi').val("true")
+          $(document).find('#basket_list li.active').addClass('identified')
           $(document).find('.is_selected_property').iCheck('disable')
           $('#basket_list li.active a i').text('Identified')
 

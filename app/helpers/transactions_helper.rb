@@ -137,4 +137,12 @@ module TransactionsHelper
         return [total_est_budget_of_closed * 2, total_est_budget_of_closed_contracted * 2, total_est_budget_of_closed_contracted_selected * 2]
     end
 
+    def is_exist_identified_basket(transaction)
+        if transaction.transaction_baskets.where(is_identified_to_qi: true).count > 0
+            return true
+        else
+            return false
+        end
+    end
+
 end

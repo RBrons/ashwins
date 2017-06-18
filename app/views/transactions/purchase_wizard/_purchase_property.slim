@@ -170,9 +170,13 @@
                 div[role="tabpanel"]
                     ul#basket_list.nav.nav-tabs.bar_tabs[role="tablist"]
                         - @transaction.transaction_baskets.each_with_index do |basket, index|
-                            li[role="presentation"]
+                            li[role="presentation" class="#{'saved' if basket.id.present?} #{'identified' if basket.is_identified_to_qi}"]
                                 a[href="#basket_#{basket.id}_section" role="tab" data-toggle="tab" aria-expanded="true"]
-                                    i[class=(basket.id.present? ? 'red' : '')] = "Basket #{index + 1}"
+                                    - if basket.is_identified_to_qi
+                                        i.red = "Identified"
+                                    - else
+                                        i[class=(basket.id.present? ? 'red' : '')] = "Basket #{index + 1}"
+                                    
                     .tab-content
                         - @transaction.transaction_baskets.each do |basket|
                             .tab-pane.fade[role="tabpanel" id="basket_#{basket.id}_section" data-basket_id="#{basket.id}" data-transaction_id="#{@transaction.id}"]
@@ -193,7 +197,7 @@
                                         - if !basket.id.present?
                                             a.save_this_basket.btn.btn-success Save this basket 
                                         / - if !basket.is_identified_to_qi
-                                        a.save_identify_this_basket_to_qi.btn.btn-danger[disabled=(!basket.is_identified_to_qi ? false : 'disabled')] Identify this basket to QI
+                                        a.save_identify_this_basket_to_qi.btn.btn-danger[disabled=(!basket.is_identified_to_qi && !is_exist_identified_basket(@transaction) ? false : 'disabled')] Identify this basket to QI
                                     .clearfix
                                     .x-panel
                                         .x-title 
@@ -363,8 +367,8 @@
                     thead
                         tr
                             th Sum of All Properties Closed x 2
-                            th Sum of All Properties Closed and Contract x 2
-                            th Sum of All Properties Closed and Contract or Asking x 2
+                            th Sum of All Properties Closed, in Contract x 2
+                            th Sum of All Properties Closed, in Contract or Asking x 2
                     tbody
                         tr
                             td[data-closed_total_price="#{est_bugdets[0]}"]
