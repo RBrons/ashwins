@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Entity Name
       th
         | Type
@@ -23,13 +25,14 @@ table#data_table
         | Email
       th
         | Membership Interest
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @members.each do |member|
       - entity_flag = member.entity.present?
       - person_flag = true
       tr data-id=member.id
+        td.actions
+          = link_to 'Edit', entities_llc_member_path( @entity.key, member.id ), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_llc_member_path( member.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"
         td
           - if !member.is_person?
             - person_flag = false
@@ -65,6 +68,3 @@ table#data_table
           = member.email
         td
           = member.my_percentage
-        td.actions
-          = link_to 'Edit', entities_llc_member_path( @entity.key, member.id ), class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_llc_member_path( member.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"

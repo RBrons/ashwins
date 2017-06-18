@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | First Name
       th
         | Last Name
@@ -15,11 +17,12 @@ table#data_table
         | Email
       th
         | Phone1
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @officers.each do |officer|
       tr data-id=officer.id
+        td
+          = link_to 'Edit', entities_corporates_officer_path(@entity.key, officer.id), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_corporates_officer_path(officer.id), method: :delete, class: "#{delete_xs} entity-page-xhr"
         td
           = officer.first_name
         td
@@ -30,6 +33,3 @@ table#data_table
           = officer.email
         td
           = officer.email
-        th
-          = link_to 'Edit', entities_corporates_officer_path(@entity.key, officer.id), class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_corporates_officer_path(officer.id), method: :delete, class: "#{delete_xs} entity-page-xhr"

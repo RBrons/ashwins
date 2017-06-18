@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Entity Name
       th
         | Type
@@ -23,13 +25,14 @@ table#data_table
         | Email
       th
         | Beneficial Interest
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @beneficiaries.each do |beneficiary|
       - entity_flag = beneficiary.entity.present?
       - person_flag = true
       tr data-id=beneficiary.id
+        td.actions
+          = link_to "Edit", entities_trust_beneficiary_path( @entity.key, beneficiary.id ), class: "#{edit_xs} entity-page-xhr"
+          = link_to "Delete", entities_trust_beneficiary_path( beneficiary.id ), method: :delete, class: "#{delete_xs} entity-page-xhr"
         td
           - if !beneficiary.is_person?
             - person_flag = false
@@ -65,7 +68,4 @@ table#data_table
           = beneficiary.email
         td
           = beneficiary.my_percentage
-        td.actions
-          = link_to "Edit", entities_trust_beneficiary_path( @entity.key, beneficiary.id ), class: "#{edit_xs} entity-page-xhr"
-          = link_to "Delete", entities_trust_beneficiary_path( beneficiary.id ), method: :delete, class: "#{delete_xs} entity-page-xhr"
 
