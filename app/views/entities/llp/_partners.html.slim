@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Entity Name
       th
         | Type
@@ -23,13 +25,14 @@ table#data_table
         | Email
       th
         | Partnership Interest
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @partners.each do |partner|
       - entity_flag = partner.entity.present?
       - person_flag = true
       tr data-id=partner.id
+        td.actions
+          = link_to 'Edit', entities_llp_partner_path(@entity.key, partner.id), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_llp_partner_path(partner.id), method: :delete, class: "#{delete_xs} entity-page-xhr"
         td
           - if !partner.is_person?
             - person_flag = false
@@ -65,6 +68,3 @@ table#data_table
           = partner.email
         td
           = partner.my_percentage
-        td.actions
-          = link_to 'Edit', entities_llp_partner_path(@entity.key, partner.id), class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_llp_partner_path(partner.id), method: :delete, class: "#{delete_xs} entity-page-xhr"

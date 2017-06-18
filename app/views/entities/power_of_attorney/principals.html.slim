@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Name
       th
         | Type
@@ -15,11 +17,12 @@ table#data_table
         | Email
       th
         | Number of Share
-      th
-        | Actions
   tbody
     - @principales.each do |principal|
       tr
+        td.actions
+          = link_to 'E', entities_power_of_attorney_principal_path(@entity.key, principal.id), remote: true, class: "#{edit_xs} entity-page-xhr"
+          = link_to 'D', entities_power_of_attorney_principal_path(principal.id), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
         td
           - if principal.entity.present?
             = principal.entity.try(:name)
@@ -50,6 +53,3 @@ table#data_table
             = principal.email
         td
           = principal.my_percentage
-        td.actions
-          = link_to 'E', entities_power_of_attorney_principal_path(@entity.key, principal.id), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to 'D', entities_power_of_attorney_principal_path(principal.id), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"

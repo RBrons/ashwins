@@ -3,6 +3,8 @@ table#data_table
     tr
       th = check_box_tag :object_all, false, false
       th
+        | Actions
+      th
         | Company
       th
         | Type
@@ -20,12 +22,13 @@ table#data_table
         | Fax
       th
         | Notes
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @contacts.each do |contact|
       tr data-id=contact.id
         td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => contact.id
+        td.actions
+          = link_to 'Edit', edit_contact_path(contact), class: edit_xs
+          = link_to 'Delete', contact_path(contact), data: {:confirm => 'Are you sure?'}, :method => :delete, class: delete_xs
         td
           = (contact.try(:company_name) || "") + " " + (contact.try(:legal_ending) || "")
         td
@@ -44,9 +47,6 @@ table#data_table
           = contact.fax
         td
           = contact.notes
-        td.actions
-          = link_to 'Edit', edit_contact_path(contact), class: edit_xs
-          = link_to 'Delete', contact_path(contact), data: {:confirm => 'Are you sure?'}, :method => :delete, class: delete_xs
 
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: {local_path: multi_delete_contacts_path, klazz: Contact, index_path: contacts_path(trashed: !params[:trashed].to_b)}

@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Contact First Name
       th
         | Contact Last Name
@@ -17,13 +19,14 @@ table#data_table
         | Phone
       th
         | Email
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @settlors.each do |settlor|
       - entity_flag = settlor.entity.present?
       - person_flag = true
       tr data-id=settlor.id
+        td.actions
+          = link_to "Edit", entities_trust_settlor_path( @entity.key, settlor.id ), class: "#{edit_xs} entity-page-xhr"
+          = link_to "Delete", entities_trust_settlor_path( settlor.id ), method: :delete, class: "#{delete_xs} entity-page-xhr"
         td
           - if person_flag
             - if settlor.entity.present?
@@ -45,6 +48,3 @@ table#data_table
           = settlor.phone1
         td
           = settlor.email
-        td.actions
-          = link_to "Edit", entities_trust_settlor_path( @entity.key, settlor.id ), class: "#{edit_xs} entity-page-xhr"
-          = link_to "Delete", entities_trust_settlor_path( settlor.id ), method: :delete, class: "#{delete_xs} entity-page-xhr"
