@@ -713,6 +713,9 @@ $ ->
                                                               .hide()
           selected_offer_tab.find('.ask_accepted').attr('disabled', 'disabled')
                                                   .hide()
+          if $(document).find('#negotiations_wrapper').data('transaction-type') == 'purchase'
+            $(document).find('#offer_list li.active a').html('<i class="red">Accepted</i>')
+          
           $(document).find('#relinquishing_purchaser_name').val(data.offer_name)
                                                            .show()
           $(document).find('#relinquishing_property_sale_price').val(selected_offer_tab.find('.last_counteroffer_price').val())
