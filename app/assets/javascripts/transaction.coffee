@@ -532,7 +532,10 @@ $ ->
       $(document).find('.is_selected_property').iCheck('disable')
       if !$(this).parent('li').hasClass('identified')
         sweetAlert '', 'One basket already Identified', 'info'
-      return
+        setTimeout (->
+            $(document).find('#basket_list li.saved.identified a').click()
+        ), 100
+        return
     else
       $(document).find('.is_selected_property').iCheck('enable')
 
