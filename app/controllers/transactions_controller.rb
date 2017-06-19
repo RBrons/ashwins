@@ -259,15 +259,26 @@ class TransactionsController < ApplicationController
             # end
             
             @cur_transaction_property = @transaction.transaction_properties.where(:property_id => params[:cur_property]).first
-            if @cur_transaction_property.present?
-              @cur_transaction_property.transaction_property_offers.destroy_all
-              if params[:initial_asking_price]["#{@cur_transaction_property.property_id}".to_sym] == "1"
-                @cur_transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :accepted_counteroffer_id => 0])
-              else
-                @transaction_property_offer = @cur_transaction_property.transaction_property_offers.create(:offer_name => "Seller", :is_accepted => false)
-                @transaction_property_offer.counteroffers.create(offered_date: Time.now.strftime('%Y-%m-%d'), offer_type: 'Counter-Party', offered_price: params[:counter_price]["#{@cur_transaction_property.property_id}".to_sym])
-              end
+            if !@cur_transaction_property.present?
+              @cur_transaction_property = @transaction.transaction_properties.create({
+                property_id: params[:cur_property],
+                transaction_id: @transaction.id,
+                is_sale: false,
+                sale_price: Property.find(params[:cur_property]).price,
+                cap_rate: Property.find(params[:cur_property]).cap_rate,
+                transaction_main_id: @transaction.main.id,
+                is_selected: true
+              })
             end
+            
+            @cur_transaction_property.transaction_property_offers.destroy_all
+            if params[:initial_asking_price]["#{@cur_transaction_property.property_id}".to_sym] == "1"
+              @cur_transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :accepted_counteroffer_id => 0])
+            else
+              @transaction_property_offer = @cur_transaction_property.transaction_property_offers.create(:offer_name => "Seller", :is_accepted => false)
+              @transaction_property_offer.counteroffers.create(offered_date: Time.now.strftime('%Y-%m-%d'), offer_type: 'Counter-Party', offered_price: params[:counter_price]["#{@cur_transaction_property.property_id}".to_sym])
+            end
+            
 
           else
             @transaction.update!(transaction_property_params)

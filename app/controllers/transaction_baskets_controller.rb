@@ -26,6 +26,7 @@ class TransactionBasketsController < ApplicationController
 
       if params[:with_identify]
         validate_identfied_property_from_transaction(@transaction_basket, @transaction)
+        @transaction_basket.update(is_identified_to_qi: true)
       end
 
       params[:type] = 'purchase'
