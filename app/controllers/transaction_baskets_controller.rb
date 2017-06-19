@@ -11,7 +11,9 @@ class TransactionBasketsController < ApplicationController
       @transaction_basket.save
       params[:property_ids].each do |property_id|
         @transaction_basket.transaction_basket_properties.create(:property_id => property_id)
-        if !@transaction.transaction_properties.exists?(property_id: property_id)
+        if @transaction.transaction_properties.exists?(property_id: property_id)
+          @transaction.transaction_properties.where(property_id: property_id).update_all(is_selected: true)
+        else
           @transaction.transaction_properties.create({
             property_id: property_id,
             transaction_id: @transaction.id,

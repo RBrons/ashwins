@@ -222,22 +222,22 @@ class TransactionsController < ApplicationController
   # GET /Transaction/1/properties_update
   def properties_update
     flag = false
-    p_count = @transaction.transaction_properties.length
+    # p_count = @transaction.transaction_properties.length
 
-    (0..p_count-1).each do |p_index|
-      pid = params[:transaction][:transaction_properties_attributes]["#{p_index}".to_sym][:property_id]
+    # (0..p_count-1).each do |p_index|
+    #   pid = params[:transaction][:transaction_properties_attributes]["#{p_index}".to_sym][:property_id]
 
-      if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil?
-        property = Property.where(id: pid).first
-        if !property.owner_entity_id.nil?
-          contact = Contact.where(id: property.owner_entity_id).first
-          @transaction.replacement_seller_contact_id = contact.id
-          @transaction.replacement_seller_first_name = contact.company_name || contact.first_name
-          @transaction.replacement_seller_last_name = contact.last_name
-          flag = true
-        end
-      end
-    end
+    #   if !(params["type"]).nil? && params["type"] == "purchase" && @transaction.replacement_seller_contact_id.nil?
+    #     property = Property.where(id: pid).first
+    #     if !property.owner_entity_id.nil?
+    #       contact = Contact.where(id: property.owner_entity_id).first
+    #       @transaction.replacement_seller_contact_id = contact.id
+    #       @transaction.replacement_seller_first_name = contact.company_name || contact.first_name
+    #       @transaction.replacement_seller_last_name = contact.last_name
+    #       flag = true
+    #     end
+    #   end
+    # end
 
     begin
       TransactionSale.transaction do
@@ -278,8 +278,7 @@ class TransactionsController < ApplicationController
               @transaction_property_offer = @cur_transaction_property.transaction_property_offers.create(:offer_name => "Seller", :is_accepted => false)
               @transaction_property_offer.counteroffers.create(offered_date: Time.now.strftime('%Y-%m-%d'), offer_type: 'Counter-Party', offered_price: params[:counter_price]["#{@cur_transaction_property.property_id}".to_sym])
             end
-            
-
+          
           else
             @transaction.update!(transaction_property_params)
             @transaction.transaction_properties.each do |transaction_property|
