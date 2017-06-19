@@ -1,0 +1,21 @@
+.property-heading
+  .clearfix
+  div.title
+    = @contact.name
+  div.role
+    = @contact.role
+  div.type
+    = @ctype_
+  div.email
+    = @contact.email
+  div.phone
+    = @contact.phone1 || @contact.phone2
+  div.fax
+    = @contact.fax
+  div.description
+    = @contact.notes
+  div.created_at
+    = time_ago_in_words(@contact.created_at)
+
+.action-buttons
+  = link_to "Edit", edit_contact_path(@contact), class: "#{edit_xs}"
