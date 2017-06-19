@@ -11,7 +11,7 @@ class TransactionBasketsController < ApplicationController
       @transaction_basket.save
       params[:property_ids].each do |property_id|
         @transaction_basket.transaction_basket_properties.create(:property_id => property_id)
-        if @transaction.transaction_properties.where(property_id: property_id).count == 0
+        if !@transaction.transaction_properties.exists?(property_id: property_id)
           @transaction.transaction_properties.create({
             property_id: property_id,
             transaction_id: @transaction.id,
@@ -22,6 +22,10 @@ class TransactionBasketsController < ApplicationController
             is_selected: true
           })
         end
+      end
+
+      if params[:with_identify]
+        validate_identfied_property_from_transaction(@transaction_basket, @transaction)
       end
 
       params[:type] = 'purchase'
@@ -62,16 +66,13 @@ class TransactionBasketsController < ApplicationController
 
   #Custom Action
   def identify_basket_to_qi
-    basket = TransactionBasket.find(params[:id])
-    basket_properties = basket.transaction_basket_properties
+    @basket = TransactionBasket.find(params[:id])
     @transaction = TransactionPurchase.find(params[:transaction_id])
     @transaction_main = @transaction.main
 
     begin
-      basket_properties.each do |basket_property|
-        @transaction.transaction_properties.where.not(property_id: basket_property.property_id).destroy_all
-      end
-      basket.update(is_identified_to_qi: true)
+      validate_identfied_property_from_transaction(@basket, @transaction)
+      @basket.update(is_identified_to_qi: true)
 
       params[:type] = 'purchase'
       params[:main_id] = @transaction_main.id
@@ -84,5 +85,27 @@ class TransactionBasketsController < ApplicationController
     end
 
   end
+
+  private
+
+    def validate_identfied_property_from_transaction(basket, transaction)
+      basket_properties = basket.transaction_basket_properties
+
+      basket_properties.each do |basket_property|
+        if !transaction.transaction_properties.exists?(property_id: basket_property.property_id)
+          transaction.transaction_properties.create({
+            property_id: basket_property.property_id,
+            transaction_id: transaction.id,
+            is_sale: false,
+            sale_price: Property.find(basket_property.property_id).price,
+            cap_rate: Property.find(basket_property.property_id).cap_rate,
+            transaction_main_id: transaction.main.id,
+            is_selected: true
+          })
+        end
+
+        transaction.transaction_properties.where("property_id NOT IN (?)", basket_properties.pluck(:property_id)).destroy_all
+      end
+    end
 
 end
