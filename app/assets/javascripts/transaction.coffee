@@ -1161,7 +1161,7 @@ $ ->
           $('.basket_property_table tbody tr td:first-child a').html('<span class="glyphicon glyphicon-ok"></span>')
           if with_identify == true
             set_attr_after_identify()
-            successful_alert = "Saving Basket " + index + " and Identified"
+            successful_alert = "Saving and Identifying Basket " + index
           else  
             create_new_basket(index+1)
             successful_alert = "Saving Basket " + index + ", Creating Basket " + (index + 1)
