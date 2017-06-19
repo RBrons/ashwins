@@ -1198,9 +1198,10 @@ $ ->
     counterCapRate = $(this).val().replace(/\,/g, '')
     counterPrice = parseFloat(currentRent) * 100 / parseFloat(counterCapRate)
     $(this).closest('tr').find("td input.counter-price").val(counterPrice)
-    # set value for form fields
-    $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
-    $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
+    
+    # set value for form fields(not on buy mode)
+    # $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
+    # $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
 
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_price').val(counterPrice)
@@ -1211,9 +1212,10 @@ $ ->
     counterPrice = $(this).val().replace(/\,/g, '')
     counterCapRate = parseFloat(currentRent) / parseFloat(counterPrice) * 100
     $(this).closest('tr').find("td input.counter-cap-rate").val(counterCapRate)
-    # set value for form fields
-    $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
-    $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
+    
+    # set value for form fields(not on buy mode)
+    # $(document).find('#' + $(this).closest("tr").attr("id") + '_cap_rate').val(counterCapRate)
+    # $(document).find('#' + $(this).closest("tr").attr("id") + '_price').val(counterPrice)
 
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_cap_rate').val(counterCapRate)
     $(document).find('#' + $(this).closest("tr").attr("id") + '_counter_price').val(counterPrice)

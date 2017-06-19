@@ -283,9 +283,14 @@ class TransactionsController < ApplicationController
           else
             @transaction.update!(transaction_property_params)
             @transaction.transaction_properties.each do |transaction_property|
-              if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == "1" && transaction_property.is_selected
-                if transaction_property.transaction_property_offers.destroy_all
-                  transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
+              if transaction_property.is_selected
+                if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == "1"
+                  if transaction_property.transaction_property_offers.destroy_all
+                    transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
+                  end
+                else
+                  @transaction_property_offer = transaction_property.transaction_property_offers.create(:offer_name => "Seller", :is_accepted => false)
+                  @transaction_property_offer.counteroffers.create(offered_date: Time.now.strftime('%Y-%m-%d'), offer_type: 'Counter-Party', offered_price: params[:counter_price]["#{transaction_property.property_id}".to_sym])
                 end
               end
             end
