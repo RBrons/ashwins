@@ -5,7 +5,7 @@ class Contact < ApplicationRecord
   has_many :groups, :through => :group_members, :as => :gmember
   has_many :group_members, :as => :gmember
 
-  has_one :transaction_property_offer, foreign_key: :relinquishing_purchaser_contact_id, dependent: :destroy 
+  has_one :transaction_property_offer, foreign_key: :relinquishing_purchaser_contact_id, dependent: :destroy
 
   #validates_presence_of :first_name, :last_name #, :email
   validate :email_check
@@ -69,7 +69,7 @@ CLIENT_PARTICIPANT_ROLE = ["Principal",
     if !company_name.nil? && !company_name.blank?
        "#{self.company_name} #{self.legal_ending}"
     else
-      "#{self.first_name} #{self.last_name}"
+      "#{self.first_name.capitalize unless self.first_name.nil?} #{self.last_name.capitalize unless self.last_name.nil?}"
     end
   end
 

@@ -90,6 +90,20 @@ class ContactsController < ApplicationController
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\"> List </a></h4></div>".html_safe
   end
 
+  def show
+    @contact = Contact.find_by(id: params[:id])
+
+    if @contact.nil?
+      flash[:error] = "Specified contact not found."
+      return redirect_to contacts_path
+    else
+      @ctype_ = "Individual"
+      @ctype_ = "Company" if @contact.is_company
+      add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
+      add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#{contact_path(@contact.id)}\">Show #{@ctype_} Contact: #{@contact.name} </a></h4></div>".html_safe
+    end
+  end
+
   def edit
     @contact = Contact.find_by(id: params[:id])
     params[:contact_type] = "company" if !@contact.company_name.nil?

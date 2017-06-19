@@ -21,6 +21,7 @@ table#data_table
         td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => property.id
         td
           = link_to 'Edit', edit_property_path(property.key), class: "#{edit_xs}"
+          = link_to 'Show', property_path(property.key), class: "#{show_xs}"
           = link_to 'Delete', property_path(property.key), method: :delete, class: "#{delete_xs}"
         td = property.ownership_status
         td
