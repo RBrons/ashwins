@@ -195,9 +195,12 @@
                                     - purchase_costs = get_purchase_property_costs(@transaction_main.purchase, basket)
                                     .toolbar-btn-action.pull-right
                                         - if !basket.id.present?
-                                            a.save_this_basket.btn.btn-success Save this basket 
-                                        / - if !basket.is_identified_to_qi
-                                        a.save_identify_this_basket_to_qi.btn.btn-danger[disabled=(!basket.is_identified_to_qi && !is_exist_identified_basket(@transaction) ? false : 'disabled')] Identify this basket to QI
+                                            a.save_this_basket.btn.btn-success[data-with_identify="false"] Save this basket
+                                            a.save_this_basket.btn.btn-danger[data-with_identify="true"] Save and Identify to QI
+                                            a.save_identify_this_basket_to_qi.btn.btn-danger[style="display: none"] Identify this basket to QI
+                                        - else
+                                            - if !basket.is_identified_to_qi
+                                                a.save_identify_this_basket_to_qi.btn.btn-danger Identify this basket to QI
                                     .clearfix
                                     .x-panel
                                         .x-title 
@@ -358,8 +361,9 @@
         - est_bugdets = get_est_identification_bugdets(@transaction_main.sale)
         - purchase_costs = get_purchase_property_costs(@transaction_main.purchase)
         .toolbar-btn-action.pull-right
-            a.save_this_basket.btn.btn-success Save this basket 
-            a.save_identify_this_basket_to_qi.btn.btn-danger[disabled="disabled"] Identify this basket to QI
+            a.save_this_basket.btn.btn-success[data-with_identify="false"] Save this basket 
+            a.save_this_basket.btn.btn-danger[data-with_identify="true"] Save and Identify to QI
+            a.save_identify_this_basket_to_qi.btn.btn-danger[disabled="disabled" style="display:none"] Identify this basket to QI
         .clearfix
         .x-panel
             .x-title 
