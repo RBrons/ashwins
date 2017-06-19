@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | First Name
       th
         | Last Name
@@ -13,11 +15,16 @@ table#data_table
         | Email
       th
         | phone1
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @managers.each do |manager|
       tr data-id=manager.id
+        td
+          - if manager.is_a?(Manager)
+            = link_to 'Edit', entities_llc_manager_path(@entity.key, manager.id), class: "#{edit_xs} entity-page-xhr"
+            = link_to 'Delete', entities_llc_manager_path(manager.id), method: :delete, class: "#{delete_xs} entity-page-xhr"
+          - elsif manager.is_a?(Member)
+            = link_to 'Edit', entities_llc_member_path( @entity.key, manager.id ), class: "#{edit_xs} entity-page-xhr"
+            = link_to 'Delete', entities_llc_member_path( manager.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"
         td
           = manager.first_name
         td
@@ -26,10 +33,3 @@ table#data_table
           = manager.email
         td
           = manager.phone1
-        td
-          - if manager.is_a?(Manager)
-            = link_to 'Edit', entities_llc_manager_path(@entity.key, manager.id), class: "#{edit_xs} entity-page-xhr"
-            = link_to 'Delete', entities_llc_manager_path(manager.id), method: :delete, class: "#{delete_xs} entity-page-xhr"
-          - elsif manager.is_a?(Member)
-            = link_to 'Edit', entities_llc_member_path( @entity.key, manager.id ), class: "#{edit_xs} entity-page-xhr"
-            = link_to 'Delete', entities_llc_member_path( manager.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"

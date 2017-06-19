@@ -480,13 +480,11 @@ $ ->
             showCancelButton: true
             cancelButtonText: "Close"
             confirmButtonColor: '#DD6B55'
-            confirmButtonText: 'Save LOI and Next'
+            confirmButtonText: 'Skip LOI and Next'
             closeOnConfirm: false
           }, (isConfirm)->
             if isConfirm
               console.log "Save Button"
-              $('#letter_of_intent').click()
-              $('#save-and-next').click()
               swal.close()
             else
               console.log "Close Button"
@@ -523,11 +521,11 @@ $ ->
           console.log e
 
   $(document).on 'click', '#offer_list li a', (e)->
-    if $(this).attr("id") != 'new_offer' 
+    if $(this).attr("id") != 'new_offer'
       selected_offer_tab = $(document).find($(this).attr('href'))
 
   $(document).on 'click', '#basket_list li a', (e)->
-    if $(document).find('#basket_list li.identified').length > 0 
+    if $(document).find('#basket_list li.identified').length > 0
       console.log 'frozen basket'
       $(document).find('.is_selected_property').iCheck('disable')
       if !$(this).parent('li').hasClass('identified')
@@ -540,8 +538,8 @@ $ ->
       $(document).find('.is_selected_property').iCheck('enable')
 
     selected_basket_tab = $(document).find($(this).attr('href'))
-    
-      
+
+
 
   $(document).on 'change', '.relingquishing_offeror_form input', ->
     if selected_offer_tab.find('.relingquishing_offeror_form').attr('action') != ""
@@ -670,7 +668,7 @@ $ ->
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper').hide()
             else
               selected_offer_tab.find('.counteroffer_action_buttons_wrapper .btn_accept_counteroffer').attr('disabled', 'disabled')
-              
+
           selected_offer_tab.find('.add_counteroffer').attr('disabled', false)
           $.notify "Successfully deleted", "success"
         else
@@ -715,7 +713,7 @@ $ ->
                                                   .hide()
           if $(document).find('#negotiations_wrapper').data('transaction-type') == 'purchase'
             $(document).find('#offer_list li.active a').html('<i class="red">Accepted</i>')
-          
+
           $(document).find('#relinquishing_purchaser_name').val(data.offer_name)
                                                            .show()
           $(document).find('#relinquishing_property_sale_price').val(selected_offer_tab.find('.last_counteroffer_price').val())
@@ -994,7 +992,7 @@ $ ->
         delete_property_on_basket($(this).parents(".fields"))
 
       delete_property_on_identification($(this).parents(".fields"))
-      
+
     checkShowButton()
 
   calculate_purchase_costs = ->

@@ -21,6 +21,8 @@ div#entities-list.pull-right style=style_str
     thead
       tr
         th = check_box_tag :object_all, false, false
+        th
+          | Actions
         th style="width: 100px;"
           | Client
         th
@@ -43,12 +45,14 @@ div#entities-list.pull-right style=style_str
           | Phone Number
         th
           | Email
-        th
-          | Actions
     tbody data-active-id=@activeId
       - @entities.each do |entity|
         tr data-id=entity.id
           td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => entity.id
+          td.action
+            = link_to 'Edit', edit_entity_path(entity.key), class: "#{edit_xs}"
+            = link_to 'Show', entity_path(entity), class: "#{show_xs}"
+            = link_to 'Delete', entity_path(entity), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs}"
           td
             = client_entity(entity)
           td
@@ -83,10 +87,6 @@ div#entities-list.pull-right style=style_str
             = entity.phone1
           td
             = entity.email
-          td.action
-            = link_to 'Edit', edit_entity_path(entity.key), class: "#{edit_xs}"
-            = link_to 'Show', entity_path(entity), class: "#{show_xs}"
-            = link_to 'Delete', entity_path(entity), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs}"
 
 
   .margin-lg-top

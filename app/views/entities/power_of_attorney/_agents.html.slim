@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Name
       th
         | Type
@@ -15,11 +17,12 @@ table#data_table
         | Email
       th
         | Number of Share
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @agents.each do |agent|
       tr data-id=agent.id
+        td.actions
+          = link_to 'E', entities_power_of_attorney_agent_path(@entity.key, agent.id), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'D', entities_power_of_attorney_agent_path(agent.id), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"
         td
           - if agent.entity.present?
             = agent.entity.try(:name)
@@ -50,6 +53,3 @@ table#data_table
             = agent.email
         td
           = agent.my_percentage
-        td.actions
-          = link_to 'E', entities_power_of_attorney_agent_path(@entity.key, agent.id), class: "#{edit_xs} entity-page-xhr"
-          = link_to 'D', entities_power_of_attorney_agent_path(agent.id), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"

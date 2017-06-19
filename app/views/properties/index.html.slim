@@ -2,6 +2,7 @@ table#data_table
   thead
     tr
       th = check_box_tag :object_all, false, false
+      th Action
       th Ownership
       th style=("width: 100px;") Owned by
       th Title
@@ -14,11 +15,13 @@ table#data_table
       th Term Ends
       th Time Remaining in Term
       th Status
-      th Action
   tbody data-active-id=@activeId
     - @properties.each do |property|
       tr data-id=property.id
         td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => property.id
+        td
+          = link_to 'Edit', edit_property_path(property.key), class: "#{edit_xs}"
+          = link_to 'Delete', property_path(property.key), method: :delete, class: "#{delete_xs}"
         td = property.ownership_status
         td
           -if property.owner.is_a?(Entity)
@@ -35,9 +38,6 @@ table#data_table
         td = property.number_of_years_in_term
         td = property.date_of_lease
         td = property.building_status_is
-        td
-          = link_to 'Edit', edit_property_path(property.key), class: "#{edit_xs}"
-          = link_to 'Delete', property_path(property.key), method: :delete, class: "#{delete_xs}"
 
 
 .margin-lg-top

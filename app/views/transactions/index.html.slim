@@ -72,7 +72,7 @@
               td = number_to_currency(var.funds_to_identified)
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
               td
-                = "#{p.name}"
+                = link_to p.name, property_path(p.property.key)
                 br
                 - if p.closed?
                   span.label.label-danger.pull-right closed
@@ -189,7 +189,7 @@
               td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
               td
-                = "#{p.name}"
+                = link_to p.name, property_path(p.property.key)
                 br
                 - if p.closed?
                   span.label.label-danger.pull-right closed

@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Entity Name
       th
         | Type
@@ -23,13 +25,14 @@ table#data_table
         | Email
       th
         | Stock Shares
-      th
-        | Actions
   tbody data-active-id=@activeId
     - @stockholders.each do |stockholder|
       - entity_flag = stockholder.entity.present?
       - person_flag = true
       tr data-id=stockholder.id
+        td.actions
+          = link_to 'Edit', entities_corporates_stockholder_path(@entity.key, stockholder.id), class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_corporates_stockholder_path(stockholder.id), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"
         td
           - if !stockholder.is_person?
             - person_flag = false
@@ -65,6 +68,3 @@ table#data_table
           = stockholder.email
         td
           = stockholder.my_percentage_stockholder
-        td.actions
-          = link_to 'Edit', entities_corporates_stockholder_path(@entity.key, stockholder.id), class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_corporates_stockholder_path(stockholder.id), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"

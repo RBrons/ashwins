@@ -12,6 +12,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Contact First Name
       th
         | Contact Last Name
@@ -25,20 +27,21 @@ table#data_table
         | Phone
       th
         | Email
-      th
-        | Actions
   tbody
     - @spouses.each do |spouse|
       - entity_flag = spouse.entity.present?
       - person_flag = true
       tr
+        td.actions
+          = link_to 'Edit', entities_tenancy_by_entirety_spouse_path( @entity.key, spouse.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_tenancy_by_entirety_spouse_path( spouse.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
         td
           - if person_flag
             - if spouse.entity.present?
               = link_to spouse.first_name, edit_entity_path(spouse.entity.key)
             - elsif spouse.contact.present?
               = link_to spouse.first_name, edit_contact_path(spouse.contact)
-          - else  
+          - else
             = spouse.first_name
         td
           = spouse.last_name
@@ -55,6 +58,3 @@ table#data_table
           = spouse.phone1
         td
           = spouse.email
-        td.actions
-          = link_to 'Edit', entities_tenancy_by_entirety_spouse_path( @entity.key, spouse.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_tenancy_by_entirety_spouse_path( spouse.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"

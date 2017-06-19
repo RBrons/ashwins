@@ -6,6 +6,8 @@ table#data_table
   thead
     tr
       th
+        | Actions
+      th
         | Joint Tenant Name
       th
         | Type
@@ -15,16 +17,17 @@ table#data_table
         | Email
       th
         | Undivided Interest
-      th
-        | Actions
   tbody
     - @joint_tenants.each do |object|
       tr
+        td.actions
+          = link_to 'Edit', entities_joint_tenancy_joint_tenant_path( @entity.key, object.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
+          = link_to 'Delete', entities_joint_tenancy_joint_tenant_path( object.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
         td
           - if object.entity.present?
             = link_to object.try(:name), edit_entity_path(object.entity.key)
           - elsif object.contact.present?
-            = link_to object.try(:name), edit_contact_path(object.contact)     
+            = link_to object.try(:name), edit_contact_path(object.contact)
         td
           = MemberType.member_types[object.member_type_id]
         td
@@ -33,6 +36,3 @@ table#data_table
           = object.email
         td
           = object.my_percentage
-        td.actions
-          = link_to 'Edit', entities_joint_tenancy_joint_tenant_path( @entity.key, object.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_joint_tenancy_joint_tenant_path( object.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
