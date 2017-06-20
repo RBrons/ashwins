@@ -28,6 +28,7 @@ table#data_table
         td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => contact.id
         td.actions
           = link_to 'Edit', edit_contact_path(contact), class: edit_xs
+          = link_to 'Show', contact_path(contact), class: show_xs
           = link_to 'Delete', contact_path(contact), data: {:confirm => 'Are you sure?'}, :method => :delete, class: delete_xs
         td
           = (contact.try(:company_name) || "") + " " + (contact.try(:legal_ending) || "")
