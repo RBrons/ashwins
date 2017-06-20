@@ -11,5 +11,7 @@
     == render 'properties/ownership_form'
   - elsif params[:type_is] == 'photo_gallery'
     == render 'properties/photo_gallery'
+  - elsif params[:type_is] == 'survey'
+    == render 'properties/survey'
   - else
     == render 'properties/basic_info_form'
