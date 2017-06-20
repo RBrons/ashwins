@@ -246,18 +246,21 @@ class TransactionsController < ApplicationController
         if params[:type] == 'sale'
           @transaction.update!(transaction_property_params)
         else
-          if params[:identification_rule] == '200_percent'
-            # if params[:basket_id].present?
-            #   basket = @transaction.transaction_baskets.find(params[:basket_id])
-            #   if basket.present?
-            #     @basket_properties = basket.transaction_basket_properties.pluck(:property_id)
-            #   else
-            #     @basket_properties = []
-            #   end
-            # else
-            #   @basket_properties = []
-            # end
+          if params[:identification_rule] == '200_percent' || params[:identification_rule] == 'three_property'
             
+            if params[:identification_rule] == 'three_property'
+              existing_basket_count = @transaction.transaction_baskets.count
+              @three_property_basket = @transaction.transaction_baskets.where(identification_rule: 'three_property').first
+              if !@three_property_basket.present?
+                @three_property_basket = @transaction.transaction_baskets.create(basket_name: "Basket #{existing_basket_count + 1}", identification_rule: "three_property", is_identified_to_qi: true)
+              end
+              transaction_property_params[:transaction_properties_attributes].each do |key, property_params|
+                if params[:is_in_three_property_basket]["#{property_params[:property_id]}".to_sym] == "1"
+                  @three_property_basket.transaction_basket_properties.create(property_id: property_params[:property_id]) if !@three_property_basket.transaction_basket_properties.exists?(property_id: property_params[:property_id])
+                end
+              end
+            end
+
             @cur_transaction_property = @transaction.transaction_properties.where(:property_id => params[:cur_property]).first
             if !@cur_transaction_property.present?
               @cur_transaction_property = @transaction.transaction_properties.create({
@@ -278,11 +281,15 @@ class TransactionsController < ApplicationController
               @transaction_property_offer = @cur_transaction_property.transaction_property_offers.create(:offer_name => "Seller", :is_accepted => false)
               @transaction_property_offer.counteroffers.create(offered_date: Time.now.strftime('%Y-%m-%d'), offer_type: 'Counter-Party', offered_price: params[:counter_price]["#{@cur_transaction_property.property_id}".to_sym])
             end
-          
+
           else
             @transaction.update!(transaction_property_params)
+            existing_basket_count = @transaction.transaction_baskets.count
+            @percent_95_basket = @transaction.transaction_baskets.create(basket_name: "Basket #{existing_basket_count + 1}", identification_rule: "95%", is_identified_to_qi: true)
+            
             @transaction.transaction_properties.each do |transaction_property|
               if transaction_property.is_selected
+                @percent_95_basket.transaction_basket_properties.create(property_id: transaction_property.property_id)
                 if params[:initial_asking_price]["#{transaction_property.property_id}".to_sym] == "1"
                   if transaction_property.transaction_property_offers.destroy_all
                     transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :transaction_property_id => transaction_property.id, :accepted_counteroffer_id => 0])
@@ -305,9 +312,9 @@ class TransactionsController < ApplicationController
       end
 
     rescue Exception => e
-     #render action: :properties_edit
-     @transaction.errors.add(:base, "Could not complete the action. Verify the data and try again.")
-     redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
+      #render action: :properties_edit
+      @transaction.errors.add(:base, "Could not complete the action. Verify the data and try again.")
+      redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
     end
 
   end

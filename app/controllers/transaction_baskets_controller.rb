@@ -3,7 +3,7 @@ class TransactionBasketsController < ApplicationController
   respond_to :json
 
   def create
-    @transaction_basket = TransactionBasket.new({basket_name: params[:basket_name], transaction_id: params[:transaction_id], identification_rule: '200%'})
+    @transaction_basket = TransactionBasket.new({basket_name: params[:basket_name], transaction_id: params[:transaction_id], identification_rule: '200%', is_identified_to_qi: false})
     @transaction = TransactionPurchase.find(params[:transaction_id])
     @transaction_main = @transaction.main
     
@@ -26,7 +26,7 @@ class TransactionBasketsController < ApplicationController
         end
       end
 
-      if params[:with_identify]
+      if params[:with_identify] == true
         validate_identfied_property_from_transaction(@transaction_basket, @transaction)
         @transaction_basket.update(is_identified_to_qi: true)
       end
