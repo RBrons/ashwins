@@ -982,29 +982,30 @@ $ ->
     el = $(this)
     if this.checked
       $(this).parents(".fields").removeClass('property-unchecked')
-      selected_property_count = selected_basket_tab.find('.basket_property_table tbody tr').length
-      console.log selected_property_count
-      if selected_basket_tab.find('#transaction_identification_rule').val() == 'three_property'
-        if selected_property_count > 2
-          setTimeout (->
-            el.iCheck('uncheck')
+      if $(document).find('#global_transaction_type').val() == 'purchase'
+        selected_property_count = selected_basket_tab.find('.basket_property_table tbody tr').length
+        console.log selected_property_count
+        if selected_basket_tab.find('#transaction_identification_rule').val() == 'three_property'
+          if selected_property_count > 2
+            setTimeout (->
+              el.iCheck('uncheck')
 
-          ), 10
-          sweetAlert("", alert_for_three_property_rule, "warning")
-          return
-      if selected_basket_tab.find('#transaction_identification_rule').val() == '95_percent'
-        add_property_to_identification($(this).parents(".fields"))
-      else
-        add_property_to_identification($(this).parents(".fields"))
-        if selected_basket_tab.find('.disable_editing_property').val() != "true"
-          add_property_to_basket($(this).parents(".fields"))
+            ), 10
+            sweetAlert("", alert_for_three_property_rule, "warning")
+            return
+        if selected_basket_tab.find('#transaction_identification_rule').val() == '95_percent'
+          add_property_to_identification($(this).parents(".fields"))
+        else
+          add_property_to_identification($(this).parents(".fields"))
+          if selected_basket_tab.find('.disable_editing_property').val() != "true"
+            add_property_to_basket($(this).parents(".fields"))
       
     else
       $(this).parents(".fields").addClass('property-unchecked')
-      if selected_basket_tab.find('.disable_editing_property').val() != "true"
-        delete_property_on_basket($(this).parents(".fields"))
-
-      delete_property_on_identification($(this).parents(".fields"))
+      if $(document).find('#global_transaction_type').val() == 'purchase'
+        if selected_basket_tab.find('.disable_editing_property').val() != "true"
+          delete_property_on_basket($(this).parents(".fields"))
+        delete_property_on_identification($(this).parents(".fields"))
 
     checkShowButton()
 
