@@ -1,0 +1,22 @@
+= nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+  = hidden_field_tag :type_is, params[:type_is]
+  - if @property.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+      ul
+        - @property.errors.full_messages.each do |message|
+          li = message
+
+  .col-lg-4.col-md-4.col-sm-12.col-xs-12 style="padding: 0px"
+    .clearfix
+    .form-group
+      label.control-label Survey Doc
+      .input-group.select_in_gdrive
+          input.form-control[type="text"]
+          span.input-group-btn
+            button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+              span.margin-md-left.blue Select in Google Drive
+  .clearfix
+  .form-group
+    = f.submit 'Save', class: 'btn btn-sm btn-primary'
