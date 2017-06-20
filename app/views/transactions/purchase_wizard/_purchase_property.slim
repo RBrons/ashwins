@@ -126,43 +126,12 @@
                             .clearfix.margin-lg-top
                             input type='hidden' name="initial_asking_price[#{transaction_property_form.object.property.id}]" value='1' id='property_#{transaction_property_form.object.property_id.to_s}_asking_mode'
                             / For 200 percent rule
+                            input type='hidden' name="is_in_three_property_basket[#{transaction_property_form.object.property.id}]" value='0' id='property_#{transaction_property_form.object.property_id.to_s}_in_three_property_basket'
                             input type='hidden' name="counter_price[#{transaction_property_form.object.property.id}]" value='#{transaction_property_form.object.sale_price || transaction_property_form.object.property.price }' id='property_#{transaction_property_form.object.property_id.to_s}_counter_price'
                             input type='hidden' name="counter_cap_rate[#{transaction_property_form.object.property.id}]" value='#{transaction_property_form.object.cap_rate || transaction_property_form.object.property.cap_rate }' id='property_#{transaction_property_form.object.property_id.to_s}_counter_cap_rate'
                             / No 200 percent rule
                             = transaction_property_form.hidden_field :cap_rate, id: 'property_' + transaction_property_form.object.property_id.to_s + '_cap_rate', value: transaction_property_form.object.cap_rate || transaction_property_form.object.property.cap_rate
                             = transaction_property_form.hidden_field :sale_price, id: 'property_' + transaction_property_form.object.property_id.to_s + '_price', value: transaction_property_form.object.sale_price || transaction_property_form.object.property.price
-                            / Modal When hits Make Counter
-                            / .md-make-counter.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
-                            /     .modal-dialog[role="document"]
-                            /         .modal-content
-                            /             .modal-header
-                            /                 button.close[type="button" data-dismiss="modal" aria-label="Close"]
-                            /                     span.btn-cancel-make-counter.lnr.lnr-cross
-                            /                 h4.modal-title Input Counteroffer
-                            /             .modal-body
-                            /                 .transaction-property-calculation
-                            /                     .form-group.center.radio-box
-                            /                         .heading_blue.radio-inline
-                            /                             span
-                            /                                 input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
-                            /                             span.margin-md-left Input Cap Rate
-                            /                         .heading_blue.radio-inline
-                            /                             span
-                            /                                 input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
-                            /                             span.margin-md-left Input Price
-                            /                     .form-group.center.cap-rate-box
-                            /                         label Propose a Cap Rate
-                            /                         .input-group
-                            /                             = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
-                            /                             .input-group-addon %
-                            /                     .form-group.center.price-box
-                            /                         label This will result in a Purchase Price of
-                            /                         .input-group
-                            /                             .input-group-addon $
-                            /                             = transaction_property_form.text_field :sale_price, readonly: 'true', class: 'form-control input-mask-currency'
-                            /             .modal-footer
-                            /                 button.btn-cancel-make-counter.btn.btn-default Cancel
-                            /                 button.btn-ok-make-counter.btn.btn-primary.next-prev Ok
                 .clearfix.margin-lg-top
                 a.btn.btn-primary.next-prev.margin-sm-right.save_next_in_step.no-submit-form Save & Next
                 
@@ -183,12 +152,41 @@
                                 .col-md-4.col-xs-12
                                     .form-group
                                         label.control-label Identification Rule
-                                        select#transaction_identification_rule.form-control.width-field-md
-                                            option[value="three_property"] Three Properties
-                                            option[value="200_percent" selected] 200%
-                                            option[value="95_percent"] 95%
+                                        select#transaction_identification_rule.form-control.width-field-md[disabled=(is_exist_identified_basket(@transaction) ? 'disabled' : false)]
+                                            option[value="three_property" selected=(basket.identification_rule == 'three_property' ? 'selected' : false)] Three Properties
+                                            option[value="200_percent" selected=((basket.identification_rule == '200%' || !basket.id.present?) ? 'selected' : false)] 200%
+                                            option[value="95_percent" selected=(basket.identification_rule == '95%' ? 'selected' : false)] 95%
                                 .clearfix
-                                section#200_percent_measure
+                                section#95_percent_measure[style="#{basket.identification_rule == '95%' ? '' : 'display: none'}"]
+                                    table.property_identification_table.table.table-bordered
+                                        thead
+                                            tr
+                                                th Property Title
+                                                th Current Rent
+                                                th Asking Cap Rate
+                                                th Asking Price
+                                                th Cap Rate Counter
+                                                th Price Counter
+                                        tbody
+                                            - @transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
+                                                tr[id="#{'property_' + transaction_property.property_id.to_s}"]
+                                                    td.green = transaction_property.property.title
+                                                    td.current-rent = number_to_currency(transaction_property.property.current_rent)
+                                                    td.cap-rate = transaction_property.property.cap_rate.to_s + '%'
+                                                    td = number_to_currency(transaction_property.property.price)
+                                                    td 
+                                                        - if transaction_property.is_in_contract? || transaction_property.closed?
+                                                            = transaction_property.cap_rate.to_s + '%'
+                                                        - else
+                                                            input[type="text" class="counter-cap-rate input-mask-currency" value="#{transaction_property.cap_rate}"] %
+                                                    td 
+                                                        - if transaction_property.is_in_contract? || transaction_property.closed?
+                                                            = number_to_currency(transaction_property.sale_price)
+                                                        - else
+                                                            span $&nbsp;
+                                                            input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price}"]
+                                .clearfix
+                                section#200_percent_measure[style="#{(!basket.id.present? || basket.identification_rule == '200%' || basket.identification_rule == 'three_property') ? '' : 'display: none'}"]
                                     input[type="hidden" class="disable_editing_property" value="#{basket.id.present?}"]
                                     input[type="hidden" class="is_identified_to_qi" value="#{basket.is_identified_to_qi == true}"]
                                     - est_bugdets = get_est_identification_bugdets(@transaction_main.sale)
@@ -202,60 +200,7 @@
                                             - if !basket.is_identified_to_qi
                                                 a.save_identify_this_basket_to_qi.btn.btn-danger Identify this basket to QI
                                     .clearfix
-                                    .x-panel
-                                        .x-title 
-                                            h2 Identification Budget
-                                        .x-content
-                                            table.identification_budget_table.table.table-bordered
-                                                thead
-                                                    tr
-                                                        th Sum of All Properties Closed x 2
-                                                        th Sum of All Properties Closed, in Contract x 2
-                                                        th Sum of All Properties Closed, in Contract or Asking x 2
-                                                tbody
-                                                    tr
-                                                        td[data-closed_total_price="#{est_bugdets[0]}"]
-                                                            span.red = number_to_currency(est_bugdets[0])
-                                                        td[data-closed_contract_total_price="#{est_bugdets[1]}"]
-                                                            span.orange = number_to_currency(est_bugdets[1])
-                                                        td[data-closed_contract_asking_total_price="#{est_bugdets[2]}"]
-                                                            span.green = number_to_currency(est_bugdets[2])
-                                    
-                                    .x-panel
-                                        .x-title    
-                                        .x-content
-                                            table.purchase_property_cost_table.table.table-bordered
-                                                thead
-                                                    tr
-                                                        th Purchase Cost of All Properties in Contract
-                                                        th Purchase Cost of All Properties Selected or in Contract
-                                                tbody
-                                                    tr
-                                                        td
-                                                            span.orange = number_to_currency(purchase_costs[0])
-                                                        td
-                                                            span.green = number_to_currency(purchase_costs[1])
-
-                                    .x-panel
-                                        .x-title    
-                                            h2 Underage (Positive Number) or Overage(Negative Number)
-                                        .x-content
-                                            table.underage_or_overage_table.table.table-bordered
-                                                thead
-                                                    tr
-                                                        th Calculated by Cost of All Properties in Contract
-                                                        th Calculated by Cost of All Properties Selected or in Contract
-                                                tbody
-                                                    tr
-                                                        td 
-                                                            span.red = "#{number_to_currency(est_bugdets[0] - purchase_costs[0])} | "
-                                                            span.orange = "#{number_to_currency(est_bugdets[1] - purchase_costs[0])} | "
-                                                            span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[0])}"
-                                                        td 
-                                                            span.red = "#{number_to_currency(est_bugdets[0] - purchase_costs[1])} | "
-                                                            span.orange = "#{number_to_currency(est_bugdets[1] - purchase_costs[1])} | "
-                                                            span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[1])}"
-                                    .x-panel
+                                    .x-panel.basket_property_table_wrapper
                                         .x-title    
                                             h2 Properties Selected or In Contract
                                         .x-content
@@ -307,38 +252,62 @@
                                                                         input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price || transaction_property.property.price}" disabled=(basket.id.present? ? false : 'disabled')]
                                                                 td
                                                                     = link_to 'Accept and Proceed', 'javascript:;', class: "go_to_negotiations btn btn-danger btn-sm", disabled: basket.is_identified_to_qi ? false : true
-                                                                    
-                    .clearfix.margin-lg-top
 
-                    section#no_200_percent_measure[style="display: none"]
-                        table#data_table.property_identification_table
-                            thead
-                                tr
-                                    th Property Title
-                                    th Current Rent
-                                    th Asking Cap Rate
-                                    th Asking Price
-                                    th Cap Rate Counter
-                                    th Price Counter
-                            tbody
-                                - @transaction.transaction_properties.where(is_selected: true).each do |transaction_property|
-                                    tr[id="#{'property_' + transaction_property.property_id.to_s}"]
-                                        td.green = transaction_property.property.title
-                                        td.current-rent = number_to_currency(transaction_property.property.current_rent)
-                                        td.cap-rate = transaction_property.property.cap_rate.to_s + '%'
-                                        td = number_to_currency(transaction_property.property.price)
-                                        td 
-                                            - if transaction_property.is_in_contract? || transaction_property.closed?
-                                                = transaction_property.cap_rate.to_s + '%'
-                                            - else
-                                                input[type="text" class="counter-cap-rate input-mask-currency" value="#{transaction_property.cap_rate}"] %
-                                        td 
-                                            - if transaction_property.is_in_contract? || transaction_property.closed?
-                                                = number_to_currency(transaction_property.sale_price)
-                                            - else
-                                                span $&nbsp;
-                                                input[type="text" class="counter-price input-mask-currency" value="#{transaction_property.sale_price}"]
-                            
+                                    .x-panel.identification_budget_table_wrapper
+                                        .x-title 
+                                            h2 Identification Budget
+                                        .x-content
+                                            table.identification_budget_table.table.table-bordered
+                                                thead
+                                                    tr
+                                                        th Sum of All Properties Closed x 2
+                                                        th Sum of All Properties Closed, in Contract x 2
+                                                        th Sum of All Properties Closed, in Contract or Asking x 2
+                                                tbody
+                                                    tr
+                                                        td[data-closed_total_price="#{est_bugdets[0]}"]
+                                                            span.red = number_to_currency(est_bugdets[0])
+                                                        td[data-closed_contract_total_price="#{est_bugdets[1]}"]
+                                                            span.orange = number_to_currency(est_bugdets[1])
+                                                        td[data-closed_contract_asking_total_price="#{est_bugdets[2]}"]
+                                                            span.green = number_to_currency(est_bugdets[2])
+                                    
+                                    .x-panel.purchase_property_cost_table_wrapper
+                                        .x-title    
+                                        .x-content
+                                            table.purchase_property_cost_table.table.table-bordered
+                                                thead
+                                                    tr
+                                                        th Purchase Cost of All Properties in Contract
+                                                        th Purchase Cost of All Properties Selected or in Contract
+                                                tbody
+                                                    tr
+                                                        td
+                                                            span.orange = number_to_currency(purchase_costs[0])
+                                                        td
+                                                            span.green = number_to_currency(purchase_costs[1])
+
+                                    .x-panel
+                                        .x-title    
+                                            h2 Underage (Positive Number) or Overage(Negative Number)
+                                        .x-content
+                                            table.underage_or_overage_table.table.table-bordered
+                                                thead
+                                                    tr
+                                                        th Calculated by Cost of All Properties in Contract
+                                                        th Calculated by Cost of All Properties Selected or in Contract
+                                                tbody
+                                                    tr
+                                                        td 
+                                                            span.red = "#{number_to_currency(est_bugdets[0] - purchase_costs[0])} | "
+                                                            span.orange = "#{number_to_currency(est_bugdets[1] - purchase_costs[0])} | "
+                                                            span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[0])}"
+                                                        td 
+                                                            span.red = "#{number_to_currency(est_bugdets[0] - purchase_costs[1])} | "
+                                                            span.orange = "#{number_to_currency(est_bugdets[1] - purchase_costs[1])} | "
+                                                            span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[1])}"
+                                    
+                                                                    
                     .clearfix
                     .divider
                     
@@ -355,6 +324,19 @@
                 option[value="200_percent" selected] 200%
                 option[value="95_percent"] 95%
     .clearfix
+    section#95_percent_measure[style="display: none"]
+        table.property_identification_table.table.table-bordered
+            thead
+                tr
+                    th Property Title
+                    th Current Rent
+                    th Asking Cap Rate
+                    th Asking Price
+                    th Cap Rate Counter
+                    th Price Counter
+            tbody
+                
+    .clearfix
     section#200_percent_measure
         input[type="hidden" class="disable_editing_property" value="false"]
         input[type="hidden" class="is_identified_to_qi" value="false"]
@@ -365,6 +347,24 @@
             a.save_this_basket.btn.btn-danger[data-with_identify="true"] Save and Identify to QI
             a.save_identify_this_basket_to_qi.btn.btn-danger[disabled="disabled" style="display:none"] Identify this basket to QI
         .clearfix
+        .x-panel
+            .x-title    
+                h2 Properties Selected or In Contract
+            .x-content
+                table.basket_property_table.table.table-bordered
+                    thead
+                        tr
+                            th 
+                            th Status
+                            th Property Title
+                            th Current Rent
+                            th Asking Cap Rate
+                            th Asking Price
+                            th Cap Rate Counter
+                            th Price Counter
+                            th Action
+                    tbody
+
         .x-panel
             .x-title 
                 h2 Identification Budget
@@ -418,21 +418,3 @@
                                 span.red = "#{number_to_currency(est_bugdets[0] - purchase_costs[1])} | "
                                 span.orange = "#{number_to_currency(est_bugdets[1] - purchase_costs[1])} | "
                                 span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[1])}"
-        .x-panel
-            .x-title    
-                h2 Properties Selected or In Contract
-            .x-content
-                table.basket_property_table.table.table-bordered
-                    thead
-                        tr
-                            th 
-                            th Status
-                            th Property Title
-                            th Current Rent
-                            th Asking Cap Rate
-                            th Asking Price
-                            th Cap Rate Counter
-                            th Price Counter
-                            th Action
-                    tbody
-                        

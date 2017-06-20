@@ -145,4 +145,23 @@ module TransactionsHelper
         end
     end
 
+    def get_identification_rule(transaction)
+        if transaction.present?
+            identified_basket = transaction.transaction_baskets.where(is_identified_to_qi: true).first
+            if identified_basket.present?
+                case identified_basket.identification_rule
+                when 'three_property'
+                    return "Three Property"
+                when '200%'
+                    return "200%"
+                when '95%'
+                    return "95%"
+                end
+            else
+                return ''
+            end
+        else
+            return ''
+        end
+    end
 end
