@@ -9,12 +9,18 @@
       .modal-body
         ul.nav.navbar-nav
           li
-            = link_to image_tag('icons/icon-selling.svg', class: 'icon'), new_transaction_path(transaction_type: '1031 Still Selling'), class: "padding-lg"
-            span Still Selling
+            span Selling
+            = link_to image_tag('icons/icon-selling.svg', class: 'icon'), new_transaction_path(transaction_type: '1031 Still Selling', type: 'sale'), class: "padding-lg"
+            .heading_blue.radio-inline
+              input.is_1031_exchange.flat-icheck[type="checkbox" checked disabled]
+              span.margin-md-left Pursuant to a 1031 Exchange
           li
-            = link_to image_tag('icons/icon-sold.svg', class: 'icon'), new_transaction_path(transaction_type: '1031 Already Sold'), class: "padding-lg"
-            span Already Sold
-
+            span Buying
+            / = link_to image_tag('icons/icon-sold.svg', class: 'icon'), new_transaction_path(transaction_type: '1031 Already Sold'), class: "padding-lg"
+            = link_to image_tag('icons/icon-sold.svg', class: 'icon'), 'javascript:void(0)', class: "comming-soon padding-lg"
+            .heading_blue.radio-inline
+              input.is_1031_exchange.flat-icheck[type="checkbox" checked disabled]
+              span.margin-md-left Pursuant to a 1031 Exchange
 
 /! Properties Modal For Adding Entities
 #md-add-property.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
