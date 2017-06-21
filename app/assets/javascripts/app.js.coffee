@@ -68,8 +68,11 @@ $ ->
 
       input_object.hide()
       input_object.attr('name', null)
-
-
+  
+  # Comming Soon Part
+  $(document).on 'click', '.comming-soon',  -> 
+    sweetAlert '', 'Under Construction', 'warning'
+  
   flat_icheckbox = ->
     $(document).find('input.flat-icheck').iCheck
       checkboxClass: 'icheckbox_flat-blue'

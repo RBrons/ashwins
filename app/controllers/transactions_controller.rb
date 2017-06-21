@@ -76,25 +76,25 @@ class TransactionsController < ApplicationController
       @transaction_main = TransactionMain.find_by(id: params[:main_id]) || TransactionMain.create(user_id: current_user.id, init: true)
 
       @transaction = if params[:type] == 'purchase'
-                       t = TransactionSale.where(transaction_main_id: @transaction_main.id).first ||
-                        TransactionSale.new(transaction_main_id: @transaction_main.id)
-                       t1 = TransactionPurchase.new({
-                         transaction_main_id: @transaction_main.id,
-                         relinquishing_seller_entity_id: t.relinquishing_seller_entity_id,
-                         relinquishing_seller_honorific: t.relinquishing_seller_honorific,
-                         relinquishing_seller_first_name: t.relinquishing_seller_first_name,
-                         relinquishing_seller_last_name: t.relinquishing_purchaser_last_name,
+                      t = TransactionSale.where(transaction_main_id: @transaction_main.id).first ||
+                      TransactionSale.new(transaction_main_id: @transaction_main.id)
+                      t1 = TransactionPurchase.new({
+                        transaction_main_id: @transaction_main.id,
+                        relinquishing_seller_entity_id: t.relinquishing_seller_entity_id,
+                        relinquishing_seller_honorific: t.relinquishing_seller_honorific,
+                        relinquishing_seller_first_name: t.relinquishing_seller_first_name,
+                        relinquishing_seller_last_name: t.relinquishing_purchaser_last_name,
 
-                         replacement_purchaser_entity_id: t.replacement_purchaser_entity_id,
-                         replacement_purchaser_honorific: t.replacement_purchaser_honorific,
-                         replacement_purchaser_first_name: t.replacement_seller_first_name,
-                         replacement_purchaser_last_name: t.replacement_purchaser_last_name,
-                         purchaser_person_is: t.seller_person_is
-                       })
-                       t1.save
-                       t1
-                     else
-                       params[:type] = 'sale'
+                        replacement_purchaser_entity_id: t.replacement_purchaser_entity_id,
+                        replacement_purchaser_honorific: t.replacement_purchaser_honorific,
+                        replacement_purchaser_first_name: t.replacement_seller_first_name,
+                        replacement_purchaser_last_name: t.replacement_purchaser_last_name,
+                        purchaser_person_is: t.seller_person_is
+                      })
+                      t1.save
+                      t1
+                    else
+                      params[:type] = 'sale'
                       #  ts = defaultize TransactionSale.new
                       #  entity_ = Entity.find(ts.relinquishing_seller_entity_id)
                       #  if entity_.type_ == 1 or entity_.type_ == 4
