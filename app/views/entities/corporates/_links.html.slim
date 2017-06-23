@@ -12,4 +12,7 @@
   = link_to "Directors", entities_corporates_directors_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'directors' ? 'active' : ''}"
 
   = link_to "+", entities_corporates_director_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left director-add entity-page-xhr #{params[:action] == 'directors' ? 'active' : ''}"
+
+  = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
+
   = link_to "Owns", entities_corporates_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"

@@ -13,4 +13,7 @@
     = link_to "Ward", entities_guardianship_ward_path(@entity.key, @entity.ward.id), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'ward' ? 'active' : ''}"
   - else
     = link_to "Ward", entities_guardianship_ward_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'ward' ? 'active' : ''}"
+
+  = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
+
   = link_to "Owns", entities_guardianship_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"
