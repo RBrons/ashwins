@@ -2,4 +2,5 @@
   = link_to "Principal", entities_power_of_attorney_basic_info_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left #{params[:action] == "basic_info" ? 'active' : ''}"
   = link_to "Agents", entities_power_of_attorney_agents_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'agent' ? 'active' : ''}"
   = link_to "+", entities_power_of_attorney_agent_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'agent' ? 'active' : ''}"
+  = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
   = link_to "Owns", entities_power_of_attorney_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'agent' ? 'active' : ''}"

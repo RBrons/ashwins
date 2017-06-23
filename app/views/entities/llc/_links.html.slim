@@ -6,4 +6,5 @@
   = link_to "+", entities_llc_member_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'members' ? 'active' : ''}"
   = link_to "Managers", entities_llc_managers_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'managers' ? 'active' : ''}"
   = link_to "+", entities_llc_manager_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left director-add entity-page-xhr #{params[:action] == 'managers' ? 'active' : ''}"
+  = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
   = link_to "Owns", entities_llc_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"

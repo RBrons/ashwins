@@ -1,5 +1,5 @@
   - if @entity.key.present?
     = link_to "Basic info", entities_sole_proprietorship_basic_info_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'basic_info' ? 'active' : ''}"
     = link_to "Contact info", entities_sole_proprietorship_contact_info_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'contact_info' ? 'active' : ''}"
+    = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
     = link_to "Owns", entities_sole_proprietorship_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'contact_info' ? 'active' : ''}"
-  
