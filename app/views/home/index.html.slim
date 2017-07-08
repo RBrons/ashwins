@@ -1,0 +1,22 @@
+input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
+#md-welcome.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg[role="document"]
+        .modal-header
+            button.close[type="button" data-dismiss="modal" aria-label="Close"]
+                span.lnr.lnr-cross
+        .modal-body
+            div[role="tabpanel"]
+                ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+                    li.active[role="presentation"]
+                        a#favorites_tab[href="#favorites_section" role="tab" data-toggle="tab" aria-expanded="true"] Favorites
+                    li[role="presentation"]
+                        a#history_tab[href="#history_section" role="tab" data-toggle="tab" aria-expanded="false"] History
+                    li[role="presentation"]
+                        a#tasks_tab[href="#tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
+                .tab-content
+                    #favorites_section.active.tab-pane.fade.in[role="tabpanel"]
+                        span Coming soon
+                    #history_section.tab-pane.fade[role="tabpanel"]
+                        span Coming soon
+                    #tasks_section.tab-pane.fade[role="tabpanel"]
+                        span Coming soon
