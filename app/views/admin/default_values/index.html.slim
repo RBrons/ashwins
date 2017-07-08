@@ -7,20 +7,35 @@ h1 Default Values
 = link_to 'Purchase Property - Add Default Value', new_purchase_property_admin_default_values_path, class: "#{edit_xs}"
 = link_to 'Sale Transaction - Add Default Value', new_sale_transaction_admin_default_values_path, class: "#{edit_xs}"
 
-h4 Note: For Dates use the format DD-MM-YYYY
+.row
+  .col-md-6.col-xs-12
+    h4 Note: For Dates use the format DD-MM-YYYY
 
-= form_tag(({controller: 'admin/default_values', action: 'random_mode'}), method: :post) do
-  .clearfix
-  .form-group
-      label.control-label Random Mode
+    = form_tag(({controller: 'admin/default_values', action: 'random_mode'}), method: :post) do
       .clearfix
-      = check_box_tag 'random_mode', true, @random_mode,:onclick=>"$('#random_info').toggle();"
+      .form-group
+          label.control-label Random Mode
+          .clearfix
+          = check_box_tag 'random_mode', true, @random_mode,:onclick=>"$('#random_info').toggle();"
 
-  .clearfix
-  = submit_tag 'Save', class: 'btn btn-sm btn-warning'
-  span id='random_info'  style="display: none"
-    | Changes not saved
+      .clearfix
+      = submit_tag 'Save', class: 'btn btn-sm btn-warning'
+      span id='random_info'  style="display: none"
+        | Changes not saved
+  
+  .col-md-6.col-xs-12
+    h4 Note: Show/hide Landing page
 
+    = form_tag(({controller: 'admin/default_values', action: 'toggle_landing_page'}), method: :post) do
+      .clearfix
+      .form-group
+          label.control-label Show Lading Page
+          .clearfix
+          = check_box_tag 'toggle_landing_page', true, @show_landing_page
+
+      .clearfix
+      = submit_tag 'Save', class: 'btn btn-sm btn-warning'
+      
 table#data_table
   thead
     tr

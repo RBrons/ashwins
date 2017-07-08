@@ -6,6 +6,12 @@ class Admin::DefaultValuesController < ApplicationController
   def index
     @default_values = DefaultValue.where.not(entity_name: 'RandomMode')
     @random_mode = DefaultValue.where(entity_name: 'RandomMode').count() == 1
+    landing_page_action = DefaultValue.where(entity_name: 'ShowLandingPage').first
+    if landing_page_action.present?
+      @show_landing_page = landing_page_action.value
+    else
+      @show_landing_page = false
+    end
   end
 
   # GET /default_values/1
@@ -124,6 +130,16 @@ class Admin::DefaultValuesController < ApplicationController
         DefaultValue.where(entity_name: rec[:entity],
                           attribute_name: rec[:attribute], value_type: rec[:vtype]).destroy_all
       end
+    end
+    redirect_to admin_default_values_url
+  end
+
+  def toggle_landing_page
+    landing_page_action = DefaultValue.where(entity_name: 'ShowLandingPage').first
+    if landing_page_action.present?
+      landing_page_action.update(value: params[:toggle_landing_page])
+    else
+      DefaultValue.create(entity_name: 'ShowLandingPage', value: params[:toggle_landing_page])
     end
     redirect_to admin_default_values_url
   end
