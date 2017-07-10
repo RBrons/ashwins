@@ -13,6 +13,10 @@ class HomeController < ApplicationController
     else
       @show_landing_page = false
     end
+    
+    @back_path = URI(request.referer || '').path
+    @back_url = request.referer
+    
   end
 
   def set_user_indexing
