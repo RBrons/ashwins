@@ -4,6 +4,9 @@ $ ->
     $(document).find('#md-welcome').modal('show')
   
   $(document).find('#md-welcome .close').on 'click', ->
-    if $(this).data('back-path') != "/"
+    # if user log in first time
+    if $(this).data('back-path') == "/users/sign_in"
+      return true
+    else if $(this).data('back-path') != "/"
       window.location.href = $(this).data('back-url')
   
