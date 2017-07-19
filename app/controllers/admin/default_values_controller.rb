@@ -12,6 +12,13 @@ class Admin::DefaultValuesController < ApplicationController
     else
       @show_landing_page = false
     end
+
+    initial_sign_in_modal_action = DefaultValue.where(entity_name: 'ShowInitialSignInModal').first
+    if initial_sign_in_modal_action.present?
+      @show_initial_sign_in_modal = initial_sign_in_modal_action.value
+    else
+      @show_initial_sign_in_modal = false
+    end
   end
 
   # GET /default_values/1
@@ -140,6 +147,16 @@ class Admin::DefaultValuesController < ApplicationController
       landing_page_action.update(value: params[:toggle_landing_page])
     else
       DefaultValue.create(entity_name: 'ShowLandingPage', value: params[:toggle_landing_page])
+    end
+    redirect_to admin_default_values_url
+  end
+
+  def toggle_initial_sign_in_modal
+    initial_sign_in_modal_action = DefaultValue.where(entity_name: 'ShowInitialSignInModal').first
+    if initial_sign_in_modal_action.present?
+      initial_sign_in_modal_action.update(value: params[:toggle_initial_sign_in_modal])
+    else
+      DefaultValue.create(entity_name: 'ShowInitialSignInModal', value: params[:toggle_initial_sign_in_modal])
     end
     redirect_to admin_default_values_url
   end
