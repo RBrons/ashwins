@@ -43,11 +43,26 @@ class User < ApplicationRecord
   def ability
     true
   end
-
+  
+  def contact_info_entered?
+    return !self.first_name.nil? || !self.business_name.nil?
+  end
 
   # Views
-  def name
-    "#{first_name} #{last_name}"
+  def get_first_name
+    if business_name.nil?
+      "#{first_name}"
+    else
+      "#{business_contact_first_name}"
+    end
+  end
+
+  def get_last_name
+    if business_name.nil?
+      "#{last_name}"
+    else
+      "#{business_contact_last_name}"
+    end
   end
 
   def created_at_to_string
@@ -76,7 +91,10 @@ class User < ApplicationRecord
 
   def self.view_index_columns
     [
-      { show: 'Name', call: 'name' },
+      # { show: 'Name', call: 'name' },
+      { show: 'Business', call: 'business_name' },
+      { show: 'First Name', call: 'get_first_name' },
+      { show: 'Last Name', call: 'get_last_name' },
       { show: 'Email', call: 'email' },
       { show: 'Sign up', call: 'created_at_to_string' },
       { show: 'Make Admin', call: 'unset_link' },

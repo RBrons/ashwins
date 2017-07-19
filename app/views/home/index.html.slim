@@ -1,5 +1,6 @@
+/ Landing Page
 input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
-#md-welcome.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
+#md-landing.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg[role="document"]
         .modal-header
             button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}" data-back-path="#{@back_path}"]
@@ -20,3 +21,76 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                         span Coming soon
                     #tasks_section.tab-pane.fade[role="tabpanel"]
                         span Coming soon
+
+/ Initial Sign in Modal 
+input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]
+#md-welcome.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg[role="document"]
+        .modal-header
+            
+        .modal-body
+            h3 Welcome to 1031fun.com
+            p 
+                | Is this account for a 
+                a.business_modal[href='#'] business
+                | &nbsp;or&nbsp;
+                a.individual_modal[href='#'] individual?
+
+#md-business.md-contact.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg[role="document"]
+        .modal-header
+            
+        .modal-body
+            h3 Welcome to 1031fun.com
+            h4 Business Setup
+            form.create_contact
+                input[type="hidden" name="contact_type" value="business"]
+                div.form-group
+                    label.form-label Please enter the name of your business:
+                    div.row
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="business_name" type="text" required]
+                div.form-group
+                    label.form-label Please enter the first and last name of the contact person for this business:
+                    div.row
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="business_contact_first_name" type="text" required]
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="business_contact_last_name" type="text" required]
+                button.btn.btn-danger Save
+
+#md-individual.md-contact.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg[role="document"]
+        .modal-header
+            
+        .modal-body
+            h3 Welcome to 1031fun.com
+            h4 Individual Setup
+            form.create_contact
+                input[type="hidden" name="contact_type" value="individual"]
+                div.form-group
+                    label.form-label Please enter your first and last name:
+                    div.row
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="individual_first_name" type="text" required]
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="individual_last_name" type="text" required]
+                
+                button.btn.btn-danger Save
+
+#md-greeting.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg[role="document"]
+        .modal-header
+            
+        .modal-body
+            h3 
+                | Greetings 
+                span.visitor
+            h4 Welcome to 1031fun.com
+            p
+                | 1031fun is a web app designed to streamline Tax Defered Exchanges utilizing IRC section 1031. The  has four main sections. 
+                | (1) Transactions;(2) Properties; (3) Clients; (4) Contacts. In the app's present state, in order to commence a transaction, you will need to first create at least one Client that will need to own at least on Purchased Property. Therefore to get started, first create a Client and then a Purchased Property for the Client to own and then sell. To make the transaction work, you will also need to create two Contact/Counter Parties, one to be the Relinquishing Purchaser and the other to the the Replacement Seller. We are currently working on Demonstration mode to show you all the features of the app automatically but unfortunately, it's under construction. 
+                | Therefore, to get started, please hit the 'Create Your First Client' Button.
+        .modal-footer           
+            a#show_demonstration.btn.btn-default.pull-left[href="#"] Demonstration Mode
+            a#create_client.btn.btn-default.pull-right[href="#"] Create Your First Client

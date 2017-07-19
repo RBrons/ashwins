@@ -321,11 +321,13 @@ Rails.application.routes.draw do
             :new_sale_transaction
         post :random_mode
         post :toggle_landing_page
+        post :toggle_initial_sign_in_modal
       end
     end
 
   end
 
+  post '/users/set_contact_info' => 'users#set_contact_info'
 
   devise_for :users, :controllers => { }
   # The priority is based upon order of creation: first created -> highest priority.

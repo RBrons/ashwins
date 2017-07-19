@@ -17,6 +17,30 @@ class UsersController < ApplicationController
     render :json => {:success => true}
   end
 
+  def set_contact_info
+    @user = current_user
+    visitor = ''
+    if request.post?
+      if params[:contact_type] == 'business'
+          @user.business_name = params[:business_name]
+          @user.business_contact_first_name = params[:business_contact_first_name]
+          @user.business_contact_last_name = params[:business_contact_last_name]
+          visitor = @user.business_contact_first_name + ' from ' + @user.business_name
+      elsif params[:contact_type] == 'individual'
+        @user.first_name = params[:individual_first_name]
+        @user.last_name = params[:individual_last_name]
+        visitor = @user.first_name
+      else
+        render json: {status: false}    
+      end  
+      @user.save
+      render json: {status: true, visitor: visitor}
+    else
+      render json: {status: false}  
+    end
+
+  end
+
   def my
     @user = current_user
     if request.post?

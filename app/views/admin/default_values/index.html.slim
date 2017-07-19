@@ -8,7 +8,7 @@ h1 Default Values
 = link_to 'Sale Transaction - Add Default Value', new_sale_transaction_admin_default_values_path, class: "#{edit_xs}"
 
 .row
-  .col-md-6.col-xs-12
+  .col-md-4.col-xs-12
     h4 Note: For Dates use the format DD-MM-YYYY
 
     = form_tag(({controller: 'admin/default_values', action: 'random_mode'}), method: :post) do
@@ -23,7 +23,7 @@ h1 Default Values
       span id='random_info'  style="display: none"
         | Changes not saved
   
-  .col-md-6.col-xs-12
+  .col-md-4.col-xs-12
     h4 Note: Show/hide Landing page
 
     = form_tag(({controller: 'admin/default_values', action: 'toggle_landing_page'}), method: :post) do
@@ -32,6 +32,19 @@ h1 Default Values
           label.control-label Show Landing Page
           .clearfix
           = check_box_tag 'toggle_landing_page', true, @show_landing_page
+
+      .clearfix
+      = submit_tag 'Save', class: 'btn btn-sm btn-warning'
+
+  .col-md-4.col-xs-12
+    h4 Note: Show/hide Initial Sign In Modal
+
+    = form_tag(({controller: 'admin/default_values', action: 'toggle_initial_sign_in_modal'}), method: :post) do
+      .clearfix
+      .form-group
+          label.control-label Show Initial Sign In Modal
+          .clearfix
+          = check_box_tag 'toggle_initial_sign_in_modal', true, @show_initial_sign_in_modal
 
       .clearfix
       = submit_tag 'Save', class: 'btn btn-sm btn-warning'
