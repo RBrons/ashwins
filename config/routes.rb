@@ -322,6 +322,7 @@ Rails.application.routes.draw do
         post :random_mode
         post :toggle_landing_page
         post :toggle_initial_sign_in_modal
+        post :set_greeting
       end
     end
 
