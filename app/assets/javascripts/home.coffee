@@ -32,11 +32,7 @@ $ ->
           $.notify "Failed", "error"
 
   $(document).find('#md-landing .close').on 'click', ->
-    # if user log in first time
-    if $(this).data('back-path') == "/users/sign_in"
-      return true
-    else if $(this).data('back-path') != "/"
-      window.location.href = $(this).data('back-url')
+    window.location.href = $(this).data('back-url')
 
   $(document).find('#create_client').on 'click', ->
     $('#md-greeting').modal('hide')

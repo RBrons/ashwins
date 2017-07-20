@@ -26,7 +26,11 @@ class HomeController < ApplicationController
     @greeting = DefaultValue.where(entity_name: 'Greeting').first.present? ? DefaultValue.where(entity_name: 'Greeting').first.value : ''
 
     @back_path = URI(request.referer || '').path
-    @back_url = request.referer
+    if @back_path == "/users/sign_in" || @back_path == "/" || @back_path.split('/').second == 'admin'
+      @back_url = "#"
+    else
+      @back_url = request.referer
+    end
     
   end
 
