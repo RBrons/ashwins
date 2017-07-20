@@ -40,12 +40,22 @@ h1 Default Values
     h4 Note: Show/hide Initial Sign In Modal
 
     = form_tag(({controller: 'admin/default_values', action: 'toggle_initial_sign_in_modal'}), method: :post) do
-      .clearfix
       .form-group
           label.control-label Show Initial Sign In Modal
           .clearfix
           = check_box_tag 'toggle_initial_sign_in_modal', true, @show_initial_sign_in_modal
 
+      = submit_tag 'Save', class: 'btn btn-sm btn-warning'
+hr
+.row 
+  .col-md-6.col-xs-12
+    h4 Greeting Text
+    p.text-mute Note: This text will be shown on Initial Sign In Modal
+    = form_tag(({controller: 'admin/default_values', action: 'set_greeting'}), method: :post) do
+      .clearfix
+      .form-group
+          label.control-label
+          = text_area_tag 'greeting', @greeting, class: 'form-control', rows: 5
       .clearfix
       = submit_tag 'Save', class: 'btn btn-sm btn-warning'
       
@@ -64,18 +74,18 @@ table#data_table
         | Actions
   tbody
     - @default_values.each do |default_value|
-      tr
-        td
-          = default_value.entity_name
-          - if !default_value.mode.blank?
-            = " (" + default_value.mode + ")"
-        td
-          = default_value.attribute_name
-        td
-          = default_value.value
-        td
-          = default_value.value_type
-        td
-          = link_to 'Edit',  edit_admin_default_value_path(default_value), class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', [:admin, default_value], method: :delete, class: "#{delete_xs} entity-page-xhr"
-
+      - if !default_value.attribute_name.nil?
+          tr
+            td
+              = default_value.entity_name
+              - if !default_value.mode.blank?
+                = " (" + default_value.mode + ")"
+            td
+              = default_value.attribute_name
+            td
+              = default_value.value
+            td
+              = default_value.value_type
+            td
+              = link_to 'Edit',  edit_admin_default_value_path(default_value), class: "#{edit_xs} entity-page-xhr"
+              = link_to 'Delete', [:admin, default_value], method: :delete, class: "#{delete_xs} entity-page-xhr"
