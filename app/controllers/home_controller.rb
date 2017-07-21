@@ -26,12 +26,13 @@ class HomeController < ApplicationController
     @greeting = DefaultValue.where(entity_name: 'Greeting').first.present? ? DefaultValue.where(entity_name: 'Greeting').first.value : ''
 
     @back_path = URI(request.referer || '').path
-    if @back_path == "/users/sign_in" || @back_path == "/" || @back_path.split('/').second == 'admin'
-      @back_url = "#"
+    if @back_path == '/users/sign_in'
+      @back_url = current_user.last_sign_out_page || '#'
+    elsif @back_path == '/' || @back_path.include?('admin/')
+      @back_url = '#'
     else
       @back_url = request.referer
     end
-    
   end
 
   def set_user_indexing

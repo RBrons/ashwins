@@ -22,10 +22,21 @@ class ApplicationController < ActionController::Base
 
 
   def save_current_url
-    if current_user.try(:email).blank?
+    if !current_user.try(:email).blank?
       unless ['/', '/users/sign_in'].include?(current_FULLPATH)
         session[:last_url] ||= current_FULLPATH
         puts session[:last_url]
+      end
+      if ['/users/sign_out'].include?(current_FULLPATH)
+        # Save last page before sign out
+        previous_url = request.referer
+        @user = current_user
+        if URI(previous_url).path != '/'
+          @user.last_sign_out_page = previous_url
+        else
+          @user.last_sign_out_page = nil
+        end
+        @user.save
       end
     end
   end
