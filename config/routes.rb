@@ -329,7 +329,7 @@ Rails.application.routes.draw do
   end
 
   post '/users/set_contact_info' => 'users#set_contact_info'
-
+  
   devise_for :users, :controllers => { }
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
