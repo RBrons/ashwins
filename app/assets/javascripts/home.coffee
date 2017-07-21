@@ -43,7 +43,7 @@ $ ->
 
   $(document).find('#show_contact-modal').on 'click', ->
     $('#md-greeting').modal('hide')
-    $('#md-add-contact').modal('show')
+    $('.top_nav #add-client').click()
   
   $(document).find('#show_demonstration').on 'click', ->
     sweetAlert 'Coming soon!', '', 'info'
