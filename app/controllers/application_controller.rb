@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
   def user_enabled
     if current_user && !current_user.enabled
       sign_out current_user
-      flash[:alert] = 'This account has been not enable yet....'
+      flash[:alert] = 'This account has been not enable yet....<br />Please be patient, the administrator will enable your account very soon.'.html_safe
       redirect_to '/'
     end
   end
