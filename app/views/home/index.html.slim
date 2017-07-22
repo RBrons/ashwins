@@ -27,6 +27,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
 #md-welcome.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg[role="document"]
         .modal-body
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 Welcome to 1031fun.com
             p 
                 | Is this account for a 
@@ -37,6 +38,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
 #md-business.md-contact.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg[role="document"]
         .modal-body
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 Welcome to 1031fun.com
             h4 Business Setup
             form.create_contact
@@ -61,6 +63,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
 #md-individual.md-contact.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg[role="document"]
         .modal-body
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 Welcome to 1031fun.com
             h4 Individual Setup
             form.create_contact
@@ -79,6 +82,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
 #md-greeting.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg[role="document"]
         .modal-body
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 
                 | Greetings 
                 span.visitor
