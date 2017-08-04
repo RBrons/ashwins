@@ -26,6 +26,7 @@ table#data_table
       th
         | Stock Shares
   tbody data-active-id=@activeId
+    - decimal_shares = @entity.shares_decimal_count.nil? ? 0 : @entity.shares_decimal_count
     - @stockholders.each do |stockholder|
       - entity_flag = stockholder.entity.present?
       - person_flag = true
@@ -67,4 +68,5 @@ table#data_table
         td
           = stockholder.email
         td
-          = stockholder.my_percentage_stockholder
+          - if decimal_shares != 0 && decimal_shares >= decimal_places(stockholder.my_percentage_stockholder)
+            = stockholder.my_percentage_stockholder

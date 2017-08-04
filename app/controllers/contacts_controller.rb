@@ -13,6 +13,7 @@ class ContactsController < ApplicationController
     @contact = Contact.new(contact_params)
     params[:contact_type] = "company" if !@contact.company_name.nil?
     @contact.legal_ending = nil if @contact.company_name.nil?
+    @contact.user_id = current_user.id
     @contact.cprefix =  (params[:contact_type] == "company") ? "Contact " : ""
     @contact.role = "Counter-Party"
     if @contact.contact_type == "Client Participant"
@@ -84,6 +85,7 @@ class ContactsController < ApplicationController
     @contacts = Contact.with_deleted
     @contacts = @contacts.where(deleted_at: nil) unless params[:trashed].to_b
     @contacts = @contacts.where.not(deleted_at: nil) if params[:trashed].to_b
+    @contacts = @contacts.where(user_id: current_user.id)
     @contacts = @contacts.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
     @activeId = params[:active_id]
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
