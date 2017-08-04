@@ -20,7 +20,7 @@
     .transaction-note style=("#{('display: none;' if f.object.persisted? && f.object.relinquishing_seller_entity.present?)}")
       p
         = "<b>Note: </b> To commence your 1031 exchange, please select a client who will sell (relinquish) a property and then hit Save & Next".html_safe
-
+        
     .clearfix.margin-sm-top
       h2.heading_without_padding_large
         = "Relinquishing Seller #{require_field}".html_safe
@@ -37,7 +37,7 @@
       = hidden_field_tag :status_alert, "#{ params[:status_alert] || (f.object.status.present? ? nil : 'Sale Pre LOI')}"
       = hidden_field_tag :transaction_klazz, @transaction.class.to_s
       = f.hidden_field :transaction_main_id
-
+    
     .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.seller_person_is?)}")
       = f.select :relqn_seller_entity_id, options_html_entities(f.object.relinquishing_seller_entity_id, "transactions"), {}, class: 'selectize-single-transaction', disabled: f.object.persisted? && f.object.relinquishing_seller_entity.present?
       - if f.object.persisted? && f.object.relinquishing_seller_entity.present?

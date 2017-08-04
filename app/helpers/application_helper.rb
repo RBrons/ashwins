@@ -673,9 +673,9 @@ module ApplicationHelper
     poa_str = " (Principal Individual) "
     poa_str = " (Principal Entity) " if sub_type_ == "entity"
     if type_ == "transactions"
-      object_array = Entity.TransactionEntityWithType(sub_type_)
+      object_array = Entity.where(user_id: current_user.id).TransactionEntityWithType(sub_type_)
     elsif type_ == "properties"
-      object_array = Entity.PurchasedPropertyEntityWithType(sub_type_)
+      object_array = Entity.where(user_id: current_user.id).PurchasedPropertyEntityWithType(sub_type_)
     end
     groups = {}
     object_array.sort_by! {|e| e[2]}
