@@ -251,15 +251,18 @@ class Entity < ApplicationRecord
       c = Entity.where(id: poa)
     end
     MemberType.InitMemberTypes if MemberType.member_types.nil?
-
-    return (a+b+c).uniq
-      .select! {
-        |item| item.has_purchased_properties?
-      }
-      .pluck(:name, :id, :type_, :has_comma, :legal_ending)
-      .map! {
-          |item| [ self.create_name_with_legal_ending(item[0], item[3], item[4]), item[1], item[2], "#{MemberType.member_types[item[2]]}", item[4].blank? ]
-      }
+    if !(a+b+c).uniq.empty?
+      return (a+b+c).uniq
+        .select! {
+          |item| item.has_purchased_properties?
+        }
+        .pluck(:name, :id, :type_, :has_comma, :legal_ending)
+        .map! {
+            |item| [ self.create_name_with_legal_ending(item[0], item[3], item[4]), item[1], item[2], "#{MemberType.member_types[item[2]]}", item[4].blank? ]
+        }
+    else
+        return []
+    end
   end
 
   def self.create_name_with_legal_ending(name_, has_comma_=false, legal_ending_='')

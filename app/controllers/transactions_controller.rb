@@ -72,7 +72,7 @@ class TransactionsController < ApplicationController
   # GET /project/new
   def new
     if params[:transaction_type] == '1031 Still Selling' || params[:type] == 'purchase'
-
+      
       @transaction_main = TransactionMain.find_by(id: params[:main_id]) || TransactionMain.create(user_id: current_user.id, init: true)
 
       @transaction = if params[:type] == 'purchase'
@@ -906,10 +906,10 @@ class TransactionsController < ApplicationController
   def build_gallery_transaction_properties transaction, type
     if type == 'sale'
       possible_properties =
-      Property.where('owner_entity_id = ? and ownership_status = ? and title is not null', transaction.prop_owner, transaction.prop_status)
+      Property.where('owner_entity_id = ? and ownership_status = ? and title is not null and user_id = ?', transaction.prop_owner, transaction.prop_status, current_user.id)
     elsif type == 'purchase'
       possible_properties =
-      Property.where('ownership_status = ? and title is not null', transaction.prop_status).where.not(price: nil)
+      Property.where('ownership_status = ? and title is not null and user_id = ?', transaction.prop_status, current_user.id).where.not(price: nil)
     end
 
     existing_transaction_properties = transaction.transaction_properties.pluck(:property_id).uniq.compact
