@@ -251,15 +251,18 @@ class Entity < ApplicationRecord
       c = Entity.where(id: poa)
     end
     MemberType.InitMemberTypes if MemberType.member_types.nil?
-    if (a+b+c).uniq.length > 0
-      return (a+b+c).uniq
-        .select! {
+    if (a + b + c).uniq.length > 0
+      entities_owning_purchased_properties = (a + b + c).uniq.select! {
           |item| item.has_purchased_properties?
         }
-        .pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      if entities_owning_purchased_properties.present?
+        return entities_owning_purchased_properties.pluck(:name, :id, :type_, :has_comma, :legal_ending)
         .map! {
             |item| [ self.create_name_with_legal_ending(item[0], item[3], item[4]), item[1], item[2], "#{MemberType.member_types[item[2]]}", item[4].blank? ]
         }
+      else
+        return []
+      end
     else
         return []
     end
@@ -294,9 +297,13 @@ class Entity < ApplicationRecord
       c = Entity.where(id: poa).pluck(:name, :id, :type_, :has_comma, :legal_ending)
     end
     MemberType.InitMemberTypes if MemberType.member_types.nil?
-    return (a+b+c).uniq.map! {
-        |item| [ self.create_name_with_legal_ending(item[0], item[3], item[4]), item[1], item[2], "#{MemberType.member_types[item[2]]}", item[4].blank? ]
-    }
+    if (a + b + c).uniq.length > 0
+      return (a + b + c).uniq.map! {
+          |item| [ self.create_name_with_legal_ending(item[0], item[3], item[4]), item[1], item[2], "#{MemberType.member_types[item[2]]}", item[4].blank? ]
+      }
+    else
+      return []
+    end
   end
 
   def display_name
