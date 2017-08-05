@@ -68,5 +68,7 @@ table#data_table
         td
           = stockholder.email
         td
-          - if decimal_shares != 0 && decimal_shares >= decimal_places(stockholder.my_percentage_stockholder)
-            = stockholder.my_percentage_stockholder
+          - if decimal_shares >= decimal_places(stockholder.my_percentage_stockholder)
+            = number_with_precision(stockholder.my_percentage_stockholder, :precision => decimal_places(stockholder.my_percentage_stockholder))
+          - else
+            = number_with_precision(stockholder.my_percentage_stockholder, :precision => decimal_shares)
