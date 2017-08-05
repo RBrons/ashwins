@@ -37,7 +37,7 @@ class ClientsController < ApplicationController
     if @current_grp != '0'
       grp_ = Group.where(id: @current_grp).first
       if grp_
-        @entities = grp_.entities
+        @entities = grp_.entities.where(user_id: current_user.id)
         #@entities_present = Entity.where(id: @entities).pluck('name, id')
         #@entities_absent = Entity.where.not(id: @entities).pluck('name, id')
       end

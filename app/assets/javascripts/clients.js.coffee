@@ -1,14 +1,14 @@
 $ ->
   $(document).on 'click', "#client_is_person_false", ->
     if this.checked
-      $(".contact").html('Contact');
-      $("input#client_entity").parent().parent().show();
+      $(".contact").html('Contact')
+      $("input#client_entity").parent().parent().show()
       sort_select_options($(document).find("select#client_state")[0], false)
 
   $(document).on 'click', "#client_is_person_true", ->
     if this.checked
-      $(".contact").html('&nbsp;');
-      $("input#client_entity").parent().parent().hide();
+      $(".contact").html('&nbsp;')
+      $("input#client_entity").parent().parent().hide()
       sort_select_options($(document).find("select#client_state")[0], true)
 
   $(document).on "click", "a.client-form-new-entity", ->
@@ -220,7 +220,7 @@ $ ->
       dataType: 'json'
       success: (sdata) ->
         #
-        $('#entity-groups-tree').jstree(true).refresh();
+        $('#entity-groups-tree').jstree(true).refresh()
     return
   )
 

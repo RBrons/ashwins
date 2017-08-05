@@ -1,9 +1,9 @@
 $ ->
   $(document).on 'click', "input[id$=is_person_false]", ->
     if this.checked
-      $(document).find(".contact").html('Contact');
-      $(document).find("input[id$=_entity]").parent().show();
-      $(document).find(".is-person-hide").show();
+      $(document).find(".contact").html('Contact')
+      $(document).find("input[id$=_entity]").parent().show()
+      $(document).find(".is-person-hide").show()
 
       $.ajax
         type: "POST"
@@ -11,7 +11,7 @@ $ ->
         data: {is_person: "false", id: $("select[id$=temp_id]").attr("data-id"), cid: $("#cid").val(), client_type: $("select[id$=temp_id]").attr("data-clienttype")}
         dataType: "html"
         success: (val) ->
-          $(document).find("select[id$=temp_id]").html(val);
+          $(document).find("select[id$=temp_id]").html(val)
         error: (e) ->
           console.log e
 
@@ -19,9 +19,9 @@ $ ->
 
   $(document).on 'click', "input[id$=is_person_true]", ->
     if this.checked
-      $(document).find(".contact").html('&nbsp;');
-      $(document).find("input[id$=_entity]").parent().hide();
-      $(document).find(".is-person-hide").hide();
+      $(document).find(".contact").html('&nbsp;')
+      $(document).find("input[id$=_entity]").parent().hide()
+      $(document).find(".is-person-hide").hide()
 
       $.ajax
         type: "POST"
@@ -29,22 +29,22 @@ $ ->
         data: {is_person: "true", id: $("select[id$=temp_id]").attr("data-id"), cid: $("#cid").val(), client_type: $("select[id$=temp_id]").attr("data-clienttype")}
         dataType: "html"
         success: (val) ->
-          $(document).find("select[id$=temp_id]").html(val);
+          $(document).find("select[id$=temp_id]").html(val)
         error: (e) ->
           console.log e
 
       sort_select_options($(document).find("select[id$=_state]")[0], true)
 
   $(document).on 'click', "select[id$=temp_id]", ->
-    currentType = $(this).find("option:selected").attr('data-type');
+    currentType = $(this).find("option:selected").attr('data-type')
 
     if currentType == "contact"
-      oldType = "entity_id";
+      oldType = "entity_id"
     else
-      oldType = "contact_id";
+      oldType = "contact_id"
 
-    currentName = $(this).attr("name");
-    $(this).attr("name", currentName.replace(oldType, currentType + "_id"));
+    currentName = $(this).attr("name")
+    $(this).attr("name", currentName.replace(oldType, currentType + "_id"))
 
   $(document).on "click", "a.resource-form-new-entity", ->
     url = '/entities/new?stockholder=true'
@@ -245,9 +245,9 @@ $ ->
 
   $(document).on "ajax:beforeSend", "a.entity-page-xhr, form.entity-page-xhr", ->
     if $(this).attr("href") != undefined
-      $(document).find("a.entity-page-xhr").removeClass("active");
-      $(this).addClass("active");
-      window.history.pushState("next", "page", $(this).attr("href"));
+      $(document).find("a.entity-page-xhr").removeClass("active")
+      $(this).addClass("active")
+      window.history.pushState("next", "page", $(this).attr("href"))
     $.blockUI()
 
   $(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr", (data, xhr, status)->
