@@ -10,17 +10,17 @@ $ ->
   $(document).find('#md-welcome .business_modal').on 'click', ->
     $(document).find('#md-welcome').modal('hide')
     $(document).find('#md-business').modal('show')
-
+    
   $(document).find('#md-welcome .individual_modal').on 'click', ->
     $(document).find('#md-welcome').modal('hide')
     $(document).find('#md-individual').modal('show')
 
-  $(document).find('.go-back').on 'click', (e)->
+  $(document).find('.go-back').on 'click', (e) ->
     e.preventDefault()
     $(this).closest('.modal').modal('hide')
     $(document).find($(this).data('target-modal')).modal('show')
   
-  $(document).find('.create_contact').submit (e)->
+  $(document).find('.create_contact').submit (e) ->
     e.preventDefault()
     back_modal = $(this).closest('.md-contact').attr('id')
     contact_info = $(this).serialize()

@@ -98,13 +98,13 @@ $ ->
   #---- Purchase ----#
   $(document).on 'ifChecked', '#transaction_purchaser_person_is_true', ->
     if this.checked
-      $(document).find('div.purchase-tr-pr-detail').show();
-      $(document).find('div.purchase-tr-et-detail').hide();
+      $(document).find('div.purchase-tr-pr-detail').show()
+      $(document).find('div.purchase-tr-et-detail').hide()
 
   $(document).on 'ifChecked', '#transaction_purchaser_person_is_false', ->
     if this.checked
-      $(document).find('div.purchase-tr-pr-detail').hide();
-      $(document).find('div.purchase-tr-et-detail').show();
+      $(document).find('div.purchase-tr-pr-detail').hide()
+      $(document).find('div.purchase-tr-et-detail').show()
 
 
   sale_pre_loi_text = (seller)-> '<strong>Congratulations!</strong> You have just initiated a 1031 Exchange on behalf of <strong>'+seller+'</strong>. You can now identify the ' +
@@ -429,7 +429,7 @@ $ ->
       type: 'text',
       tpl: '<input class="offered-price" type="text">',
       params: (params) ->
-        params.value = $(document).find('input.offered-price').inputmask('unmaskedvalue');
+        params.value = $(document).find('input.offered-price').inputmask('unmaskedvalue')
         return params
       emptytext: 'Enter Amount of Offer'
       success: (response) ->
@@ -567,7 +567,7 @@ $ ->
   add_counteroffer_row = (offer_id, date, offeror, price) ->
     date = date || moment().format('YYYY-MM-DD')
     if price != ""
-      unformated_price = Number(price.replace(/[^0-9\.]+/g,""));
+      unformated_price = Number(price.replace(/[^0-9\.]+/g, ""))
     else
        unformated_price = ""
 
@@ -747,7 +747,7 @@ $ ->
   $(document).on 'click', (e) ->
     container = $("div#TransactionTypeList")
     if (!container.is(e.target) && (container.has(e.target).length == 0))
-      container.hide();
+      container.hide()
 
   $(document).on 'nested:fieldAdded', (event) ->
     field = event.field
@@ -811,7 +811,7 @@ $ ->
         url: "/xhr/entity_type_list"
         dataType: "html"
         success: (val) ->
-          $(document).find("#md-add-client .modal-body").html(val);
+          $(document).find("#md-add-client .modal-body").html(val)
         error: (e) ->
           console.log e
 
@@ -837,7 +837,7 @@ $ ->
 
   set_first_deposit_date_due = (psa_date, offset = 0) ->
     first_deposit_date_due = new Date(psa_date)
-    first_deposit_date_due.setDate(first_deposit_date_due.getDate() + parseInt(offset));
+    first_deposit_date_due.setDate(first_deposit_date_due.getDate() + parseInt(offset))
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_1i').val(first_deposit_date_due.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_2i').val(first_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_first_deposit_date_due_3i').val(first_deposit_date_due.getDate())
@@ -846,7 +846,7 @@ $ ->
 
   set_inspection_period_end = (psa_date, offset = 0) ->
     inspection_period_end = new Date(psa_date)
-    inspection_period_end.setDate(inspection_period_end.getDate() + parseInt(offset));
+    inspection_period_end.setDate(inspection_period_end.getDate() + parseInt(offset))
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_1i').val(inspection_period_end.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_2i').val(inspection_period_end.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_inspection_period_end_3i').val(inspection_period_end.getDate())
@@ -854,7 +854,7 @@ $ ->
 
   set_second_deposit_date_due = (psa_date, offset = 0) ->
     second_deposit_date_due = new Date(psa_date)
-    second_deposit_date_due.setDate(second_deposit_date_due.getDate() + parseInt(offset));
+    second_deposit_date_due.setDate(second_deposit_date_due.getDate() + parseInt(offset))
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_1i').val(second_deposit_date_due.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_2i').val(second_deposit_date_due.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_second_deposit_date_due_3i').val(second_deposit_date_due.getDate())
@@ -863,7 +863,7 @@ $ ->
 
   set_closing_date = (psa_date, offset = 0 )->
     closing_date = new Date(psa_date)
-    closing_date.setDate(closing_date.getDate() + parseInt(offset));
+    closing_date.setDate(closing_date.getDate() + parseInt(offset))
     $(document).find('#transaction_transaction_term_attributes_closing_date_1i').val(closing_date.getFullYear())
     $(document).find('#transaction_transaction_term_attributes_closing_date_2i').val(closing_date.getMonth() + 1)
     $(document).find('#transaction_transaction_term_attributes_closing_date_3i').val(closing_date.getDate())

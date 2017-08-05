@@ -251,7 +251,7 @@ class Entity < ApplicationRecord
       c = Entity.where(id: poa)
     end
     MemberType.InitMemberTypes if MemberType.member_types.nil?
-    if !(a+b+c).uniq.empty?
+    if (a+b+c).uniq.length > 0
       return (a+b+c).uniq
         .select! {
           |item| item.has_purchased_properties?
