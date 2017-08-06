@@ -315,6 +315,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :tenants do
+      
+    end
+    
     resources :default_values do
       collection do
         get :new_property, :new_terms, :new_purchase_property, :new_sell_property,
