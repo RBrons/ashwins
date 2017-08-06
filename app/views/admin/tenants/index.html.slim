@@ -1,0 +1,20 @@
+.action-btn
+  = link_to 'New Tenant', new_admin_tenant_path, class: 'btn btn-warning'
+.table-responsive
+  table#data_table
+    thead
+      tr
+        th Name
+        th User
+        th Action
+    tbody
+      - @tenants.each do |tenant|
+        - if tenant.user.present?
+          tr
+            td = tenant.name
+            td = tenant.user.get_first_name() + ' ' +  tenant.user.get_last_name
+            td 
+              = link_to 'Edit', edit_admin_tenant_path(tenant), class: 'btn btn-primary'
+              = link_to 'Destroy', admin_tenant_path(tenant), data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-danger'
+
+.clearfix.margin-lg-top

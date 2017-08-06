@@ -1,0 +1,19 @@
+= form_for [:admin, @tenant] do |f|
+  - if @tenant.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@tenant.errors.count, "error")} prohibited this tenant from being saved:"
+      ul
+        - @tenant.errors.full_messages.each do |message|
+          li = message
+
+  .form-group
+    = f.label :name, class: 'control-label'
+    = f.text_field :name, class: 'form-control'
+  
+  .form-group
+    = f.label :user_id, class: 'form-label'
+    = f.select :user_id, options_for_select(User.all.where('first_name is not null or business_contact_first_name is not null').map{ |user|[ "#{user.get_first_name} #{user.get_last_name}", user.id ]}), {}, { class: "form-control" }
+  
+  = f.submit 'Edit', class: 'btn btn-primary' if @tenant.id.present?
+  = f.submit 'Create', class: 'btn btn-primary' if !@tenant.id.present?
+  = link_to 'Back', admin_tenants_path, class: 'btn btn-danger'
