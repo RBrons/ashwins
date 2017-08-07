@@ -42,7 +42,7 @@
                   = link_to 'Properties', admin_properties_path, class: "btn btn-sm #{controller_name == 'properties' ? 'btn-primary' : 'btn-default'}"
               %span
                 %span
-                  = link_to 'Tenants', admin_tenants_path, class: "btn btn-sm #{controller_name == 'tenants' ? 'btn-primary' : 'btn-default'}"
+                  = link_to 'Default Tenants', admin_tenants_path, class: "btn btn-sm #{controller_name == 'tenants' ? 'btn-primary' : 'btn-default'}"
               %span
                 %span
                   = link_to 'Sale Transactions', admin_transactions_path(klazz: 'TransactionSale'), class: "btn btn-sm #{controller_name == 'transactions' && (params[:klazz] == 'TransactionSale' || params[:klazz].blank?) ? 'btn-primary' : 'btn-default'}"
