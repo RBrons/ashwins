@@ -89,13 +89,13 @@ class Entity < ApplicationRecord
   end
 
   def corporate_remaining_share
-    val   = StockHolder.where(super_entity_id: self.id).sum(:stock_share)
+    val   = StockHolder.where(super_entity_id: self.id).sum(:my_percentage_stockholder)
     val ||= 0
     (self.number_of_assets - val) rescue nil
   end
 
   def corporate_distributed_share
-    val   = StockHolder.where(super_entity_id: self.id).sum(:stock_share)
+    val   = StockHolder.where(super_entity_id: self.id).sum(:my_percentage_stockholder)
     val || 0
   end
 
