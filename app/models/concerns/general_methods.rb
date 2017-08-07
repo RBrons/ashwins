@@ -3,7 +3,7 @@ class GeneralMethods
   class << self
 
     def honorific
-      ["Mr.", "Mrs.", "Miss.", "Ms.", "Dr.", "Mx."]
+      ["Mr.", "Mrs.", "Miss", "Ms.", "Dr.", "Mx."]
     end
 
     def USSTATES
