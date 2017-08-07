@@ -26,6 +26,7 @@ class Admin::TenantsController < Admin::AdminController
   # POST /tenants
   def create
     @tenant = Tenant.new(tenant_params)
+    @tenant.user_id = current_user.id
 
     if @tenant.save
       #redirect_to @tenant, notice: 'Tenant was successfully created.'
@@ -68,6 +69,6 @@ class Admin::TenantsController < Admin::AdminController
 
     # Only allow a trusted parameter "white list" through.
     def tenant_params
-      params.require(:tenant).permit(:name, :user_id)
+      params.require(:tenant).permit(:name)
     end
 end
