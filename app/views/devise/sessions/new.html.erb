@@ -4,10 +4,10 @@
   <div class="x_panel">
     <div class="x_content">
       <% if flash[:alert] %>
-          <div class='text-info'><%= flash[:alert] %></div>
+          <h4 class='text-danger'><%= flash[:alert] %></h4>
       <% end %>
       <% if flash[:notice] %>
-          <div class='text-warning'><%= flash[:notice] %></div>
+          <h4 class='text-warning'><%= flash[:notice] %></h4>
       <% end %>
 
       <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
