@@ -1262,12 +1262,60 @@ $ ->
     $(document).find('form.transaction-photo-gallery').submit()
 
   $(document).on 'ifChecked', '#contact_is_company_false', ->
-    $(document).find('div.company-detail').hide()
-    $(document).find('label[for="contact_ein_or_ssn"]').text('EIN')
-    
+    form_wrapper = $(this).closest('.form-wrapper')
+    if form_wrapper.find('.form_submit_mode').val() == 'edit'
+      if form_wrapper.find('.is_company').val() == 'true'
+        swal {
+          title: 'Are you sure?'
+          text: 'Prior contact will be deleted'
+          type: 'warning'
+          showCancelButton: true
+          cancelButtonText: "No"
+          confirmButtonColor: '#DD6B55'
+          confirmButtonText: 'Yes'
+          closeOnConfirm: false
+        }, (isConfirm)->
+          if isConfirm
+            form_wrapper.find('div.company-detail').hide()
+            form_wrapper.find('label[for="contact_ein_or_ssn"]').text('EIN')
+            form_wrapper.find('form input[type=text], form textarea').val('')
+          else
+            setTimeout (->
+              form_wrapper.find('#contact_is_company_true').iCheck('check')
+            ), 100  
+          
+          swal.close()
+      else
+        form_wrapper.find('div.company-detail').hide()
+        form_wrapper.find('label[for="contact_ein_or_ssn"]').text('EIN')
+  
   $(document).on 'ifChecked', '#contact_is_company_true', ->
-    $(document).find('div.company-detail').show()
-    $(document).find('label[for="contact_ein_or_ssn"]').text('SSN')
+    form_wrapper = $(this).closest('.form-wrapper')
+    if form_wrapper.find('.form_submit_mode').val() == 'edit'
+      if form_wrapper.find('.is_company').val() == 'false'
+        swal {
+          title: 'Are you sure?'
+          text: 'Prior contact will be deleted'
+          type: 'warning'
+          showCancelButton: true
+          cancelButtonText: "No"
+          confirmButtonColor: '#DD6B55'
+          confirmButtonText: 'Yes'
+          closeOnConfirm: false
+        }, (isConfirm)->
+          if isConfirm
+            form_wrapper.find('div.company-detail').show()
+            form_wrapper.find('label[for="contact_ein_or_ssn"]').text('SSN')
+            form_wrapper.find('form input[type=text], form textarea').val('')
+          else
+            setTimeout (->
+              form_wrapper.find('#contact_is_company_false').iCheck('check')
+            ), 100  
+          
+          swal.close()
+      else
+        form_wrapper.find('div.company-detail').show()
+        form_wrapper.find('label[for="contact_ein_or_ssn"]').text('SSN')
   
   $(document).on 'ajax:success', '.new_contact, .edit_contact', (e, data, status, xhr) ->
     $.notify "Contact updated", "success"
