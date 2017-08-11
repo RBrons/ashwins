@@ -83,10 +83,10 @@
               td = p.try(:psa_date)
               td
                 - if !sale_closing_date.nil?
-                  = (maint.identification_deadline.to_date - today_).to_i
+                  = (maint.identification_deadline.to_date - today_).to_i >= 0 ? (maint.identification_deadline.to_date - today_).to_i : 'Expired'
               td
                 - if !sale_closing_date.nil?
-                  = (maint.transaction_deadline.to_date - today_).to_i
+                  = (maint.transaction_deadline.to_date - today_).to_i >= 0 ? (maint.transaction_deadline.to_date - today_).to_i : 'Expired'
               td
                 - unless p.closed?
                   = (p.first_deposit_date_due - today_).to_i if p.first_deposit_date_due.present?
@@ -138,10 +138,10 @@
             td
             td
               - if !sale_closing_date.nil?
-                = (maint.identification_deadline.to_date - today_).to_i
+                = (maint.identification_deadline.to_date - today_).to_i >= 0 ? (maint.identification_deadline.to_date - today_).to_i : 'Expired'
             td
               - if !sale_closing_date.nil?
-                = (maint.transaction_deadline.to_date - today_).to_i
+                = (maint.transaction_deadline.to_date - today_).to_i >= 0 ? (maint.transaction_deadline.to_date - today_).to_i : 'Expired'
             td
             td
             td
