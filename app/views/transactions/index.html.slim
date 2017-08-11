@@ -200,21 +200,21 @@
               td = p.try(:psa_date)
               td
                 - unless p.closed?
-                  span = "#{ p.try(:measured_days_to_1st_deposit) }"
+                  span = "#{ p.try(:measured_days_to_1st_deposit).to_i >= 0 ? p.try(:measured_days_to_1st_deposit) : 'Expired' }"
               td
                 - unless p.closed?
                   span
                     - if p.psa_date.present?
-                      - if (p.inspection_period_days - (today_ - p.psa_date).to_i )> 0
+                      - if (p.inspection_period_days - (today_ - p.psa_date).to_i ) > 0
                         = (p.inspection_period_days - (today_ - p.psa_date).to_i)
                       - else
                         = 'Expired'
                     /= "#{ p.try(:measured_days_to_end_of_inspection) }"
               td
                 - unless p.closed?
-                  span = "#{ p.try(:measured_days_to_2nd_deposit) }"
+                  span = "#{ p.try(:measured_days_to_2nd_deposit).to_i >= 0 ? p.try(:measured_days_to_2nd_deposit) : 'Expired'}"
               td
-                span = "#{ p.try(:measured_days_to_closing) }"
+                span = "#{ p.try(:measured_days_to_closing).to_i >= 0 ? p.try(:measured_days_to_closing) : 'Expired'}"
               td
                 - if p.sale_inspection_lease_tasks_estoppel
                   | Yes
