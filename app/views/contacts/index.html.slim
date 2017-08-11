@@ -33,7 +33,7 @@ table#data_table
           = link_to 'Show', contact_path(contact), class: show_xs
           = link_to 'Delete', contact_path(contact), data: {:confirm => 'Are you sure?'}, :method => :delete, class: delete_xs
         td
-          span.label.label-info Principal
+          span.label.label-info = contact.principal(current_user.id)
         td
           = (contact.try(:company_name) || "") + " " + (contact.try(:legal_ending) || "")
         td
