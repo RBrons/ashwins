@@ -1261,6 +1261,17 @@ $ ->
     $(document).find('form.transaction-photo-gallery').attr('action', action_url)
     $(document).find('form.transaction-photo-gallery').submit()
 
+  $(document).on 'ifChecked', '#contact_is_company_false', ->
+    $(document).find('div.company-detail').hide()
+    $(document).find('label[for="contact_ein_or_ssn"]').text('EIN')
+    
+  $(document).on 'ifChecked', '#contact_is_company_true', ->
+    $(document).find('div.company-detail').show()
+    $(document).find('label[for="contact_ein_or_ssn"]').text('SSN')
+  
+  $(document).on 'ajax:success', '.new_contact, .edit_contact', (e, data, status, xhr) ->
+    $.notify "Contact updated", "success"
+
   #--- end ---
 
   $(document).on 'ifChecked', '.radio_edit_mode_cap', ->

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170801023815) do
+ActiveRecord::Schema.define(version: 20170810211516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -540,6 +540,8 @@ ActiveRecord::Schema.define(version: 20170801023815) do
     t.boolean  "purchase_inspection_lease_tasks_estoppel",                          default: false
     t.boolean  "purchase_inspection_lease_tasks_rofr",                              default: false
     t.string   "current_step_subtab"
+    t.integer  "broker_id"
+    t.integer  "attorney_id"
     t.index ["property_id", "transaction_id"], name: "index_transaction_properties_on_property_id_and_transaction_id", unique: true, using: :btree
     t.index ["property_id"], name: "index_transaction_properties_on_property_id", using: :btree
     t.index ["transaction_id"], name: "index_transaction_properties_on_transaction_id", using: :btree

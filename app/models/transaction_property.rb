@@ -11,7 +11,7 @@ class TransactionProperty < ApplicationRecord
   accepts_nested_attributes_for :transaction_term, :reject_if => :all_blank
 
   has_many :transaction_property_offers, foreign_key: :transaction_property_id, dependent: :destroy
-
+  
   delegate :transaction_term_closing_date, to: :transaction_term, allow_nil: true
   delegate :first_deposit_date_due, to: :transaction_term, allow_nil: true
   delegate :inspection_period_days, to: :transaction_term, allow_nil: true
@@ -28,6 +28,14 @@ class TransactionProperty < ApplicationRecord
   after_update :update_transaction
   after_save :update_transaction
   
+  def broker_contact
+    return Contact.find(self.broker_id)
+  end
+
+  def attorney_contact
+    return Contact.find(self.attorney_id)
+  end
+
   def update_transaction
     if self.is_sale
       TransactionSale.find(self.transaction_id).touch

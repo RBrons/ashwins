@@ -157,8 +157,154 @@
                   input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.seller_name}"]
 
                 #broker_section.tab-pane.fade[role="tabpanel"]
+                  .form-wrapper
+                    - url = @broker_contact.persisted? ? contact_path(@broker_contact.id) : contacts_path
+                    = form_for @broker_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
+                      .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
+                        = f.hidden_field :contact_type, value: 'Personnel', readonly: true
+                        = f.hidden_field :per_role, value: 'Counter-Party Broker or Agent', readonly: true
+                        = hidden_field_tag 'from_transaction_broker', 'true'
+                        = hidden_field_tag 'transaction_property_id', @transaction_property.id
+                        .form-group
+                          .heading_blue.radio-inline
+                            span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                            span.margin-md-left Individual
+                          .heading_blue.radio-inline
+                            span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                            span.margin-md-left Entity
+                        .form-group.company-detail style=(f.object.is_company ? '' : 'display: none')
+                          = f.label :company_name, "Company Name"
+                          .row
+                            .col-md-8
+                              = f.text_field :company_name, class: "form-control"
+                            .col-md-4
+                              = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
+                        .form-group
+                          = f.label :first_name, "#{f.object.cprefix}First Name"
+                          = f.text_field :first_name, class: "form-control"
+
+                        .form-group
+                          = f.label :last_name, "#{f.object.cprefix}Last Name"
+                          = f.text_field :last_name, class: "form-control"
+
+                        .form-group
+                          = f.label :phone1
+                          = f.text_field :phone1, class: "form-control"
+
+                        .form-group
+                          = f.label :phone2
+                          = f.text_field :phone2, class: "form-control"
+
+                        .form-group
+                          = f.label :fax
+                          = f.text_field :fax, class: "form-control"
+
+                        .form-group
+                          = f.label :email
+                          = f.text_field :email, class: "form-control"
+
+                        .form-group
+                          = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                          = f.text_field :ein_or_ssn, class: "form-control"
+
+                        .form-group
+                          = f.label :postal_address, "Postal Address"
+                          = f.text_field :postal_address, class: "form-control"
+
+                        .form-group
+                          = label_tag 'City'
+                          = f.text_field :city, class: "form-control city"
+
+                        .form-group
+                          = label_tag 'State'
+                          = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+
+                        .form-group
+                          = f.label "Zip"
+                          = f.text_field :zip, class: 'zip form-control'
+
+                        .form-group
+                          = f.label :notes
+                          = f.text_area :notes, class: "form-control"
+                        .form-group
+                        .clearfix
+                        .form-group
+                          = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
                 #attorney_section.tab-pane.fade[role="tabpanel"]
+                  .form-wrapper
+                    - url = @attorney_contact.persisted? ? contact_path(@attorney_contact.id) : contacts_path
+                    = form_for @attorney_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
+                      .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
+                        = f.hidden_field :contact_type, value: 'Personnel', readonly: true
+                        = f.hidden_field :per_role, value: 'Counter-Party Legal', readonly: true
+                        = hidden_field_tag 'from_transaction_attorney', 'true'
+                        = hidden_field_tag 'transaction_property_id', @transaction_property.id
+                        .form-group
+                          .heading_blue.radio-inline
+                            span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                            span.margin-md-left Individual
+                          .heading_blue.radio-inline
+                            span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                            span.margin-md-left Entity
+                        .form-group.company-detail style=(f.object.is_company ? '' : 'display: none')
+                          = f.label :company_name, "Company Name"
+                          .row
+                            .col-md-8
+                              = f.text_field :company_name, class: "form-control"
+                            .col-md-4
+                              = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
+                        .form-group
+                          = f.label :first_name, "#{f.object.cprefix}First Name"
+                          = f.text_field :first_name, class: "form-control"
+
+                        .form-group
+                          = f.label :last_name, "#{f.object.cprefix}Last Name"
+                          = f.text_field :last_name, class: "form-control"
+
+                        .form-group
+                          = f.label :phone1
+                          = f.text_field :phone1, class: "form-control"
+
+                        .form-group
+                          = f.label :phone2
+                          = f.text_field :phone2, class: "form-control"
+
+                        .form-group
+                          = f.label :fax
+                          = f.text_field :fax, class: "form-control"
+
+                        .form-group
+                          = f.label :email
+                          = f.text_field :email, class: "form-control"
+
+                        .form-group
+                          = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                          = f.text_field :ein_or_ssn, class: "form-control"
+
+                        .form-group
+                          = f.label :postal_address, "Postal Address"
+                          = f.text_field :postal_address, class: "form-control"
+
+                        .form-group
+                          = label_tag 'City'
+                          = f.text_field :city, class: "form-control city"
+
+                        .form-group
+                          = label_tag 'State'
+                          = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+
+                        .form-group
+                          = f.label "Zip"
+                          = f.text_field :zip, class: 'zip form-control'
+
+                        .form-group
+                          = f.label :notes
+                          = f.text_area :notes, class: "form-control"
+                        .form-group
+                        .clearfix
+                        .form-group
+                          = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
       #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
         input.is_passed[type="hidden" value="#{@transaction_property.transaction_term.purchase_price.present? ? true : false}"]
