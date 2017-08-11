@@ -21,7 +21,7 @@ class ContactsController < ApplicationController
     elsif @contact.contact_type == "Personnel"
       @contact.role = @contact.per_role
     end
-
+    
     respond_to do |format|
       if @contact.save
         if params[:from_relinquishing_offeror].present?
@@ -31,6 +31,14 @@ class ContactsController < ApplicationController
             TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.first_name} #{@contact.last_name}")
           end
         end
+        if params[:from_transaction_broker]
+          transaction_property = TransactionProperty.find(params[:transaction_property_id])
+          transaction_property.update(broker_id: @contact.id)
+        elsif params[:from_transaction_attorney]
+          transaction_property = TransactionProperty.find(params[:transaction_property_id])
+          transaction_property.update(attorney_id: @contact.id)
+        end
+
         flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>"
         format.html { redirect_to edit_contact_path(@contact) }
         # format.html { redirect_to contacts_path }

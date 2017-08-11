@@ -187,8 +187,22 @@ class TransactionsController < ApplicationController
         redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
         return
       end
-
+      
       @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
+     
+      # broker and attorney for transaction property
+      if @transaction_property.broker_id.present?
+        @broker_contact = @transaction_property.broker_contact
+      else
+        @broker_contact = Contact.new
+      end
+
+      if @transaction_property.attorney_id.present?
+        @attorney_contact = @transaction_property.attorney_contact
+      else
+        @attorney_contact = Contact.new
+      end
+
       @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
     end
 
@@ -511,6 +525,19 @@ class TransactionsController < ApplicationController
       end
 
       @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
+
+      # broker and attorney for transaction property
+      if @transaction_property.broker_id.present?
+        @broker_contact = @transaction_property.broker_contact
+      else
+        @broker_contact = Contact.new
+      end
+
+      if @transaction_property.attorney_id.present?
+        @attorney_contact = @transaction_property.attorney_contact
+      else
+        @attorney_contact = Contact.new
+      end
     else
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
     end

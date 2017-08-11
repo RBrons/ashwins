@@ -1,84 +1,230 @@
-- if @transaction.persisted?
-  - options = %w(Active Completed InActive)
-- else
-  - options = [ 'Active']
+/ - if @transaction.persisted?
+/   - options = %w(Active Completed InActive)
+/ - else
+/   - options = [ 'Active']
 
-= form_for(@transaction, as: :transaction) do |f|
-  = hidden_field_tag :sub, params[:sub]
-  = hidden_field_tag :type, params[:type]
-  = hidden_field_tag :main_id, params[:main_id]
-  = hidden_field_tag :is_purchase, true
+/ = form_for(@transaction, as: :transaction) do |f|
+/   = hidden_field_tag :sub, params[:sub]
+/   = hidden_field_tag :type, params[:type]
+/   = hidden_field_tag :main_id, params[:main_id]
+/   = hidden_field_tag :is_purchase, true
 
-  - if @transaction.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
-      ul
-        - @transaction.errors.full_messages.each do |message|
-          li = transaction_message_filter(message)
+/   - if @transaction.errors.any?
+/     #error_explanation
+/       h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
+/       ul
+/         - @transaction.errors.full_messages.each do |message|
+/           li = transaction_message_filter(message)
 
-  .row
-    .col-md-12
-      .clearfix.margin-sm-top
-        input#cur_property_id[type="hidden" value="#{@transaction_property.id}"]
-        input#sub_tab_val[type="hidden" value="#{@sub_tab}"]
-        div[role="tabpanel"]
-          ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-            li.active[role="presentation"]
-                a#basic_info[href="#basic_info_section" role="tab" data-toggle="tab" aria-expanded="true"] Basic info
+.row
+  .col-md-12
+    .clearfix.margin-sm-top
+      input#cur_property_id[type="hidden" value="#{@transaction_property.id}"]
+      input#sub_tab_val[type="hidden" value="#{@sub_tab}"]
+      div[role="tabpanel"]
+        ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+          li.active[role="presentation"]
+              a#basic_info[href="#basic_info_section" role="tab" data-toggle="tab" aria-expanded="true"] Basic info
 
-            li[role="presentation"]
-                a#broker[href="#broker_section" role="tab" data-toggle="tab" aria-expanded="false"] Broker
+          li[role="presentation"]
+              a#broker[href="#broker_section" role="tab" data-toggle="tab" aria-expanded="false"] Broker
 
-            li[role="presentation"]
-                a#attorney[href="#attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Attorney
+          li[role="presentation"]
+              a#attorney[href="#attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Attorney
 
-          .tab-content
-            #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
-              .col-lg-6.col-md-6.col-sm-12.col-xs-12
-                h2.heading_without_padding_large
-                  | Basic Info
-                .clearfix
-                .form-group
-                  p
-                    - if @property.owner.present?
-                      - owner_name = @property.owner.name
-                    - else
-                      - owner_name = "No Owner"
+        .tab-content
+          #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-sm-12.col-xs-12
+              h2.heading_without_padding_large
+                | Basic Info
+              .clearfix
+              .form-group
+                p
+                  - if @property.owner.present?
+                    - owner_name = @property.owner.name
+                  - else
+                    - owner_name = "No Owner"
 
-                    = "<b>#{owner_name}</b> is selling <b>#{@property.try(:title) || 'Untitled'}</b> to your client <b>#{@transaction.try(:relinquishing_seller_first_name)} #{@transaction.try(:relinquishing_seller_last_name)}</b> for #{number_to_currency(get_sale_price(@transaction_property))}.".html_safe
-                / .form-group
-                  / label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
-                  / .clearfix
-                  / .pull-left
-                  /  = f.date_select :purchase_only_closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto transaction_purchase_only_closing_date", style: "#{'display: none;' if f.object.m_purchase_only_closing_date?}"
-                  /  = f.text_field :purchase_only_closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_purchase_only_closing_date?}"
-                  / .pull-right
-                  /  .pull-left
-                  /    label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                  /  .pull-right
-                  /    = f.check_box :m_purchase_only_closing_date, data: {class: 'transaction_purchase_only_closing_date'}, class: 'manually_date'
-
+                  = "<b>#{owner_name}</b> is selling <b>#{@property.try(:title) || 'Untitled'}</b> to your client <b>#{@transaction.try(:relinquishing_seller_first_name)} #{@transaction.try(:relinquishing_seller_last_name)}</b> for #{number_to_currency(get_sale_price(@transaction_property))}.".html_safe
+              / .form-group
+                / label = "Closing Date of Relinquishing Sale #{require_field}".html_safe
                 / .clearfix
-                / .form-group.margin-sm-top
-                /  label = "Amount of QI Funds #{require_field}".html_safe
-                /  .input-group
-                /    .input-group-addon $
-                /    = f.text_field :purchase_only_qi_funds, class: 'form-control'
+                / .pull-left
+                /  = f.date_select :purchase_only_closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto transaction_purchase_only_closing_date", style: "#{'display: none;' if f.object.m_purchase_only_closing_date?}"
+                /  = f.text_field :purchase_only_closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_purchase_only_closing_date?}"
+                / .pull-right
+                /  .pull-left
+                /    label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                /  .pull-right
+                /    = f.check_box :m_purchase_only_closing_date, data: {class: 'transaction_purchase_only_closing_date'}, class: 'manually_date'
 
-                .clearfix
+              / .clearfix
+              / .form-group.margin-sm-top
+              /  label = "Amount of QI Funds #{require_field}".html_safe
+              /  .input-group
+              /    .input-group-addon $
+              /    = f.text_field :purchase_only_qi_funds, class: 'form-control'
+
+              / .clearfix
+              /   .form-group
+              /     = hidden_field_tag :seller_info, @transaction.try(:seller_info)
+              /     = hidden_field_tag :status_alert, "#{ params[:status_alert] || (f.object.status.present? ? nil : 'Purchase Pre LOI' )}"
+              /     = hidden_field_tag :transaction_klazz, @transaction.class.to_s
+              /     = f.hidden_field :transaction_main_id
+
+              / = f.hidden_field :purchaser_person_is, :value => f.object.purchaser_person_is?
+              / = f.hidden_field :rplmnt_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
+              / = f.hidden_field :replacement_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
+
+              / .form-group
+              /   = f.submit 'Save & Next', class: 'btn btn-primary next-prev save_next_in_step'
+
+          #broker_section.tab-pane.fade[role="tabpanel"]
+            .form-wrapper
+              - url = @broker_contact.persisted? ? contact_path(@broker_contact.id) : contacts_path
+              = form_for @broker_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
+                .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
+                  = f.hidden_field :contact_type, value: 'Personnel', readonly: true
+                  = f.hidden_field :per_role, value: 'Counter-Party Broker or Agent', readonly: true
+                  = hidden_field_tag 'from_transaction_broker', 'true'
+                  = hidden_field_tag 'transaction_property_id', @transaction_property.id
                   .form-group
-                    = hidden_field_tag :seller_info, @transaction.try(:seller_info)
-                    = hidden_field_tag :status_alert, "#{ params[:status_alert] || (f.object.status.present? ? nil : 'Purchase Pre LOI' )}"
-                    = hidden_field_tag :transaction_klazz, @transaction.class.to_s
-                    = f.hidden_field :transaction_main_id
+                    .heading_blue.radio-inline
+                      span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                      span.margin-md-left Individual
+                    .heading_blue.radio-inline
+                      span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                      span.margin-md-left Entity
+                  .form-group.company-detail style=(f.object.is_company ? '' : 'display: none')
+                    = f.label :company_name, "Company Name"
+                    .row
+                      .col-md-8
+                        = f.text_field :company_name, class: "form-control"
+                      .col-md-4
+                        = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
+                  .form-group
+                    = f.label :first_name, "#{f.object.cprefix}First Name"
+                    = f.text_field :first_name, class: "form-control"
 
-                = f.hidden_field :purchaser_person_is, :value => f.object.purchaser_person_is?
-                = f.hidden_field :rplmnt_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
-                = f.hidden_field :replacement_purchaser_entity_id, :value => f.object.relinquishing_seller_entity_id
+                  .form-group
+                    = f.label :last_name, "#{f.object.cprefix}Last Name"
+                    = f.text_field :last_name, class: "form-control"
 
-                / .form-group
-                /   = f.submit 'Save & Next', class: 'btn btn-primary next-prev save_next_in_step'
+                  .form-group
+                    = f.label :phone1
+                    = f.text_field :phone1, class: "form-control"
 
-            #broker_section.tab-pane.fade[role="tabpanel"]
+                  .form-group
+                    = f.label :phone2
+                    = f.text_field :phone2, class: "form-control"
 
-            #attorney_section.tab-pane.fade[role="tabpanel"]
+                  .form-group
+                    = f.label :fax
+                    = f.text_field :fax, class: "form-control"
+
+                  .form-group
+                    = f.label :email
+                    = f.text_field :email, class: "form-control"
+
+                  .form-group
+                    = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                    = f.text_field :ein_or_ssn, class: "form-control"
+
+                  .form-group
+                    = f.label :postal_address, "Postal Address"
+                    = f.text_field :postal_address, class: "form-control"
+
+                  .form-group
+                    = label_tag 'City'
+                    = f.text_field :city, class: "form-control city"
+
+                  .form-group
+                    = label_tag 'State'
+                    = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+
+                  .form-group
+                    = f.label "Zip"
+                    = f.text_field :zip, class: 'zip form-control'
+
+                  .form-group
+                    = f.label :notes
+                    = f.text_area :notes, class: "form-control"
+                  .form-group
+                  .clearfix
+                  .form-group
+                    = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          
+          #attorney_section.tab-pane.fade[role="tabpanel"]
+            .form-wrapper
+              - url = @attorney_contact.persisted? ? contact_path(@attorney_contact.id) : contacts_path
+              = form_for @attorney_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
+                .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
+                  = f.hidden_field :contact_type, value: 'Personnel', readonly: true
+                  = f.hidden_field :per_role, value: 'Counter-Party Legal', readonly: true
+                  = hidden_field_tag 'from_transaction_attorney', 'true'
+                  = hidden_field_tag 'transaction_property_id', @transaction_property.id
+                  .form-group
+                    .heading_blue.radio-inline
+                      span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                      span.margin-md-left Individual
+                    .heading_blue.radio-inline
+                      span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                      span.margin-md-left Entity
+                  .form-group.company-detail style=(f.object.is_company ? '' : 'display: none')
+                    = f.label :company_name, "Company Name"
+                    .row
+                      .col-md-8
+                        = f.text_field :company_name, class: "form-control"
+                      .col-md-4
+                        = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
+                  .form-group
+                    = f.label :first_name, "#{f.object.cprefix}First Name"
+                    = f.text_field :first_name, class: "form-control"
+
+                  .form-group
+                    = f.label :last_name, "#{f.object.cprefix}Last Name"
+                    = f.text_field :last_name, class: "form-control"
+
+                  .form-group
+                    = f.label :phone1
+                    = f.text_field :phone1, class: "form-control"
+
+                  .form-group
+                    = f.label :phone2
+                    = f.text_field :phone2, class: "form-control"
+
+                  .form-group
+                    = f.label :fax
+                    = f.text_field :fax, class: "form-control"
+
+                  .form-group
+                    = f.label :email
+                    = f.text_field :email, class: "form-control"
+
+                  .form-group
+                    = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                    = f.text_field :ein_or_ssn, class: "form-control"
+
+                  .form-group
+                    = f.label :postal_address, "Postal Address"
+                    = f.text_field :postal_address, class: "form-control"
+
+                  .form-group
+                    = label_tag 'City'
+                    = f.text_field :city, class: "form-control city"
+
+                  .form-group
+                    = label_tag 'State'
+                    = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+
+                  .form-group
+                    = f.label "Zip"
+                    = f.text_field :zip, class: 'zip form-control'
+
+                  .form-group
+                    = f.label :notes
+                    = f.text_area :notes, class: "form-control"
+                  .form-group
+                  .clearfix
+                  .form-group
+                    = f.submit 'Save', class: 'btn btn-sm btn-primary'
