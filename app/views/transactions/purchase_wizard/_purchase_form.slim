@@ -81,6 +81,9 @@
 
           #broker_section.tab-pane.fade[role="tabpanel"]
             .form-wrapper
+              input.form_submit_mode[type="hidden" value="#{@broker_contact.persisted? ? 'edit' : 'create'}"]
+              input.is_company[type="hidden" value="#{@broker_contact.is_company}"]
+
               - url = @broker_contact.persisted? ? contact_path(@broker_contact.id) : contacts_path
               = form_for @broker_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
                 .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
@@ -156,6 +159,9 @@
           
           #attorney_section.tab-pane.fade[role="tabpanel"]
             .form-wrapper
+              input.form_submit_mode[type="hidden" value="#{@attorney_contact.persisted? ? 'edit' : 'create'}"]
+              input.is_company[type="hidden" value="#{@attorney_contact.is_company}"]
+
               - url = @attorney_contact.persisted? ? contact_path(@attorney_contact.id) : contacts_path
               = form_for @attorney_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
                 .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
