@@ -13,5 +13,7 @@
     == render 'properties/photo_gallery'
   - elsif params[:type_is] == 'survey'
     == render 'properties/survey'
+  - elsif params[:type_is] == 'map'
+    == render 'properties/map'
   - else
     == render 'properties/basic_info_form'

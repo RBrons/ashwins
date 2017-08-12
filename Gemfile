@@ -83,8 +83,10 @@ gem 'figaro'
 
 gem 'cloudinary'
 
+gem 'geocoder'
+
 group :development, :test do
-  gem 'rspec-rails'  
+  gem 'rspec-rails'
 end
 
 group :development do
