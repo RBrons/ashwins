@@ -45,6 +45,13 @@ class PropertiesController < ApplicationController
   # GET /properties/1/edit
   def edit
     @property.ostatus = @property.ownership_status
+
+    @latLng = @property.latLng
+    if !@latLng.nil?
+      @latitude = @latLng[0]
+      @longitude = @latLng[1]
+    end
+
     if !@property.owner_person_is.nil?
       @property.owner_entity_id_indv = @property.owner_entity_id if @property.owner_person_is
     end

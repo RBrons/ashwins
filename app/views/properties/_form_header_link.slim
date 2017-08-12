@@ -1,5 +1,6 @@
 - if params[:id]
     = link_to 'Basic Info', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'basic_info')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'basic_info' || params[:type_is].blank?} #{'disabled' unless params[:id]}"
+    = link_to 'Map', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'map')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'map'} #{'disabled' unless params[:id]}"
     = link_to 'Photo Gallery', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'photo_gallery')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'photo_gallery'} #{'disabled' unless params[:id]}"
     = link_to 'County Tax', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'county_tax')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'county_tax'} #{'disabled' unless params[:id]}"
     = link_to 'Tenant', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'tenant')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'tenant'} #{'disabled' unless params[:id]}"

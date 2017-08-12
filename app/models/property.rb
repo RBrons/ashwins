@@ -179,6 +179,29 @@ class Property < ApplicationRecord
     "#{location_city}, #{location_state}, #{location_street_address}, #{location_county}"
   end
 
+  def formatted_address
+    [self.street_address_with_suffix, self.location_city, self.location_state, self.location_county].compact.join(', ')
+  end
+
+  def latLng
+    geoData = Geocoder.search(self.formatted_address)
+
+    if geoData.present? && geoData[0].present? && geoData[0].data.present? && geoData[0].data["geometry"].present?
+
+      if geoData[0].data["geometry"]["bounds"].present?
+        lat = (geoData[0].data["geometry"]["bounds"]["northeast"]["lat"]+geoData[0].data["geometry"]["bounds"]["southwest"]["lat"])/2
+        lng = (geoData[0].data["geometry"]["bounds"]["northeast"]["lng"]+geoData[0].data["geometry"]["bounds"]["southwest"]["lng"])/2
+      elsif geoData[0].data["geometry"]["location"].present?
+        lat = geoData[0].data["geometry"]["location"]["lat"]
+        lng = geoData[0].data["geometry"]["location"]["lng"]
+      end
+
+      return [lat, lng]
+    else
+      return nil
+    end
+  end
+
   def self.resources_url
     Rails.application.routes.url_helpers.admin_properties_path
   end

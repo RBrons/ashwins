@@ -1,0 +1,44 @@
+.col-md-12
+  - if !@latLng.nil?
+    #map_canvas
+  - else
+    p Map is not available for this property
+
+- if !@latLng.nil?
+    javascript:
+      var mapOptions = {
+        zoom: 7,
+        center: new google.maps.LatLng(#{@latitude}, #{@longitude}),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+
+        mapTypeControl: false,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.BOTTOM_CENTER
+        },
+        panControl: false,
+        panControlOptions: {
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.LARGE,
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        scaleControl: false,
+        scaleControlOptions: {
+            position: google.maps.ControlPosition.TOP_LEFT
+        },
+        streetViewControl: true,
+        streetViewControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP
+        }
+      };
+
+      var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+      var marker = new google.maps.Marker({
+        position: {lat: #{@latitude}, lng: #{@longitude}},
+        map: map,
+        title: "Property Map"
+      });
