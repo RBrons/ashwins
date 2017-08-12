@@ -729,7 +729,8 @@ $ ->
           else
             $(document).find('#relinquishing_property_rat_race').val('')
 
-          $('#sale_buy_step_tab a#letter_of_intent').click()
+          # $('#sale_buy_step_tab a#letter_of_intent').click()
+          window.location.reload()
         else
           $.notify "Failed", "error"
 
