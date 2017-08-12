@@ -18,7 +18,7 @@
               #NavHeader{:style => "overflow: visible;"}
                 %div{:style => "min-height:22px;"}
                   .pull-right
-                    .pull-right{:style => "display:inline;"}
+                    .margin-sm-left.pull-right{:style => "display:inline;"}
                       = link_to "Logout", destroy_user_session_path, method: :delete,  :class => "pull-right logout"
                     .signed_in.pull-right
                       %b{:style => "color: #808080; display:inline;"} Signed in as:
