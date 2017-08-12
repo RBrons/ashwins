@@ -152,9 +152,71 @@
 
               .tab-content
                 #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
-                  h2.heading_without_padding_large = "Relinquishing Purchaser".html_safe
-                  input#relinquishing_purchaser_name.form-control[type="text" value="#{ (@relinquishing_purchaser.try(:is_company) ? @relinquishing_purchaser.company_name : @relinquishing_purchaser.try(:first_name).to_s + ' ' + @relinquishing_purchaser.try(:last_name).to_s) }" style="#{ 'display: none' if !@relinquishing_purchaser.present? }" readonly]
                   input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.seller_name}"]
+                  h2.heading_without_padding_large = "Relinquishing Purchaser".html_safe
+                  - if !@relinquishing_purchaser.present?
+                    P No relinquishing purchaser yet
+                  - else
+                    = form_for @relinquishing_purchaser, remote: true, :html => {:'data-type' => 'json'} do |f|
+                      .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
+                        - if f.object.is_company
+                          .form-group
+                            label.control-label Company Name
+                            input#relinquishing_purchaser_company_name.form-control[type="text" value="#{ f.object.company_name }" style="#{ 'display: none' if !f.object.is_company }" readonly]
+                          .form-group
+                            = f.label :first_name, "#{f.object.cprefix}First Name"
+                            = f.text_field :first_name, class: "form-control"
+                          .form-group
+                            = f.label :last_name, "#{f.object.cprefix}Last Name"
+                            = f.text_field :last_name, class: "form-control"
+                        - else  
+                          .form-group
+                            label.control-label Name
+                            input#relinquishing_purchaser_name.form-control[type="text" value="#{ f.object.first_name + ' ' + f.object.last_name }" readonly]
+                          
+                        .form-group
+                          = f.label :phone1
+                          = f.text_field :phone1, class: "form-control"
+
+                        .form-group
+                          = f.label :phone2
+                          = f.text_field :phone2, class: "form-control"
+
+                        .form-group
+                          = f.label :fax
+                          = f.text_field :fax, class: "form-control"
+
+                        .form-group
+                          = f.label :email
+                          = f.text_field :email, class: "form-control"
+
+                        .form-group
+                          = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                          = f.text_field :ein_or_ssn, class: "form-control"
+
+                        .form-group
+                          = f.label :postal_address, "Postal Address"
+                          = f.text_field :postal_address, class: "form-control"
+
+                        .form-group
+                          = label_tag 'City'
+                          = f.text_field :city, class: "form-control city"
+
+                        .form-group
+                          = label_tag 'State'
+                          = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+
+                        .form-group
+                          = f.label "Zip"
+                          = f.text_field :zip, class: 'zip form-control'
+
+                        .form-group
+                          = f.label :notes
+                          = f.text_area :notes, class: "form-control"
+                        .form-group
+                        .clearfix
+                        .form-group
+                          = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
                 #broker_section.tab-pane.fade[role="tabpanel"]
                   .form-wrapper
