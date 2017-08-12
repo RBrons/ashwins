@@ -76,22 +76,9 @@ CLIENT_PARTICIPANT_ROLE = ["Principal",
   def is_company?
     self.is_company
   end
-
-  def principal user_id
-    principal = ''
-    seller_contact_ids = Property.where(ownership_status: "Prospective Purchase", user_id: user_id).pluck(:owner_entity_id)
-    if seller_contact_ids.include?(self.id)
-      principal += 'Seller'
-    end
-    buyer_contact_ids = TransactionPropertyOffer.all().pluck(:relinquishing_purchaser_contact_id)
-    if buyer_contact_ids.include?(self.id)
-      principal += ' ' + 'Buyer'
-    end
-    return principal
-  end
-
+    
   private
-
+  
   def company_name_check
     if self.is_company? && !self.company_name.present?
       errors.add(:company_name, ' can\'t be blank!')

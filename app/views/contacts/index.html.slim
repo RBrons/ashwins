@@ -33,7 +33,15 @@ table#data_table
           = link_to 'Show', contact_path(contact), class: show_xs
           = link_to 'Delete', contact_path(contact), data: {:confirm => 'Are you sure?'}, :method => :delete, class: delete_xs
         td
-          span.label.label-info = contact.principal(current_user.id)
+          - principals = get_principals(contact.id, current_user.id)
+          - if principals[0].length > 0
+            span.label.label-info Sellers:
+            - principals[0].each do |principal_seller|
+              p = principal_seller
+          - if principals[1].length > 0
+            span.label.label-danger Buyers:
+            - principals[1].each do |principal_buyer|
+              p = principal_buyer
         td
           = (contact.try(:company_name) || "") + " " + (contact.try(:legal_ending) || "")
         td
