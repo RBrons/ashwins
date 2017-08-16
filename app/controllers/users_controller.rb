@@ -29,12 +29,13 @@ class UsersController < ApplicationController
       elsif params[:contact_type] == 'individual'
         @user.first_name = params[:individual_first_name]
         @user.last_name = params[:individual_last_name]
+        @user.user_type = params[:user_type]
         visitor = @user.first_name
       else
         render json: {status: false}    
       end  
       @user.save
-      render json: {status: true, visitor: visitor}
+      render json: {status: true, visitor: visitor, user_type: @user.user_type}
     else
       render json: {status: false}  
     end

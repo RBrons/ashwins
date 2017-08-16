@@ -68,6 +68,14 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
             h4 Individual Setup
             form.create_contact
                 input[type="hidden" name="contact_type" value="individual"]
+                .form-group
+                    input[type="hidden" name="user_type" value="Non-Attorney Fiduciary"]
+                    .checkbox
+                        label
+                            input.attorney_user[type="checkbox"] Are you an attorney?
+                    .checkbox
+                        label
+                            input.fiduciary_user[type="checkbox"] Do you plan to use 1031fun.com primarily in fiduciary capacity?
                 div.form-group
                     label.form-label Please enter your first and last name:
                     div.row

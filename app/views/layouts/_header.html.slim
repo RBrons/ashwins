@@ -4,13 +4,13 @@ input#google_api_app_id[type="hidden" value="#{ENV['GOOGLE_API_APP_ID']}"]
   nav
     ul.nav.navbar-nav.navbar-left
       li
-        = link_to 'Transactions<span class="fa fa-plus-circle" id="add-transaction"></span>'.html_safe, transactions_path, class: "#{@current_page == 'project' ? 'active' : ''}"
+        = link_to "#{current_user.user_type != "Non-Attorney Fiduciary" ? "Clients" : "Holdings"} <span class='fa fa-plus-circle' id='add-client'></span>".html_safe, clients_path, class: "#{@current_page == 'client' ? 'active' : ''} client-module"
       li
-        = link_to 'Properties<span class="fa fa-plus-circle" id="add-property"></span>'.html_safe, properties_path, class: "#{@current_page == 'property' ? 'active' : ''}"
+        = link_to 'Contacts<span class="fa fa-plus-circle" id="add-contact"></span>'.html_safe, contacts_path, class: "#{@current_page == 'contacts' ? 'active' : ''} contact-module"
       li
-        = link_to 'Clients<span class="fa fa-plus-circle" id="add-client"></span>'.html_safe, clients_path, class: "#{@current_page == 'client' ? 'active' : ''}"
+        = link_to 'Properties<span class="fa fa-plus-circle" id="add-property"></span>'.html_safe, properties_path, class: "#{@current_page == 'property' ? 'active' : ''} property-module"
       li
-        = link_to 'Contacts<span class="fa fa-plus-circle" id="add-contact"></span>'.html_safe, contacts_path, class: "#{@current_page == 'contacts' ? 'active' : ''}"
+        = link_to 'Transactions<span class="fa fa-plus-circle" id="add-transaction"></span>'.html_safe, transactions_path, class: "#{@current_page == 'project' ? 'active' : ''} transaction-module"
       /li
         = link_to 'Reports', 'javascript:;', class: "#{@current_page == 'crucial personnel' ? 'active' : ''}", "data-toggle" => "dropdown" 
         ul.dropdown-menu

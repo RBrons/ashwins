@@ -19,7 +19,15 @@ $ ->
     e.preventDefault()
     $(this).closest('.modal').modal('hide')
     $(document).find($(this).data('target-modal')).modal('show')
-  
+
+  $(document).find('.attorney_user, .fiduciary_user').on 'click', ->
+    if $('.attorney_user').is(':checked')
+      $('form.create_contact input[name="user_type"]').val('Attorney')
+    else if $('.fiduciary_user').is(':checked')
+      $('form.create_contact input[name="user_type"]').val('Normal User')
+    else
+      $('form.create_contact input[name="user_type"]').val('Non-Attorney Fiduciary')
+    
   $(document).find('.create_contact').submit (e) ->
     e.preventDefault()
     back_modal = $(this).closest('.md-contact').attr('id')
@@ -34,6 +42,9 @@ $ ->
           $(document).find('.md-contact').modal('hide')
           $(document).find('#md-greeting .visitor').text(data.visitor)
           $(document).find('#md-greeting .go-back').data('target-modal', '#' + back_modal)
+          if data.user_type == 'Non-Attorney Fiduciary'
+            $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
+            console.log()
           $(document).find('#md-greeting').modal('show')
         else
           $.notify "Failed", "error"
