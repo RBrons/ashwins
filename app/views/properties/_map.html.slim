@@ -1,13 +1,15 @@
-.col-md-12
-  - if !@latLng.nil?
-    #map_canvas
-  - else
-    p Map is not available for this property
+- if @latLng.nil?
+  p Map is not available for this property
+- else
+  .col-md-6
+    #map_canvas_1.map_canvas
+  .col-md-6
+    #map_canvas_2.map_canvas
 
 - if !@latLng.nil?
     javascript:
-      var mapOptions = {
-        zoom: 7,
+      var mapOptions1 = {
+        zoom: 6,
         center: new google.maps.LatLng(#{@latitude}, #{@longitude}),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
 
@@ -35,10 +37,46 @@
         }
       };
 
-      var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+      var mapOptions2 = {
+        zoom: 16,
+        center: new google.maps.LatLng(#{@latitude}, #{@longitude}),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
 
-      var marker = new google.maps.Marker({
+        mapTypeControl: false,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.BOTTOM_CENTER
+        },
+        panControl: false,
+        panControlOptions: {
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.LARGE,
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        scaleControl: false,
+        scaleControlOptions: {
+            position: google.maps.ControlPosition.TOP_LEFT
+        },
+        streetViewControl: true,
+        streetViewControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP
+        }
+      };
+
+      var map1 = new google.maps.Map(document.getElementById("map_canvas_1"), mapOptions1);
+      var map2 = new google.maps.Map(document.getElementById("map_canvas_2"), mapOptions2);
+
+      var marker1 = new google.maps.Marker({
         position: {lat: #{@latitude}, lng: #{@longitude}},
-        map: map,
+        map: map1,
+        title: "Property Map"
+      });
+
+      var marker2 = new google.maps.Marker({
+        position: {lat: #{@latitude}, lng: #{@longitude}},
+        map: map2,
         title: "Property Map"
       });
