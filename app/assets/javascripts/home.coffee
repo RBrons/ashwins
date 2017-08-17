@@ -44,7 +44,8 @@ $ ->
           $(document).find('#md-greeting .go-back').data('target-modal', '#' + back_modal)
           if data.user_type == 'Non-Attorney Fiduciary'
             $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
-            console.log()
+          else
+            $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
           $(document).find('#md-greeting').modal('show')
         else
           $.notify "Failed", "error"
