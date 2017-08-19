@@ -51,22 +51,6 @@ class User < ApplicationRecord
   end
 
   # Views
-  def get_first_name
-    if business_name.nil?
-      "#{first_name}"
-    else
-      "#{business_contact_first_name}"
-    end
-  end
-
-  def get_last_name
-    if business_name.nil?
-      "#{last_name}"
-    else
-      "#{business_contact_last_name}"
-    end
-  end
-
   def get_user_type
     case user_type
       when 'Attorney'
@@ -118,8 +102,8 @@ class User < ApplicationRecord
       { show: 'User Role', call: 'get_user_type' },
       { show: 'Law Firm', call: 'get_law_firm' },
       { show: 'Business', call: 'business_name' },
-      { show: 'First Name', call: 'get_first_name' },
-      { show: 'Last Name', call: 'get_last_name' },
+      { show: 'First Name', call: 'first_name' },
+      { show: 'Last Name', call: 'last_name' },
       { show: 'Email', call: 'email' },
       { show: 'Sign up', call: 'created_at_to_string' },
       { show: 'Make Admin', call: 'unset_link' },

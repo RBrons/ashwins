@@ -30,8 +30,6 @@ ActiveRecord::Schema.define(version: 20170818183347) do
 
   create_table "attorney_firms", force: :cascade do |t|
     t.string "name"
-    t.string "first_name"
-    t.string "last_name"
   end
 
   create_table "clients", force: :cascade do |t|

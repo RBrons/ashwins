@@ -30,9 +30,9 @@ class UsersController < ApplicationController
             if params[:firm_name].present?
               if AttorneyFirm.exists?(:name => params[:firm_name])
                 firm = AttorneyFirm.where(:name => params[:firm_name]).first
-                firm.update(:name => params[:firm_name], :first_name => params[:firm_first_name], :last_name => params[:firm_last_name])
+                firm.update(:name => params[:firm_name])
               else
-                firm = AttorneyFirm.create(:name => params[:firm_name], :first_name => params[:firm_first_name], :last_name => params[:firm_last_name])
+                firm = AttorneyFirm.create(:name => params[:firm_name])
               end
               @user.attorney_firm_id = firm.id
             else
@@ -40,34 +40,28 @@ class UsersController < ApplicationController
               return render json: {status: false}
             end
           end
+          @user.first_name = params[:first_name]
+          @user.last_name = params[:last_name]
           @user.business_name = nil
-          @user.business_contact_first_name = nil
-          @user.business_contact_last_name = nil
-          @user.first_name = nil
-          @user.last_name = nil
 
           @user.user_type = params[:user_type]
                     
           @user.save
-          visitor = @user.attorney_firm.contact_name + ' from ' + @user.attorney_firm.name
+          visitor = @user.first_name + ' from ' + @user.attorney_firm.name
         else
           @user.business_name = params[:business_name]
-          @user.business_contact_first_name = params[:business_contact_first_name]
-          @user.business_contact_last_name = params[:business_contact_last_name]
+          @user.first_name = params[:first_name]
+          @user.last_name = params[:last_name]
           @user.attorney_firm_id = nil
-          @user.first_name = nil
-          @user.last_name = nil
           @user.user_type = params[:user_type]
 
           @user.save
-          visitor = @user.business_contact_first_name + ' from ' + @user.business_name
+          visitor = @user.first_name + ' from ' + @user.business_name
         end
       elsif params[:contact_type] == 'individual'
-        @user.first_name = params[:individual_first_name]
-        @user.last_name = params[:individual_last_name]
+        @user.first_name = params[:first_name]
+        @user.last_name = params[:last_name]
         @user.business_name = nil
-        @user.business_contact_first_name = nil
-        @user.business_contact_last_name = nil
         @user.attorney_firm_id = nil
 
         @user.user_type = params[:user_type]

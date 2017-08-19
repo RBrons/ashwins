@@ -22,12 +22,8 @@ $ ->
   $(document).find('#md-user-role .go-next').on 'click', -> 
     if user_role == 'Attorney' && $(this).data('target-modal') == '#md-business'
       $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', false)
-      if $('.existing_firm option:selected').text() == "Add"
-        $('.law-firm-detail .new_firm_field input').prop('disabled', false)
-        $('.law-firm-detail .new_firm_field').show()
-      else
-        $('.law-firm-detail .new_firm_field input').prop('disabled', 'disabled')
-        $('.law-firm-detail .new_firm_field').hide()
+      $(document).find('#md-business .law-firm-detail .new_firm_field').hide()
+      $(document).find('#md-business .shared-field').hide()
       $(document).find('#md-business .law-firm-detail').removeClass('hide')
       
       $(document).find('#md-business .business-detail input').prop('disabled', 'disabled')
@@ -38,7 +34,11 @@ $ ->
 
       $(document).find('#md-business .business-detail input').prop('disabled', false)
       $(document).find('#md-business .business-detail').removeClass('hide')
-
+      $(document).find('#md-business .shared-field').show()
+    # clear form fields
+    $(document).find('form.create_contact select.existing_firm').val($(document).find('form.create_contact select.existing_firm option:first').val())
+    $(document).find('form.create_contact input[type="text"]').val('')
+    
   $(document).find('.go-back, .go-next').on 'click', (e) ->
     e.preventDefault()
     $(this).closest('.modal').modal('hide')
@@ -57,13 +57,14 @@ $ ->
       user_role = 'Non-Attorney Fiduciary'
       $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
   
-  $(document).find('select.existing_firm').on 'change', ->
+  $(document).find('select.existing_firm').on 'click', ->
     if $('.existing_firm option:selected').text() == "Add"
       $('.law-firm-detail .new_firm_field input').prop('disabled', false)
       $('.law-firm-detail .new_firm_field').show()
     else
       $('.law-firm-detail .new_firm_field input').prop('disabled', 'disabled')
       $('.law-firm-detail .new_firm_field').hide()
+    $(document).find('#md-business .shared-field').show()
 
   $(document).find('.create_contact').submit (e) ->
     e.preventDefault()
