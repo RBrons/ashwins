@@ -24,6 +24,7 @@ class HomeController < ApplicationController
     @show_initial_sign_in_modal &&= !current_user.contact_info_entered?
 
     @greeting = DefaultValue.where(entity_name: 'Greeting').first.present? ? DefaultValue.where(entity_name: 'Greeting').first.value : ''
+    @firms = AttorneyFirm.all()
 
     @back_path = URI(request.referer || '').path
     if @back_path == '/users/sign_in'

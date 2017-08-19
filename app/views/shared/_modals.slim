@@ -67,5 +67,32 @@
             = link_to '<i class="lnr lnr-cart"></i>'.html_safe, new_contact_path(contact_type: 'company'), class: "padding-lg"
             span Company
 
-
-        
+/! Clients Modal For Adding Entities on Initial Sign Up Sequence
+#md-add-initial-client.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
+  .modal-dialog.modal-lg[role="document"]
+    .modal-content
+      .modal-header
+        button.close[type="button" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#md-greeting"]
+          span.lnr.lnr-cross
+        h4.modal-title Add Client
+      .modal-body
+        ul.nav.navbar-nav
+          li
+            = link_to image_tag('icons/individual.svg', class: 'icon'), "/entities/new?type=Individual", class: 'padding-md'
+            span Individual
+          li
+            = link_to image_tag('icons/sole-proprietorship.svg', class: 'icon'), "/entities/new?type=Sole Proprietorship", class: 'padding-md'
+            span Sole Proprietorship
+        ul.nav.navbar-nav
+          li
+            = link_to image_tag('icons/llc.svg', class: 'icon'), "/entities/new?type=LLC", class: 'padding-md'
+            span LLC
+          li
+            = link_to image_tag('icons/llp.svg', class: 'icon'), "/entities/new?type=LLP", class: 'padding-md'
+            span LLP
+          li
+            = link_to image_tag('icons/limited-partnership.svg', class: 'icon'), "/entities/new?type=Limited Partnership", class: 'padding-md'
+            span Limited Partnership
+          li
+            = link_to image_tag('icons/corporation.svg', class: 'icon'), "/entities/new?type=Corporation", class: 'padding-md'
+            span Corporation

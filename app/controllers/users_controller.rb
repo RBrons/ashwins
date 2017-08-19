@@ -22,22 +22,55 @@ class UsersController < ApplicationController
     visitor = ''
     if request.post?
       if params[:contact_type] == 'business'
+        if params[:firm_id].present?
+          if params[:firm_id].to_i != 0
+            @user.attorney_firm_id = params[:firm_id].to_i
+          else
+            # Save new Attorney Firm.
+            if params[:firm_name].present?
+              if AttorneyFirm.exists?(:name => params[:firm_name])
+                firm = AttorneyFirm.where(:name => params[:firm_name]).first
+                firm.update(:name => params[:firm_name], :first_name => params[:firm_first_name], :last_name => params[:firm_last_name])
+              else
+                firm = AttorneyFirm.create(:name => params[:firm_name], :first_name => params[:firm_first_name], :last_name => params[:firm_last_name])
+              end
+              @user.attorney_firm_id = firm.id
+            else
+              # Big issue
+              return render json: {status: false}
+            end
+          end
+          @user.business_name = nil
+          @user.business_contact_first_name = nil
+          @user.business_contact_last_name = nil
+          @user.user_type = params[:user_type]
+                    
+          @user.save
+          visitor = @user.attorney_firm.contact_name + ' from ' + @user.attorney_firm.name
+        else
           @user.business_name = params[:business_name]
           @user.business_contact_first_name = params[:business_contact_first_name]
           @user.business_contact_last_name = params[:business_contact_last_name]
+          @user.attorney_firm_id = nil
+          @user.user_type = params[:user_type]
+
+          @user.save
           visitor = @user.business_contact_first_name + ' from ' + @user.business_name
+        end
       elsif params[:contact_type] == 'individual'
         @user.first_name = params[:individual_first_name]
         @user.last_name = params[:individual_last_name]
         @user.user_type = params[:user_type]
+
+        @user.save
         visitor = @user.first_name
       else
-        render json: {status: false}    
+        return render json: {status: false}
       end  
-      @user.save
-      render json: {status: true, visitor: visitor, user_type: @user.user_type}
+      
+      return render json: {status: true, visitor: visitor, user_type: @user.user_type}
     else
-      render json: {status: false}  
+      return render json: {status: false}  
     end
 
   end

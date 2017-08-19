@@ -1,7 +1,7 @@
 / Landing Page
 input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
-#md-landing.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
-    .modal-dialog.modal-extra-lg[role="document"]
+#md-landing.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
         .modal-header
             button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
                 span.lnr.lnr-cross
@@ -24,58 +24,89 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
 
 / Initial Sign in Modal 
 input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]
-#md-welcome.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
-    .modal-dialog.modal-extra-lg[role="document"]
+#md-welcome.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
         .modal-body
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 Welcome to 1031fun.com
             p 
                 | Is this account for a 
-                a.business_modal.underline-red[href='#'] business
+                a.business_modal.underline-red[href='#'] business(including law firm)
                 | &nbsp;or&nbsp;
                 a.individual_modal.underline-red[href='#'] individual?
 
-#md-business.md-contact.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
-    .modal-dialog.modal-extra-lg[role="document"]
+#md-user-role.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
+        .modal-body
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h3 Welcome to 1031fun.com
+            div.form-group
+                .checkbox
+                    label
+                        input.attorney_user[type="checkbox"] Are you an attorney or working in a support role with an attorney or law firm?
+                .checkbox
+                    label
+                        input.fiduciary_user[type="checkbox"] Do you plan to use 1031fun.com primarily in fiduciary capacity?
+            button.btn.btn-default[data-toggle="modal" data-target="#md-welcome" data-dismiss="modal"] Back
+            button.go-next.btn.btn-danger[data-target-modal=""] Next
+
+#md-business.md-contact.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
         .modal-body
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 Welcome to 1031fun.com
             h4 Business Setup
             form.create_contact
                 input[type="hidden" name="contact_type" value="business"]
-                div.form-group
-                    label.form-label Please enter the name of your business:
-                    div.row
-                        div.col-md-2.col-xs-6
-                            input.form-control[name="business_name" type="text" required]
-                div.form-group
-                    label.form-label Please enter the first and last name of the contact person for this business:
-                    div.row
-                        div.col-md-2.col-xs-6
-                            input.form-control[name="business_contact_first_name" type="text" required]
-                        div.col-md-2.col-xs-6
-                            input.form-control[name="business_contact_last_name" type="text" required]
+                input[type="hidden" name="user_type"]
                 
-                button.go-back.btn.btn-default[data-target-modal="#md-welcome"] Back
+                .law-firm-detail
+                    div.form-group
+                        label.form-label Please enter the name of the law firm that you affiliated with:
+                        div.row
+                            div.col-md-2.col-xs-6
+                                select.existing_firm.form-control[name="firm_id"]
+                                    - @firms.each do |firm|
+                                        option[value="#{firm.id}"] = firm.name
+                                    option[value="0"] Other
+                            div.new_firm_field.col-md-2.col-xs-6[style=(@firms.empty? ? '' : 'display: none')]
+                                input.form-control.input[name="firm_name" type="text"]
+                    div.new_firm_field.form-group[ style=(@firms.empty? ? '' : 'display: none')]
+                        label.form-label Please enter your first and last name:
+                        div.row
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="firm_first_name" type="text" required disabled=(@firms.empty? ? 'false' : 'disabled')]
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="firm_last_name" type="text" required disabled=(@firms.empty? ? 'false' : 'disabled')]
+
+                .business-detail
+                    div.form-group
+                        label.form-label Please enter the name of the business that you affiliated with:
+                        div.row
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="business_name" type="text" required]
+                                
+                    div.form-group
+                        label.form-label Please enter your first and last name:
+                        div.row
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="business_contact_first_name" type="text" required]
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="business_contact_last_name" type="text" required]
+                
+                a.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
                 button.btn.btn-danger Save
                 
 
-#md-individual.md-contact.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
-    .modal-dialog.modal-extra-lg[role="document"]
+#md-individual.md-contact.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
         .modal-body
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 Welcome to 1031fun.com
             h4 Individual Setup
             form.create_contact
                 input[type="hidden" name="contact_type" value="individual"]
-                .form-group
-                    input[type="hidden" name="user_type" value="Non-Attorney Fiduciary"]
-                    .checkbox
-                        label
-                            input.attorney_user[type="checkbox"] Are you an attorney?
-                    .checkbox
-                        label
-                            input.fiduciary_user[type="checkbox"] Do you plan to use 1031fun.com primarily in fiduciary capacity?
+                input[type="hidden" name="user_type"]
                 div.form-group
                     label.form-label Please enter your first and last name:
                     div.row
@@ -84,20 +115,80 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                         div.col-md-2.col-xs-6
                             input.form-control[name="individual_last_name" type="text" required]
                 
-                button.go-back.btn.btn-default[data-target-modal="#md-welcome"] Back
+                button.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
                 button.btn.btn-danger Save
                 
-#md-greeting.modal.fade[tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static"]
-    .modal-dialog.modal-extra-lg[role="document"]
+#md-greeting.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
         .modal-body
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 
                 | Greetings 
                 span.visitor
             h4 Welcome to 1031fun.com
-            p = @greeting
+            p 1031fun is a web app designed o streamline Tax Deffered Exchanges utilizing IRC section 1031. To accomplish a 1031 Exchange, at minimum, it will be necessary to input three people or entities.
+            section.exchangor-wrapper
+                p 
+                    | (1) an Exchangor who will need to own at least one property (which we call a Purchased Property). The Exchangor will start out as a Seller but from the beginning will be able to search through properites to buy. The Exchangor will be listed in the 
+                    span.depends_on_user_role Clients 
+                    | &nbsp;List view.
+                p
+                    a.create-initial-client.text-danger[href="#"] Choose an Entity Type for your first Exchangor
+                p = "#{current_user.get_first_name} #{current_user.get_last_name}"
+                p 
+                    a.text-danger[href="#"] Create a property for your first Exchangor
+            section.relinquishing-purchaser-wrapper
+                p 
+                    | (2) a Relinquishing Purchaser who will purchase the property that the Exchangor sells. The Relinquishing Purchaser will be listed in the Contacts List View.    
+                p.text-danger
+                    | Will your first Relinquishing Purchaser be a 
+                    a.is_relinp_business.text-danger.underline-red[href="#"] business
+                    | &nbsp;or&nbsp;
+                    a.is_relinp_individual.text-danger.underline-red[href="#"] individual
+                form[action=""]
+                    input[type="hidden" name="contact[role]" value="Counter-Party"]
+                    input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+                    input[type="hidden" name="contact[is_company]" value="false"]
+                    
+                    div.form-group
+                        label.form-label Name your first Relinquishing Purchaser
+                        div.relinp-individual-detail.row
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="contact[first_name]" type="text"]
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="contact[last_name]" type="text"]
+                        div.relinp-business-detail.row[style="display: none"]
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="contact[company_name]" type="text"]
+            section.replacement-seller-wrapper
+                p
+                    | (3) A Replacement Seller who will need to own at least one property(which we call a Prospective Property). The Replacement Seller will also be listed in the Contact List View.
+                p.text-danger
+                    | Will your first Replacement Seller be a 
+                    a.is_repls_business.text-danger.underline-red[href="#"] business
+                    | &nbsp;or&nbsp;
+                    a.is_repls_individual.text-danger.underline-red[href="#"] individual
                 
+                form[action=""]
+                    input[type="hidden" name="contact[role]" value="Counter-Party"]
+                    input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+                    input[type="hidden" name="contact[is_company]" value="false"]
+
+                    div.form-group
+                        label.form-label Name your first Replacement Seller
+                        div.repls-individual-detail.row
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="contact[first_name]" type="text"]
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="contact[last_name]" type="text"]
+                        div.repls-business-detail.row[style="display: none"]
+                            div.col-md-2.col-xs-6
+                                input.form-control[name="contact[company_name]" type="text"]
+                p 
+                    a.text-danger[href="#"] Create a property for your first Replacement Seller
+
         .modal-footer
             a.go-back.btn.btn-danger.pull-left[href="#" data-target-modal=""] Back
+            a.btn.btn-warning.pull-left[data-dismiss="modal"] Skip This Step
             a#show_contact-modal.btn.btn-default.pull-right[href="#"] Create Your First Client
             a#show_demonstration.btn.btn-default.pull-right[href="#"] Demonstration Mode           
