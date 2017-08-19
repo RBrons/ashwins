@@ -65,6 +65,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                     div.row
                         div.col-md-2.col-xs-6
                             select.existing_firm.form-control[name="firm_id"]
+                                option 
                                 option[value="0"] Add
                                 - @firms.each do |firm|
                                     option[value="#{firm.id}"] = firm.name
