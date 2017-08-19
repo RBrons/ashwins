@@ -924,6 +924,7 @@ $ ->
       return false
 
   $("form.transaction-photo-gallery").on 'keydown', '.cap-rate-box input', (e)->
+    $(this).closest('.fields').find('.is_selected_property').iCheck('check')
     $(this).parents(".fields").find(".transaction-form-validation").hide()
 
   $("form.transaction-photo-gallery").on 'keydown', '.price-box input', (e)->
