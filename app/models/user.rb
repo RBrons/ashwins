@@ -8,6 +8,8 @@ class User < ApplicationRecord
 
   has_many :tenants
 
+  belongs_to :attorney_firm, foreign_key: :attorney_firm_id
+
   private
   def move_remove_entry_from_unregistered
     unregistered = Users::Unregistered.find_by(email: self.email)
@@ -65,6 +67,27 @@ class User < ApplicationRecord
     end
   end
 
+  def get_user_type
+    case user_type
+      when 'Attorney'
+        "A"
+      when 'Normal User'
+        "F"
+      when 'Non-Attorney Fiduciary'
+        "N"
+      else
+        ""
+    end
+  end
+
+  def get_law_firm
+    if !attorney_firm_id.nil?
+      return self.attorney_firm.name
+    else
+      return ""  
+    end
+  end
+
   def created_at_to_string
     created_at.to_string
   end
@@ -92,6 +115,8 @@ class User < ApplicationRecord
   def self.view_index_columns
     [
       # { show: 'Name', call: 'name' },
+      { show: 'User Role', call: 'get_user_type' },
+      { show: 'Law Firm', call: 'get_law_firm' },
       { show: 'Business', call: 'business_name' },
       { show: 'First Name', call: 'get_first_name' },
       { show: 'Last Name', call: 'get_last_name' },
