@@ -60,39 +60,30 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                 input[type="hidden" name="contact_type" value="business"]
                 input[type="hidden" name="user_type"]
                 
-                .law-firm-detail
-                    div.form-group
-                        label.form-label Please enter the name of the law firm that you affiliated with:
-                        div.row
-                            div.col-md-2.col-xs-6
-                                select.existing_firm.form-control[name="firm_id"]
-                                    option[value="0"] Add
-                                    - @firms.each do |firm|
-                                        option[value="#{firm.id}"] = firm.name
-                            div.new_firm_field.col-md-2.col-xs-6
-                                input.form-control.input[name="firm_name" type="text"]
-                    div.new_firm_field.form-group
-                        label.form-label Please enter your first and last name:
-                        div.row
-                            div.col-md-2.col-xs-6
-                                input.form-control[name="firm_first_name" type="text" required disabled=(@firms.empty? ? 'false' : 'disabled')]
-                            div.col-md-2.col-xs-6
-                                input.form-control[name="firm_last_name" type="text" required disabled=(@firms.empty? ? 'false' : 'disabled')]
-
-                .business-detail
-                    div.form-group
-                        label.form-label Please enter the name of the business that you affiliated with:
-                        div.row
-                            div.col-md-2.col-xs-6
-                                input.form-control[name="business_name" type="text" required]
+                div.law-firm-detail.form-group
+                    label.form-label Please enter the name of the law firm that you affiliated with:
+                    div.row
+                        div.col-md-2.col-xs-6
+                            select.existing_firm.form-control[name="firm_id"]
+                                option[value="0"] Add
+                                - @firms.each do |firm|
+                                    option[value="#{firm.id}"] = firm.name
+                        div.new_firm_field.col-md-2.col-xs-6[style="display:none"]
+                            input.form-control.input[name="firm_name" type="text"]
+                
+                div.business-detail.form-group
+                    label.form-label Please enter the name of the business that you affiliated with:
+                    div.row
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="business_name" type="text" required]
                                 
-                    div.form-group
-                        label.form-label Please enter your first and last name:
-                        div.row
-                            div.col-md-2.col-xs-6
-                                input.form-control[name="business_contact_first_name" type="text" required]
-                            div.col-md-2.col-xs-6
-                                input.form-control[name="business_contact_last_name" type="text" required]
+                div.shared-field.form-group
+                    label.form-label Please enter your first and last name:
+                    div.row
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="first_name" type="text" required]
+                        div.col-md-2.col-xs-6
+                            input.form-control[name="last_name" type="text" required]
                 
                 a.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
                 button.btn.btn-danger Save
@@ -111,9 +102,9 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                     label.form-label Please enter your first and last name:
                     div.row
                         div.col-md-2.col-xs-6
-                            input.form-control[name="individual_first_name" type="text" required]
+                            input.form-control[name="first_name" type="text" required]
                         div.col-md-2.col-xs-6
-                            input.form-control[name="individual_last_name" type="text" required]
+                            input.form-control[name="last_name" type="text" required]
                 
                 button.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
                 button.btn.btn-danger Save
@@ -134,7 +125,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                     | &nbsp;List view.
                 p
                     a.create-initial-client.text-danger[href="#"] Choose an Entity Type for your first Exchangor
-                p = "#{current_user.get_first_name} #{current_user.get_last_name}"
+                p = "#{current_user.first_name} #{current_user.last_name}"
                 p 
                     a.text-danger[href="#"] Create a property for your first Exchangor
             section.relinquishing-purchaser-wrapper
