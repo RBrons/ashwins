@@ -43,6 +43,9 @@ class UsersController < ApplicationController
           @user.business_name = nil
           @user.business_contact_first_name = nil
           @user.business_contact_last_name = nil
+          @user.first_name = nil
+          @user.last_name = nil
+
           @user.user_type = params[:user_type]
                     
           @user.save
@@ -52,6 +55,8 @@ class UsersController < ApplicationController
           @user.business_contact_first_name = params[:business_contact_first_name]
           @user.business_contact_last_name = params[:business_contact_last_name]
           @user.attorney_firm_id = nil
+          @user.first_name = nil
+          @user.last_name = nil
           @user.user_type = params[:user_type]
 
           @user.save
@@ -60,6 +65,11 @@ class UsersController < ApplicationController
       elsif params[:contact_type] == 'individual'
         @user.first_name = params[:individual_first_name]
         @user.last_name = params[:individual_last_name]
+        @user.business_name = nil
+        @user.business_contact_first_name = nil
+        @user.business_contact_last_name = nil
+        @user.attorney_firm_id = nil
+
         @user.user_type = params[:user_type]
 
         @user.save
