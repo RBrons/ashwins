@@ -21,8 +21,8 @@ $ ->
 
   $(document).find('#md-user-role .go-next').on 'click', -> 
     if user_role == 'Attorney' && $(this).data('target-modal') == '#md-business'
-      $(document).find('#md-business .law-firm-detail input').prop('disabled', false)
-      if $('.existing_firm option:selected').text() == "Other"
+      $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', false)
+      if $('.existing_firm option:selected').text() == "Add"
         $('.law-firm-detail .new_firm_field input').prop('disabled', false)
         $('.law-firm-detail .new_firm_field').show()
       else
@@ -42,18 +42,23 @@ $ ->
   $(document).find('.go-back, .go-next').on 'click', (e) ->
     e.preventDefault()
     $(this).closest('.modal').modal('hide')
+    if $(this).data('target') == '#md-welcome'
+      $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
     $(document).find($(this).data('target-modal')).modal('show')
 
   $(document).find('.attorney_user, .fiduciary_user').on 'click', ->
     if $('.attorney_user').is(':checked')
       user_role = 'Attorney'
+      $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
     else if $('.fiduciary_user').is(':checked')
       user_role = 'Normal User'
+      $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
     else
       user_role = 'Non-Attorney Fiduciary'
+      $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
   
   $(document).find('select.existing_firm').on 'change', ->
-    if $('.existing_firm option:selected').text() == "Other"
+    if $('.existing_firm option:selected').text() == "Add"
       $('.law-firm-detail .new_firm_field input').prop('disabled', false)
       $('.law-firm-detail .new_firm_field').show()
     else

@@ -47,7 +47,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                 .checkbox
                     label
                         input.fiduciary_user[type="checkbox"] Do you plan to use 1031fun.com primarily in fiduciary capacity?
-            button.btn.btn-default[data-toggle="modal" data-target="#md-welcome" data-dismiss="modal"] Back
+            button.go-back.btn.btn-default[data-toggle="modal" data-target="#md-welcome" data-dismiss="modal"] Back
             button.go-next.btn.btn-danger[data-target-modal=""] Next
 
 #md-business.md-contact.modal.fade[data-keyboard="false" data-backdrop="static"]
@@ -66,12 +66,12 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                         div.row
                             div.col-md-2.col-xs-6
                                 select.existing_firm.form-control[name="firm_id"]
+                                    option[value="0"] Add
                                     - @firms.each do |firm|
                                         option[value="#{firm.id}"] = firm.name
-                                    option[value="0"] Other
-                            div.new_firm_field.col-md-2.col-xs-6[style=(@firms.empty? ? '' : 'display: none')]
+                            div.new_firm_field.col-md-2.col-xs-6
                                 input.form-control.input[name="firm_name" type="text"]
-                    div.new_firm_field.form-group[ style=(@firms.empty? ? '' : 'display: none')]
+                    div.new_firm_field.form-group
                         label.form-label Please enter your first and last name:
                         div.row
                             div.col-md-2.col-xs-6
