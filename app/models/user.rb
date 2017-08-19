@@ -47,7 +47,7 @@ class User < ApplicationRecord
   end
   
   def contact_info_entered?
-    return !self.first_name.nil? || !self.business_name.nil?
+    return !self.first_name.nil? || !self.business_name.nil? || !self.attorney_firm_id.nil?
   end
 
   # Views
