@@ -5,6 +5,7 @@ class TransactionsController < ApplicationController
                                          :personnel_update, :get_status, :set_status, :qi_status, :inspection_update]
   before_action :current_page
   before_action :add_breadcrum, only: [:index]
+  before_action :validate_user_assets
   # GET /project
   # GET /project.json
 
@@ -924,6 +925,21 @@ class TransactionsController < ApplicationController
   private
   def current_page
     @current_page = 'project'
+  end
+
+  def validate_user_assets
+    @exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
+    if @exchangor.present?
+      has_purchased_properties = @exchangor.has_purchased_properties?
+      
+      if has_purchased_properties
+        # allow user's activity
+      else
+        return redirect_to '/'
+      end
+    else
+      return redirect_to '/'
+    end
   end
 
   def add_breadcrum

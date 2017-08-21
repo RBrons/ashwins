@@ -37,7 +37,7 @@
       = f.text_field :city2, class: "city form-control"
     .form-group
       = f.label "State"
-      = f.select :state2, options_for_select(GeneralMethods.USSTATES, @entity.state2), html_options: {class: "state form-control selectize-single"}
+      = f.select :state2, options_for_select(GeneralMethods.USSTATES, @entity.state2), {}, {class: "state form-control selectize-single"}
     .form-group
       = f.label "Zip"
       = f.text_field :zip2, class: "zip form-control"

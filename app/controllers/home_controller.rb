@@ -23,6 +23,19 @@ class HomeController < ApplicationController
     end
     @show_initial_sign_in_modal &&= !current_user.contact_info_entered?
 
+    @exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
+    if @exchangor.present?
+      has_purchased_properties = @exchangor.has_purchased_properties?
+      
+      if has_purchased_properties
+        @completed_initial_sequence = true
+      else
+        @completed_initial_sequence = false
+      end
+    else
+      @completed_initial_sequence = false
+    end
+    
     @greeting = DefaultValue.where(entity_name: 'Greeting').first.present? ? DefaultValue.where(entity_name: 'Greeting').first.value : ''
     @firms = AttorneyFirm.all()
 

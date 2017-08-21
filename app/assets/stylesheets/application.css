@@ -14,11 +14,11 @@
  *= require_self
  *= require font-awesome
  *= require jstree-default
- *= require_tree .
  *= require bootstrap-datetimepicker
  *= require bootstrap-editable
  *= require selectize
  *= require selectize.bootstrap3
+ *= require_tree .
  */
 
 
