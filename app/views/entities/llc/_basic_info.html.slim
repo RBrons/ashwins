@@ -52,7 +52,7 @@
     .clearfix
     .form-group.margin-sm-top
       = f.label "State of Formation"
-      = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction), class: "form-control"
+      = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction), {}, class: "form-control selectize-single width-field-md"
     - if @entity.persisted?
       .form-group
         .part123.heading

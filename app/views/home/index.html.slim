@@ -24,6 +24,7 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
 
 / Initial Sign in Modal 
 input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]
+input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initial_sequence}"]
 #md-welcome.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
         .modal-body
@@ -60,23 +61,23 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                 input[type="hidden" name="contact_type" value="business"]
                 input[type="hidden" name="user_type"]
                 
-                div.law-firm-detail.form-group
-                    label.form-label Please enter the name of the law firm that you affiliated with:
+                div.law-firm-detail.form-group[class=(current_user.attorney_firm_id.nil? ? 'hide' : '')]
+                    label.form-label Please enter the name of the law firm that you are affiliated with:
                     div.row
                         div.col-md-2.col-xs-6
                             select.existing_firm.form-control[name="firm_id"]
                                 option 
                                 option[value="0"] Add
                                 - @firms.each do |firm|
-                                    option[value="#{firm.id}"] = firm.name
-                        div.new_firm_field.col-md-2.col-xs-6[style="display:none"]
+                                    option[value="#{firm.id}" selected="#{firm.id == current_user.attorney_firm_id ? 'selected' : ''}"] = firm.name
+                        div.new_firm_field.col-md-2.col-xs-6[style=(current_user.attorney_firm_id.nil? ? '' : 'display: none')]
                             input.form-control.input[name="firm_name" type="text"]
                 
-                div.business-detail.form-group
-                    label.form-label Please enter the name of the business that you affiliated with:
+                div.business-detail.form-group[class=(current_user.business_name.nil? ? 'hide' : '')]
+                    label.form-label Please enter the name of the business that you are affiliated with:
                     div.row
                         div.col-md-2.col-xs-6
-                            input.form-control[name="business_name" type="text" required]
+                            input.form-control[name="business_name" type="text" disabled=(current_user.business_name.nil? ? 'disabled' : false) required]
                                 
                 div.shared-field.form-group
                     label.form-label Please enter your first and last name:
@@ -116,19 +117,23 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 
                 | Greetings 
-                span.visitor
+                span.visitor = current_user.first_name
             h4 Welcome to 1031fun.com
-            p 1031fun is a web app designed o streamline Tax Deffered Exchanges utilizing IRC section 1031. To accomplish a 1031 Exchange, at minimum, it will be necessary to input three people or entities.
+            p 1031fun is a web app designed to streamline Tax Deferred Exchanges utilizing IRC section 1031. To accomplish a 1031 Exchange, at minimum, it will be necessary to input three people or entities.
             section.exchangor-wrapper
+                input.exchangor_entity_id[type="hidden" value="#{@exchangor.present? ? @exchangor.id : 0}"]
+                input.exchangor_entity_type[type="hidden" value="#{@exchangor.present? ? @exchangor.entity_type.name : ''}"]
                 p 
                     | (1) an Exchangor who will need to own at least one property (which we call a Purchased Property). The Exchangor will start out as a Seller but from the beginning will be able to search through properites to buy. The Exchangor will be listed in the 
                     span.depends_on_user_role Clients 
                     | &nbsp;List view.
-                p
-                    a.create-initial-client.text-danger[href="#"] Choose an Entity Type for your first Exchangor
-                p = "#{current_user.first_name} #{current_user.last_name}"
+                - if !@exchangor.present?
+                    p
+                        a.create-initial-client.text-danger[href="#"] Choose an Entity Type for your first Exchangor
+                - else
+                    p = @exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name
                 p 
-                    a.text-danger[href="#"] Create a property for your first Exchangor
+                    a.create-exchangor-property.text-danger[href="#"] Create a property for your first Exchangor
             section.relinquishing-purchaser-wrapper
                 p 
                     | (2) a Relinquishing Purchaser who will purchase the property that the Exchangor sells. The Relinquishing Purchaser will be listed in the Contacts List View.    
@@ -142,7 +147,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                     input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
                     input[type="hidden" name="contact[is_company]" value="false"]
                     
-                    div.form-group
+                    div.form-group[style="display: none"]
                         label.form-label Name your first Relinquishing Purchaser
                         div.relinp-individual-detail.row
                             div.col-md-2.col-xs-6
@@ -166,7 +171,7 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                     input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
                     input[type="hidden" name="contact[is_company]" value="false"]
 
-                    div.form-group
+                    div.form-group[style="display:none"]
                         label.form-label Name your first Replacement Seller
                         div.repls-individual-detail.row
                             div.col-md-2.col-xs-6
@@ -177,10 +182,40 @@ input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in
                             div.col-md-2.col-xs-6
                                 input.form-control[name="contact[company_name]" type="text"]
                 p 
-                    a.text-danger[href="#"] Create a property for your first Replacement Seller
+                    a.create-seller-property.text-danger[href="#"] Create a property for your first Replacement Seller
 
         .modal-footer
-            a.go-back.btn.btn-danger.pull-left[href="#" data-target-modal=""] Back
-            a.btn.btn-warning.pull-left[data-dismiss="modal"] Skip This Step
-            a#show_contact-modal.btn.btn-default.pull-right[href="#"] Create Your First Client
-            a#show_demonstration.btn.btn-default.pull-right[href="#"] Demonstration Mode           
+            a.go-back.btn.btn-danger.pull-left[href="#" data-target-modal="#{current_user.business_name.nil? && current_user.attorney_firm_id.nil? ? '#md-individual' : '#md-business'}"] Back
+            a.sequence-step.btn.btn-warning.pull-left[data-dismiss="modal"] Skip This Step
+            / a#show_contact-modal.btn.btn-default.pull-right[href="#"] Create Your First Client
+            / a#show_demonstration.btn.btn-default.pull-right[href="#"] Demonstration Mode
+
+#md-new-property.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-sm
+        .modal-header
+            button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
+                span.lnr.lnr-cross
+            h4.modal-title Add Property
+        .modal-body
+            form[action="/properties" data-remote="true" method="post"]
+                input#property_ownership_status[type="hidden" name="property[ownership_status]" value=""]
+                input#property_owner_entity_id[type="hidden" name="property[owner_entity_id]" value=""]
+                input#property_owner_entity_id_indv[type="hidden" name="property[owner_entity_id_indv]" value=""]
+                input#property_owner_person_is[type="hidden" name="property[owner_person_is]" value=""]
+                
+                .form-group
+                    label.control-label Title
+                    input.form-control[type="text" name="property[title]" required]
+                .form-group
+                    label.control-label Tenant
+                    = select_tag 'property[tenant_id]', options_for_select(Tenant.all().pluck(:name, :id)), {class: 'form-control'}
+                    = link_to "New", "javascript:void(0)", class: "new-tenant-button"
+                .form-group
+                    label.control-label City
+                    input.form-control[type="text" name="property[location_city]"]
+                .form-group
+                    .input-group
+                        .input-group-addon $
+                        input.form-control.input-mask-currency[type="text" name="property[current_rent]"]
+                input.btn.btn-primary[type="submit"]
+                a.btn.btn-default[href="#" data-dismiss="modal"] Close
