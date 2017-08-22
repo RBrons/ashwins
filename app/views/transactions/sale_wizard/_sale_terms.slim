@@ -21,7 +21,7 @@
           a#purchase_sale_agreement[href="#purchase_sale_agreement_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchase Sale Agreement
 
       li[role="presentation"]
-          a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] Relinquishing Purchaser
+          a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchaser
 
       li[role="presentation"]
           a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
@@ -54,7 +54,7 @@
                         input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
                         input[type="hidden" name="from_relinquishing_offeror" value="#{transaction_property_offer.id}"]
 
-                        h2.heading_without_padding_large Relinquishing Offeror
+                        h2.heading_without_padding_large Offeror
                         .form-group
                           .heading_blue.radio-inline
                             span
@@ -153,9 +153,9 @@
               .tab-content
                 #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
                   input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.seller_name}"]
-                  h2.heading_without_padding_large = "Relinquishing Purchaser".html_safe
+                  h2.heading_without_padding_large = "Purchaser".html_safe
                   - if !@relinquishing_purchaser.present?
-                    P No relinquishing purchaser yet
+                    P No purchaser yet
                   - else
                     = form_for @relinquishing_purchaser, remote: true, :html => {:'data-type' => 'json'} do |f|
                       .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]

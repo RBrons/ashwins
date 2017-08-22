@@ -252,9 +252,9 @@ class Entity < ApplicationRecord
     end
     MemberType.InitMemberTypes if MemberType.member_types.nil?
     if (a + b + c).uniq.length > 0
-      entities_owning_purchased_properties = (a + b + c).uniq.select! {
+      entities_owning_purchased_properties = (a + b + c).uniq.select {
           |item| item.has_purchased_properties?
-        }
+      }
       if entities_owning_purchased_properties.present?
         return entities_owning_purchased_properties.pluck(:name, :id, :type_, :has_comma, :legal_ending)
         .map! {
