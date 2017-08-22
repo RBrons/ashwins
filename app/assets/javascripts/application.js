@@ -17,8 +17,9 @@
 //= notify
 //= require jquery-gdrive/gdrive-client
 //= require jquery-gdrive/jquery-gdrive
-//= require moment
 //= require bootstrap.min
+//= require_tree .
+//= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap-editable
 //= require bootstrap-modalmanager
@@ -28,7 +29,6 @@
 //= require jquery.select2
 //= require selectize
 //= require cloudinary
-//= require_tree .
 
 var image_via_mimetype = function(mimetype){
 
