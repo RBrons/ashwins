@@ -204,9 +204,6 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                 input#property_owner_person_is[type="hidden" name="property[owner_person_is]" value=""]
                 
                 .form-group
-                    label.control-label Title
-                    input.form-control[type="text" name="property[title]" required]
-                .form-group
                     label.control-label Tenant
                     = select_tag 'property[tenant_id]', options_for_select(Tenant.all().pluck(:name, :id)), {class: 'form-control'}
                     = link_to "New", "javascript:void(0)", class: "new-tenant-button"
@@ -214,8 +211,12 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     label.control-label City
                     input.form-control[type="text" name="property[location_city]"]
                 .form-group
+                    label.control-label Title
+                    input.form-control[type="text" name="property[title]" required]
+                .form-group
                     .input-group
                         .input-group-addon $
                         input.form-control.input-mask-currency[type="text" name="property[current_rent]"]
+                        
                 input.btn.btn-primary[type="submit"]
                 a.btn.btn-default[href="#" data-dismiss="modal"] Close
