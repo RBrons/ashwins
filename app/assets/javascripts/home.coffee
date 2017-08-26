@@ -1,10 +1,17 @@
 $ ->
   user_role = 'Non-Attorney Fiduciary'
   repls_contact_id = 0
-  repls_contact_type = ''
+  repls_contact_type = ""
+  repls_name = ""
+  repls_info_html = ""
 
+  relinp_info_html = ""
   exchangor_entity_id = $(document).find('input.exchangor_entity_id').val()
   exchangor_entity_type = $(document).find('input.exchangor_entity_type').val()
+  exchangor_name = $(document).find('input.exchangor_name').val()
+
+  purchased_info_html = ''
+  replacement_property_info_html = ''
 
   if $(document).find('#is_show_initial_sign_in_modal').val() == 'true'
     # show initial sign in modal
@@ -180,6 +187,18 @@ $ ->
         success: (data) ->
           if data
             form.attr('action', '/contacts/' + data.id)
+            if data.is_company
+              relinp_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
+            else if data.first_name != '' && data.last_name != ""
+              relinp_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
+            if relinp_info_html != ""
+              $(document).find('.relinquishing-purcahser-info').html(relinp_info_html)
+              $(document).find('.relinquishing-purchaser-wrapper form').hide()
+            
+            if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+              $(document).find('.final-step').text('Next')
+            else
+              $(document).find('.final-step').text('Skip This Step')
           else
             $.notify "Failed!", "error"
 
@@ -202,6 +221,20 @@ $ ->
           if data
             form.attr('action', '/contacts/' + data.id)
             repls_contact_id = data.id
+            if data.is_company
+              repls_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
+              repls_name = data.company_name
+            else if data.first_name != '' && data.last_name != ""
+              repls_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
+              repls_name = data.first_name + ' ' + data.last_name
+            if repls_info_html != ""
+              $(document).find('.replacement-seller-info').html(repls_info_html)
+              $(document).find('.replacement-seller-wrapper form').hide()
+            
+            if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+              $(document).find('.final-step').text('Next')
+            else
+              $(document).find('.final-step').text('Skip This Step')
           else
             $.notify "Failed!", "error"
   $(document).find('.create-exchangor-property').on 'click', ->
@@ -236,14 +269,34 @@ $ ->
       form.find('input#property_owner_entity_id').val('')
       form.find('input#property_owner_entity_id_indv').val(repls_contact_id)
       form.find('input#property_owner_person_is').val('true')
-
     $(document).find('#md-new-property').modal('show')
-  
+
+  $(document).find('#md-new-property form select#property_tenant_id').on 'change', ->
+    form = $(document).find('#md-new-property form')
+    if form.find('#property_location_city').val() != ""
+      form.find('#property_title').val($(this).find('option:selected').text() + ', ' + form.find('#property_location_city').val())
+    else
+      form.find('#property_title').val('')
+        
+  $(document).find('#md-new-property form #property_location_city').on 'change', ->
+    form = $(document).find('#md-new-property form')
+    if $(this).val() != ""
+      form.find('#property_title').val(form.find('select#property_tenant_id option:selected').text() + ', ' + $(this).val())
+    else
+      form.find('#property_title').val('')
+      
   $(document).on 'ajax:complete', '#md-new-property form', (e, data, status, xhr) ->
     $.notify 'Success', 'success'
     $(document).find('#md-new-property').modal('hide')
     if JSON.parse(data.responseText).ownership_status == 'Purchased'
-      $(document).find('#md-greeting .sequence-step').text('Next')
-
+      purchased_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Purchased Property of ' + exchangor_name + '</span>.'
+      $(document).find('.create-exchangor-property').parent('p').html(purchased_info_html)
+    else
+      replacement_property_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Prospective Purchase Property of ' + repls_name + '</span>.'
+      $(document).find('.create-seller-property').parent('p').html(replacement_property_info_html)
+    if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+      $(document).find('.final-step').text('Next')
+    else
+      $(document).find('.final-step').text('Skip This Step')
   $(document).find('.new-tenant-button').on 'click', ->
     console.log 'new tenant'

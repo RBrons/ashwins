@@ -929,15 +929,28 @@ class TransactionsController < ApplicationController
 
   def validate_user_assets
     @exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
+    @initial_relinquishing_purchaser = Contact.where(contact_type: 'Counter-Party', user_id: current_user.id).first
+    @initial_replacement_property =  Property.where('ownership_status = ? and title is not null and user_id = ?', 'Prospective Purchase', current_user.id).first
     if @exchangor.present?
       has_purchased_properties = @exchangor.has_purchased_properties?
-      
       if has_purchased_properties
-        # allow user's activity
+        if @initial_relinquishing_purchaser.present?
+          if @initial_replacement_property
+            # allow to go to transaction module
+          else
+            # new property for seller
+            return redirect_to '/'
+          end
+        else
+          # new relinquishing purchaser
+          return redirect_to '/'
+        end
       else
+        # new relinquishing property
         return redirect_to '/'
       end
     else
+      # new entity for exchangor
       return redirect_to '/'
     end
   end
