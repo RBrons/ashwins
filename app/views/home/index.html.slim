@@ -169,8 +169,11 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                 p
                     | (3) A Replacement Seller who will need to own at least one property(which we call a Prospective Property). The Replacement Seller will also be listed in the Contact List View.
 
-                - if @replacement_property.present? && @replacement_property.owner.present?
-                    p.text-success = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
+                - if @replacement_property.present?
+                    - if @replacement_property.owner.present?
+                        p.text-success = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
+                    - else
+                        
                 - else
                     p.replacement-seller-info.text-danger
                         | Will your first Replacement Seller be a 
