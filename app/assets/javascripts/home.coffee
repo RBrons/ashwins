@@ -9,6 +9,7 @@ $ ->
   exchangor_entity_id = $(document).find('input.exchangor_entity_id').val()
   exchangor_entity_type = $(document).find('input.exchangor_entity_type').val()
   exchangor_name = $(document).find('input.exchangor_name').val()
+  exchangor_info_html = ''
 
   purchased_info_html = ''
   replacement_property_info_html = ''
@@ -125,10 +126,76 @@ $ ->
   $(document).find('#show_demonstration').on 'click', ->
     sweetAlert 'Coming soon!', '', 'info'
 
-  $(document).find('.exchangor-wrapper .create-initial-client').on 'click', ->
-    $(document).find('#md-greeting').modal('hide')
+  $(document).find('.exchangor-wrapper .create-initial-client-type').on 'click', ->
+    if $(document).find('.exchangor-wrapper form input[name="entity[name]"]').val() == ''
+      sweetAlert('First input the Name', '', 'info')
+      return false
     $(document).find('#md-add-initial-client').modal('show')
   
+  $(document).find('.is_entity_business').on 'click', ->
+    $(document).find('.exchangor-wrapper form .form-group').show()
+    $(document).find('.exchangor-wrapper .entity-business-detail').show()
+    
+    $(document).find('.exchangor-wrapper .entity-individual-detail input').val('')
+    $(document).find('.exchangor-wrapper .entity-individual-detail').hide()
+    
+    $(document).find('.exchangor-wrapper form input[name="entity_type"]').val('business')
+
+  $(document).find('.is_entity_individual').on 'click', ->
+    $(document).find('.exchangor-wrapper form .form-group').show()
+    $(document).find('.exchangor-wrapper .entity-business-detail input').val('')
+    $(document).find('.exchangor-wrapper .entity-business-detail').hide()
+
+    $(document).find('.exchangor-wrapper .entity-individual-detail').show()
+    
+    $(document).find('.exchangor-wrapper form input[name="entity_type"]').val('individual')
+
+  $(document).find('#md-add-initial-client ul li').on 'click', ->
+    entity_em = $(this)
+    form = $(document).find('.exchangor-wrapper form')
+    if form.find('input[name="entity[name]"]').val() != ''
+      entity_business_name = form.find('input[name="entity[name]"]').val()
+    else
+      return false
+    switch entity_em.data('entity-name')
+      when 'Sole Proprietorship'
+        legal_ending = ''
+      when 'Partnership'
+        legal_ending = 'Partners'
+      when 'LLC'
+        legal_ending = 'LLC'
+      when 'Limited Partnership'
+        legal_ending = 'LP'
+      when 'Corporation'
+        legal_ending = ''
+
+    entity_params =  {}
+    entity_params['entity[name]'] = entity_business_name
+    entity_params['entity[type_]'] = entity_em.data('entity-type')
+    entity_params['entity[legal_ending]'] = legal_ending
+    $.ajax
+      url: '/xhr/create_entity'
+      type: 'POST'
+      dataType: 'json'
+      data: entity_params
+      success: (data) ->
+        if data.id
+          exchangor_entity_id = data.id
+          exchangor_name = data.name
+          exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + entity_em.data('entity-name') + '</span>'
+          $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
+          $(document).find('.exchangor-info').html(exchangor_info_html)
+          $(document).find('.exchangor-wrapper form').hide()
+          
+          $(document).find('#md-add-initial-client').modal('hide')
+          if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+            $(document).find('.final-step').text('Next')
+          else
+            $(document).find('.final-step').text('Skip This Step')
+        else
+          $.notify "Failed!", "error"
+    
+
   $(document).find('.is_repls_business').on 'click', ->
     $(document).find('.replacement-seller-wrapper form .form-group').show()
     $(document).find('.replacement-seller-wrapper .repls-business-detail').show()
@@ -168,6 +235,38 @@ $ ->
     $(document).find('.relinquishing-purchaser-wrapper .relinp-individual-detail').show()
 
     $(document).find('.relinquishing-purchaser-wrapper form input[name="contact[is_company]"]').val('false')
+
+  $(document).find('.entity-individual-detail input, .entity-business-detail input').on 'blur', ->
+    form = $(this).closest('form')
+    if form.find('input[name="entity_type"]').val() == 'individual'
+      none_empty_inputs = form.find('.entity-individual-detail input').filter ->
+        return this.value != ''
+    else
+      return false
+    if none_empty_inputs.length != 2
+      return false
+    
+    $.ajax
+      url: '/xhr/create_entity'
+      type: 'POST'
+      dataType: 'json'
+      data: form.serialize()
+      success: (data) ->
+        if data.id
+          exchangor_entity_id = data.id
+          if data.first_name && data.last_name
+            exchangor_name = data.first_name + ' ' + data.last_name
+            exchangor_info_html = '<span class="text-success">You have created a data record for ' + exchangor_name + ' to be your first Exchangor.</span>'
+            $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
+            $(document).find('.exchangor-info').html(exchangor_info_html)
+            $(document).find('.exchangor-wrapper form').hide()
+            
+          if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+            $(document).find('.final-step').text('Next')
+          else
+            $(document).find('.final-step').text('Skip This Step')
+        else
+          $.notify "Failed!", "error"
   
   $(document).find('.relinp-individual-detail input, .relinp-business-detail input').on 'blur', ->
     form = $(this).closest('form')
@@ -238,8 +337,8 @@ $ ->
           else
             $.notify "Failed!", "error"
   $(document).find('.create-exchangor-property').on 'click', ->
-    if exchangor_entity_id == 0
-      sweetAlert 'First choose your Exchangor', '', 'info'
+    if parseInt(exchangor_entity_id) == 0
+      sweetAlert 'First create your Exchangor', '', 'info'
       return
     
     form = $(document).find('#md-new-property form')
@@ -256,7 +355,7 @@ $ ->
 
   $(document).find('.create-seller-property').on 'click', ->
     if repls_contact_id == 0
-      sweetAlert 'First create you Replacement Seller', '', 'info'
+      sweetAlert 'First create your\n Replacement Seller', '', 'info'
       return
 
     form = $(document).find('#md-new-property form')

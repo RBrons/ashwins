@@ -2,6 +2,7 @@ class PropertiesController < ApplicationController
   before_action :set_property, only: [:show, :edit, :destroy]
   before_action :current_page
   before_action :add_breadcrum
+  before_action :validate_user_assets
   # GET /properties
   # GET /properties.json
   def index
@@ -73,7 +74,7 @@ class PropertiesController < ApplicationController
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
-        flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
+        flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>" if !request.xhr?
         format.html { redirect_to edit_property_path(@property.key, type_is: 'basic_info') }
         # format.html { redirect_to properties_path }
         format.js { render json: @property.to_json, status: :ok }
@@ -324,6 +325,27 @@ class PropertiesController < ApplicationController
         add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/properties\"> Ownership </a></h4></div>".html_safe
       else
         #add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/properties\"> Basic Info </a></h4></div>".html_safe
+      end
+    end
+
+  end
+
+  def validate_user_assets
+    exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
+    replacement_seller =  Contact.where(contact_type: 'Counter-Party', user_id: current_user.id).first
+    if property_params[:ownership_status] == 'Purchased'
+      if exchangor.present?
+        #allow user goes to property
+      else
+        # not created relinquishing seller
+        return redirect_to '/'
+      end
+    else
+      if replacement_seller.present?
+        #allow user goes to property
+      else
+        # not created property owner
+        return redirect_to '/'
       end
     end
 
