@@ -935,22 +935,22 @@ class TransactionsController < ApplicationController
       has_purchased_properties = @exchangor.has_purchased_properties?
       if has_purchased_properties
         if @initial_relinquishing_purchaser.present?
-          if @initial_replacement_property
+          if @initial_replacement_property.present?
             # allow to go to transaction module
           else
-            # new property for seller
+            # not created prospective purchase property
             return redirect_to '/'
           end
         else
-          # new relinquishing purchaser
+          # not created relinquishing purchaser
           return redirect_to '/'
         end
       else
-        # new relinquishing property
+        # not created purchased property
         return redirect_to '/'
       end
     else
-      # new entity for exchangor
+      # not created relinquishing seller
       return redirect_to '/'
     end
   end

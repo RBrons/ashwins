@@ -39,7 +39,7 @@ class ContactsController < ApplicationController
           transaction_property.update(attorney_id: @contact.id)
         end
 
-        flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>"
+        flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>" if !request.xhr?
         format.html { redirect_to edit_contact_path(@contact) }
         # format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}

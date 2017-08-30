@@ -129,17 +129,38 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     span.depends_on_user_role Clients 
                     | &nbsp;List view.
                 - if !@exchangor.present?
+                    p.exchangor-info.text-danger
+                        | Will your first Exchangor be a&nbsp;
+                        a.is_entity_business.text-danger.underline-red[href='#'] business
+                        | &nbsp;or&nbsp;
+                        a.is_entity_individual.text-danger.underline-red[href='#'] individual?
+                    form[action=""]
+                        input[type="hidden" name="entity_type" value=""]
+                        div.form-group[style="display: none"]
+                            label.form-label Name your first Exchangor
+                            div.entity-individual-detail.row
+                                div.col-md-2.col-xs-6
+                                    input.form-control[name="entity[first_name]" type="text"]
+                                div.col-md-2.col-xs-6
+                                    input.form-control[name="entity[last_name]" type="text"]
+                            div.entity-business-detail.row[style="display: none"]
+                                div.col-md-2.col-xs-6
+                                    input.form-control[name="entity[name]" type="text"]
                     p
-                        a.create-initial-client.text-danger[href="#"] Choose an Entity Type for your first Exchangor
+                        a.create-initial-client-type.text-danger[href="#"] What type of Entity will your Exchangor be?
                     p 
-                        a.create-exchangor-property.text-danger[href="#"] Create a property for your first Exchangor
+                        a.create-exchangor-property.text-danger[href="#"] Create a property to be Relinquished by your first Exchangor
                 - else
-                    p.text-success = "You have created a data record for #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name} to be your first Exchangor."
+                    - if @exchangor.type_ == 1
+                        p.text-success = "You have created a data record for #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name} to be your first Exchangor."
+                    - else 
+                        p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.entity_type.try(:name)}"
                     - if @exchangor.has_purchased_properties?
                         p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
                     - else
                         p 
                             a.create-exchangor-property.text-danger[href="#"] Create a property for your first Exchangor
+            
             section.relinquishing-purchaser-wrapper
                 p 
                     | (2) a Relinquishing Purchaser who will purchase the property that the Exchangor sells. The Relinquishing Purchaser will be listed in the Contacts List View.    
@@ -236,3 +257,29 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                         
                 input.btn.btn-primary[type="submit"]
                 a.btn.btn-default[href="#" data-dismiss="modal"] Close
+
+/! Clients Modal For Adding Entities on Initial Sign Up Sequence
+#md-add-initial-client.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
+  .modal-dialog.modal-lg[role="document"]
+    .modal-content
+      .modal-header
+        button.close[type="button" data-dismiss="modal" aria-label="Close"]
+          span.lnr.lnr-cross
+        h4.modal-title Select Entity Type
+      .modal-body
+        ul.nav.navbar-nav
+            li[data-entity-type="#{MemberType.getSoleProprietorshipId}" data-entity-name="Sole Proprietorship"]
+                = link_to image_tag('icons/sole-proprietorship.svg', class: 'icon'), "#", class: 'padding-md'
+                span Sole Proprietorship
+            li[data-entity-type="#{MemberType.getPartnershipId}" data-entity-name="Partnership"]
+                = link_to image_tag('icons/partnership.svg', class: 'icon'), "#", class: 'padding-md'
+                span Partnership
+            li[data-entity-type="#{MemberType.getLLCId}" data-entity-name="LLC"]
+                = link_to image_tag('icons/llc.svg', class: 'icon'), "#", class: 'padding-md'
+                span LLC
+            li[data-entity-type="#{MemberType.getLimitedPartnershipId}" data-entity-name="Limited Partnership"]
+                = link_to image_tag('icons/limited-partnership.svg', class: 'icon'), "#", class: 'padding-md'
+                span Limited Partnership
+            li[data-entity-type="#{MemberType.getCorporationId}" data-entity-name="Corporation"]
+                = link_to image_tag('icons/corporation.svg', class: 'icon'), "#", class: 'padding-md'
+                span Corporation
