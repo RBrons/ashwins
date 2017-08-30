@@ -87,7 +87,7 @@ class XhrController < ApplicationController
   end
 
   def create_entity
-    entity_params = params.require(:entity).permit(:name, :first_name, :last_name, :type_, :legal_ending).merge({date_of_formation: DateTime.now })
+    entity_params = params.require(:entity).permit(:name, :first_name, :last_name, :type_, :legal_ending).merge({date_of_formation: Time.zone.now })
     @entity = Entity.new(entity_params)
     @entity.basic_info_only = true
     @entity.user_id = current_user.id
@@ -96,9 +96,12 @@ class XhrController < ApplicationController
       @entity.name = @entity.first_name + ' ' + @entity.last_name
     end
     begin
-      @entity.save
-      AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
-      render json: @entity
+      if @entity.save
+        AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
+        render json: @entity
+      else
+        render json: false
+      end
     rescue Exception=>e
       render json: e.message
     end
@@ -107,7 +110,10 @@ class XhrController < ApplicationController
 
   def update_entity
     @entity = Entity.where(id: params[:id]).first
-    @entity.type_ = params[:entity_type]
-    @entity.update
+    if @entity.update(:legal_ending => params[:legal_ending])
+      render json: true
+    else
+      render json: false
+    end
   end
 end

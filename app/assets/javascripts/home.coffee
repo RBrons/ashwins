@@ -160,14 +160,19 @@ $ ->
     switch entity_em.data('entity-name')
       when 'Sole Proprietorship'
         legal_ending = ''
+        legal_ending_html = 'Sole Proprietorship'
       when 'Partnership'
         legal_ending = 'Partners'
+        legal_ending_html = 'Partnership'
       when 'LLC'
         legal_ending = 'LLC'
+        legal_ending_html = 'LLC'
       when 'Limited Partnership'
         legal_ending = 'LP'
+        legal_ending_html = 'LP'
       when 'Corporation'
         legal_ending = ''
+        legal_ending_html = '<select class="select_auto corporation_legal_ending"><option>Inc</option><option>Corp</option><option>Ltd</option></select>'
 
     entity_params =  {}
     entity_params['entity[name]'] = entity_business_name
@@ -182,7 +187,7 @@ $ ->
         if data.id
           exchangor_entity_id = data.id
           exchangor_name = data.name
-          exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + entity_em.data('entity-name') + '</span>'
+          exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + legal_ending_html + '</span>'
           $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
           $(document).find('.exchangor-info').html(exchangor_info_html)
           $(document).find('.exchangor-wrapper form').hide()
@@ -195,7 +200,17 @@ $ ->
         else
           $.notify "Failed!", "error"
     
-
+  $(document).on 'change', '.corporation_legal_ending', ->
+    console.log $(this).find('option:selected').text()
+    $.ajax
+      url: '/xhr/update_entity'
+      type: 'POST'
+      dataType: 'json'
+      data: {id: exchangor_entity_id, legal_ending: $(this).find('option:selected').text()}
+      success: (data) ->
+        if data
+          console.log 'success'
+          
   $(document).find('.is_repls_business').on 'click', ->
     $(document).find('.replacement-seller-wrapper form .form-group').show()
     $(document).find('.replacement-seller-wrapper .repls-business-detail').show()
