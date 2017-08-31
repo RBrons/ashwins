@@ -47,10 +47,10 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                         input.attorney_user[type="radio" name="user_role"] I am an attorney, work for or with an attorney or lawfirm, or am a client of an attorney
                 .radio
                     label
-                        input.fiduciary_user[type="radio" name="user_role"] I am not an attorney or working for or with an attorney but I am acting as a fiduciary (an executrix, a Trustee, a Guardian or a holder of a Power of Attorney)
+                        input.fiduciary_user[type="radio" name="user_role"] I am not an attorney or working for or with an attorney but I am acting as a fiduciary (an executor or executrix, a Trustee, a Guardian or a holder of a Power of Attorney)
                 .radio
                     label
-                        input.property_owner[type="radio" name="user_role" checked] I'm an owner of real property
+                        input.property_owner[type="radio" name="user_role" checked] I am an owner of real property
             button.go-back.btn.btn-default[data-toggle="modal" data-target="#md-welcome" data-dismiss="modal"] Back
             button.go-next.btn.btn-danger[data-target-modal=""] Next
 
@@ -130,8 +130,8 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                 li
                     p 
                         | First you will create an Exchangor. The Exchangor must own at least one property which we call a Relinquished Property. The Exchangor will commence the exchange by selling the Relinquished Property. To create the Exchangor, you must first decide whether the Exchangor will be a Business or an Individual. After that selection, name fields will pop up so you can give your Exchangor a name. Third, you will select an entity type for your Exchangor. When you move from this Introduction to the main part of the app you will be able to find your first Exchangor in the&nbsp;
-                        span.depends_on_user_role Clients 
-                        | &nbsp;List view. Lastly, you will create the Relinquished Property
+                        span.depends_on_user_role Clients
+                        | &nbsp;List view. Lastly, you will create a property for your Exchangor to Relinquish
 
                     section.exchangor-wrapper.margin-lg-left
                         input.exchangor_entity_id[type="hidden" value="#{@exchangor.present? ? @exchangor.id : 0}"]
