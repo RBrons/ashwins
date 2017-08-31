@@ -166,6 +166,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                             - else 
                                 p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
                             - if @exchangor.has_purchased_properties?
+                                input.purchased_property_id[type="hidden" value="#{@purchased_property_id}"]
                                 p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
                             - else
                                 p 
@@ -177,6 +178,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
 
                     section.relinquishing-purchaser-wrapper.margin-lg-left
                         - if @relinquishing_purchaser.present?
+                            input.relinp_id[type="hidden" value="#{@relinquishing_purchaser.id}"]
                             p.text-success = "You have created a data record for #{@relinquishing_purchaser.name} to be your first purchaser."
                         - else
                             p.relinquishing-purchaser-info.text-danger
@@ -207,6 +209,8 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     section.replacement-seller-wrapper.margin-lg-left
                         - if @replacement_property.present?
                             - if @replacement_property.owner.present?
+                                input.repls_contact_id[type="hidden" value="#{@replacement_property.owner.id}"]
+                                input.replacement_property_id[type="hidden" value="#{@replacement_property.id}"]
                                 p.text-success = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
                         - else
                             p.replacement-seller-info.text-danger
@@ -251,6 +255,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
             h4.modal-title Add Property
         .modal-body
             form[action="/properties" data-remote="true" method="post"]
+                input#ostatus[type="hidden" name="ostatus" value=""]
                 input#property_ownership_status[type="hidden" name="property[ownership_status]" value=""]
                 input#property_owner_entity_id[type="hidden" name="property[owner_entity_id]" value=""]
                 input#property_owner_entity_id_indv[type="hidden" name="property[owner_entity_id_indv]" value=""]
@@ -263,11 +268,11 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     = link_to "New", "javascript:void(0)", class: "new-tenant-button"
                 .form-group
                     label.control-label City
-                    span.help-block
+                    span.error-msg
                     input#property_location_city.form-control[type="text" name="property[location_city]" required data-parsley-error-message="Please input a city"]
                 .form-group
                     label.control-label Rent
-                    span.help-block
+                    span.error-msg
                     .input-group
                         .input-group-addon $
                         input.form-control.input-mask-currency[type="text" name="property[current_rent]" required data-parsley-error-message="Please input the monthly rental amount"]

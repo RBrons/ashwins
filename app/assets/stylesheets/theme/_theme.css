@@ -2798,7 +2798,8 @@ p.parsley-error {
 ul.parsley-errors-list {
     list-style: none;
     color: #E74C3C;
-    padding-left: 0
+    padding-left: 0;
+    margin-bottom: 0
 }
 
 input.parsley-error,

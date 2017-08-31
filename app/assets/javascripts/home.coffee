@@ -1,17 +1,27 @@
 $ ->
   user_role = 'Non-Attorney Fiduciary'
-  repls_contact_id = 0
+  # replacement seller
+  repls_contact_id = $(document).find('input.repls_contact_id').val()
   repls_contact_type = ""
   repls_name = ""
   repls_info_html = ""
 
+  # relinquishing purchaser
+  relinp_id = $(document).find('input.relinp_id').val()
   relinp_info_html = ""
+  
+  # relinqushing seller
   exchangor_entity_id = $(document).find('input.exchangor_entity_id').val()
   exchangor_entity_type = $(document).find('input.exchangor_entity_type').val()
   exchangor_name = $(document).find('input.exchangor_name').val()
   exchangor_info_html = ''
-
+  
+  # relinquishing property
+  purchased_property_id = $(document).find('input.purchased_property_id').val()
   purchased_info_html = ''
+  
+  # replacement property
+  replacement_property_id = $(document).find('input.replacement_property_id').val()
   replacement_property_info_html = ''
 
   if $(document).find('#is_show_initial_sign_in_modal').val() == 'true'
@@ -213,7 +223,8 @@ $ ->
           $(document).find('.exchangor-wrapper form').hide()
           
           $(document).find('#md-add-initial-client').modal('hide')
-          if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+          if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+            $(document).find('.final-step').removeAttr('data-dismiss')
             $(document).find('.final-step').attr('href', '/')
             $(document).find('.final-step').text('Next')
           else
@@ -297,7 +308,8 @@ $ ->
               $(document).find('.exchangor-wrapper form').hide()
               current_em.off('blur')
               
-            if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+            if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+              $(document).find('.final-step').removeAttr('data-dismiss')
               $(document).find('.final-step').attr('href', '/')
               $(document).find('.final-step').text('Next')
             else
@@ -330,8 +342,9 @@ $ ->
           dataType: 'json'
           data: form.serialize()
           success: (data) ->
-            if data
+            if data.id
               form.attr('action', '/contacts/' + data.id)
+              relinp_id = data.id
               if data.is_company
                 relinp_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
               else if data.first_name != '' && data.last_name != ""
@@ -341,7 +354,8 @@ $ ->
                 $(document).find('.relinquishing-purchaser-wrapper form').hide()
                 current_em.off('blur')
 
-              if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+              if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+                $(document).find('.final-step').removeAttr('data-dismiss')
                 $(document).find('.final-step').attr('href', '/')
                 $(document).find('.final-step').text('Next')
               else
@@ -367,7 +381,7 @@ $ ->
           dataType: 'json'
           data: form.serialize()
           success: (data) ->
-            if data
+            if data.id
               form.attr('action', '/contacts/' + data.id)
               repls_contact_id = data.id
               if data.is_company
@@ -381,7 +395,8 @@ $ ->
                 $(document).find('.replacement-seller-wrapper form').hide()
                 current_em.off('blur')
 
-              if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+              if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+                $(document).find('.final-step').removeAttr('data-dismiss')
                 $(document).find('.final-step').attr('href', '/')
                 $(document).find('.final-step').text('Next')
               else
@@ -395,7 +410,9 @@ $ ->
       return
     
     form = $(document).find('#md-new-property form')
+    form.parsley().reset()
     form.find('input').val('')
+    form.find('input#ostatus').val('Purchased')
     form.find('input#property_ownership_status').val('Purchased')
     if exchangor_entity_type == 'Individual'
       form.find('input#property_owner_entity_id').val('')
@@ -413,7 +430,9 @@ $ ->
       return
 
     form = $(document).find('#md-new-property form')
+    form.parsley().reset()
     form.find('input').val('')
+    form.find('input#ostatus').val('Prospective Purchase')
     form.find('input#property_ownership_status').val('Prospective Purchase')
     if repls_contact_type == 'business'
       form.find('input#property_owner_entity_id').val(repls_contact_id)
@@ -443,12 +462,15 @@ $ ->
     $.notify 'Success', 'success'
     $(document).find('#md-new-property').modal('hide')
     if JSON.parse(data.responseText).ownership_status == 'Purchased'
+      purchased_property_id = JSON.parse(data.responseText).id
       purchased_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Purchased Property of ' + exchangor_name + '</span>.'
       $(document).find('.create-exchangor-property').parent('p').html(purchased_info_html)
     else
+      replacement_property_id = JSON.parse(data.responseText).id
       replacement_property_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Prospective Purchase Property of ' + repls_name + '</span>.'
       $(document).find('.create-seller-property').parent('p').html(replacement_property_info_html)
-    if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+    if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+      $(document).find('.final-step').removeAttr('data-dismiss')
       $(document).find('.final-step').attr('href', '/')
       $(document).find('.final-step').text('Next')
     else
@@ -458,6 +480,6 @@ $ ->
   
   $(document).find('#md-new-property form').parsley(
     errorsContainer: (em)->
-        $err = em.$element.parents('.form-group').find('.help-block')
+        $err = em.$element.parents('.form-group').find('.error-msg')
         return $err
   )
