@@ -333,7 +333,11 @@ class PropertiesController < ApplicationController
   def validate_user_assets
     exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
     replacement_seller =  Contact.where(contact_type: 'Counter-Party', user_id: current_user.id).first
-    if property_params[:ownership_status] == 'Purchased'
+    if !exchangor.present? && !replacement_seller.present?
+      return redirect_to '/'
+    end
+    
+    if params[:ostatus] == 'Purchased'
       if exchangor.present?
         #allow user goes to property
       else
