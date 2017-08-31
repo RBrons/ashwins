@@ -166,6 +166,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                             - else 
                                 p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
                             - if @exchangor.has_purchased_properties?
+                                input.purchased_property_id[type="hidden" value="#{@purchased_property_id}"]
                                 p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
                             - else
                                 p 
@@ -177,6 +178,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
 
                     section.relinquishing-purchaser-wrapper.margin-lg-left
                         - if @relinquishing_purchaser.present?
+                            input.relinp_id[type="hidden" value="#{@relinquishing_purchaser.id}"]
                             p.text-success = "You have created a data record for #{@relinquishing_purchaser.name} to be your first purchaser."
                         - else
                             p.relinquishing-purchaser-info.text-danger
@@ -207,6 +209,8 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     section.replacement-seller-wrapper.margin-lg-left
                         - if @replacement_property.present?
                             - if @replacement_property.owner.present?
+                                input.repls_contact_id[type="hidden" value="#{@replacement_property.owner.id}"]
+                                input.replacement_property_id[type="hidden" value="#{@replacement_property.id}"]
                                 p.text-success = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
                         - else
                             p.replacement-seller-info.text-danger
