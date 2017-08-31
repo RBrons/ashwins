@@ -37,21 +37,41 @@ $ ->
     $(document).find('#md-user-role').modal('show')
     
   $(document).find('#md-user-role .go-next').on 'click', -> 
-    if user_role == 'Attorney' && $(this).data('target-modal') == '#md-business'
-      $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', false)
-      $(document).find('#md-business .law-firm-detail .new_firm_field').hide()
-      $(document).find('#md-business .shared-field').hide()
-      $(document).find('#md-business .law-firm-detail').removeClass('hide')
-      
-      $(document).find('#md-business .business-detail input').prop('disabled', 'disabled')
-      $(document).find('#md-business .business-detail').addClass('hide')
-    else
-      $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', 'disabled')
-      $(document).find('#md-business .law-firm-detail').addClass('hide')
+    if $(this).data('target-modal') == '#md-business'
+      if user_role == 'Attorney'
+        # begin temporary command
+        $(document).find('#md-business form.create_contact').show()
+        $(document).find('#md-business form.under_construction').hide()
+        # end
+        
+        $(document).find('.business-step-title').text('Legal Setup')
+        $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', false)
+        $(document).find('#md-business .law-firm-detail .new_firm_field').hide()
+        $(document).find('#md-business .shared-field').hide()
+        $(document).find('#md-business .law-firm-detail').removeClass('hide')
+        
+        $(document).find('#md-business .business-detail input').prop('disabled', 'disabled')
+        $(document).find('#md-business .business-detail').addClass('hide')
+      else if user_role == 'Normal User'
+        $(document).find('.business-step-title').text('Fiduciary Setup')
+        
+        # begin temporary command
+        $(document).find('#md-business form.create_contact').hide()
+        $(document).find('#md-business form.under_construction').show()
+        # end
+      else
+        # begin temporary command
+        $(document).find('#md-business form.create_contact').show()
+        $(document).find('#md-business form.under_construction').hide()
+        # end
+        $(document).find('.business-step-title').text('Business Setup')
+        $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', 'disabled')
+        $(document).find('#md-business .law-firm-detail').addClass('hide')
 
-      $(document).find('#md-business .business-detail input').prop('disabled', false)
-      $(document).find('#md-business .business-detail').removeClass('hide')
-      $(document).find('#md-business .shared-field').show()
+        $(document).find('#md-business .business-detail input').prop('disabled', false)
+        $(document).find('#md-business .business-detail').removeClass('hide')
+        $(document).find('#md-business .shared-field').show()
+
     # clear form fields
     $(document).find('form.create_contact select.existing_firm').val($(document).find('form.create_contact select.existing_firm option:first').val())
     $(document).find('form.create_contact input[type="text"]').val('')
@@ -63,7 +83,7 @@ $ ->
       $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
     $(document).find($(this).data('target-modal')).modal('show')
 
-  $(document).find('.attorney_user, .fiduciary_user').on 'click', ->
+  $(document).find('.attorney_user, .fiduciary_user, .property_owner').on 'click', ->
     if $('.attorney_user').is(':checked')
       user_role = 'Attorney'
       $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
@@ -194,6 +214,7 @@ $ ->
           
           $(document).find('#md-add-initial-client').modal('hide')
           if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+            $(document).find('.final-step').attr('href', '/')
             $(document).find('.final-step').text('Next')
           else
             $(document).find('.final-step').text('Skip This Step')
@@ -277,6 +298,7 @@ $ ->
               current_em.off('blur')
               
             if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+              $(document).find('.final-step').attr('href', '/')
               $(document).find('.final-step').text('Next')
             else
               $(document).find('.final-step').text('Skip This Step')
@@ -320,6 +342,7 @@ $ ->
                 current_em.off('blur')
 
               if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+                $(document).find('.final-step').attr('href', '/')
                 $(document).find('.final-step').text('Next')
               else
                 $(document).find('.final-step').text('Skip This Step')
@@ -359,6 +382,7 @@ $ ->
                 current_em.off('blur')
 
               if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+                $(document).find('.final-step').attr('href', '/')
                 $(document).find('.final-step').text('Next')
               else
                 $(document).find('.final-step').text('Skip This Step')
@@ -425,8 +449,15 @@ $ ->
       replacement_property_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Prospective Purchase Property of ' + repls_name + '</span>.'
       $(document).find('.create-seller-property').parent('p').html(replacement_property_info_html)
     if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+      $(document).find('.final-step').attr('href', '/')
       $(document).find('.final-step').text('Next')
     else
       $(document).find('.final-step').text('Skip This Step')
   $(document).find('.new-tenant-button').on 'click', ->
     console.log 'new tenant'
+  
+  $(document).find('#md-new-property form').parsley(
+    errorsContainer: (em)->
+        $err = em.$element.parents('.form-group').find('.help-block')
+        return $err
+  )
