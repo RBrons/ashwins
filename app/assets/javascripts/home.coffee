@@ -187,8 +187,8 @@ $ ->
         if data.id
           exchangor_entity_id = data.id
           exchangor_name = data.name
-          exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + legal_ending_html + '</span>'
-          $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
+          exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + legal_ending_html + ' will be your first Exchangor</span>'
+          # $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
           $(document).find('.exchangor-info').html(exchangor_info_html)
           $(document).find('.exchangor-wrapper form').hide()
           
@@ -251,7 +251,7 @@ $ ->
 
     $(document).find('.relinquishing-purchaser-wrapper form input[name="contact[is_company]"]').val('false')
 
-  $(document).find('.entity-individual-detail input, .entity-business-detail input').on 'blur', ->
+  $(document).find('.entity-individual-detail input').on 'blur', ->
     form = $(this).closest('form')
     if form.find('input[name="entity_type"]').val() == 'individual'
       none_empty_inputs = form.find('.entity-individual-detail input').filter ->
@@ -283,6 +283,19 @@ $ ->
         else
           $.notify "Failed!", "error"
   
+  $(document).find('.entity-business-detail input').on 'blur', ->
+    if $(this).val() == ''
+      sweetAlert('First input the Name', '', 'info')
+      return false
+    $(document).find('#md-add-initial-client').modal('show')
+
+  $(document).find('.entity-business-detail input').on 'keypress', (e)->
+    if(e.which == 13)
+      if $(document).find('.exchangor-wrapper form input[name="entity[name]"]').val() == ''
+        sweetAlert('First input the Name', '', 'info')
+        return false
+      $(document).find('#md-add-initial-client').modal('show')
+      
   $(document).find('.relinp-individual-detail input, .relinp-business-detail input').on 'blur', ->
     form = $(this).closest('form')
     if $(this).val() != ""

@@ -146,15 +146,15 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                             div.entity-business-detail.row[style="display: none"]
                                 div.col-md-2.col-xs-6
                                     input.form-control[name="entity[name]" type="text"]
-                    p
-                        a.create-initial-client-type.text-danger[href="#"] What type of Entity will your Exchangor be?
+                    / p
+                    /     a.create-initial-client-type.text-danger[href="#"] What type of Entity will your Exchangor be?
                     p 
                         a.create-exchangor-property.text-danger[href="#"] Create a property to be Relinquished by your first Exchangor
                 - else
                     - if @exchangor.type_ == 1
                         p.text-success = "You have created a data record for #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name} to be your first Exchangor."
                     - else 
-                        p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)}"
+                        p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
                     - if @exchangor.has_purchased_properties?
                         p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
                     - else
@@ -251,6 +251,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     label.control-label City
                     input#property_location_city.form-control[type="text" name="property[location_city]" required]
                 .form-group
+                    label.control-label Rent
                     .input-group
                         .input-group-addon $
                         input.form-control.input-mask-currency[type="text" name="property[current_rent]" required]
