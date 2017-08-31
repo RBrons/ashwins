@@ -29,7 +29,10 @@ class HomeController < ApplicationController
     
     if @exchangor.present?
       @has_purchased_properties = @exchangor.has_purchased_properties?
-      
+      if @has_purchased_properties
+        @purchased_property_id = Property.where(ownership_status: 'Purchased', owner_entity_id: @exchangor.id).first.id || 0
+      end
+
       if @has_purchased_properties && @relinquishing_purchaser.present? && @replacement_property.present?
         @completed_initial_sequence = true
       else
