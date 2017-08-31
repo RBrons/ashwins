@@ -251,125 +251,127 @@ $ ->
 
     $(document).find('.relinquishing-purchaser-wrapper form input[name="contact[is_company]"]').val('false')
 
-  $(document).find('.entity-individual-detail input').on 'blur', ->
+  $(document).find('.entity-individual-detail input').on 'blur keypress', (e)->
     form = $(this).closest('form')
-    if form.find('input[name="entity_type"]').val() == 'individual'
+    current_em = $(this)
+    if e.type == 'blur' || e.keyCode == 13
       none_empty_inputs = form.find('.entity-individual-detail input').filter ->
-        return this.value != ''
-    else
-      return false
-    if none_empty_inputs.length != 2
-      return false
-    
-    $.ajax
-      url: '/xhr/create_entity'
-      type: 'POST'
-      dataType: 'json'
-      data: form.serialize()
-      success: (data) ->
-        if data.id
-          exchangor_entity_id = data.id
-          if data.first_name && data.last_name
-            exchangor_name = data.first_name + ' ' + data.last_name
-            exchangor_info_html = '<span class="text-success">You have created a data record for ' + exchangor_name + ' to be your first Exchangor.</span>'
-            $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
-            $(document).find('.exchangor-info').html(exchangor_info_html)
-            $(document).find('.exchangor-wrapper form').hide()
-            
-          if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
-            $(document).find('.final-step').text('Next')
+          return this.value != ''
+      if none_empty_inputs.length != 2
+        return false
+      
+      $.ajax
+        url: '/xhr/create_entity'
+        type: 'POST'
+        dataType: 'json'
+        data: form.serialize()
+        success: (data) ->
+          if data.id
+            exchangor_entity_id = data.id
+            if data.first_name && data.last_name
+              exchangor_name = data.first_name + ' ' + data.last_name
+              exchangor_info_html = '<span class="text-success">You have created a data record for ' + exchangor_name + ' to be your first Exchangor.</span>'
+              $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
+              $(document).find('.exchangor-info').html(exchangor_info_html)
+              $(document).find('.exchangor-wrapper form').hide()
+              current_em.off('blur')
+              
+            if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+              $(document).find('.final-step').text('Next')
+            else
+              $(document).find('.final-step').text('Skip This Step')
           else
-            $(document).find('.final-step').text('Skip This Step')
-        else
-          $.notify "Failed!", "error"
+            $.notify "Failed!", "error"
   
-  $(document).find('.entity-business-detail input').on 'blur', ->
-    if $(this).val() == ''
-      sweetAlert('First input the Name', '', 'info')
-      return false
-    $(document).find('#md-add-initial-client').modal('show')
-
-  $(document).find('.entity-business-detail input').on 'keypress', (e)->
-    if(e.which == 13)
-      if $(document).find('.exchangor-wrapper form input[name="entity[name]"]').val() == ''
+  $(document).find('.entity-business-detail input').on 'blur keypress', (e)->
+    if e.type == 'blur' || e.keyCode == 13
+      if $(this).val() == ''
         sweetAlert('First input the Name', '', 'info')
         return false
       $(document).find('#md-add-initial-client').modal('show')
-      
-  $(document).find('.relinp-individual-detail input, .relinp-business-detail input').on 'blur', ->
+
+  $(document).find('.relinp-individual-detail input, .relinp-business-detail input').on 'blur keypress', (e)->
     form = $(this).closest('form')
-    if $(this).val() != ""
-      if form.attr('action') != ""
-        action_url = form.attr('action')
-        type = 'PUT'
-      else
-        action_url = '/contacts/'
-        type = 'POST'
+    current_em = $(this)
+    if e.type == 'blur' || e.keyCode == 13
+      if $(this).val() != ""
+        if form.attr('action') != ""
+          action_url = form.attr('action')
+          type = 'PUT'
+        else
+          action_url = '/contacts/'
+          type = 'POST'
 
-      $.ajax
-        url: action_url
-        type: type
-        dataType: 'json'
-        data: form.serialize()
-        success: (data) ->
-          if data
-            form.attr('action', '/contacts/' + data.id)
-            if data.is_company
-              relinp_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
-            else if data.first_name != '' && data.last_name != ""
-              relinp_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
-            if relinp_info_html != ""
-              $(document).find('.relinquishing-purcahser-info').html(relinp_info_html)
-              $(document).find('.relinquishing-purchaser-wrapper form').hide()
-            
-            if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
-              $(document).find('.final-step').text('Next')
+        $.ajax
+          url: action_url
+          type: type
+          dataType: 'json'
+          data: form.serialize()
+          success: (data) ->
+            if data
+              form.attr('action', '/contacts/' + data.id)
+              if data.is_company
+                relinp_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
+              else if data.first_name != '' && data.last_name != ""
+                relinp_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
+              if relinp_info_html != ""
+                $(document).find('.relinquishing-purchaser-info').html(relinp_info_html)
+                $(document).find('.relinquishing-purchaser-wrapper form').hide()
+                current_em.off('blur')
+
+              if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+                $(document).find('.final-step').text('Next')
+              else
+                $(document).find('.final-step').text('Skip This Step')
             else
-              $(document).find('.final-step').text('Skip This Step')
-          else
-            $.notify "Failed!", "error"
+              $.notify "Failed!", "error"
 
-  $(document).find('.repls-individual-detail input, .repls-business-detail input').on 'blur', ->
+  $(document).find('.repls-individual-detail input, .repls-business-detail input').on 'blur keypress', (e)->
     form = $(this).closest('form')
-    if $(this).val() != ""
-      if form.attr('action') != ""
-        action_url = form.attr('action')
-        type = 'PUT'
-      else
-        action_url = '/contacts/'
-        type = 'POST'
+    current_em = $(this)
+    if e.type == 'blur' || e.keyCode == 13
+      if $(this).val() != ""
+        if form.attr('action') != ""
+          action_url = form.attr('action')
+          type = 'PUT'
+        else
+          action_url = '/contacts/'
+          type = 'POST'
 
-      $.ajax
-        url: action_url
-        type: type
-        dataType: 'json'
-        data: form.serialize()
-        success: (data) ->
-          if data
-            form.attr('action', '/contacts/' + data.id)
-            repls_contact_id = data.id
-            if data.is_company
-              repls_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
-              repls_name = data.company_name
-            else if data.first_name != '' && data.last_name != ""
-              repls_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
-              repls_name = data.first_name + ' ' + data.last_name
-            if repls_info_html != ""
-              $(document).find('.replacement-seller-info').html(repls_info_html)
-              $(document).find('.replacement-seller-wrapper form').hide()
-            
-            if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
-              $(document).find('.final-step').text('Next')
+        $.ajax
+          url: action_url
+          type: type
+          dataType: 'json'
+          data: form.serialize()
+          success: (data) ->
+            if data
+              form.attr('action', '/contacts/' + data.id)
+              repls_contact_id = data.id
+              if data.is_company
+                repls_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
+                repls_name = data.company_name
+              else if data.first_name != '' && data.last_name != ""
+                repls_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
+                repls_name = data.first_name + ' ' + data.last_name
+              if repls_info_html != ""
+                $(document).find('.replacement-seller-info').html(repls_info_html)
+                $(document).find('.replacement-seller-wrapper form').hide()
+                current_em.off('blur')
+
+              if exchangor_entity_id != "" && purchased_info_html != "" && relinp_info_html != "" && replacement_property_info_html != ""
+                $(document).find('.final-step').text('Next')
+              else
+                $(document).find('.final-step').text('Skip This Step')
             else
-              $(document).find('.final-step').text('Skip This Step')
-          else
-            $.notify "Failed!", "error"
+              $.notify "Failed!", "error"
+
   $(document).find('.create-exchangor-property').on 'click', ->
     if parseInt(exchangor_entity_id) == 0
       sweetAlert 'First create your Exchangor', '', 'info'
       return
     
     form = $(document).find('#md-new-property form')
+    form.find('input').val('')
     form.find('input#property_ownership_status').val('Purchased')
     if exchangor_entity_type == 'Individual'
       form.find('input#property_owner_entity_id').val('')
@@ -387,6 +389,7 @@ $ ->
       return
 
     form = $(document).find('#md-new-property form')
+    form.find('input').val('')
     form.find('input#property_ownership_status').val('Prospective Purchase')
     if repls_contact_type == 'business'
       form.find('input#property_owner_entity_id').val(repls_contact_id)
