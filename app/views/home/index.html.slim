@@ -251,6 +251,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
             h4.modal-title Add Property
         .modal-body
             form[action="/properties" data-remote="true" method="post"]
+                input#ostatus[type="hidden" name="ostatus" value=""]
                 input#property_ownership_status[type="hidden" name="property[ownership_status]" value=""]
                 input#property_owner_entity_id[type="hidden" name="property[owner_entity_id]" value=""]
                 input#property_owner_entity_id_indv[type="hidden" name="property[owner_entity_id_indv]" value=""]
@@ -263,11 +264,11 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     = link_to "New", "javascript:void(0)", class: "new-tenant-button"
                 .form-group
                     label.control-label City
-                    span.help-block
+                    span.error-msg
                     input#property_location_city.form-control[type="text" name="property[location_city]" required data-parsley-error-message="Please input a city"]
                 .form-group
                     label.control-label Rent
-                    span.help-block
+                    span.error-msg
                     .input-group
                         .input-group-addon $
                         input.form-control.input-mask-currency[type="text" name="property[current_rent]" required data-parsley-error-message="Please input the monthly rental amount"]

@@ -344,7 +344,7 @@ class PropertiesController < ApplicationController
         # not created relinquishing seller
         return redirect_to '/'
       end
-    else
+    elsif params[:ostatus] == 'Prospective Purchase'
       if replacement_seller.present?
         #allow user goes to property
       else

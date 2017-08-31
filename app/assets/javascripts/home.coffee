@@ -396,6 +396,7 @@ $ ->
     
     form = $(document).find('#md-new-property form')
     form.find('input').val('')
+    form.find('input#ostatus').val('Purchased')
     form.find('input#property_ownership_status').val('Purchased')
     if exchangor_entity_type == 'Individual'
       form.find('input#property_owner_entity_id').val('')
@@ -414,6 +415,7 @@ $ ->
 
     form = $(document).find('#md-new-property form')
     form.find('input').val('')
+    form.find('input#ostatus').val('Prospective Purchase')
     form.find('input#property_ownership_status').val('Prospective Purchase')
     if repls_contact_type == 'business'
       form.find('input#property_owner_entity_id').val(repls_contact_id)
@@ -443,6 +445,7 @@ $ ->
     $.notify 'Success', 'success'
     $(document).find('#md-new-property').modal('hide')
     if JSON.parse(data.responseText).ownership_status == 'Purchased'
+      
       purchased_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Purchased Property of ' + exchangor_name + '</span>.'
       $(document).find('.create-exchangor-property').parent('p').html(purchased_info_html)
     else
@@ -458,6 +461,6 @@ $ ->
   
   $(document).find('#md-new-property form').parsley(
     errorsContainer: (em)->
-        $err = em.$element.parents('.form-group').find('.help-block')
+        $err = em.$element.parents('.form-group').find('.error-msg')
         return $err
   )
