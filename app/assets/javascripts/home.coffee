@@ -445,7 +445,6 @@ $ ->
     $.notify 'Success', 'success'
     $(document).find('#md-new-property').modal('hide')
     if JSON.parse(data.responseText).ownership_status == 'Purchased'
-      
       purchased_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Purchased Property of ' + exchangor_name + '</span>.'
       $(document).find('.create-exchangor-property').parent('p').html(purchased_info_html)
     else
