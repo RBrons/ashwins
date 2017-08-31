@@ -131,7 +131,7 @@ input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initi
                     p 
                         | First you will create an Exchangor. The Exchangor must own at least one property which we call a Relinquished Property. The Exchangor will commence the exchange by selling the Relinquished Property. To create the Exchangor, you must first decide whether the Exchangor will be a Business or an Individual. After that selection, name fields will pop up so you can give your Exchangor a name. Third, you will select an entity type for your Exchangor. When you move from this Introduction to the main part of the app you will be able to find your first Exchangor in the&nbsp;
                         span.depends_on_user_role Clients
-                        | &nbsp;List view. Lastly, you will create the Relinquished Property
+                        | &nbsp;List view. Lastly, you will create a property for your Exchangor to Relinquish
 
                     section.exchangor-wrapper.margin-lg-left
                         input.exchangor_entity_id[type="hidden" value="#{@exchangor.present? ? @exchangor.id : 0}"]
