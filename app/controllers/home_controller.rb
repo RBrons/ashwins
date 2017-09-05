@@ -27,6 +27,8 @@ class HomeController < ApplicationController
     @relinquishing_purchaser = Contact.where(contact_type: 'Counter-Party', user_id: current_user.id).first
     @replacement_property =  Property.where('ownership_status = ? and title is not null and user_id = ?', 'Prospective Purchase', current_user.id).first
     
+    @transactions_in_user = []
+
     if @exchangor.present?
       @has_purchased_properties = @exchangor.has_purchased_properties?
       if @has_purchased_properties
@@ -35,6 +37,36 @@ class HomeController < ApplicationController
 
       if @has_purchased_properties && @relinquishing_purchaser.present? && @replacement_property.present?
         @completed_initial_sequence = true
+
+        # Make Transaction Participants Tab
+        sale_transactions = TransactionSale.joins(:transaction_main).where('transaction_mains.user_id' => current_user.id, 'transactions.deleted_at' => 
+        nil).select('DISTINCT on (transactions.relinquishing_seller_entity_id) transactions.*')
+
+        purchase_transactions = TransactionPurchase.joins(:transaction_main).where('transaction_mains.user_id' => current_user.id, 'transactions.deleted_at' => nil)
+        del_transaction_ids = []
+        purchase_transactions.each do |purchase_transaction|
+          main = purchase_transaction.main
+          sale = main.sale
+          if !sale.nil?
+            if purchase_transaction.created_at > sale.created_at
+              tprops = sale.transaction_properties
+              del_flag = true
+              tprops.each do |prop|
+  
+                if prop.closed?
+                  del_flag = false
+                  break
+                end
+              end
+              del_transaction_ids << purchase_transaction.id if del_flag
+            end
+          end
+        end
+        purchase_transactions = purchase_transactions.where.not('transactions.id in (?)', del_transaction_ids) if del_transaction_ids.count > 0
+        purchase_transactions = purchase_transactions.joins(:transaction_properties).joins('INNER JOIN properties ON properties.id = transaction_properties.property_id AND properties.deleted_at IS NULL').select('DISTINCT on (properties.id) transactions.*, properties.id as p_id, properties.title as p_title')
+        
+        @transactions_in_user = (sale_transactions + purchase_transactions).sort_by(&:updated_at).reverse
+        
       else
         @completed_initial_sequence = false
       end
