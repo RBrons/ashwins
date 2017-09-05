@@ -483,3 +483,12 @@ $ ->
         $err = em.$element.parents('.form-group').find('.error-msg')
         return $err
   )
+
+  $('table#pt_data_table').DataTable
+    'bSort': false
+    'bPaginate': true
+    'bInfo': false
+    'bFilter': false
+    'iDisplayLength': 20
+    
+  $(document).find('#pt_data_table_length').hide()

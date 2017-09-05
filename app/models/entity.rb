@@ -232,6 +232,10 @@ class Entity < ApplicationRecord
     Property.where(ownership_status: 'Purchased', owner_entity_id: self.id).length > 0 ? true : false
   end
 
+  def purchased_properties
+    Property.where(ownership_status: 'Purchased', owner_entity_id: self.id)
+  end
+
   def self.TransactionEntityWithType(etype="entity")
     if etype == "individual"
       # exclude all non individual member types

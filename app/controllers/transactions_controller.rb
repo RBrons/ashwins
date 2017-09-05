@@ -81,6 +81,7 @@ class TransactionsController < ApplicationController
                       TransactionSale.new(transaction_main_id: @transaction_main.id)
                       t1 = TransactionPurchase.new({
                         transaction_main_id: @transaction_main.id,
+                        user_id: current_user.id,
                         relinquishing_seller_entity_id: t.relinquishing_seller_entity_id,
                         relinquishing_seller_honorific: t.relinquishing_seller_honorific,
                         relinquishing_seller_first_name: t.relinquishing_seller_first_name,
@@ -121,7 +122,7 @@ class TransactionsController < ApplicationController
                       #  end
                       #  ts.transaction_main_id = @transaction_main.id
                       #  ts
-                       TransactionSale.new(transaction_main_id: @transaction_main.id) #,
+                      TransactionSale.new(transaction_main_id: @transaction_main.id) #,
                       #  relinquishing_seller_entity_id: ts.relinquishing_seller_entity_id)
                      end
 

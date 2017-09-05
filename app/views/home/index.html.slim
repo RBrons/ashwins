@@ -8,20 +8,53 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
         .modal-body
             div[role="tabpanel"]
                 ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-                    li.active[role="presentation"]
+                    li.active[role="presentation"] 
+                        a#transaction_participants_tab[href="#transaction_participants_section" role="tab" data-toggle="tab"  aria-expanded="true"] Transaction Participants
+                    li[role="presentation"]
                         a#favorites_tab[href="#favorites_section" role="tab" data-toggle="tab" aria-expanded="true"] Favorites
                     li[role="presentation"]
                         a#history_tab[href="#history_section" role="tab" data-toggle="tab" aria-expanded="false"] History
                     li[role="presentation"]
                         a#tasks_tab[href="#tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
                 .tab-content
-                    #favorites_section.active.tab-pane.fade.in[role="tabpanel"]
+                    #transaction_participants_section.active.tab-pane.fade.in[role="tabpanel"]
+                        div.col-md-8.col-xs-12
+                            table#pt_data_table
+                                thead
+                                    tr
+                                        th Participant
+                                        th Type
+                                        th Properties
+                                tbody
+                                    - @transactions_in_user.each do |transaction|
+                                        - if transaction.is_purchase == 1
+                                            - owner = get_property_purchaser(transaction.p_id, transaction.id, 'purchase')
+                                            - if owner.present?
+                                                tr
+                                                    td.text-success = owner.try(:name) || "No Name"
+                                                    td.text-danger Contact/Counterparty
+                                                    td.text-success  = "owns #{transaction.p_title}"
+                                        - else
+                                            tr
+                                                td.text-success = transaction.seller_name || "No Name"
+                                                td.text-danger Client
+                                                td.text-success  = transaction.relinquishing_seller_entity.present? ? transaction.relinquishing_seller_entity.purchased_properties.pluck(:title).join(" | ") : "No Properties"
+                                            - tproperties = get_transaction_properties(transaction)
+                                            - tproperties.each do |tproperty|
+                                                - purchaser = get_property_purchaser(tproperty.id, transaction.id)
+                                                - if purchaser.present?
+                                                    tr
+                                                        td.text-success = purchaser.name
+                                                        td.text-danger Contact/Counterparty
+                                                        td
+
+                    #favorites_section.tab-pane.fade.in[role="tabpanel"]
                         span Coming soon
                     #history_section.tab-pane.fade[role="tabpanel"]
                         span Coming soon
                     #tasks_section.tab-pane.fade[role="tabpanel"]
                         span Coming soon
-
+               
 / Initial Sign in Modal 
 input#is_show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]
 input#is_completed_initial_sign_in_modal[type="hidden" value="#{@completed_initial_sequence}"]
