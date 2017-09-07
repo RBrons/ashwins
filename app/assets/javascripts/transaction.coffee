@@ -1413,3 +1413,28 @@ $ ->
 #      currentRent.val(0)
 #      currentImage.attr 'src', "<%= asset_path('sale_house.jpg') %>"
 #      currentImage.attr 'alt', "Placeholder"
+
+  
+  # Personnel Page
+  $(document).on 'change', '#transaction_personnel_contact_id', ->
+    if $(this).find('option:selected').text() == 'Add New'
+      $('.transaction-personnel-contact-form-wrapper').show()
+      $(document).find('div.personnel-individual-detail input').prop('disabled', false)
+    else 
+      $('.transaction-personnel-contact-form-wrapper').hide()
+      $(document).find('div.personnel-business-detail input').prop('disabled', 'disabled')
+      $(document).find('div.personnel-individual-detail input').prop('disabled', 'disabled')
+  
+  $(document).on 'ifChecked', '#transaction_personnel_contact_is_company_true', ->
+    if this.checked
+      $(document).find('div.personnel-business-detail').show()
+      $(document).find('div.personnel-business-detail input').prop('disabled', false)
+      $(document).find('div.personnel-individual-detail').hide()
+      $(document).find('div.personnel-individual-detail input').prop('disabled', 'disabled')
+
+  $(document).on 'ifChecked', '#transaction_personnel_contact_is_company_false', ->
+    if this.checked
+      $(document).find('div.personnel-business-detail').hide()
+      $(document).find('div.personnel-business-detail input').prop('disabled', 'disabled')
+      $(document).find('div.personnel-individual-detail').show()
+      $(document).find('div.personnel-individual-detail input').prop('disabled', false)

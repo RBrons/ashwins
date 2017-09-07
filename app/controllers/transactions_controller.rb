@@ -719,16 +719,48 @@ class TransactionsController < ApplicationController
   end
 
   def personnel
-    if @transaction.transaction_personnel.blank?
-      @transaction.create_transaction_personnel
+    if !params[:sub_sub].present?
+      params[:sub_sub] = 'Title'
     end
-    #@transaction.transaction_personnel.create_contacts
-    @transaction_personnel = @transaction.transaction_personnel
+
+    if !@transaction.transaction_personnels.where(personnel_category: params[:sub_sub]).first.present?
+      @transaction_personnel = @transaction.transaction_personnels.new
+    else
+      @transaction_personnel = @transaction.transaction_personnels.where(personnel_category: params[:sub_sub]).first
+    end
+    
+    @prepopulated_list = Contact.where(object_title: params[:sub_sub], user_id: current_user.id, contact_type: 'Personnel')    
   end
 
   def personnel_update
-    @transaction_personnel = @transaction.transaction_personnel
-    if @transaction.transaction_personnel.update(transaction_personnels_params)
+    
+    if !@transaction.transaction_personnels.where(personnel_category: params[:sub_sub]).first.present?
+      @transaction_personnel = @transaction.transaction_personnels.create(transaction_personnel_params)
+    else
+      @transaction_personnel = @transaction.transaction_personnels.where(personnel_category: params[:sub_sub]).first
+    end
+    if transaction_personnel_params[:contact_id].present?
+      if TransactionPersonnel::FIXED_TITLE.find_next(params[:sub_sub] || TransactionPersonnel::FIXED_TITLE.first)
+        return redirect_to personnel_transaction_path(@transaction, sub: params[:sub], sub_sub: TransactionPersonnel::FIXED_TITLE.find_next(params[:sub_sub] || TransactionPersonnel::FIXED_TITLE.first), main_id: params[:main_id], type: params[:type])
+      else
+        return redirect_to personnel_transaction_path(@transaction, sub: params[:sub], sub_sub: TransactionPersonnel::FIXED_TITLE.last, main_id: params[:main_id], type: params[:type])
+      end
+    end
+    
+    contact = params.require(:transaction_personnel).require(:contact).permit(:id)
+    if contact[:id].to_i == 0
+      @contact = Contact.create(transaction_personnel_contact_params)
+    else
+      @contact = Contact.find(contact[:id])
+      @contact.update(transaction_personnel_contact_params)
+      if @contact.is_company
+        @contact.update(first_name: nil, last_name: nil)
+      else
+        @contact.update(company_name: nil)
+      end
+    end
+
+    if @transaction_personnel.update(contact_id: @contact.id)
       if TransactionPersonnel::FIXED_TITLE.find_next(params[:sub_sub] || TransactionPersonnel::FIXED_TITLE.first)
         redirect_to personnel_transaction_path(@transaction, sub: params[:sub], sub_sub: TransactionPersonnel::FIXED_TITLE.find_next(params[:sub_sub] || TransactionPersonnel::FIXED_TITLE.first), main_id: params[:main_id], type: params[:type])
       else
@@ -915,8 +947,12 @@ class TransactionsController < ApplicationController
     params.require(:transaction).permit(:sale_inspection_lease_tasks_estoppel, :sale_inspection_lease_tasks_rofr, :purchase_inspection_lease_tasks_estoppel, :purchase_inspection_lease_tasks_rofr)
   end
 
-  def transaction_personnels_params
-    params.require(:transaction).permit(:contacts_attributes => [:first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :id, :object_title])
+  def transaction_personnel_params
+    params.require(:transaction_personnel).permit([:personnel_category, :contact_id])
+  end
+
+  def transaction_personnel_contact_params
+    params.require(:transaction_personnel).require(:contact).permit([:is_company, :company_name, :first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :contact_type, :object_title])
   end
 
   def transaction_main_params

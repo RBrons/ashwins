@@ -24,7 +24,7 @@ class TransactionSale < ApplicationRecord
   has_one :transaction_term, foreign_key: :transaction_id, dependent: :destroy
   accepts_nested_attributes_for :transaction_term, :reject_if => :all_blank
 
-  has_one :transaction_personnel, foreign_key: :transaction_id
+  has_many :transaction_personnels, foreign_key: :transaction_id
   
   has_one :entity
   has_one :contact
