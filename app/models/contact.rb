@@ -7,6 +7,8 @@ class Contact < ApplicationRecord
 
   has_one :transaction_property_offer, foreign_key: :relinquishing_purchaser_contact_id, dependent: :destroy
   
+  has_many :transaction_personnels, dependent: :destroy
+
   #validates_presence_of :first_name, :last_name #, :email
   validate :email_check
   validate :company_name_check

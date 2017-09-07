@@ -134,15 +134,15 @@
                       - if !pclosed
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="purchase"]
       
-      li class=("#{ params[:type] == 'qi_status' ? 'active' : '' }")
+      li class=("#{ params[:sub] == 'closing' && params[:type] == 'qi_status' ? 'active' : '' }")
         = link_to qi_status_transaction_path(@transaction, main_id: @transaction_main.id), class: "#{'active' if params[:type] == 'qi_status' || params[:type].blank?}" do
           = image_tag('icons/icon-qi.svg', class: 'icon')
           |  QI
           span.label.label-danger.pull-right = get_identification_rule(@transaction_main.purchase)
-      li
-          a[href="#"]
-            = image_tag('icons/icon-personnel.svg', class: 'icon')
-            |  Personnel
+      li class=("#{ params[:sub] == 'personnel' ? 'active' : '' }")
+        = link_to personnel_transaction_path(@transaction, sub: 'personnel', main_id: params[:main_id]), class: "#{'active' if params[:sub] == 'personnel'}" do
+          = image_tag('icons/icon-personnel.svg', class: 'icon')
+          |  Personnel
       li
         a[href="#"]
           = image_tag('icons/icon-documents.svg', class: 'icon')

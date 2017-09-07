@@ -3,7 +3,7 @@
 .clearfix
 hr
 .clearfix
-- if params[:type] != 'qi_status'
+- if params[:type] != 'qi_status' && params[:sub] != 'personnel'
   .clearfix.margin-lg-top
     - persisted = @transaction.persisted?
     - if @transaction.is_a?(TransactionSale)
