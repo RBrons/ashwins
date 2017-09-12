@@ -328,6 +328,7 @@ Rails.application.routes.draw do
         post :toggle_landing_page
         post :toggle_initial_sign_in_modal
         post :set_greeting
+        post :toggle_personnel_to_user
       end
     end
 

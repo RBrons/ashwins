@@ -20,7 +20,8 @@ class Admin::DefaultValuesController < ApplicationController
       @show_initial_sign_in_modal = false
     end
 
-    @greeting = DefaultValue.where(entity_name: 'Greeting').first.present? ? DefaultValue.where(entity_name: 'Greeting').first.value : ''
+    @greeting = DefaultValue.where(entity_name: 'Greeting').first.try(:value)
+    @show_personnel_list = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
   end
 
   # GET /default_values/1
@@ -169,6 +170,16 @@ class Admin::DefaultValuesController < ApplicationController
       greeting_text.update(value: params[:greeting])
     else
       DefaultValue.create(entity_name: 'Greeting', value: params[:greeting])
+    end
+    redirect_to admin_default_values_url
+  end
+
+  def toggle_personnel_to_user
+    toggle_personnel = DefaultValue.where(entity_name: 'ShowPersonnel').first
+    if toggle_personnel.present?
+      toggle_personnel.update(value: params[:toggle_personnel_to_user])
+    else
+      DefaultValue.create(entity_name: 'ShowPersonnel', value: params[:toggle_personnel_to_user])
     end
     redirect_to admin_default_values_url
   end
