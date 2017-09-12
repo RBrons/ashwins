@@ -565,6 +565,8 @@ class TransactionsController < ApplicationController
     @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
     
     # personnel form
+    @show_personnel_list = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
+
     @personnel_on_tab = {}
     TransactionPersonnel::FIXED_TITLE.each do |personnel_category|
       if !@transaction.transaction_personnels.where(personnel_category: personnel_category).first.present?
@@ -585,7 +587,7 @@ class TransactionsController < ApplicationController
           @personnel_on_tab[:zoning] = [transaction_personnel, prepopulated_list]
       end
     end
-
+    
   end
 
   def inspection_update
