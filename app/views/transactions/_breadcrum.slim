@@ -19,8 +19,14 @@
         .pull-left
           h5
             = link_to  'QI', qi_status_transaction_path(@transaction, main_id: @transaction_main.id)
-      - else
-        
+      - elsif params[:sub] == 'personnel'
+        .pull-left
+          h5
+            | &nbsp;&nbsp;/&nbsp;&nbsp;
+        .pull-left
+          h5
+            = link_to  'Personnel', personnel_transaction_path(@transaction, sub: 'personnel', main_id: params[:main_id])
+      - else        
         - if defined?(@transaction) && @transaction.present? && @transaction.Sale? && params[:type] != 'status'
           .pull-left
             h5
