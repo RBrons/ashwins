@@ -563,6 +563,7 @@ class TransactionsController < ApplicationController
 
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
     @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
+    @sub_sub_tab = params[:sub_sub_tab] || @transaction_property.current_step_sub_subtab
     
     # personnel form
     @show_personnel_list = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
@@ -852,7 +853,9 @@ class TransactionsController < ApplicationController
         if params[:sub] == "terms"
           TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'offer_and_acceptance')
         elsif params[:sub] == "inspection"
-          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'seller_documentation')
+          if !TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).first.try(:current_step_subtab)
+            TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'seller_documentation')
+          end
         end
       else
         TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step: params[:sub])
@@ -860,7 +863,9 @@ class TransactionsController < ApplicationController
         if params[:sub] == "terms"
           TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'offer_and_acceptance')
         elsif params[:sub] == "inspection"
-          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'seller_documentation')
+          if !TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).first.try(:current_step_subtab)
+            TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'seller_documentation')
+          end
         elsif params[:sub] == "parties"
           TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'basic_info')
         end

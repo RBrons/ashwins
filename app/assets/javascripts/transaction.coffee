@@ -11,9 +11,11 @@ $ ->
   alert_for_three_property_rule = "Because you selected three property rule, you can not select any more properties to buy"
 
   sub_tab_id = $("#sub_tab_val").val()
-  console.log sub_tab_id
+  sub_sub_tab_id = $("#sub_sub_tab_val").val()
   if sub_tab_id
     $("#" + sub_tab_id).click()
+  if sub_sub_tab_id
+    $("#" + sub_sub_tab_id).click()
 
   #Transaction List
   $(document).on 'click', '#data_table.sale_mode tbody td.details-control, #data_table.purchase_mode tbody td.details-control', ->
@@ -1441,11 +1443,27 @@ $ ->
   
   $(document).on 'ajax:success', '.edit_transaction_personnel, .new_transaction_personnel', (e, data, status, xhr) ->
     $.notify "Success!", "success"
-    $(document).find(selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active a').attr('href')).find('#transaction_personnel_contact_id').hide()
-    if selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active').nextAll().length >= 1
-      selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active').next().find('a').click()
-    else if selected_transaction_sub_tab.nextAll().length >= 1
-      selected_transaction_sub_tab.next().find('a').click()
-    else
-      next_step = $(document).find('ul.wizard_steps li.selected').next()
-      window.location.href = next_step.find('a').attr("href")
+    window.location.reload()
+    # $(document).find(selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active a').attr('href')).find('#transaction_personnel_contact_id').prop('disabled', 'disabled')
+    # if selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active').nextAll().length >= 1
+    #   selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active').next().find('a').click()
+    # else if selected_transaction_sub_tab.nextAll().length >= 1
+    #   selected_transaction_sub_tab.next().find('a').click()
+    # else
+    #   next_step = $(document).find('ul.wizard_steps li.selected').next()
+    #   window.location.href = next_step.find('a').attr("href")
+  
+  $(document).on 'click', '.sale_buy_step_tab_sub li a', (e)->
+    curPropertyId = $("#cur_property_id").val()
+    selectedSubSubTabId = $(this).attr("id")
+    
+    if !isNaN(parseInt(curPropertyId)) && parseInt(curPropertyId) > 0
+      $.ajax
+        type: "POST"
+        url: "/xhr/save_transaction_subtab"
+        data: {id: curPropertyId, sub_subtab: selectedSubSubTabId}
+        dataType: "json"
+        success: (val) ->
+          console.log val
+        error: (e) ->
+          console.log e

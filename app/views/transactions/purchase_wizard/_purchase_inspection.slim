@@ -2,6 +2,8 @@
 div[role="tabpanel"]
   input#cur_property_id[type="hidden" value="#{@transaction_property.id}"]
   input#sub_tab_val[type="hidden" value="#{@sub_tab}"]
+  input#sub_sub_tab_val[type="hidden" value="#{@sub_sub_tab}"]
+
   ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li.active[role="presentation"]
           a#seller_documentation[href="#seller_documentation_section" role="tab" data-toggle="tab" aria-expanded="true"] Seller Documentation
