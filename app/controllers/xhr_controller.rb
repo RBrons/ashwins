@@ -11,7 +11,14 @@ class XhrController < ApplicationController
 
   def save_transaction_subtab
     tp_id = params[:id]
-    TransactionProperty.find(tp_id).update(current_step_subtab: params[:subtab])
+    if params[:subtab]
+      TransactionProperty.find(tp_id).update(current_step_subtab: params[:subtab])
+    end
+
+    if params[:sub_subtab]
+      TransactionProperty.find(tp_id).update(current_step_sub_subtab: params[:sub_subtab])
+    end
+
     render :json => {status: 'success'}
   end
 
