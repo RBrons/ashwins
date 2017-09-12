@@ -144,9 +144,10 @@ div[role="tabpanel"]
                 button.back_prev_step.btn.btn-default Back
                 = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
 
+          #lease_tasks_section.tab-pane.fade.in[role="tabpanel"]
+            = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
               .col-lg-6.col-md-6.col-sm-12.col-xs-12
-                .note
-                  h2 Tasks
+                div
                   ul.to_do
                     li
                       .field_list
@@ -168,8 +169,6 @@ div[role="tabpanel"]
                           input.task_status.flat-icheck[type="checkbox"]
                         .right
                           span Send Documents to Purchaser
-
-          #lease_tasks_section.tab-pane.fade.in[role="tabpanel"]
 
       #inspection_title_section.tab-pane.fade[role="tabpanel"]
         ul.sale_buy_step_tab_sub.nav.nav-tabs.bar_tabs[role="tablist"]
