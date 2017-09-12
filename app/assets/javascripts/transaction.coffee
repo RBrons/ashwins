@@ -1438,3 +1438,14 @@ $ ->
       $(document).find('div.personnel-business-detail input').prop('disabled', 'disabled')
       $(document).find('div.personnel-individual-detail').show()
       $(document).find('div.personnel-individual-detail input').prop('disabled', false)
+  
+  $(document).on 'ajax:success', '.edit_transaction_personnel, .new_transaction_personnel', (e, data, status, xhr) ->
+    $.notify "Success!", "success"
+    $(document).find(selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active a').attr('href')).find('#transaction_personnel_contact_id').hide()
+    if selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active').nextAll().length >= 1
+      selected_transaction_sub_tab.find('.sale_buy_step_tab_sub li.active').next().find('a').click()
+    else if selected_transaction_sub_tab.nextAll().length >= 1
+      selected_transaction_sub_tab.next().find('a').click()
+    else
+      next_step = $(document).find('ul.wizard_steps li.selected').next()
+      window.location.href = next_step.find('a').attr("href")

@@ -2553,9 +2553,8 @@ button,
 }
 
 .field_list .left {
-    width: 5%;
     float: left;
-    margin-right: 3%
+    margin-right: 5px
 }
 
 .field_list .left .vertical-line {
@@ -2567,8 +2566,11 @@ button,
 }
 
 .field_list .right {
-    width: 90%;
     float: left
+}
+
+.field_list .right span{
+    vertical-align: middle;
 }
 
 .field_list h3 {
