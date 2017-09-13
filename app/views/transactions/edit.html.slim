@@ -1,9 +1,9 @@
-.clearfix.margin-lg-left
-  = render 'transactions/breadcrum'
-.clearfix.margin-lg-left
-  = render 'transactions/header_link'
+.clearfix
+= render 'transactions/breadcrum'
+.clearfix
+= render 'transactions/header_link'
+.clearfix
 .col-lg-12.col-md-12.col-sm-12.col-xs-12
-  .clearfix
   = hidden_field_tag :entity_info, @transaction.entity_info
   - if params[:sub].blank?
     - if params[:type] == 'sale'

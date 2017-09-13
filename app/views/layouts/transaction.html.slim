@@ -20,16 +20,16 @@ html
         .top_nav
           = render partial: 'layouts/header'
         .right_col[role="main"]
-          .clearfix.margin-lg-left
-          - flash.each do |key, value|
-            div class="#{flash_class(key, 'duration_6sec')}"
-              a.close data-dismiss="alert" aria-label="Close"
-                span aria-hidden="true"
-                  | &times;
-              = value.html_safe
-          .margin-md-left
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"><h4>&nbsp;&nbsp;/&nbsp;&nbsp;</h4></div>".html_safe
-          div.clearfix
-          = yield
+          .errors-wrapper
+            - flash.each do |key, value|
+              div class="#{flash_class(key, 'duration_6sec')}"
+                a.close data-dismiss="alert" aria-label="Close"
+                  span aria-hidden="true"
+                    | &times;
+                = value.html_safe
+          / .margin-md-left
+          /   = render_breadcrumbs :separator => "<div class=\"pull-left\"><h4>&nbsp;&nbsp;/&nbsp;&nbsp;</h4></div>".html_safe
+          div.row
+            = yield
 
     = javascript_include_tag 'application'
