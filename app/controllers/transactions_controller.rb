@@ -971,7 +971,7 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_personnel_contact_params
-    params.require(:transaction_personnel).require(:contact).permit([:is_company, :company_name, :first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :contact_type, :object_title])
+    params.require(:transaction_personnel).require(:contact).permit([:is_company, :company_name, :first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :contact_type, :object_title]).merge(:user_id => current_user.id)
   end
 
   def transaction_main_params
