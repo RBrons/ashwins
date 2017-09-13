@@ -68,7 +68,7 @@ function init_sidebar() {
 		if ($li.is('.active')) {
 			$li.removeClass('active active-sm');
 			$('ul:first', $li).slideUp(function() {
-					setContentHeight();
+				setContentHeight();
 			});
 		} else {
 			// prevent closing menu if we are on child menu
@@ -101,6 +101,7 @@ function init_sidebar() {
 	if ($.fn.mCustomScrollbar) {
 		$('.menu_fixed').mCustomScrollbar({
 			autoHideScrollbar: true,
+			mouseWheelPixels: 250,
 			theme: 'minimal',
 			mouseWheel:{ preventDefault: true }
 		});

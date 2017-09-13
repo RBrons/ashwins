@@ -5,10 +5,10 @@
     
     ul.nav.side-menu
       / Sale Menu 
-      li class=("#{params[:type] == 'sale' ? 'active' : ''}")
+      li class=("#{params[:type] == 'sale' && params[:sub] != 'personnel' ? 'active' : ''}")
         / The case if there are multiple properties
         - if sale_properties.count > 1
-          = link_to params[:type] == 'sale' ? '#' : (@transaction_main.sale.present? ? edit_transaction_path(@transaction_main.sale, type: 'sale', main_id: @transaction_main) : new_transaction_path(type: 'sale', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'sale' || params[:type].blank?}" do
+          = link_to params[:type] == 'sale' && params[:sub] != 'personnel' ? '#' : (@transaction_main.sale.present? ? edit_transaction_path(@transaction_main.sale, type: 'sale', main_id: @transaction_main) : new_transaction_path(type: 'sale', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'sale' || params[:type].blank?}" do
             = image_tag('icons/icon-sale.svg', class:'icon')
             | Sale
             span.sub-menu-expander.lnr.lnr-chevron-down
@@ -34,12 +34,12 @@
                   = image_tag('icons/icon-sale.svg', class:'icon')
                   | Sale    
           - else
-            = link_to params[:type] == 'sale' ? '#' : (@transaction_main.sale.present? ? edit_transaction_path(@transaction_main.sale, type: 'sale', main_id: @transaction_main) : new_transaction_path(type: 'sale', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'sale' || params[:type].blank?}" do
+            = link_to params[:type] == 'sale' && params[:sub] != 'personnel' ? '#' : (@transaction_main.sale.present? ? edit_transaction_path(@transaction_main.sale, type: 'sale', main_id: @transaction_main) : new_transaction_path(type: 'sale', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'sale' || params[:type].blank?}" do
               = image_tag('icons/icon-sale.svg', class:'icon')
               | Sale
         
         - if sale_properties.present?
-          ul.nav.child_menu[style= "display:block"]
+          ul.transaction-property.nav.child_menu[style= "display:block"]
             - sale_properties.each do |property|
               - pclosed = is_property_closed?(@transaction_main.sale.try(:id) || 0, property.id)
               - p_in_contract = is_property_in_contract?(@transaction_main.sale.try(:id) || 0, property.id)
@@ -69,10 +69,10 @@
                         span.manual_delete_property.lnr.lnr-cross[data-tran-propid="#{property.id}" data-tran-mainid="#{params[:main_id]}" data-tran-type="sale"]
       
       / Purchase Menu
-      li class=("#{params[:type] == 'purchase' ? 'active' : ''}")
+      li class=("#{params[:type] == 'purchase' && params[:sub] != 'personnel' ? 'active' : ''}")
         / The case if there are multiple properties
         - if buy_properties.count > 1
-          = link_to params[:type] == 'purchase' ? '#' : (@transaction_main.purchase.present? ? edit_transaction_path(@transaction_main.purchase, type: 'purchase', main_id: @transaction_main) : new_transaction_path(type: 'purchase', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+          = link_to params[:type] == 'purchase' && params[:sub] != 'personnel' ? '#' : (@transaction_main.purchase.present? ? edit_transaction_path(@transaction_main.purchase, type: 'purchase', main_id: @transaction_main) : new_transaction_path(type: 'purchase', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
             = image_tag('icons/icon-purchase.svg', class: 'icon')
             |  Purchase
             span.sub-menu-expander.lnr.lnr-chevron-down
@@ -98,12 +98,12 @@
                   = image_tag('icons/icon-purchase.svg', class: 'icon')
                   |  Purchase            
           - else
-            = link_to params[:type] == 'purchase' ? '#' : (@transaction_main.purchase.present? ? edit_transaction_path(@transaction_main.purchase, type: 'purchase', main_id: @transaction_main) : new_transaction_path(type: 'purchase', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
+            = link_to params[:type] == 'purchase' && params[:sub] != 'personnel' ? '#' : (@transaction_main.purchase.present? ? edit_transaction_path(@transaction_main.purchase, type: 'purchase', main_id: @transaction_main) : new_transaction_path(type: 'purchase', main_id: @transaction_main)), class: "#{'active' if params[:type] == 'purchase' || (@transaction.try(:purchase_only?) && params[:type] != 'status')}" do
               = image_tag('icons/icon-purchase.svg', class: 'icon')
               |  Purchase
 
         - if buy_properties.present?
-          ul.nav.child_menu[style= "display:block"]
+          ul.transaction-property.nav.child_menu[style= "display:block"]
             - buy_properties.each do |property|
               - pclosed = is_property_closed?(@transaction_main.purchase.try(:id) || 0, property.id)
               - p_in_contract = is_property_in_contract?(@transaction_main.purchase.try(:id) || 0, property.id)
@@ -140,9 +140,42 @@
           |  QI
           span.label.label-danger.pull-right = get_identification_rule(@transaction_main.purchase)
       li class=("#{ params[:sub] == 'personnel' ? 'active' : '' }")
-        = link_to personnel_transaction_path(@transaction, sub: 'personnel', main_id: params[:main_id]), class: "#{'active' if params[:sub] == 'personnel'}" do
+        = link_to '#', class: "#{'active' if params[:sub] == 'personnel'}" do
           = image_tag('icons/icon-personnel.svg', class: 'icon')
           |  Personnel
+          span.sub-menu-expander.lnr.lnr-chevron-down
+        ul.nav.child_menu[style="#{params[:sub] == 'personnel' ? 'display: block' : 'display: none'}"]
+          li
+            = link_to 'Title <span class="sub-menu-expander lnr lnr-chevron-down"></span>'.html_safe, '#'
+            ul.nav.child_menu[style="#{params[:personnel_category] == 'Title' ? 'display: block' : 'display: none'}"]
+              li class=('active' if params[:type] == 'sale' && params[:personnel_category] == 'Title' && params[:sub] == 'personnel')
+                = link_to 'Sale', personnel_transaction_path(type: 'sale', sub: 'personnel', main_id: params[:main_id], personnel_category: 'Title'), class: "#{'active' if params[:type] == 'sale' && params[:personnel_category] == 'Title' && params[:sub] == 'personnel'}"
+              li class=('active' if params[:type] == 'purchase' && params[:personnel_category] == 'Title' && params[:sub] == 'personnel')
+                = link_to 'Purchase', personnel_transaction_path(type: 'purchase', sub: 'personnel', main_id: params[:main_id], personnel_category: 'Title'), class: "#{'active' if params[:type] == 'purchase' && params[:personnel_category] == 'Title' && params[:sub] == 'personnel'}"
+
+          li
+            = link_to 'Survey <span class="sub-menu-expander lnr lnr-chevron-down"></span>'.html_safe, '#'
+            ul.nav.child_menu[style="#{params[:personnel_category] == 'Survey' ? 'display: block' : 'display: none'}"]
+              li class=('active' if params[:type] == 'sale' && params[:personnel_category] == 'Survey' && params[:sub] == 'personnel')
+                = link_to 'Sale', personnel_transaction_path(type: 'sale', sub: 'personnel', main_id: params[:main_id], personnel_category: 'Survey'), class: "#{'active' if params[:type] == 'sale' && params[:personnel_category] == 'Survey' && params[:sub] == 'personnel'}"
+              li class=('active' if params[:type] == 'purchase' && params[:personnel_category] == 'Survey' && params[:sub] == 'personnel')
+                = link_to 'Purchase', personnel_transaction_path(type: 'purchase', sub: 'personnel', main_id: params[:main_id], personnel_category: 'Survey'), class: "#{'active' if params[:type] == 'purchase' && params[:personnel_category] == 'Survey' && params[:sub] == 'personnel'}"
+          
+          li
+            = link_to 'Environmental <span class="sub-menu-expander lnr lnr-chevron-down"></span>'.html_safe, '#', class: ""
+            ul.nav.child_menu[style="#{params[:personnel_category] == 'Environmental' ? 'display: block' : 'display: none'}"]
+              li class=('active' if params[:type] == 'sale' && params[:personnel_category] == 'Environmental' && params[:sub] == 'personnel')
+                = link_to 'Sale', personnel_transaction_path(type: 'sale', sub: 'personnel', type: 'sale', main_id: params[:main_id], personnel_category: 'Environmental'), class: "#{'active' if params[:type] == 'sale' && params[:personnel_category] == 'Environmental' && params[:sub] == 'personnel'}"
+              li class=('active' if params[:type] == 'purchase' && params[:personnel_category] == 'Environmental' && params[:sub] == 'personnel')
+                = link_to 'Purchase', personnel_transaction_path(type: 'purchase', sub: 'personnel', type: 'purchase', main_id: params[:main_id], personnel_category: 'Environmental'), class: "#{'active' if params[:type] == 'purchase' && params[:personnel_category] == 'Environmental' && params[:sub] == 'personnel'}"
+          
+          li
+            = link_to 'Zoning <span class="sub-menu-expander lnr lnr-chevron-down"></span>'.html_safe, '#', class: ""
+            ul.nav.child_menu[style="#{params[:personnel_category] == 'Zoning' ? 'display: block' : 'display: none'}"]
+              li class=('active' if params[:type] == 'sale' && params[:personnel_category] == 'Zoning' && params[:sub] == 'personnel')
+                = link_to 'Sale', personnel_transaction_path(type: 'sale', sub: 'personnel', main_id: params[:main_id], personnel_category: 'Zoning'), class: "#{'active' if params[:type] == 'sale' && params[:personnel_category] == 'Zoning' && params[:sub] == 'personnel'}"
+              li class=('active' if params[:type] == 'purchase' && params[:personnel_category] == 'Zoning' && params[:sub] == 'personnel')
+                = link_to 'Purchase', personnel_transaction_path(type: 'purchase', sub: 'personnel', main_id: params[:main_id], personnel_category: 'Zoning'), class: "#{'active' if params[:type] == 'purchase' && params[:personnel_category] == 'Zoning' && params[:sub] == 'personnel'}"
       li
         a[href="#"]
           = image_tag('icons/icon-documents.svg', class: 'icon')

@@ -4,10 +4,9 @@
     .clearfix.margin-lg-left
     = render 'transactions/header_link'
 
-
 .col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-lg-top
     .clearfix
-    label Title
+    h2 = @personnel_category
     table.table.table-stripe
         thead
             tr
@@ -20,103 +19,16 @@
                 th Phone
                 th Fax
         tbody
-        - if @personnel_contacts[:title].present?
+        - if !@personnel.nil?
             tr
-                td = @personnel_contacts[:title].company_name
+                td = @personnel.company_name
                 td Personnel
                 td Personnel
-                td = @personnel_contacts[:title].first_name
-                td = @personnel_contacts[:title].last_name
-                td = @personnel_contacts[:title].email
-                td = @personnel_contacts[:title].phone1
-                td = @personnel_contacts[:title].fax
+                td = @personnel.first_name
+                td = @personnel.last_name
+                td = @personnel.email
+                td = @personnel.phone1
+                td = @personnel.fax
         - else
             tr 
-                td[colspan="100%"] No Titile Personnel
-
-.col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-lg-top
-    .clearfix
-    label Survey
-    table.table.table-stripe
-        thead
-            tr
-                th Company
-                th Type
-                th Role
-                th Contact First Name
-                th Contact last Name
-                th Email
-                th Phone
-                th Fax
-        tbody
-        - if @personnel_contacts[:survey].present?
-            tr
-                td = @personnel_contacts[:survey].company_name
-                td Personnel
-                td Personnel
-                td = @personnel_contacts[:survey].first_name
-                td = @personnel_contacts[:survey].last_name
-                td = @personnel_contacts[:survey].email
-                td = @personnel_contacts[:survey].phone1
-                td = @personnel_contacts[:survey].fax
-        - else
-            tr
-                td[colspan="100%"] No Survey Personnel
-
-.col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-lg-top
-    .clearfix
-    label Environmental
-    table.table.table-stripe
-        thead
-            tr
-                th Company
-                th Type
-                th Role
-                th Contact First Name
-                th Contact last Name
-                th Email
-                th Phone
-                th Fax
-        tbody
-        - if @personnel_contacts[:environmental].present?
-            tr
-                td = @personnel_contacts[:environmental].company_name
-                td Personnel
-                td Personnel
-                td = @personnel_contacts[:environmental].first_name
-                td = @personnel_contacts[:environmental].last_name
-                td = @personnel_contacts[:environmental].email
-                td = @personnel_contacts[:environmental].phone1
-                td = @personnel_contacts[:environmental].fax
-        - else
-            tr
-                td[colspan="100%"] No Environmental Personnel
-
-.col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-lg-top
-    .clearfix
-    label Zoning
-    table.table.table-stripe
-        thead
-            tr
-                th Company
-                th Type
-                th Role
-                th Contact First Name
-                th Contact last Name
-                th Email
-                th Phone
-                th Fax
-        tbody
-        - if @personnel_contacts[:zoning].present?
-            tr
-                td = @personnel_contacts[:zoning].company_name
-                td Personnel
-                td Personnel
-                td = @personnel_contacts[:zoning].first_name
-                td = @personnel_contacts[:zoning].last_name
-                td = @personnel_contacts[:zoning].email
-                td = @personnel_contacts[:zoning].phone1
-                td = @personnel_contacts[:zoning].fax
-        - else
-            tr  
-                td[colspan="100%"] No Zoning Personnel
+                td[colspan="100%"] No Personnel
