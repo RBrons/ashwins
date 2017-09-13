@@ -426,7 +426,7 @@ i.lnr {
     position: absolute;
     display: -ms-flexbox;
     display: flex;
-    z-index: 1
+    z-index: 1001;
 }
 
 .nav-md .container.body .view-content {
@@ -439,7 +439,18 @@ i.lnr {
 
 .nav-md .container.body .col-md-3.left_col.menu_fixed {
     position: fixed;
+    height: 100%;
     z-index: 300;
+}
+
+.nav-md img.logo{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 230px;
+    height: 75px;
+    z-index: 100;
+    background-color: white
 }
 
 body .container.body .right_col {
@@ -916,15 +927,15 @@ a:focus {
     margin: 0;
 }
 
-.nav.child_menu li:hover {
+.transaction-property.nav.child_menu li:hover {
     background-color: rgba(26, 187, 156, 0.2)
 }
 
-.nav.child_menu li.in-contract:hover {
+.transaction-property.nav.child_menu li.in-contract:hover {
     background-color: rgba(255, 168, 0, 0.2)
 }
 
-.nav.child_menu li.in-closed:hover {
+.transaction-property.nav.child_menu li.in-closed:hover {
     background-color: rgba(255, 118, 120, 0.2)
 }
 
@@ -937,7 +948,7 @@ a:focus {
 }
 
 .nav-md ul.nav.child_menu li:after {
-    border-left: 2px solid #1ABB9C;
+    border-left: 2px solid #666;
     bottom: 4px;
     content: "";
     left: 30px;
@@ -945,15 +956,19 @@ a:focus {
     top: 4px
 }
 
-.nav.side-menu>li>ul.nav.child_menu li.current-page:after {
+.nav-md ul.transaction-property.nav.child_menu li:after {
+    border-left: 2px solid #1ABB9C;
+}
+
+.nav.side-menu>li>ul.transaction-property.nav.child_menu li.current-page:after {
     border-left-color: #1abb9c
 }
 
-.nav.side-menu>li>ul.nav.child_menu li.in-contract:after {
+.nav.side-menu>li>ul.transaction-property.nav.child_menu li.in-contract:after {
     border-left-color: #ffa800
 }
 
-.nav.side-menu>li>ul.nav.child_menu li.in-closed:after {
+.nav.side-menu>li>ul.transaction-property.nav.child_menu li.in-closed:after {
     border-left-color: #ff7678;
 }
 
@@ -964,9 +979,12 @@ a:focus {
 }
 
 .nav.child_menu>li>a {
-    color: #1abb9c;
+    color: #666;
     font-size: 13px;
     padding: 9px 30px 9px 9px;
+}
+.transaction-property.nav.child_menu>li>a{
+    color: #1abb9c;
 }
 
 .side-menu>li>.nav.child_menu>li>a span {
@@ -975,18 +993,18 @@ a:focus {
     right: 5px;
 }
 
-.side-menu>li>.nav.child_menu>li>a,
-.side-menu>li.active>.nav.child_menu>li>a span {
+.side-menu>li>.transaction-property.nav.child_menu>li>a,
+.side-menu>li.active>.transaction-property.nav.child_menu>li>a span {
     color: #1abb9c;
 }
 
-.side-menu>li>.nav.child_menu>li.in-contract>a,
-.side-menu>li.active>.nav.child_menu>li.in-contract>a span {
+.side-menu>li>.transaction-property.nav.child_menu>li.in-contract>a,
+.side-menu>li.active>.transaction-property.nav.child_menu>li.in-contract>a span {
     color: #ffa800;
 }
 
-.side-menu>li>.nav.child_menu>li.in-closed>a,
-.side-menu>li.active>.nav.child_menu>li.in-closed>a span {
+.side-menu>li>.transaction-property.nav.child_menu>li.in-closed>a,
+.side-menu>li.active>.transaction-property.nav.child_menu>li.in-closed>a span {
     color: #ff7678;
 }
 
@@ -997,7 +1015,7 @@ a:focus {
 
 .nav.child_menu li li a:hover,
 .nav.child_menu li li a.active {
-    color: #fff
+    color: #3082ee
 }
 
 .nav>li>a {
@@ -2554,7 +2572,7 @@ button,
 
 .field_list .left {
     float: left;
-    margin-right: 5px
+    width: 20px;
 }
 
 .field_list .left .vertical-line {
@@ -2566,7 +2584,9 @@ button,
 }
 
 .field_list .right {
-    float: left
+    float: left;
+    width: 85%;
+    margin-left: 5px;
 }
 
 .field_list .right span{

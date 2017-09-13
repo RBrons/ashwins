@@ -9,7 +9,7 @@
           li = message
   
   = f.hidden_field :personnel_category, value: personnel_category
-  = f.select :contact_id, options_for_select(['', 'Add New'] + prepopulated_list.map { |contact| [contact.name, contact.id] }.uniq {|c| c[0] }), {}, class: 'form-control' if @show_personnel_list && !transaction_personnel.contact.present? && prepopulated_list.length != 0
+  = f.select :contact_id, options_for_select(['', 'Add New'] + prepopulated_list), {}, class: 'form-control' if @show_personnel_list && !transaction_personnel.contact.present? && prepopulated_list.length != 0
   
   .transaction-personnel-contact-form-wrapper.margin-lg-top[style=(!@show_personnel_list || transaction_personnel.contact.present? || prepopulated_list.length == 0 ? '' : 'display: none')]
     = f.fields_for transaction_personnel.contact.present? ? transaction_personnel.contact : Contact.new(is_company: false)  do |c_builder|

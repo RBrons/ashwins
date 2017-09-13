@@ -575,17 +575,24 @@ class TransactionsController < ApplicationController
       else
         transaction_personnel = @transaction.transaction_personnels.where(personnel_category: personnel_category).first
       end
+      
       prepopulated_list = Contact.where(object_title: personnel_category, user_id: current_user.id, contact_type: 'Personnel')
+      dropdown_list = []
+      prepopulated_list.each do |pre_personnel|
+        if !pre_personnel.name.empty?
+          dropdown_list << [pre_personnel.name, pre_personnel.id]
+        end
+      end
       
       case personnel_category
         when 'Title'
-          @personnel_on_tab[:title] = [transaction_personnel, prepopulated_list]
+          @personnel_on_tab[:title] = [transaction_personnel, dropdown_list]
         when 'Survey'
-          @personnel_on_tab[:survey] = [transaction_personnel, prepopulated_list]
+          @personnel_on_tab[:survey] = [transaction_personnel, dropdown_list]
         when 'Environmental'
-          @personnel_on_tab[:environmental] = [transaction_personnel, prepopulated_list]        
+          @personnel_on_tab[:environmental] = [transaction_personnel, dropdown_list]        
         when 'Zoning'
-          @personnel_on_tab[:zoning] = [transaction_personnel, prepopulated_list]
+          @personnel_on_tab[:zoning] = [transaction_personnel, dropdown_list]
       end
     end
     
@@ -742,25 +749,14 @@ class TransactionsController < ApplicationController
   end
 
   def personnel
-    @personnel_contacts = {}
-    TransactionPersonnel::FIXED_TITLE.each do |personnel_category|
-      if @transaction.transaction_personnels.where(personnel_category: personnel_category).first.present?
-        transaction_personnel = @transaction.transaction_personnels.where(personnel_category: personnel_category).first
-        if transaction_personnel.present?
-          personnel = transaction_personnel.contact
-          case personnel_category
-            when 'Title'
-              @personnel_contacts[:title] = personnel
-            when 'Survey'
-              @personnel_contacts[:survey] = personnel
-            when 'Environmental'
-              @personnel_contacts[:environmental] = personnel
-            when 'Zoning'
-              @personnel_contacts[:zoning] = personnel
-          end
-        end
+    @personnel_category = params[:personnel_category] || 'Title'
+    @personnel = nil
+    if @transaction.present?
+      if @transaction.transaction_personnels.where(personnel_category: @personnel_category).first.present?
+        @personnel = @transaction.transaction_personnels.where(personnel_category: @personnel_category).first.contact
       end
     end
+    
   end
 
   def personnel_update
