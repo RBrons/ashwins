@@ -9,7 +9,7 @@
           li = message
   
   = f.hidden_field :personnel_category, value: personnel_category
-  = f.select :contact_id, options_for_select(['', 'Add New'] + prepopulated_list.map{ |contact| [contact.name, contact.id] }), {}, class: 'form-control' if @show_personnel_list && !transaction_personnel.contact.present? && prepopulated_list.length != 0
+  = f.select :contact_id, options_for_select(['', 'Add New'] + prepopulated_list), {}, class: 'form-control' if @show_personnel_list && !transaction_personnel.contact.present? && prepopulated_list.length != 0
   
   .transaction-personnel-contact-form-wrapper.margin-lg-top[style=(!@show_personnel_list || transaction_personnel.contact.present? || prepopulated_list.length == 0 ? '' : 'display: none')]
     = f.fields_for transaction_personnel.contact.present? ? transaction_personnel.contact : Contact.new(is_company: false)  do |c_builder|
@@ -19,11 +19,12 @@
       
       .form-group
         .heading_blue.radio-inline
-          span = c_builder.radio_button :is_company, true, checked: c_builder.object.is_company, class: 'form-control flat-icheck radiobuttons'
-          span.margin-md-left Entity
-        .heading_blue.radio-inline
           span.margin-md-left = c_builder.radio_button :is_company, false, checked: !c_builder.object.is_company, class: 'form-control flat-icheck radiobuttons'
           span.margin-md-left Individual
+        .heading_blue.radio-inline
+          span = c_builder.radio_button :is_company, true, checked: c_builder.object.is_company, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Entity
+
       .form-group.personnel-business-detail[style=(c_builder.object.is_company ? '' : 'display: none')]
         label Company Name
         = c_builder.text_field :company_name, class: 'form-control', required: true, disabled: !c_builder.object.is_company

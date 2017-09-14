@@ -13,23 +13,23 @@ html
         .col-md-3.left_col.menu_fixed
           .left_col.scroll-view
             .navbar.nav_title[style="border: 0;"]
-              = link_to image_tag('logo.png', :width => '100%', :height=> '75px'), '/'
+              = link_to image_tag('logo.png', class: 'logo'), '/'
             .clearfix
             - if @transaction.present? && !@transaction.id.nil? && @transaction.relinquishing_seller_entity_id
               = render partial: 'layouts/left_sidebar'
         .top_nav
           = render partial: 'layouts/header'
         .right_col[role="main"]
-          .clearfix.margin-lg-left
-          - flash.each do |key, value|
-            div class="#{flash_class(key, 'duration_6sec')}"
-              a.close data-dismiss="alert" aria-label="Close"
-                span aria-hidden="true"
-                  | &times;
-              = value.html_safe
-          .margin-md-left
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"><h4>&nbsp;&nbsp;/&nbsp;&nbsp;</h4></div>".html_safe
-          div.clearfix
-          = yield
+          .errors-wrapper
+            - flash.each do |key, value|
+              div class="#{flash_class(key, 'duration_6sec')}"
+                a.close data-dismiss="alert" aria-label="Close"
+                  span aria-hidden="true"
+                    | &times;
+                = value.html_safe
+          / .margin-md-left
+          /   = render_breadcrumbs :separator => "<div class=\"pull-left\"><h4>&nbsp;&nbsp;/&nbsp;&nbsp;</h4></div>".html_safe
+          div.row
+            = yield
 
     = javascript_include_tag 'application'

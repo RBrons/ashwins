@@ -607,6 +607,7 @@ ActiveRecord::Schema.define(version: 20170914012220) do
     t.string   "current_step_subtab"
     t.integer  "broker_id"
     t.integer  "attorney_id"
+    t.string   "current_step_sub_subtab"
     t.index ["property_id", "transaction_id"], name: "index_transaction_properties_on_property_id_and_transaction_id", unique: true, using: :btree
     t.index ["property_id"], name: "index_transaction_properties_on_property_id", using: :btree
     t.index ["transaction_id"], name: "index_transaction_properties_on_transaction_id", using: :btree

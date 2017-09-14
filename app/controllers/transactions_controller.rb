@@ -563,6 +563,7 @@ class TransactionsController < ApplicationController
 
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
     @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
+    @sub_sub_tab = params[:sub_sub_tab] || @transaction_property.current_step_sub_subtab
     
     # personnel form
     @show_personnel_list = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
@@ -574,17 +575,24 @@ class TransactionsController < ApplicationController
       else
         transaction_personnel = @transaction.transaction_personnels.where(personnel_category: personnel_category).first
       end
+      
       prepopulated_list = Contact.where(object_title: personnel_category, user_id: current_user.id, contact_type: 'Personnel')
+      dropdown_list = []
+      prepopulated_list.each do |pre_personnel|
+        if !pre_personnel.name.empty?
+          dropdown_list << [pre_personnel.name, pre_personnel.id]
+        end
+      end
       
       case personnel_category
         when 'Title'
-          @personnel_on_tab[:title] = [transaction_personnel, prepopulated_list]
+          @personnel_on_tab[:title] = [transaction_personnel, dropdown_list]
         when 'Survey'
-          @personnel_on_tab[:survey] = [transaction_personnel, prepopulated_list]
+          @personnel_on_tab[:survey] = [transaction_personnel, dropdown_list]
         when 'Environmental'
-          @personnel_on_tab[:environmental] = [transaction_personnel, prepopulated_list]        
+          @personnel_on_tab[:environmental] = [transaction_personnel, dropdown_list]        
         when 'Zoning'
-          @personnel_on_tab[:zoning] = [transaction_personnel, prepopulated_list]
+          @personnel_on_tab[:zoning] = [transaction_personnel, dropdown_list]
       end
     end
     
@@ -741,25 +749,14 @@ class TransactionsController < ApplicationController
   end
 
   def personnel
-    @personnel_contacts = {}
-    TransactionPersonnel::FIXED_TITLE.each do |personnel_category|
-      if @transaction.transaction_personnels.where(personnel_category: personnel_category).first.present?
-        transaction_personnel = @transaction.transaction_personnels.where(personnel_category: personnel_category).first
-        if transaction_personnel.present?
-          personnel = transaction_personnel.contact
-          case personnel_category
-            when 'Title'
-              @personnel_contacts[:title] = personnel
-            when 'Survey'
-              @personnel_contacts[:survey] = personnel
-            when 'Environmental'
-              @personnel_contacts[:environmental] = personnel
-            when 'Zoning'
-              @personnel_contacts[:zoning] = personnel
-          end
-        end
+    @personnel_category = params[:personnel_category] || 'Title'
+    @personnel = nil
+    if @transaction.present?
+      if @transaction.transaction_personnels.where(personnel_category: @personnel_category).first.present?
+        @personnel = @transaction.transaction_personnels.where(personnel_category: @personnel_category).first.contact
       end
     end
+    
   end
 
   def personnel_update
@@ -852,7 +849,9 @@ class TransactionsController < ApplicationController
         if params[:sub] == "terms"
           TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'offer_and_acceptance')
         elsif params[:sub] == "inspection"
-          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'seller_documentation')
+          if !TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).first.try(:current_step_subtab)
+            TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'seller_documentation')
+          end
         end
       else
         TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step: params[:sub])
@@ -860,7 +859,9 @@ class TransactionsController < ApplicationController
         if params[:sub] == "terms"
           TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'offer_and_acceptance')
         elsif params[:sub] == "inspection"
-          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'seller_documentation')
+          if !TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).first.try(:current_step_subtab)
+            TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'seller_documentation')
+          end
         elsif params[:sub] == "parties"
           TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'basic_info')
         end
@@ -970,7 +971,7 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_personnel_contact_params
-    params.require(:transaction_personnel).require(:contact).permit([:is_company, :company_name, :first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :contact_type, :object_title])
+    params.require(:transaction_personnel).require(:contact).permit([:is_company, :company_name, :first_name, :last_name, :email, :zip, :fax, :street_address, :city, :state, :phone1, :phone2, :contact_type, :object_title]).merge(:user_id => current_user.id)
   end
 
   def transaction_main_params

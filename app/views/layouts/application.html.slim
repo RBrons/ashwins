@@ -12,15 +12,16 @@ html
     = render partial: 'shared/modals'
     .container.body
       .main_container
-        .col-md-3.left_col.menu_fixed
-          = link_to image_tag('logo.png', :width => '100%', :height=> '75px'), '/'
+        .col-md-3.left_col
+          = link_to image_tag('logo.png', class: 'logo'), '/'
         .top_nav
           = render partial: 'layouts/header'
         .view-content
-          - flash.each do |key, value|
-            div class="#{flash_class(key)}"
-              = value.html_safe
-          .margin-md-left
-            = render_breadcrumbs :separator => "<div class=\"pull-left\"><h4>&nbsp;&nbsp;/&nbsp;&nbsp;</h4></div>".html_safe
-          div.clearfix
-          = yield
+          .error-wrapper
+            - flash.each do |key, value|
+              div class="#{flash_class(key)}"
+                = value.html_safe
+          / .margin-md-left
+          /   = render_breadcrumbs :separator => "<div class=\"pull-left\"><h4>&nbsp;&nbsp;/&nbsp;&nbsp;</h4></div>".html_safe
+          div
+            = yield
