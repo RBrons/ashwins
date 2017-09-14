@@ -17,6 +17,14 @@
             button.btn-gdrive.btn.btn-default.border-blue[type="button"]
               = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
               span.margin-md-left.blue Select in Google Drive
+    .clearfix
+    .form-group
+      label.control-label Survey
+      = f.text_field :survey, class: 'form-control'
+    .clearfix
+    .form-group
+      label.control-label Survey Described
+      = f.text_field :survey_described, class: 'form-control'
   .clearfix
   .form-group
     = f.submit 'Save', class: 'btn btn-sm btn-primary'

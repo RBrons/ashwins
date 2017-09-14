@@ -27,6 +27,11 @@ $ ->
       if (!container.is(e.target) and (container.has(e.target).length == 0))
         container.hide();
 
+  $(document).on 'click', '#property_lease_percentage_rent_exist', ->
+    if $(this).is(':checked')
+      $(".rent-percentage-wrapper").show()
+    else
+      $(".rent-percentage-wrapper").hide()
   #      Inline EDIT
   $(document).on 'mouseover', '.property-heading-index', ->
     id = $(this).attr('data-id')
