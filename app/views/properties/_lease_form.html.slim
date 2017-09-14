@@ -9,13 +9,15 @@ div[role="tabpanel"]
       li[role="presentation"]
           a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
       li[role="presentation"]
+          a#lease_taxes_and_fees[href="#lease_site_preparation_section" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
+      li[role="presentation"]
           a#lease_construction[href="#lease_construction_section" role="tab" data-toggle="tab" aria-expanded="false"] Construction
       li[role="presentation"]
           a#lease_use[href="#lease_use_section" role="tab" data-toggle="tab" aria-expanded="false"] Use
       li[role="presentation"]
           a#lease_premises[href="#lease_premises_section" role="tab" data-toggle="tab" aria-expanded="false"] Premises
       li[role="presentation"]
-          a#lease_transer[href="#lease_transer_section" role="tab" data-toggle="tab" aria-expanded="false"] Transfer
+          a#lease_transfer[href="#lease_transfer_section" role="tab" data-toggle="tab" aria-expanded="false"] Transfer
       li[role="presentation"]
           a#lease_remedies[href="#lease_remedies_section" role="tab" data-toggle="tab" aria-expanded="false"] Remedies
       li[role="presentation"]
@@ -59,6 +61,13 @@ div[role="tabpanel"]
                   = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
 
               .clearfix
+            .form-group
+              h2.heading Lease Analysis Date
+              .clearfix
+              .pull-left
+                = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
+
+              .clearfix
           .clearfix
           .form-group
               h2.heading Lease Base Rent
@@ -72,6 +81,24 @@ div[role="tabpanel"]
             .input-group
               .input-group-addon $
               = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+          .clearfix
+          .form-group
+              h2.heading Original Landlord
+              .clearfix
+              = f.text_field :lease_original_landlord, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+              h2.heading Original Tenant
+              .clearfix
+              = f.text_field :lease_original_tenant, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+              h2.heading Original Guarantor
+              .clearfix
+              = f.text_field :lease_original_guarantor, class: 'form-control'
+              .clearfix
 
           .clearfix
           .form-group
@@ -155,6 +182,24 @@ div[role="tabpanel"]
             .clearfix
             .form-group
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: 'form-control select_auto'
+            .clearfix
+            .form-group
+              h2.heading
+                | Option to Extend
+              .clearfix
+              =  f.text_field :lease_option_to_extend, class: 'form-control'
+            .clearfix
+            .form-group
+              h2.heading
+                | Delivery of the Premises
+              .clearfix
+              =  f.text_field :lease_delivery_of_the_premises, class: 'form-control'
+            .clearfix
+            .form-group
+              h2.heading
+                | Primary Term
+              .clearfix
+              =  f.text_field :lease_primary_term, class: 'form-control'
             .clearfix
             .form-group
               h2.heading
@@ -278,18 +323,397 @@ div[role="tabpanel"]
         - else
           p Rent Table is not available right now.
       #lease_rent_details_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Rent Abatement
+              .clearfix
+              = f.text_field :lease_rent_abatement, class: 'form-control'
+              .clearfix
+            .clearfix
+            .form-group
+              label
+                | Percentage Rent Exist?
+              = f.check_box :lease_percentage_rent_exist, class: ''
+              .clearfix
+            .clearfix
+            .rent-percentage-wrapper[style="#{'display: none;' unless f.object.lease_percentage_rent_exist?}"]
+              .form-group
+                h2.heading Percentage Rent
+                .clearfix
+                .input-group
+                  = f.text_field :lease_percentage_rent, class: 'form-control'
+                  .input-group-addon %
+                .clearfix
+              .clearfix
+              .form-group
+                h2.heading Percentage Rent Exclusions
+                .clearfix
+                = f.text_field :lease_percentage_rent_exclusions, class: 'form-control'
+                .clearfix
+            .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_taxes_and_fees_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Real Estate Taxes
+              .clearfix
+              = f.text_field :taxes_and_fees_restate, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Assessments
+              .clearfix
+              = f.text_field :taxes_and_fees_assessments, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Separate Tax Parcel
+              .clearfix
+              = f.text_field :taxes_and_fees_separate_tax_parcel, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Landlord Contesting Taxes
+              .clearfix
+              = f.text_field :taxes_and_fees_landlord_contesting, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Tenant Contesting Taxes
+              .clearfix
+              = f.text_field :taxes_and_fees_tenant_contesting, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Easements
+              .clearfix
+              = f.text_field :taxes_and_fees_easements, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
+      #lease_site_preparation_section.tab-pane.fade[role="tabpanel"]
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Environmental Obligations for Site Preparation
+              .clearfix
+              = f.text_field :site_preparation_env_obligations, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Environmental Termination Rights
+              .clearfix
+              = f.text_field :site_preparation_env_termination_rights, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Environmental Remediation
+              .clearfix
+              = f.text_field :site_preparation_env_remediation, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Environmental Permits and Licenses
+              .clearfix
+              = f.text_field :site_preparation_env_permits_and_licenses, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
       #lease_construction_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Construction
+              .clearfix
+              = f.text_field :construction, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Construction Deadline
+              .clearfix
+              = f.text_field :construction_deadline, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Liens
+              .clearfix
+              = f.text_field :construction_liens, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Approval of Plans and Specifications
+              .clearfix
+              = f.text_field :construction_approval_of_plans_and_specs, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
       #lease_use_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Use Clause
+              .clearfix
+              = f.text_field :use_clause, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Exclusive Clause
+              .clearfix
+              = f.text_field :use_exclusive_clause, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
       #lease_premises_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
-      #lease_transer_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Tenant Rights Under the Declaration
+              .clearfix
+              = f.text_field :premises_tenant_rights, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Waste
+              .clearfix
+              = f.text_field :premises_waste, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Initial Opening
+              .clearfix
+              = f.text_field :premises_initial_opening, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Recapture Clause
+              .clearfix
+              = f.text_field :premises_recapture_clause, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Demolition
+              .clearfix
+              = f.text_field :premises_demolition, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Tenant's Equipment Defined
+              .clearfix
+              = f.text_field :premises_tenants_equipment_defined, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Ownership and Removal of Tenant's Equipment
+              .clearfix
+              = f.text_field :premises_ownership_and_removal, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Repairs
+              .clearfix
+              = f.text_field :premises_repairs, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Compliance with Laws
+              .clearfix
+              = f.text_field :premises_compliance_with_laws, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Surrender
+              .clearfix
+              = f.text_field :premises_surrender, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Inspection
+              .clearfix
+              = f.text_field :premises_inspection, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Insurance
+              .clearfix
+              = f.text_field :premises_insurance, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Destruction
+              .clearfix
+              = f.text_field :premises_destruction, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Total Taking
+              .clearfix
+              = f.text_field :premises_total_taking, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Partial Taking
+              .clearfix
+              = f.text_field :premises_partial_taking, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Signs
+              .clearfix
+              = f.text_field :premises_signs, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Utilities
+              .clearfix
+              = f.text_field :premises_utilities, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
+      #lease_transfer_section.tab-pane.fade[role="tabpanel"]
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Assignment and Subletting
+              .clearfix
+              = f.text_field :transfer_assignment_and_subletting, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Leasehold Mortgage
+              .clearfix
+              = f.text_field :transfer_leasehold_mortgage, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Subordination
+              .clearfix
+              = f.text_field :transfer_subordination, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Estoppel Certificate
+              .clearfix
+              = f.text_field :transfer_estoppel_certificate, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
       #lease_remedies_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Rent Defaults by Tenant
+              .clearfix
+              = f.text_field :remedies_rent_defaults, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Landlord Remedies for Tenant Defaults
+              .clearfix
+              = f.text_field :remedies_landlord, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Mitigation
+              .clearfix
+              = f.text_field :remedies_mitigation, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Dispute Resolution
+              .clearfix
+              = f.text_field :remedies_dispute_resolution, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Landlord Exoneration after Sale
+              .clearfix
+              = f.text_field :remedies_landlord_exoneration, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Exculpation
+              .clearfix
+              = f.text_field :remedies_exculpation, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
       #lease_misc_section.tab-pane.fade[role="tabpanel"]
-        p Under Contruction
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              h2.heading Notices
+              .clearfix
+              = f.text_field :misc_notices, class: 'form-control'
+              .clearfix
+            .form-group
+              h2.heading Obligation to be reasonable
+              .clearfix
+              = f.text_field :misc_obligation, class: 'form-control'
+              .clearfix
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .clearfix
