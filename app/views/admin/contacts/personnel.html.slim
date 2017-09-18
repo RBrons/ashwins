@@ -1,0 +1,66 @@
+.col-md-6.col-xs-12
+  h4 Personnel
+  p.text-mute Note: This will indicates whether the various sections of Personnel will show up for a new user
+  = form_tag(({controller: 'admin/default_values', action: 'toggle_personnel_to_user'}), method: :post) do
+    .clearfix
+    .form-group
+      label.control-label Show Personnel List to new user
+      .clearfix
+        = check_box_tag 'toggle_personnel_to_user', true, @show_other_personnel
+    = submit_tag 'Save', class: 'btn btn-sm btn-warning'
+
+.clearfix.margin-lg-top
+table#data_table
+  thead
+    tr
+      th
+        | Company
+      th
+        | Type
+      th
+        | Role
+      th
+        | Contact First Name
+      th
+        | Contact Last Name
+      th
+        | Email
+      th
+        | Phone
+      th
+        | Fax
+      th
+        | Notes
+      th
+        | Actions
+  tbody data-active-id=@activeId
+    - @personnel.each do |contact|
+      tr data-id=contact.id
+        td
+          = contact.name
+        td
+          = contact.contact_type
+        td
+          = contact.role
+        td
+          = contact.first_name
+        td
+          = contact.last_name
+        td
+          = contact.email
+        td
+          = contact.phone1
+        td
+          = contact.fax
+        td
+          = contact.notes
+        td.actions
+          = link_to 'Edit', edit_contact_path(contact), class: edit_xs
+          = link_to 'Show', contact_path(contact), class: show_xs
+          = link_to 'Delete', contact_path(contact), data: {:confirm => 'Are you sure?'}, :method => :delete, class: delete_xs
+
+.margin-lg-top
+  .pull-right
+    = will_paginate @personnel
+    .clearfix
+    = render template: 'shared/per_page_set'

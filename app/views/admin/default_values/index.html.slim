@@ -58,17 +58,6 @@ hr
           = text_area_tag 'greeting', @greeting, class: 'form-control', rows: 5
       .clearfix
       = submit_tag 'Save', class: 'btn btn-sm btn-warning'
-
-  .col-md-6.col-xs-12
-    h4 Personnel
-    p.text-mute Note: This will indicates whether the various sections of Personnel will show up for a new user
-    = form_tag(({controller: 'admin/default_values', action: 'toggle_personnel_to_user'}), method: :post) do
-      .clearfix
-      .form-group
-        label.control-label Show Personnel List to new user
-        .clearfix
-          = check_box_tag 'toggle_personnel_to_user', true, @show_personnel_list
-      = submit_tag 'Save', class: 'btn btn-sm btn-warning'
       
 table#data_table
   thead

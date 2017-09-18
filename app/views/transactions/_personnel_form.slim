@@ -9,9 +9,9 @@
           li = message
   
   = f.hidden_field :personnel_category, value: personnel_category
-  = f.select :contact_id, options_for_select(['', 'Add New'] + prepopulated_list), {}, class: 'form-control' if @show_personnel_list && !transaction_personnel.contact.present? && prepopulated_list.length != 0
+  = f.select :contact_id, options_for_select(['Add New'] + prepopulated_list), {include_blank: true}, class: 'form-control' if !transaction_personnel.contact.present? && prepopulated_list.length != 0
   
-  .transaction-personnel-contact-form-wrapper.margin-lg-top[style=(!@show_personnel_list || transaction_personnel.contact.present? || prepopulated_list.length == 0 ? '' : 'display: none')]
+  .transaction-personnel-contact-form-wrapper.margin-lg-top[style=(transaction_personnel.contact.present? || prepopulated_list.length == 0 ? '' : 'display: none')]
     = f.fields_for transaction_personnel.contact.present? ? transaction_personnel.contact : Contact.new(is_company: false)  do |c_builder|
       = c_builder.hidden_field :contact_type, value: 'Personnel'
       = c_builder.hidden_field :object_title, value: personnel_category
