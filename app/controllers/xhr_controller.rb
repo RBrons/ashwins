@@ -109,7 +109,7 @@ class XhrController < ApplicationController
       else
         render json: false
       end
-    rescue Exception=>e
+    rescue Exception => e
       render json: e.message
     end
 

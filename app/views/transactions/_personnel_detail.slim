@@ -1,0 +1,28 @@
+div
+- if personnel.present?
+  .form-group
+    label.control-label Company
+    p = personnel.company_name
+  .form-group
+    label.control-label Type
+    p = personnel.contact_type
+  .form-group
+    label.control-label Role
+    p = personnel.role
+  .form-group
+    label.control-label Contact First Name
+    p = personnel.first_name
+  .form-group
+    label.control-label Contact Last Name
+    p = personnel.last_name
+  .form-group
+    label.control-label Email
+    p = personnel.email
+  .form-group
+    label.control-label Phone
+    p = personnel.phone1 || personnel.phone2
+  .form-group
+    label.control-label Fax
+    p = personnel.fax
+- else
+  p There is no contact available.

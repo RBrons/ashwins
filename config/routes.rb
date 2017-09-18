@@ -344,7 +344,7 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-
+  get '/initial-participants' => 'home#initial_participants'
 
   get ':controller(/:action(/:id))'
   post ':controller(/:action(/:id))'

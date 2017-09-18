@@ -24,17 +24,17 @@ $ ->
   replacement_property_id = $(document).find('input.replacement_property_id').val()
   replacement_property_info_html = ''
 
-  if $(document).find('#is_show_initial_sign_in_modal').val() == 'true'
+  # show initial participants modal
+  if $(document).find('#md-initial-participants').length > 0
+    $(document).find('#md-initial-participants').modal('show')
+
+  if $(document).find('#show_initial_sign_in_modal').val() == 'true'
     # show initial sign in modal
     $(document).find('#md-welcome').modal('show')
   else
-    if $(document).find('#is_completed_initial_sign_in_modal').val() == 'false'
-      # show create assets modal
-      $(document).find('#md-greeting').modal('show')
-    else
-      # show landing page modal
-      if $(document).find('#is_show_landing_page').val() == 'true'
-        $(document).find('#md-landing').modal('show')
+    # show landing page modal
+    if $(document).find('#is_show_landing_page').val() == 'true'
+      $(document).find('#md-landing').modal('show')
   
   $(document).find('#md-welcome .business_modal').on 'click', ->
     $(document).find('#md-welcome').modal('hide')
@@ -134,27 +134,17 @@ $ ->
       success: (data) ->
         if data.status
           $(document).find('.md-contact').modal('hide')
-          $(document).find('#md-greeting .visitor').text(data.visitor)
-          $(document).find('#md-greeting .go-back').data('target-modal', '#' + back_modal)
           if data.user_type == 'Non-Attorney Fiduciary'
             $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
-            $(document).find('#md-greeting span.depends_on_user_role').text('Holdings')
           else
             $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
-            $(document).find('#md-greeting span.depends_on_user_role').text('Clients')
-          $(document).find('#md-greeting').modal('show')
+          
+          window.location.href = '/'
         else
           $.notify "Failed", "error"
 
   $(document).find('#md-landing .close').on 'click', ->
     window.location.href = $(this).data('back-url')
-
-  $(document).find('#show_contact-modal').on 'click', ->
-    $('#md-greeting').modal('hide')
-    $('.top_nav #add-client').click()
-  
-  $(document).find('#show_demonstration').on 'click', ->
-    sweetAlert 'Coming soon!', '', 'info'
 
   $(document).find('.exchangor-wrapper .create-initial-client-type').on 'click', ->
     if $(document).find('.exchangor-wrapper form input[name="entity[name]"]').val() == ''
@@ -226,7 +216,7 @@ $ ->
           if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
             $(document).find('.final-step').removeAttr('data-dismiss')
             $(document).find('.final-step').attr('href', '/')
-            $(document).find('.final-step').text('Next')
+            $(document).find('.final-step').text('Done')
           else
             $(document).find('.final-step').text('Skip This Step')
         else
@@ -405,7 +395,7 @@ $ ->
               $.notify "Failed!", "error"
 
   $(document).find('.create-exchangor-property').on 'click', ->
-    if parseInt(exchangor_entity_id) == 0
+    if parseInt(exchangor_entity_id) == 0 || exchangor_entity_id == undefined
       sweetAlert 'First create your Exchangor', '', 'info'
       return
     
@@ -425,7 +415,7 @@ $ ->
     $(document).find('#md-new-property').modal('show')
 
   $(document).find('.create-seller-property').on 'click', ->
-    if repls_contact_id == 0
+    if parseInt(repls_contact_id) == 0 || repls_contact_id == undefined
       sweetAlert 'First create your\n Replacement Seller', '', 'info'
       return
 
@@ -446,6 +436,11 @@ $ ->
 
   $(document).find('#md-new-property form select#property_tenant_id').on 'change', ->
     form = $(document).find('#md-new-property form')
+    if $(this).find('option:selected').text() == 'No Tenant'
+      $('#property_rent_price').prop('required', false)
+    else
+      $('#property_rent_price').prop('required', true)
+    
     if form.find('#property_location_city').val() != ""
       form.find('#property_title').val($(this).find('option:selected').text() + ', ' + form.find('#property_location_city').val())
     else
@@ -479,7 +474,7 @@ $ ->
     console.log 'new tenant'
   
   $(document).find('#md-new-property form').parsley(
-    errorsContainer: (em)->
+    errorsContainer: (em) -> 
         $err = em.$element.parents('.form-group').find('.error-msg')
         return $err
   )

@@ -1,0 +1,186 @@
+#md-initial-participants.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
+        .modal-body
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h3 
+                | Greetings 
+                span.visitor = current_user.first_name
+            h4 Welcome to 1031fun.com
+            p 1031fun is a web app designed to streamline Tax Deferred Exchanges utilizing IRC section 1031. To accomplish a 1031 Exchange, at minimum, it will be necessary to input three people or entities.
+            ol.number_with_parentheses
+                li
+                    p 
+                        | First you will create an Exchangor. The Exchangor must own at least one property which we call a Relinquished Property. The Exchangor will commence the exchange by selling the Relinquished Property. To create the Exchangor, you must first decide whether the Exchangor will be a Business or an Individual. After that selection, name fields will pop up so you can give your Exchangor a name. Third, you will select an entity type for your Exchangor. When you move from this Introduction to the main part of the app you will be able to find your first Exchangor in the&nbsp;
+                        span.depends_on_user_role Clients
+                        | &nbsp;List view. Lastly, you will create a property for your Exchangor to Relinquish
+
+                    section.exchangor-wrapper.margin-lg-left
+                        input.exchangor_entity_id[type="hidden" value="#{@exchangor.present? ? @exchangor.id : 0}"]
+                        input.exchangor_entity_type[type="hidden" value="#{@exchangor.present? ? @exchangor.entity_type.name : ''}"]
+                        input.exchangor_name[type="hidden" value="#{@exchangor.present? ? (@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name) : ''}"]
+                        
+                        - if !@exchangor.present?
+                            p.exchangor-info.text-danger
+                                | Will your first Exchangor be a&nbsp;
+                                a.is_entity_business.text-danger.underline-red[href='#'] business
+                                | &nbsp;or&nbsp;
+                                a.is_entity_individual.text-danger.underline-red[href='#'] individual?
+                            form[action=""]
+                                input[type="hidden" name="entity_type" value=""]
+                                div.form-group[style="display: none"]
+                                    label.form-label Name your first Exchangor
+                                    div.entity-individual-detail.row
+                                        div.col-md-2.col-xs-6
+                                            input.form-control[name="entity[first_name]" type="text"]
+                                        div.col-md-2.col-xs-6
+                                            input.form-control[name="entity[last_name]" type="text"]
+                                    div.entity-business-detail.row[style="display: none"]
+                                        div.col-md-2.col-xs-6
+                                            input.form-control[name="entity[name]" type="text"]
+                            / p
+                            /     a.create-initial-client-type.text-danger[href="#"] What type of Entity will your Exchangor be?
+                            p 
+                                a.create-exchangor-property.text-danger[href="#"] Create a property to be Relinquished by your first Exchangor
+                        - else
+                            - if @exchangor.type_ == 1
+                                p.text-success = "You have created a data record for #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name} to be your first Exchangor."
+                            - else 
+                                p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
+                            - if @exchangor.has_purchased_properties?
+                                input.purchased_property_id[type="hidden" value="#{@purchased_property_id}"]
+                                p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
+                            - else
+                                p 
+                                    a.create-exchangor-property.text-danger[href="#"] Create a property for your first Exchangor
+                
+                li
+                    p 
+                        | Common sense states that you can't sell anything without a Purchaser. So, for Step 2 you will create a Purchaser so that the Exchangor has someone or some company to sell the Purchased Property too. The will clasify the Purchaser as a Contact so when you go into the main part of the app, you will find the Purchaser in the Contact list view. The Purchaser is a special type of Contact which we call a Contact/Counter-party
+
+                    section.relinquishing-purchaser-wrapper.margin-lg-left
+                        - if @relinquishing_purchaser.present?
+                            input.relinp_id[type="hidden" value="#{@relinquishing_purchaser.id}"]
+                            p.text-success = "You have created a data record for #{@relinquishing_purchaser.name} to be your first purchaser."
+                        - else
+                            p.relinquishing-purchaser-info.text-danger
+                                | Will your first Relinquishing Purchaser be a 
+                                a.is_relinp_business.text-danger.underline-red[href="#"] business
+                                | &nbsp;or&nbsp;
+                                a.is_relinp_individual.text-danger.underline-red[href="#"] individual
+                        form[action=""]
+                            input[type="hidden" name="contact[role]" value="Counter-Party"]
+                            input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+                            input[type="hidden" name="contact[is_company]" value="false"]
+                            
+                            div.form-group[style="display: none"]
+                                label.form-label Name your first Relinquishing Purchaser
+                                div.relinp-individual-detail.row
+                                    div.col-md-2.col-xs-6
+                                        input.form-control[name="contact[first_name]" type="text"]
+                                    div.col-md-2.col-xs-6
+                                        input.form-control[name="contact[last_name]" type="text"]
+                                div.relinp-business-detail.row[style="display: none"]
+                                    div.col-md-2.col-xs-6
+                                        input.form-control[name="contact[company_name]" type="text"]
+
+                li
+                    p
+                        | Even before selling to the Purchaser or even finding the Purchaser, it makes sense for the Exchangor to be looking for a property to buy. However, it will not be possible for the Exchangor to find a property to purchaser if there is No Seller. Therefore, for Step 3 you will create a Seller so that the Exchangor has someone or some company to purchase a property from. We call this property a Replacement Property. The app willl clasify the Purchaser as a Contact so when you go into the main part of the app. you will find the Seller in the Contact list view. The Seller like the Purchaser is a speical type of Contact which we call a Contact/Counter-party
+
+                    section.replacement-seller-wrapper.margin-lg-left
+                        - if @replacement_property.present?
+                            - if @replacement_property.owner.present?
+                                input.repls_contact_id[type="hidden" value="#{@replacement_property.owner.id}"]
+                                input.replacement_property_id[type="hidden" value="#{@replacement_property.id}"]
+                                p.text-success = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
+                        - else
+                            p.replacement-seller-info.text-danger
+                                | Will your first Replacement Seller be a 
+                                a.is_repls_business.text-danger.underline-red[href="#"] business
+                                | &nbsp;or&nbsp;
+                                a.is_repls_individual.text-danger.underline-red[href="#"] individual
+                                        
+                        form[action=""]
+                            input[type="hidden" name="contact[role]" value="Counter-Party"]
+                            input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
+                            input[type="hidden" name="contact[is_company]" value="false"]
+
+                            div.form-group[style="display:none"]
+                                label.form-label Name your first Replacement Seller
+                                div.repls-individual-detail.row
+                                    div.col-md-2.col-xs-6
+                                        input.form-control[name="contact[first_name]" type="text"]
+                                    div.col-md-2.col-xs-6
+                                        input.form-control[name="contact[last_name]" type="text"]
+                                div.repls-business-detail.row[style="display: none"]
+                                    div.col-md-2.col-xs-6
+                                        input.form-control[name="contact[company_name]" type="text"]
+                        - if !@replacement_property.present?
+                            p 
+                                a.create-seller-property.text-danger[href="#"] Create a property for your first Replacement Seller
+
+        .modal-footer
+            / a.go-back.btn.btn-danger.pull-left[href="#"] Back
+            - if @exchangor.present? && @has_purchased_properties && @relinquishing_purchaser.present? && @replacement_property.present?
+                a.final-step.btn.btn-warning.pull-left[data-dismiss="modal"] Done
+            - else
+                a.final-step.btn.btn-warning.pull-left[data-dismiss="modal"] Skip This Step
+            
+#md-new-property.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-sm
+        .modal-header
+            button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
+                span.lnr.lnr-cross
+            h4.modal-title Add Property
+        .modal-body
+            form[action="/properties" data-remote="true" method="post"]
+                input#ostatus[type="hidden" name="ostatus" value=""]
+                input#property_ownership_status[type="hidden" name="property[ownership_status]" value=""]
+                input#property_owner_entity_id[type="hidden" name="property[owner_entity_id]" value=""]
+                input#property_owner_entity_id_indv[type="hidden" name="property[owner_entity_id_indv]" value=""]
+                input#property_owner_person_is[type="hidden" name="property[owner_person_is]" value=""]
+                input#property_title[type="hidden" name="property[title]"]
+                
+                .form-group
+                    label.control-label Tenant
+                    = select_tag 'property[tenant_id]', options_for_select(Tenant.all().pluck(:name, :id)), {class: 'form-control'}
+                    = link_to "New", "javascript:void(0)", class: "new-tenant-button"
+                .form-group
+                    label.control-label City
+                    span.error-msg
+                    input#property_location_city.form-control[type="text" name="property[location_city]" required data-parsley-error-message="Please input a city"]
+                .form-group
+                    label.control-label Rent
+                    span.error-msg
+                    .input-group
+                        .input-group-addon $
+                        input#property_rent_price.form-control.input-mask-currency[type="text" name="property[current_rent]" required data-parsley-error-message="Please input the monthly rental amount"]
+                        
+                button.btn.btn-primary[type="submit"] Save
+                a.btn.btn-default[href="#" data-dismiss="modal"] Close
+
+/! Clients Modal For Adding Entities on Initial Sign Up Sequence
+#md-add-initial-client.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
+  .modal-dialog.modal-lg[role="document"]
+    .modal-content
+      .modal-header
+        button.close[type="button" data-dismiss="modal" aria-label="Close"]
+          span.lnr.lnr-cross
+        h4.modal-title Select Entity Type
+      .modal-body
+        ul.nav.navbar-nav
+            / li[data-entity-type="#{MemberType.getSoleProprietorshipId}" data-entity-name="Sole Proprietorship"]
+            /     = link_to image_tag('icons/sole-proprietorship.svg', class: 'icon'), "#", class: 'padding-md'
+            /     span Sole Proprietorship
+            li[data-entity-type="#{MemberType.getPartnershipId}" data-entity-name="Partnership"]
+                = link_to image_tag('icons/partnership.svg', class: 'icon'), "#", class: 'padding-md'
+                span Partnership
+            li[data-entity-type="#{MemberType.getLLCId}" data-entity-name="LLC"]
+                = link_to image_tag('icons/llc.svg', class: 'icon'), "#", class: 'padding-md'
+                span LLC
+            li[data-entity-type="#{MemberType.getLimitedPartnershipId}" data-entity-name="Limited Partnership"]
+                = link_to image_tag('icons/limited-partnership.svg', class: 'icon'), "#", class: 'padding-md'
+                span Limited Partnership
+            li[data-entity-type="#{MemberType.getCorporationId}" data-entity-name="Corporation"]
+                = link_to image_tag('icons/corporation.svg', class: 'icon'), "#", class: 'padding-md'
+                span Corporation
