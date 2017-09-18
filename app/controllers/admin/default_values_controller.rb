@@ -21,7 +21,6 @@ class Admin::DefaultValuesController < ApplicationController
     end
 
     @greeting = DefaultValue.where(entity_name: 'Greeting').first.try(:value)
-    @show_personnel_list = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
   end
 
   # GET /default_values/1
@@ -181,7 +180,7 @@ class Admin::DefaultValuesController < ApplicationController
     else
       DefaultValue.create(entity_name: 'ShowPersonnel', value: params[:toggle_personnel_to_user])
     end
-    redirect_to admin_default_values_url
+    redirect_to :back
   end
 
   private

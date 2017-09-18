@@ -1,6 +1,6 @@
 .clearfix
 .pull-right
-  = form_tag(({controller: 'settings', action: 'per_page'}), method: :post) do
+  = form_tag(({controller: '/settings', action: 'per_page'}), method: :post) do
     label Records Per Page
     = text_field_tag :per_page, sessioned_per_page, style: 'width: 50px'
     = submit_tag 'Save', class: 'btn btn-sm btn-default margin-sm-left'

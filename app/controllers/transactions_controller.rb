@@ -566,7 +566,7 @@ class TransactionsController < ApplicationController
     @sub_sub_tab = params[:sub_sub_tab] || @transaction_property.current_step_sub_subtab
     
     # personnel form
-    @show_personnel_list = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
+    @show_other_personnel = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
 
     @personnel_on_tab = {}
     TransactionPersonnel::FIXED_TITLE.each do |personnel_category|
@@ -576,7 +576,8 @@ class TransactionsController < ApplicationController
         transaction_personnel = @transaction.transaction_personnels.where(personnel_category: personnel_category).first
       end
       
-      prepopulated_list = Contact.where(object_title: personnel_category, user_id: current_user.id, contact_type: 'Personnel')
+      prepopulated_list = Contact.where(object_title: personnel_category, contact_type: 'Personnel')
+      prepopulated_list = prepopulated_list.where(user_id: current_user.id) if !@show_other_personnel
       dropdown_list = []
       prepopulated_list.each do |pre_personnel|
         if !pre_personnel.name.empty?

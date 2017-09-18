@@ -310,6 +310,12 @@ Rails.application.routes.draw do
 
     end
 
+    resources :contacts do
+      collection do
+        get :personnel
+      end
+    end
+
     resources :properties do
       collection do
         get :sold_to_purchased
