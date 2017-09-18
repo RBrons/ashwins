@@ -18,14 +18,14 @@ $ ->
 
   $(document).on 'click', 'a.property-settings', ->
     position = $(this).position()
-    $(this).parent().parent().find('#property-settings:first').toggle();
-    $(this).parent().parent().find('#property-settings:first').css('left', (position.left - 100) + 'px');
+    $(this).parent().parent().find('#property-settings:first').toggle()
+    $(this).parent().parent().find('#property-settings:first').css('left', (position.left - 100) + 'px')
 
   $(document).on 'click', (e)->
     if !$(e.target).hasClass('property-settings')
       container = $("#property-settings")
       if (!container.is(e.target) and (container.has(e.target).length == 0))
-        container.hide();
+        container.hide()
 
   $(document).on 'click', '#property_lease_percentage_rent_exist', ->
     if $(this).is(':checked')
@@ -41,7 +41,7 @@ $ ->
       indicator: 'Saving....'
       onblur : 'submit'
       callback: ->
-#        fetch_action_checklist(pid)
+  # fetch_action_checklist(pid)
 
   $(document).on 'mouseover', '.property-description-index', ->
     id = $(this).attr('data-id')
@@ -84,6 +84,10 @@ $ ->
     titleHideShow()
 
   $(document).on 'change', '#property_tenant_id', ->
+    if $(this).find('option:selected').text() == 'No Tenant'
+      $(document).find('#property_current_rent').prop('required', false)
+    else
+      $(document).find('#property_current_rent').prop('required', true)
     setTitleValue()
 
   $(document).on 'click', '.entity_owner', ->
@@ -136,7 +140,7 @@ $ ->
     $("div#OwnershipFormNewEntity").modal()
 
   $(document).on 'click', ".ind-entity-popup", ->
-    $("div#OwnershipFormNewEntity").modal('hide');
+    $("div#OwnershipFormNewEntity").modal('hide')
     if $(this).data('klass') == "Person"
       $('#owner_entity_dropown_selection').html('<input autocomplete="off" id="property_owner_person_id" name="property[owner_person_id]" type="hidden">')
       $('#property_owner_person_id').val($(this).data('id'))
@@ -156,7 +160,7 @@ $ ->
       data: {id: propertyId, version: selectedVersion}
       dataType: "html"
       success: (val) ->
-        $(document).find("#rent-table-wrapper").html(val);
+        $(document).find("#rent-table-wrapper").html(val)
       error: (e) ->
         console.log e
 
