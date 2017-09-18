@@ -9,8 +9,9 @@ div[role="tabpanel"]
           a#seller_documentation[href="#seller_documentation_section" role="tab" data-toggle="tab" aria-expanded="true"] Seller Documentation
       li[role="presentation"]
           a#environmental[href="#environmental_section" role="tab" data-toggle="tab" aria-expanded="false"] Environmental
-      li[role="presentation"]
-          a#lease[href="#lease_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease
+      - if !@property.tenant.try(:name).nil? && @property.tenant.try(:name) != 'No Tenant'
+        li[role="presentation"]
+            a#lease[href="#lease_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease
       li[role="presentation"]
           a#inspection_title[href="#inspection_title_section" role="tab" data-toggle="tab" aria-expanded="false"] Title
       li[role="presentation"]
@@ -130,100 +131,100 @@ div[role="tabpanel"]
                         input.task_status.flat-icheck[type="checkbox"]
                       .right
                         span Conference with Purchaser's Environmental Constaultant and Client Purchaser
+      - if !@property.tenant.try(:name).nil? && @property.tenant.try(:name) != 'No Tenant'
+        #lease_section.tab-pane.fade[role="tabpanel"]
+          ul.sale_buy_step_tab_sub.nav.nav-tabs.bar_tabs[role="tablist"]
+            li.active
+              a#lease_tenant_contact[href="#lease_tenant_contact_section" role="tab" data-toggle="tab" aria-expanded="true"] Tenant Contact
+            li
+              a#lease_facilities_manager[href="#lease_facilities_manager_section" role="tab" data-toggle="tab" aria-expanded="true"] Facilities Manager
+            li
+              a#lease_files[href="#lease_files_section" role="tab" data-toggle="tab" aria-expanded="false"] Files
+            li
+              a#lease_tasks[href="#lease_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
 
-      #lease_section.tab-pane.fade[role="tabpanel"]
-        ul.sale_buy_step_tab_sub.nav.nav-tabs.bar_tabs[role="tablist"]
-          li.active
-            a#lease_tenant_contact[href="#lease_tenant_contact_section" role="tab" data-toggle="tab" aria-expanded="true"] Tenant Contact
-          li
-            a#lease_facilities_manager[href="#lease_facilities_manager_section" role="tab" data-toggle="tab" aria-expanded="true"] Facilities Manager
-          li
-            a#lease_files[href="#lease_files_section" role="tab" data-toggle="tab" aria-expanded="false"] Files
-          li
-            a#lease_tasks[href="#lease_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
+          .tab-content
+            #lease_tenant_contact_section.tab-pane.fade.in[role="tabpanel"]
+            
+            #lease_facilities_manager_section.tab-pane.fade.in[role="tabpanel"]
 
-        .tab-content
-          #lease_tenant_contact_section.tab-pane.fade.in[role="tabpanel"]
-          
-          #lease_facilities_manager_section.tab-pane.fade.in[role="tabpanel"]
-
-          #lease_files_section.tab-pane.fade.in[role="tabpanel"]
-            = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
-              .col-lg-6.col-md-6.col-sm-12.col-xs-12
-                .form-group
-                  label.control-label Correspondence
-                  .input-group.select_in_gdrive
+            #lease_files_section.tab-pane.fade.in[role="tabpanel"]
+              = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
+                .col-lg-6.col-md-6.col-sm-12.col-xs-12
+                  .form-group
+                    label.control-label Correspondence
+                    .input-group.select_in_gdrive
+                        input.form-control[type="text"]
+                        span.input-group-btn
+                          button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+                  .form-group
+                    label.control-label Lease
+                    .input-group.select_in_gdrive
+                        input.form-control[type="text"]
+                        span.input-group-btn
+                          button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+                            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+                            span.margin-md-left.blue Select in Google Drive
+                  .form-group
+                    label.control-label Lease Guaranty
+                    .input-group.select_in_gdrive
                       input.form-control[type="text"]
                       span.input-group-btn
                         button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                           = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                           span.margin-md-left.blue Select in Google Drive
-                .form-group
-                  label.control-label Lease
-                  .input-group.select_in_gdrive
+                  .form-group
+                    label.control-label Lease Abstract
+                    .input-group.select_in_gdrive
                       input.form-control[type="text"]
                       span.input-group-btn
                         button.btn-gdrive.btn.btn-default.border-blue[type="button"]
                           = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
                           span.margin-md-left.blue Select in Google Drive
-                .form-group
-                  label.control-label Lease Guaranty
-                  .input-group.select_in_gdrive
-                    input.form-control[type="text"]
-                    span.input-group-btn
-                      button.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                        = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                        span.margin-md-left.blue Select in Google Drive
-                .form-group
-                  label.control-label Lease Abstract
-                  .input-group.select_in_gdrive
-                    input.form-control[type="text"]
-                    span.input-group-btn
-                      button.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                        = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                        span.margin-md-left.blue Select in Google Drive
 
-                .clearfix
-                .divider
-                button.back_prev_step.btn.btn-default Back
-                = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
-          #lease_tasks_section.tab-pane.fade.in[role="tabpanel"]
-            = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
-              .col-lg-6.col-md-6.col-sm-12.col-xs-12
-                div
-                  ul.to_do
-                    li
-                      .field_list
-                        .left
-                          input.task_status.flat-icheck[type="checkbox"]
-                        .right
-                          span Prepare Lease Abstract
-                    li
-                      .field_list
-                        .left
-                          / input.task_status.flat-icheck[type="checkbox"]
-                          = f.check_box :purchase_inspection_lease_tasks_estoppel, class: 'task_status flat-icheck'
-                        .right
-                          span Acquire Estoppel Certificate from Seller
-                    li
-                      .field_list
-                        .left
-                          / input.task_status.flat-icheck[type="checkbox"]
-                          = f.check_box :purchase_inspection_lease_tasks_rofr, class: 'task_status flat-icheck'
-                        .right
-                          span Acquire Waiver of Tenant's Right of First Refusal from Seller(if applicable)
-                    li
-                      .field_list
-                        .left
-                          input.task_status.flat-icheck[type="checkbox"]
-                        .right
-                          span Conference with Client
-                    li
-                      .field_list
-                        .left
-                          input.task_status.flat-icheck[type="checkbox"]
-                        .right
-                          span Conference with Seller's Attorney
+                  .clearfix
+                  .divider
+                  button.back_prev_step.btn.btn-default Back
+                  = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
+            #lease_tasks_section.tab-pane.fade.in[role="tabpanel"]
+              = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
+                .col-lg-6.col-md-6.col-sm-12.col-xs-12
+                  div
+                    ul.to_do
+                      li
+                        .field_list
+                          .left
+                            input.task_status.flat-icheck[type="checkbox"]
+                          .right
+                            span Prepare Lease Abstract
+                      li
+                        .field_list
+                          .left
+                            / input.task_status.flat-icheck[type="checkbox"]
+                            = f.check_box :purchase_inspection_lease_tasks_estoppel, class: 'task_status flat-icheck'
+                          .right
+                            span Acquire Estoppel Certificate from Seller
+                      li
+                        .field_list
+                          .left
+                            / input.task_status.flat-icheck[type="checkbox"]
+                            = f.check_box :purchase_inspection_lease_tasks_rofr, class: 'task_status flat-icheck'
+                          .right
+                            span Acquire Waiver of Tenant's Right of First Refusal from Seller(if applicable)
+                      li
+                        .field_list
+                          .left
+                            input.task_status.flat-icheck[type="checkbox"]
+                          .right
+                            span Conference with Client
+                      li
+                        .field_list
+                          .left
+                            input.task_status.flat-icheck[type="checkbox"]
+                          .right
+                            span Conference with Seller's Attorney
 
       #inspection_title_section.tab-pane.fade[role="tabpanel"]
         ul.sale_buy_step_tab_sub.nav.nav-tabs.bar_tabs[role="tablist"]
