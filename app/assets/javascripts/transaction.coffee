@@ -917,9 +917,14 @@ $ ->
     $.each $("form.transaction-photo-gallery").find('.is_selected_property'), ->
       if $(this).is(":checked")
         checkedElement = true
-        if $(this).parents(".fields").find(".cap-rate-box input").val() == "" || $(this).parents(".fields").find(".price-box input").val() == ""
-          resultValidation = false
-          $(this).parents(".fields").find(".transaction-form-validation").show()
+        if $(this).parents(".fields").find('.property_with_no_tenant').val() == "false"
+          if $(this).parents(".fields").find(".cap-rate-box input").val() == "" || $(this).parents(".fields").find(".price-box input").val() == ""
+            resultValidation = false
+            $(this).parents(".fields").find(".transaction-form-validation").show()
+        else
+          if $(this).parents(".fields").find(".price-box input").val() == "" || parseFloat($(this).parents(".fields").find(".price-box input").val()) == 0
+            resultValidation = false
+            $(this).parents(".fields").find(".transaction-form-validation").show()
 
     if resultValidation == false || checkedElement == false
       e.preventDefault()

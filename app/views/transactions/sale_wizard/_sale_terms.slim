@@ -172,7 +172,8 @@
                         - else  
                           .form-group
                             label.control-label Name
-                            input#relinquishing_purchaser_name.form-control[type="text" value="#{ f.object.first_name + ' ' + f.object.last_name }" readonly]
+                            = @relinquishing_purchaser.id
+                            input#relinquishing_purchaser_name.form-control[type="text" value="#{ f.object.first_name.to_s + ' ' + f.object.last_name.to_s }" readonly]
                           
                         .form-group
                           = f.label :phone1
