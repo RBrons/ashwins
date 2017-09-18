@@ -334,7 +334,7 @@ class PropertiesController < ApplicationController
     exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
     replacement_seller =  Contact.where(contact_type: 'Counter-Party', user_id: current_user.id).first
     if !exchangor.present? && !replacement_seller.present?
-      return redirect_to '/'
+      return redirect_to '/initial-participants'
     end
     
     if params[:ostatus] == 'Purchased'
@@ -342,14 +342,14 @@ class PropertiesController < ApplicationController
         #allow user goes to property
       else
         # not created relinquishing seller
-        return redirect_to '/'
+        return redirect_to '/initial-participants'
       end
     elsif params[:ostatus] == 'Prospective Purchase'
       if replacement_seller.present?
         #allow user goes to property
       else
         # not created property owner
-        return redirect_to '/'
+        return redirect_to '/initial-participants'
       end
     end
 

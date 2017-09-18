@@ -1,34 +1,54 @@
-.clearfix.margin-lg-left
-  = render 'transactions/breadcrum'
+.clearfix
+    = render 'transactions/breadcrum'
 - if params[:main_id]
-    .clearfix.margin-lg-left
-    = render 'transactions/header_link'
-
-.col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-lg-top
     .clearfix
-    h2 = @personnel_category
-    table.table.table-stripe
-        thead
-            tr
-                th Company
-                th Type
-                th Role
-                th Contact First Name
-                th Contact last Name
-                th Email
-                th Phone
-                th Fax
-        tbody
-        - if !@personnel.nil?
-            tr
-                td = @personnel.company_name
-                td Personnel
-                td Personnel
-                td = @personnel.first_name
-                td = @personnel.last_name
-                td = @personnel.email
-                td = @personnel.phone1
-                td = @personnel.fax
-        - else
-            tr 
-                td[colspan="100%"] No Personnel
+    = render 'transactions/header_link'
+.text-center
+    = link_to 'Sale Mode', personnel_transaction_path(@transaction, sub: 'personnel', main_id: params[:main_id], type: 'sale'), class: "#{params[:sub] == 'personnel' && (params[:type].blank? || params[:type] == 'sale') ? 'btn btn-primary' : 'btn btn-default'}"
+    = link_to 'Purchase Mode', personnel_transaction_path(@transaction, sub: 'personnel', main_id: params[:main_id], type: 'purchase'), class: "#{params[:sub] == 'personnel' && params[:type] == 'purchase' ? 'btn btn-primary' : 'btn btn-default'}"
+.clearfix.margin-lg-top
+div
+    ul.nav.nav-tabs.bar_tabs[role="tablist"]
+        li.active[role="presentation"]
+            a#personnel_environmental[href="#personnel_environmental_section" role="tab" data-toggle="tab" aria-expanded="true"] Environmental
+        li[role="presentation"]
+            a#personnel_tenant_contact[href="#personnel_tenant_contact_section" role="tab" data-toggle="tab" aria-expanded="false"] Tenant Contact
+        li[role="presentation"]
+            a#personnel_tenant_facility_contact[href="#personnel_tenant_facility_contact_section" role="tab" data-toggle="tab" aria-expanded="false"] Tenant Facility Contact
+        li[role="presentation"]
+            a#personnel_title[href="#personnel_title_section" role="tab" data-toggle="tab" aria-expanded="false"] Title
+        li[role="presentation"]
+            a#personnel_survey[href="#personnel_survey_section" role="tab" data-toggle="tab" aria-expanded="false"] Survey
+        li[role="presentation"]
+            a#personnel_zoning[href="#personnel_zoning_section" role="tab" data-toggle="tab" aria-expanded="false"] Zoning
+        li[role="presentation"]
+            a#personnel_purchaser_broker[href="#personnel_purchaser_broker_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchaser Broker
+        li[role="presentation"]
+            a#personnel_purchaser_attorney[href="#personnel_purchaser_attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchaser Attorney
+        li[role="presentation"]
+    
+    .tab-content
+        #personnel_environmental_section.active.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:environmental]}
+        #personnel_tenant_contact_section.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:tenant_contact]}
+        #personnel_tenant_facility_contact_section.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:tenant_facility_contact]}
+        #personnel_title_section.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:title]}
+        #personnel_survey_section.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:survey]}
+        #personnel_zoning_section.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:zoning]}
+        #personnel_purchaser_broker_section.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:purchaser_broker]}
+        #personnel_purchaser_attorney_section.tab-pane.fade.in[role="tabpanel"]
+            .col-lg-6.col-md-6.col-xs-12
+                = render partial: 'transactions/personnel_detail', locals: {personnel: @contacts_on_personnel[:purchaser_attorney]}

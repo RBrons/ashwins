@@ -749,12 +749,32 @@ class TransactionsController < ApplicationController
   end
 
   def personnel
-    @personnel_category = params[:personnel_category] || 'Title'
-    @personnel = nil
-    if @transaction.present?
-      if @transaction.transaction_personnels.where(personnel_category: @personnel_category).first.present?
-        @personnel = @transaction.transaction_personnels.where(personnel_category: @personnel_category).first.contact
+    params[:type] = 'sale' if params[:type].blank?
+    @contacts_on_personnel = {}
+    # Get Personnel
+    TransactionPersonnel::FIXED_TITLE.each do |personnel_category|
+      if @transaction.present?
+        if @transaction.transaction_personnels.where(personnel_category: personnel_category).first.present?
+          personnel = @transaction.transaction_personnels.where(personnel_category: personnel_category).first.contact
+        end
       end
+
+      case personnel_category
+        when 'Title'
+          @contacts_on_personnel[:title] = personnel
+        when 'Survey'
+          @contacts_on_personnel[:survey] = personnel
+        when 'Environmental'
+          @contacts_on_personnel[:environmental] = personnel
+        when 'Zoning'
+          @contacts_on_personnel[:zoning] = personnel
+      end
+
+      # Get Contact related to Tenant
+
+      # Get Contact related to Purchaser
+      
+
     end
     
   end
@@ -995,19 +1015,19 @@ class TransactionsController < ApplicationController
             # allow to go to transaction module
           else
             # not created prospective purchase property
-            return redirect_to '/'
+            return redirect_to '/initial-participants'
           end
         else
           # not created relinquishing purchaser
-          return redirect_to '/'
+          return redirect_to '/initial-participants'
         end
       else
         # not created purchased property
-        return redirect_to '/'
+        return redirect_to '/initial-participants'
       end
     else
       # not created relinquishing seller
-      return redirect_to '/'
+      return redirect_to '/initial-participants'
     end
   end
 
