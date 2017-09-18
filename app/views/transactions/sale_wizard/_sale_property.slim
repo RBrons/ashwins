@@ -51,6 +51,7 @@
               .input-group-addon $
               = transaction_property_form.text_field :sale_price, :readonly => true, class: 'form-control input-mask-currency'
       -else
+        input[type="hidden" class="property_with_no_tenant" value="#{transaction_property_form.object.property.with_no_tenant?}"]
         .transaction-property-header
           / = link_to "◇", "#", class: 'pull-left'
           = transaction_property_form.check_box :is_selected, disabled: transaction_property_form.object.is_selected, class: 'pull-left flat-icheck is_selected_property'
@@ -87,22 +88,22 @@
             .form-group.center.radio-box
                 .heading_blue.radio-inline
                     span
-                        input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' checked='checked' class='form-control flat-icheck radiobuttons radio_edit_mode_cap'
+                        input[type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='cap_rate' class='form-control flat-icheck radiobuttons radio_edit_mode_cap' checked=!transaction_property_form.object.property.with_no_tenant? disabled=transaction_property_form.object.property.with_no_tenant?]
                     span.margin-md-left Input Cap Rate
                 .heading_blue.radio-inline
                     span
-                        input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price'
+                        input type='radio' name="edit_mode[#{transaction_property_form.object.property.id}]" value='price' class='form-control flat-icheck radiobuttons radio_edit_mode_price' checked=transaction_property_form.object.property.with_no_tenant?
                     span.margin-md-left Input Price
             .form-group.center.cap-rate-box
                 label Propose a Cap Rate
                 .input-group
-                    = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate
+                    = transaction_property_form.text_field :cap_rate, class: 'form-control input-mask-currency', value: transaction_property_form.object.cap_rate, readonly: transaction_property_form.object.property.with_no_tenant?
                     .input-group-addon %
             .form-group.center.price-box
                 label This will result in an Asking Price of
                 .input-group
                     .input-group-addon $
-                    = transaction_property_form.text_field :sale_price, readonly: 'true', class: 'form-control input-mask-currency'  
+                    = transaction_property_form.text_field :sale_price, class: 'form-control input-mask-currency', readonly: !transaction_property_form.object.property.with_no_tenant?
 
   .clearfix.margin-lg-top
   / = f.link_to_add "Add Property", :transaction_properties, data: {target: ".transaction_properties_wrapper"}, class: 'btn btn-primary next-prev margin-sm-right'

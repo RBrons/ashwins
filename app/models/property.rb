@@ -315,4 +315,12 @@ class Property < ApplicationRecord
     ret
   end
 
+  def with_no_tenant?
+    if self.tenant.try(:name).nil? || self.tenant.try(:name) == 'No Tenant'
+      true
+    else
+      false
+    end
+  end
+
 end
