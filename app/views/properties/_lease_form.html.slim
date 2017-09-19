@@ -255,45 +255,29 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
             .form-group
               h2.heading Rent Abatement
-              .clearfix
               = f.text_area :lease_rent_abatement, rows: 7, class: 'form-control'
-              .clearfix
-            .clearfix
             .form-group
               label
                 | Percentage Rent Exist?
               = f.check_box :lease_percentage_rent_exist, class: ''
-              .clearfix
-            .clearfix
             .rent-percentage-wrapper[style="#{'display: none;' unless f.object.lease_percentage_rent_exist?}"]
               .form-group
                 h2.heading Percentage Rent
-                .clearfix
                 .input-group
                   = f.text_field :lease_percentage_rent, class: 'form-control'
                   .input-group-addon %
-                .clearfix
-              .clearfix
               .form-group
                 h2.heading Breakpoint
-                .clearfix
                 .input-group
                   .input-group-addon $
                   = f.text_field :lease_breakpoint, class: 'form-control'
-                .clearfix
-              .clearfix
               .form-group
                 h2.heading Percentage Rent Exclusions
-                .clearfix
                 = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
-                .clearfix
-            .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_taxes_and_fees_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -305,10 +289,8 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
-              h2.heading
-                | Net Nature Of Lease
-            .clearfix
+            h2.heading
+              | Net Nature Of Lease
             .form-group
               label
                 = f.check_box :net_nature_of_lease, {multiple: true}, 'Tenant pays for Real Estate Taxes'
@@ -325,41 +307,26 @@ div[role="tabpanel"]
               label
                 = f.check_box :net_nature_of_lease, {multiple: true}, 'Tenant pays Common Area Maintenance'
                 | Tenant pays Common Area Maintenance
-            .clearfix
             .form-group
               h2.heading Real Estate Taxes
-              .clearfix
               = f.text_area :taxes_and_fees_restate, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Assessments
-              .clearfix
               = f.text_area :taxes_and_fees_assessments, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Separate Tax Parcel
-              .clearfix
               = f.text_area :taxes_and_fees_separate_tax_parcel, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Landlord Contesting Taxes
-              .clearfix
               = f.text_area :taxes_and_fees_landlord_contesting, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Tenant Contesting Taxes
-              .clearfix
               = f.text_area :taxes_and_fees_tenant_contesting, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Easements
-              .clearfix
               = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_site_preparation_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -371,31 +338,21 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
             .form-group
               h2.heading Environmental Obligations for Site Preparation
-              .clearfix
               = f.text_area :site_preparation_env_obligations, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Environmental Termination Rights
-              .clearfix
               = f.text_area :site_preparation_env_termination_rights, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Environmental Remediation
-              .clearfix
               = f.text_area :site_preparation_env_remediation, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Environmental Permits and Licenses
-              .clearfix
               = f.text_area :site_preparation_env_permits_and_licenses, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
+
       #lease_construction_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -407,31 +364,20 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
             .form-group
               h2.heading Construction
-              .clearfix
               = f.text_area :construction, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Construction Deadline
-              .clearfix
               = f.text_area :construction_deadline, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Liens
-              .clearfix
               = f.text_area :construction_liens, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Approval of Plans and Specifications
-              .clearfix
               = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_use_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -446,18 +392,12 @@ div[role="tabpanel"]
             .clearfix
             .form-group
               h2.heading Use Clause
-              .clearfix
               = f.text_area :use_clause, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Exclusive Clause
-              .clearfix
               = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_premises_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -469,96 +409,59 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
             .form-group
               h2.heading Tenant Rights Under the Declaration
-              .clearfix
               = f.text_area :premises_tenant_rights, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Waste
-              .clearfix
               = f.text_area :premises_waste, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Initial Opening
-              .clearfix
               = f.text_area :premises_initial_opening, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Recapture Clause
-              .clearfix
               = f.text_area :premises_recapture_clause, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Demolition
-              .clearfix
               = f.text_area :premises_demolition, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Tenant's Equipment Defined
-              .clearfix
               = f.text_area :premises_tenants_equipment_defined, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Ownership and Removal of Tenant's Equipment
-              .clearfix
               = f.text_area :premises_ownership_and_removal, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Repairs
-              .clearfix
               = f.text_area :premises_repairs, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Compliance with Laws
-              .clearfix
               = f.text_area :premises_compliance_with_laws, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Surrender
-              .clearfix
               = f.text_area :premises_surrender, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Inspection
-              .clearfix
               = f.text_area :premises_inspection, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Insurance
-              .clearfix
               = f.text_area :premises_insurance, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Destruction
-              .clearfix
               = f.text_area :premises_destruction, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Total Taking
-              .clearfix
               = f.text_area :premises_total_taking, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Partial Taking
-              .clearfix
               = f.text_area :premises_partial_taking, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Signs
-              .clearfix
               = f.text_area :premises_signs, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Utilities
-              .clearfix
               = f.text_area :premises_utilities, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_transfer_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -570,31 +473,20 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
             .form-group
               h2.heading Assignment and Subletting
-              .clearfix
               = f.text_area :transfer_assignment_and_subletting, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Leasehold Mortgage
-              .clearfix
               = f.text_area :transfer_leasehold_mortgage, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Subordination
-              .clearfix
               = f.text_area :transfer_subordination, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Estoppel Certificate
-              .clearfix
               = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_remedies_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -606,41 +498,26 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
             .form-group
               h2.heading Rent Defaults by Tenant
-              .clearfix
               = f.text_area :remedies_rent_defaults, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Landlord Remedies for Tenant Defaults
-              .clearfix
               = f.text_area :remedies_landlord, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Mitigation
-              .clearfix
               = f.text_area :remedies_mitigation, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Dispute Resolution
-              .clearfix
               = f.text_area :remedies_dispute_resolution, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Landlord Exoneration after Sale
-              .clearfix
               = f.text_area :remedies_landlord_exoneration, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Exculpation
-              .clearfix
               = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_misc_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -655,15 +532,9 @@ div[role="tabpanel"]
             .clearfix
             .form-group
               h2.heading Notices
-              .clearfix
               = f.text_area :misc_notices, rows: 7, class: 'form-control'
-              .clearfix
             .form-group
               h2.heading Obligation to be reasonable
-              .clearfix
               = f.text_area :misc_obligation, rows: 7, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
