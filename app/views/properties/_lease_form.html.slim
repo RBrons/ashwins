@@ -34,22 +34,35 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
-              h2.heading
-                | Lease Type
+            .form-group
+              label Lease Analysis Date
+              .clearfix
+              = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
+            h2.heading
+                | Original Parties
             .clearfix
             .form-group
+                label Original Landlord
+                .clearfix
+                = f.text_field :lease_original_landlord, class: 'form-control'
+            .form-group
+                label Original Tenant
+                .clearfix
+                = f.text_field :lease_original_tenant, class: 'form-control'
+            .form-group
+                label Original Guarantor
+                .clearfix
+                = f.text_field :lease_original_guarantor, class: 'form-control'
+            .form-group
+              label Lease Type
+              .clearfix
               = f.select :lease_type_is, Property::LEASE_TYPES, {}, class: 'form-control '
-            .clearfix
-              h2.heading
-                | Building Status
-            .clearfix
             .form-group
+              label Building Status
+              .clearfix
               = f.select :building_status_is, Property::BUILDING_STATUS, {}, class: 'form-control'
-
-            .clearfix
             .form-group
-              h2.heading Date Of Lease
+              label Date Of Lease
               .clearfix
               .pull-left
                 = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
@@ -59,50 +72,21 @@ div[role="tabpanel"]
                   label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
                 .pull-right
                   = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
-
               .clearfix
             .form-group
-              h2.heading Lease Analysis Date
+                label Lease Base Rent
+                .clearfix
+                .input-group
+                  .input-group-addon $
+                  = f.text_field :current_rent, class: 'form-control input-mask-currency'
+            .form-group
+              label Current Monthly Rent
               .clearfix
-              .pull-left
-                = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
-
-              .clearfix
-          .clearfix
-          .form-group
-              h2.heading Lease Base Rent
               .input-group
                 .input-group-addon $
-                = f.text_field :current_rent, class: 'form-control input-mask-currency'
-
-          .clearfix
-          .form-group
-            h2.heading Current Monthly Rent
-            .input-group
-              .input-group-addon $
-              = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
-          .clearfix
-          .form-group
-              h2.heading Original Landlord
-              .clearfix
-              = f.text_field :lease_original_landlord, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-              h2.heading Original Tenant
-              .clearfix
-              = f.text_field :lease_original_tenant, class: 'form-control'
-              .clearfix
-          .clearfix
-          .form-group
-              h2.heading Original Guarantor
-              .clearfix
-              = f.text_field :lease_original_guarantor, class: 'form-control'
-              .clearfix
-
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+                = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_rent_table_section.tab-pane.fade[role="tabpanel"]
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
