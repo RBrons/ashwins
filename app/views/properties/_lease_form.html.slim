@@ -100,117 +100,75 @@ div[role="tabpanel"]
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .clearfix
             .form-group
-              h2.heading Date Of Lease
+              label Date Of Lease
               .clearfix
-              .pull-left
-                = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
-                = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}"
-              .pull-right
-                .pull-left
-                  label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                .pull-right
-                  = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
-
-              .clearfix
-
-            .clearfix
+              = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}", disabled: true
+              = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}", disabled: true
             .form-group
-              h2.heading Starting Date Of Lease Amendment
+              label Starting Date Of Lease Amendment
               .clearfix
-              .pull-left
-                = f.date_select :starting_date_of_lease_amendment, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease"
-
-            .clearfix
+              = f.date_select :starting_date_of_lease_amendment, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease"
             .form-group
-              h2.heading Lease Base Rent
+              label Lease Base Rent
               .input-group
                 .input-group-addon $
                 = f.text_field :current_rent, class: 'form-control input-mask-currency', :readonly => true
-
-            .clearfix
             .form-group
-              h2.heading Current Monthly Rent
+              label Current Monthly Rent
               .input-group
                 .input-group-addon $
                 = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
-
-            .clearfix
             .form-group
-              h2.heading Duration of Base term
+              label Duration of Base term
               .clearfix
               =  f.text_field :lease_duration_in_years, class: 'form-control'
-
-            .clearfix
             .form-group
-              h2.heading Lease Rent Increase Percentage
+              label Lease Rent Increase Percentage
+              .clearfix
               .input-group
                 = f.text_field :lease_rent_increase_percentage, class: 'form-control'
                 .input-group-addon %
-
-            .clearfix
             .form-group
-              h2.heading
-                | No of Years Before Rent Increase
+              label No of Years Before Rent Increase
               .clearfix
               =  f.text_field :lease_rent_slab_in_years, class: 'form-control'
-
-            .clearfix
-              h2.heading
-                | Date Of Lease Details
-            .clearfix
             .form-group
+              label Date Of Lease Details
+              .clearfix
               = f.select :date_of_lease_details, Property::DATE_OF_LEASE_DETAILS, {}, class: 'form-control'
-            .clearfix
-              h2.heading
-                | Rent Commencement Date
-            .clearfix
             .form-group
+              label Rent Commencement Date
+              .clearfix
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: 'form-control select_auto'
-            .clearfix
             .form-group
-              h2.heading
-                | Option to Extend
+              label Option to Extend
               .clearfix
               =  f.text_field :lease_option_to_extend, class: 'form-control'
-            .clearfix
             .form-group
-              h2.heading
-                | Delivery of the Premises
+              label Delivery of the Premises
               .clearfix
               =  f.text_field :lease_delivery_of_the_premises, class: 'form-control'
-            .clearfix
             .form-group
-              h2.heading
-                | Primary Term
+              label Primary Term
               .clearfix
               =  f.text_field :lease_primary_term, class: 'form-control'
-            .clearfix
             .form-group
-              h2.heading
-                | Pro Rated Rent?
-                =  f.check_box :lease_is_pro_rated, class: 'form-control'
-            .clearfix
-              h2.heading
-                | Rent Commencement Date Details
-            .clearfix
+              label Pro Rated Rent?
+              =  f.check_box :lease_is_pro_rated, class: ''
             .form-group
+              label Rent Commencement Date Details
+              .clearfix
               = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
-            .clearfix
-              h2.heading
-                | Number Of Option Period(s)
-            .clearfix
             .form-group
+              label Number Of Option Period(s)
+              .clearfix
               = f.text_field :number_of_option_period, class: 'form-control'
-            .clearfix
-              h2.heading
-                | Length of an Option Period in Years
-            .clearfix
             .form-group
+              label Length of an Option Period in Years
+              .clearfix
               = f.text_field :length_of_option_period, class: 'form-control'
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-          .clearfix
+            .form-group
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
         - if @property.rent_tables.present?
           .clearfix
           .col-sm-4
