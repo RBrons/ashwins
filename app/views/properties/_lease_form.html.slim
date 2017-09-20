@@ -36,6 +36,16 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
+              label Lease Anlaysis Date Perspective
+              .clearfix
+              .form-group
+                .heading_blue.radio-inline
+                  span = f.radio_button :lease_analysis_perspective, true, checked: @property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
+                  span.margin-md-left Tenant's Perspective
+                .heading_blue.radio-inline
+                  span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
+                  span.margin-md-left Landlord's Perspective
+            .form-group
               label Lease Analysis Date
               .clearfix
               = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
