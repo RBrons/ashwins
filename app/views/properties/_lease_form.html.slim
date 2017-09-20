@@ -1,31 +1,32 @@
 div[role="tabpanel"]
     ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-      li.active[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
           a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Basics
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
           a#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
           a#lease_rent_details[href="#lease_rent_details_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
           a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
           a#lease_taxes_and_fees[href="#lease_site_preparation_section" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_construction_section'}")
           a#lease_construction[href="#lease_construction_section" role="tab" data-toggle="tab" aria-expanded="false"] Construction
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_use_section'}")
           a#lease_use[href="#lease_use_section" role="tab" data-toggle="tab" aria-expanded="false"] Use
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_premises_section'}")
           a#lease_premises[href="#lease_premises_section" role="tab" data-toggle="tab" aria-expanded="false"] Premises
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_transfer_section'}")
           a#lease_transfer[href="#lease_transfer_section" role="tab" data-toggle="tab" aria-expanded="false"] Transfer
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_remedies_section'}")
           a#lease_remedies[href="#lease_remedies_section" role="tab" data-toggle="tab" aria-expanded="false"] Remedies
-      li[role="presentation"]
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_misc_section'}")
           a#lease_misc[href="#lease_misc_section" role="tab" data-toggle="tab" aria-expanded="false"] Misc
     .tab-content
-      #lease_basics_section.tab-pane.fade.active.in[role="tabpanel"]
+      #lease_basics_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_basics_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -87,9 +88,10 @@ div[role="tabpanel"]
                 = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_rent_table_section.tab-pane.fade[role="tabpanel"]
+      #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_rent_table_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -244,9 +246,10 @@ div[role="tabpanel"]
                       = number_to_currency row[13]
         - else
           p Rent Table is not available right now.
-      #lease_rent_details_section.tab-pane.fade[role="tabpanel"]
+      #lease_rent_details_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_rent_details_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -278,9 +281,10 @@ div[role="tabpanel"]
                 = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_taxes_and_fees_section.tab-pane.fade[role="tabpanel"]
+      #lease_taxes_and_fees_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_taxes_and_fees_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -327,9 +331,10 @@ div[role="tabpanel"]
               = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_site_preparation_section.tab-pane.fade[role="tabpanel"]
+      #lease_site_preparation_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_site_preparation_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -353,9 +358,10 @@ div[role="tabpanel"]
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
-      #lease_construction_section.tab-pane.fade[role="tabpanel"]
+      #lease_construction_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_construction_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -378,9 +384,10 @@ div[role="tabpanel"]
               = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_use_section.tab-pane.fade[role="tabpanel"]
+      #lease_use_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_use_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -398,9 +405,10 @@ div[role="tabpanel"]
               = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_premises_section.tab-pane.fade[role="tabpanel"]
+      #lease_premises_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_premises_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -462,9 +470,10 @@ div[role="tabpanel"]
               = f.text_area :premises_utilities, rows: 7, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_transfer_section.tab-pane.fade[role="tabpanel"]
+      #lease_transfer_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_transfer_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -487,9 +496,10 @@ div[role="tabpanel"]
               = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_remedies_section.tab-pane.fade[role="tabpanel"]
+      #lease_remedies_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_remedies_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
@@ -518,9 +528,10 @@ div[role="tabpanel"]
               = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_misc_section.tab-pane.fade[role="tabpanel"]
+      #lease_misc_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_misc_section'
           - if @property.errors.any?
             #error_explanation
               h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"

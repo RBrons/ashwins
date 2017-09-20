@@ -229,7 +229,11 @@ class PropertiesController < ApplicationController
 
           flash[:success] = "The Property Successfully Updated.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
 
-          format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }
+          if params[:lease_sub].blank?
+            format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }
+          else
+            format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is], lease_sub: params[:lease_sub]) }
+          end
           format.json { render action: 'show', status: :created, location: @property }
         else
           format.html { render action: 'edit' }
@@ -336,7 +340,7 @@ class PropertiesController < ApplicationController
     if !exchangor.present? && !replacement_seller.present?
       return redirect_to '/initial-participants'
     end
-    
+
     if params[:ostatus] == 'Purchased'
       if exchangor.present?
         #allow user goes to property
