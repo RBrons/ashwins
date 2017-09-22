@@ -3,7 +3,7 @@
 - else
   - options = [ 'Active']
 
-- @replacement_seller = get_property_purchaser(@transaction_property.property_id, @transaction_property.transaction_id, 'purchase')
+- @replacement_seller = @transaction_property.owner
 
 #negotiations_wrapper[data-transaction-type="#{@transaction_property.is_sale ? 'sale' : 'purchase'}"]
   input#negotiated_property[type="hidden" value="#{@property.title}"]

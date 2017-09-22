@@ -28,7 +28,7 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                                 tbody
                                     - @transactions_in_user.each do |transaction|
                                         - if transaction.is_purchase == 1
-                                            - owner = get_property_purchaser(transaction.p_id, transaction.id, 'purchase')
+                                            - owner = get_property_purchaser_or_seller(transaction.p_id, transaction.id, 'purchase')
                                             - if owner.present?
                                                 tr
                                                     td.text-success = owner.try(:name) || "No Name"
@@ -41,7 +41,7 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                                                 td.text-success  = transaction.relinquishing_seller_entity.present? ? transaction.relinquishing_seller_entity.purchased_properties.pluck(:title).join(" | ") : "No Properties"
                                             - tproperties = get_transaction_properties(transaction)
                                             - tproperties.each do |tproperty|
-                                                - purchaser = get_property_purchaser(tproperty.id, transaction.id)
+                                                - purchaser = get_property_purchaser_or_seller(tproperty.id, transaction.id)
                                                 - if purchaser.present?
                                                     tr
                                                         td.text-success = purchaser.name
