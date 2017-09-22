@@ -232,6 +232,13 @@ $ ->
 
   # --- Negotiations Step in Sale Wizard --- #
 
+  # - Purchaser tab -
+  $(document).on 'change', '#transaction_property_offer_relinquishing_purchaser_contact_id', ->
+    if $(this).find('option:selected').text() == 'Add New'
+      $(document).find('.relinquishing-purchaser-form-wrapper').show()
+    else
+      $(document).find('.relinquishing-purchaser-form-wrapper').hide()
+
   # - Offer and Acceptance -
   $(document).on 'click', '.nav-tabs #new_offer', (e)->
     e.preventDefault()
@@ -716,8 +723,6 @@ $ ->
           if $(document).find('#negotiations_wrapper').data('transaction-type') == 'purchase'
             $(document).find('#offer_list li.active a').html('<i class="red">Accepted</i>')
 
-          $(document).find('#relinquishing_purchaser_name').val(data.offer_name)
-                                                           .show()
           $(document).find('#relinquishing_property_sale_price').val(selected_offer_tab.find('.last_counteroffer_price').val())
 
           loi_description = data.offer_name + ' is purchasing ' + $(document).find('#negotiated_property').val() + ' for ' + selected_offer_tab.find('.last_counteroffer_price').val()

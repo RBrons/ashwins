@@ -119,11 +119,11 @@ $ ->
 
   $(document).find('.create_contact').submit (e) ->
     e.preventDefault()
-    if $(this).closest('.md-contact').attr('id') == 'md-business'
+    if $(this).closest('.md-user-setup').attr('id') == 'md-business'
       if user_role == 'Attorney' && !$(this).find('select.existing_firm').val()
         $.notify 'Please select law firm!', 'error'
         return false
-    back_modal = $(this).closest('.md-contact').attr('id')
+    back_modal = $(this).closest('.md-user-setup').attr('id')
     $(this).find('input[name="user_type"]').val(user_role)
     contact_info = $(this).serialize()
     $.ajax
@@ -133,7 +133,7 @@ $ ->
       data: contact_info
       success: (data) ->
         if data.status
-          $(document).find('.md-contact').modal('hide')
+          $(document).find('.md-user-setup').modal('hide')
           if data.user_type == 'Non-Attorney Fiduciary'
             $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
           else

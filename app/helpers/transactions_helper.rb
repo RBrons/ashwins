@@ -40,7 +40,7 @@ module TransactionsHelper
         end
     end
 
-    def get_property_purchaser(property_id, transaction_id, type="sale")
+    def get_property_purchaser_or_seller(property_id, transaction_id, type="sale")
         if type == 'sale'
             is_sale = true
         else
