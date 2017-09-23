@@ -5,7 +5,7 @@ class TransactionsController < ApplicationController
                                          :personnel_update, :get_status, :set_status, :qi_status, :inspection_update]
   before_action :current_page
   before_action :add_breadcrum, only: [:index]
-  before_action :validate_user_assets
+  before_action :validate_user_assets, except: [:index]
   # GET /project
   # GET /project.json
 
