@@ -214,6 +214,7 @@ $ ->
           
           $(document).find('#md-add-initial-client').modal('hide')
           if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+            $(document).find('#completed-ipp').show()
             $(document).find('.final-step').removeAttr('data-dismiss')
             $(document).find('.final-step').attr('href', '/')
             $(document).find('.final-step').text('Done')
@@ -299,6 +300,7 @@ $ ->
               current_em.off('blur')
               
             if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+              $(document).find('#completed-ipp').show()
               $(document).find('.final-step').removeAttr('data-dismiss')
               $(document).find('.final-step').attr('href', '/')
               $(document).find('.final-step').text('Next')
@@ -345,6 +347,7 @@ $ ->
                 current_em.off('blur')
 
               if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+                $(document).find('#completed-ipp').show()
                 $(document).find('.final-step').removeAttr('data-dismiss')
                 $(document).find('.final-step').attr('href', '/')
                 $(document).find('.final-step').text('Next')
@@ -386,6 +389,7 @@ $ ->
                 current_em.off('blur')
 
               if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+                $(document).find('#completed-ipp').show()
                 $(document).find('.final-step').removeAttr('data-dismiss')
                 $(document).find('.final-step').attr('href', '/')
                 $(document).find('.final-step').text('Next')
@@ -465,6 +469,7 @@ $ ->
       replacement_property_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Prospective Purchase Property of ' + repls_name + '</span>.'
       $(document).find('.create-seller-property').parent('p').html(replacement_property_info_html)
     if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
+      $(document).find('#completed-ipp').show()
       $(document).find('.final-step').removeAttr('data-dismiss')
       $(document).find('.final-step').attr('href', '/')
       $(document).find('.final-step').text('Next')

@@ -2,7 +2,7 @@ class PropertiesController < ApplicationController
   before_action :set_property, only: [:show, :edit, :destroy]
   before_action :current_page
   before_action :add_breadcrum
-  before_action :validate_user_assets
+  before_action :validate_user_assets, except: [:index]
   # GET /properties
   # GET /properties.json
   def index
