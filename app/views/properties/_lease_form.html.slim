@@ -46,7 +46,7 @@ div[role="tabpanel"]
                   span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
                   span.margin-md-left Landlord's Perspective
             .form-group
-              label Lease Analysis Date
+              label.mg-top-5 Lease Analysis Date
               .clearfix
               = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
             h2.heading
