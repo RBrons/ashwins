@@ -53,27 +53,27 @@ div[role="tabpanel"]
                 | Original Parties
             .clearfix
             .form-group
-                label Original Landlord
+                label.mg-top-5 Original Landlord
                 .clearfix
                 = f.text_field :lease_original_landlord, class: 'form-control'
             .form-group
-                label Original Tenant
+                label.mg-top-5 Original Tenant
                 .clearfix
                 = f.text_field :lease_original_tenant, class: 'form-control'
             .form-group
-                label Original Guarantor
+                label.mg-top-5 Original Guarantor
                 .clearfix
                 = f.text_field :lease_original_guarantor, class: 'form-control'
             .form-group
-              label Lease Type
+              label.mg-top-5 Lease Type
               .clearfix
               = f.select :lease_type_is, Property::LEASE_TYPES, {}, class: 'form-control '
             .form-group
-              label Building Status
+              label.mg-top-5 Building Status
               .clearfix
               = f.select :building_status_is, Property::BUILDING_STATUS, {}, class: 'form-control'
             .form-group
-              label Date Of Lease
+              label.mg-top-5 Date Of Lease
               .clearfix
               .pull-left
                 = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
@@ -85,13 +85,13 @@ div[role="tabpanel"]
                   = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
               .clearfix
             .form-group
-                label Lease Base Rent
+                label.mg-top-5 Lease Base Rent
                 .clearfix
                 .input-group
                   .input-group-addon $
                   = f.text_field :current_rent, class: 'form-control input-mask-currency'
             .form-group
-              label Current Monthly Rent
+              label.mg-top-5 Current Monthly Rent
               .clearfix
               .input-group
                 .input-group-addon $
@@ -112,40 +112,40 @@ div[role="tabpanel"]
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .clearfix
             .form-group
-              label Date Of Lease
+              label.mg-top-5 Date Of Lease
               .clearfix
               = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}", disabled: true
               = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}", disabled: true
             .form-group
-              label Starting Date Of Lease Amendment
+              label.mg-top-5 Starting Date Of Lease Amendment
               .clearfix
               = f.date_select :starting_date_of_lease_amendment, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease"
             .form-group
-              label Lease Base Rent
+              label.mg-top-5 Lease Base Rent
               .input-group
                 .input-group-addon $
                 = f.text_field :current_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
-              label Current Monthly Rent
+              label.mg-top-5 Current Monthly Rent
               .input-group
                 .input-group-addon $
                 = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
-              label Duration of Base term
+              label.mg-top-5 Duration of Base term
               .clearfix
               =  f.text_field :lease_duration_in_years, class: 'form-control'
             .form-group
-              label Lease Rent Increase Percentage
+              label.mg-top-5 Lease Rent Increase Percentage
               .clearfix
               .input-group
                 = f.text_field :lease_rent_increase_percentage, class: 'form-control'
                 .input-group-addon %
             .form-group
-              label No of Years Before Rent Increase
+              label.mg-top-5 No of Years Before Rent Increase
               .clearfix
               =  f.text_field :lease_rent_slab_in_years, class: 'form-control'
             .form-group
-              label Date Of Lease Details
+              label.mg-top-5 Date Of Lease Details
               .clearfix
               = f.select :date_of_lease_details, Property::DATE_OF_LEASE_DETAILS, {}, class: 'form-control'
             .form-group
@@ -153,30 +153,30 @@ div[role="tabpanel"]
               .clearfix
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: 'form-control select_auto'
             .form-group
-              label Option to Extend
+              label.mg-top-5 Option to Extend
               .clearfix
               =  f.text_field :lease_option_to_extend, class: 'form-control'
             .form-group
-              label Delivery of the Premises
+              label.mg-top-5 Delivery of the Premises
               .clearfix
               =  f.text_field :lease_delivery_of_the_premises, class: 'form-control'
             .form-group
-              label Primary Term
+              label.mg-top-5 Primary Term
               .clearfix
               =  f.text_field :lease_primary_term, class: 'form-control'
             .form-group
-              label Pro Rated Rent?
+              label.mg-top-5 Pro Rated Rent?
               =  f.check_box :lease_is_pro_rated, class: ''
             .form-group
-              label Rent Commencement Date Details
+              label.mg-top-5 Rent Commencement Date Details
               .clearfix
               = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
             .form-group
-              label Number Of Option Period(s)
+              label.mg-top-5 Number Of Option Period(s)
               .clearfix
               = f.text_field :number_of_option_period, class: 'form-control'
             .form-group
-              label Length of an Option Period in Years
+              label.mg-top-5 Length of an Option Period in Years
               .clearfix
               = f.text_field :length_of_option_period, class: 'form-control'
             .form-group
