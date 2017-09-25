@@ -34,8 +34,19 @@
       = f.text_area :description, class: 'form-control width-field-lg'
     .form-group
     - if @property.ostatus == "Purchased"
+      - entity_clients = options_html_entities(f.object.owner_entity_id, "properties", "entity", "array")
+      - individual_clients = options_html_entities(f.object.owner_entity_id, "properties", "individual", "array")
+
+      - if individual_clients.length == 1 && entity_clients.length == 0
+        - f.object.owner_person_is = true
+        p.text-info = "You only have 1 client, an individual"
+      - elsif individual_clients.length == 0 && entity_clients.length == 1
+        p.text-info = "You only have 1 client, a business"
+      - elsif individual_clients.length == 1 && entity_clients.length == 1
+        p.text-info = "You have 2 clients, one business and one individual"
+        
       label Owning Client
-      .form-group
+      .form-group style=("#{('display: none;' if entity_clients.length == 0 || individual_clients.length == 0)}")
         .heading_blue.radio-inline
           span = f.radio_button :owner_person_is, true, checked: f.object.owner_person_is?, class: 'form-control flat-icheck radiobuttons'
           span.margin-md-left Individual
@@ -44,22 +55,41 @@
           span.margin-md-left Entity
 
       .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is?)}")
-        = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single width-field-lg'
+        - if entity_clients.length > 1
+          = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single width-field-lg'
+        - elsif entity_clients.length == 1
+          = f.hidden_field :owner_entity_id, value: entity_clients[0][1]
+          input.form-control.width-field-lg[type="text" value="#{entity_clients[0][0]}" readonly]
 
         - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
           - owner_entity = Entity.find(@property.owner_entity_id)
           = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank'
 
       .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is?)}")
-        = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single width-field-lg'
+        - if individual_clients.length > 1
+          = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single width-field-lg'
+        - elsif individual_clients.length == 1
+          = f.hidden_field :owner_entity_id_indv, value: individual_clients[0][1]
+          input.form-control.width-field-lg[type="text" value="#{individual_clients[0][0]}" readonly]
 
         - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
           - owner_entity = Entity.find(@property.owner_entity_id)
           = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank'
 
     - else
+      - entity_owners = Contact.TransactionContacts("company")
+      - individual_owners = Contact.TransactionContacts("individual")
+
+      - if individual_owners.length == 1 && entity_owners.length == 0
+        - f.object.owner_person_is = true
+        p.text-info = "You only have 1 owner, an individual"
+      - elsif individual_owners.length == 0 && entity_owners.length == 1
+        p.text-info = "You only have 1 owner, a business"
+      - elsif individual_owners.length == 1 && entity_owners.length == 1
+        p.text-info = "You have 2 owners, one business and one individual"
+
       label Owner
-      .form-group
+      .form-group style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")
         .heading_blue.radio-inline
           span = f.radio_button :owner_person_is, true, checked: f.object.owner_person_is?, class: 'form-control flat-icheck radiobuttons'
           span.margin-md-left Individual
@@ -68,14 +98,22 @@
           span.margin-md-left Company
 
       .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is?)}")
-        = f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("company"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+        - if entity_owners.length > 1
+          = f.select :owner_entity_id, options_for_select(entity_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+        - elsif entity_owners.length == 1
+          = f.hidden_field :owner_entity_id, value: entity_owners[0][1]
+          input.form-control.width-field-lg[type="text" value="#{entity_owners[0][0]}" readonly]
 
         - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
           - owner_contact = Contact.find(@property.owner_entity_id)
           = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank'
 
       .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is?)}")
-        = f.select :owner_entity_id_indv, options_for_select(Contact.TransactionContacts("individual"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+        - if individual_owners.length > 1
+          = f.select :owner_entity_id_indv, options_for_select(individual_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+        - elsif individual_owners.length == 1
+          = f.hidden_field :owner_entity_id_indv, value: individual_owners[0][1]
+          input.form-control.width-field-lg[type="text" value="#{individual_owners[0][0]}" readonly]
 
         - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
           - owner_contact = Contact.find(@property.owner_entity_id)
