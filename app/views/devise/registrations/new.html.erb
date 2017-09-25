@@ -7,17 +7,21 @@
           <%= devise_error_messages! %>
           
           <div class='form-group margin-lg-top'>
-            <%= f.label :email, class: "control-label" %>
+            <label>Email *</i></label>
             <%= f.email_field :email, :autofocus => true, class: 'form-control input-lg' %>
           </div>  
           <div class="form-group margin-lg-top">
-            <%= f.label :password, class: "control-label" %>
+            <label>Password *</label>
             <%= f.password_field :password, class: 'form-control input-lg' %>
+          </div>
+          <div class="form-group margin-lg-top">
+            <label>Password Confirmation *</label>
+            <%= f.password_field :password_confirmation, class: 'form-control input-lg' %>
           </div>
 
           <div class="form-group margin-lg-top">
-            <%= f.label :password_confirmation, class: "control-label" %>
-            <%= f.password_field :password_confirmation, class: 'form-control input-lg' %>
+            <label>Invite Code (optional)</label>
+            <input type="text" name="" class="form-control input-lg">
           </div>
           
           <div class="form-group margin-lg-top">
