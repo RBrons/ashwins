@@ -28,7 +28,7 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                                 tbody
                                     - @transactions_in_user.each do |transaction|
                                         - if transaction.is_purchase == 1
-                                            - owner = get_property_purchaser(transaction.p_id, transaction.id, 'purchase')
+                                            - owner = get_property_purchaser_or_seller(transaction.p_id, transaction.id, 'purchase')
                                             - if owner.present?
                                                 tr
                                                     td.text-success = owner.try(:name) || "No Name"
@@ -41,7 +41,7 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                                                 td.text-success  = transaction.relinquishing_seller_entity.present? ? transaction.relinquishing_seller_entity.purchased_properties.pluck(:title).join(" | ") : "No Properties"
                                             - tproperties = get_transaction_properties(transaction)
                                             - tproperties.each do |tproperty|
-                                                - purchaser = get_property_purchaser(tproperty.id, transaction.id)
+                                                - purchaser = get_property_purchaser_or_seller(tproperty.id, transaction.id)
                                                 - if purchaser.present?
                                                     tr
                                                         td.text-success = purchaser.name
@@ -57,21 +57,29 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                
 / Initial Sign in Modal 
 input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]
-#md-welcome.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-welcome.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
-        .modal-body
+        .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h4.modal-title.text-primary User Setup
+        .modal-body
             h3 Welcome to 1031fun.com
             p 
                 | Is this account for a 
                 a.business_modal.underline-red[href='#'] business (including law firm)
                 | &nbsp;or&nbsp;
                 a.individual_modal.underline-red[href='#'] individual?
-
-#md-user-role.modal.fade[data-keyboard="false" data-backdrop="static"]
+        .modal-footer
+            .text-left
+                p.text-primary Skip User Setup and Jump to
+                = render partial: 'layouts/header'
+        
+#md-user-role.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
-        .modal-body
+        .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h4.modal-title.text-primary User Setup
+        .modal-body
             h3 Welcome to 1031fun.com
             div.form-group
                 .radio
@@ -85,11 +93,18 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                         input.property_owner[type="radio" name="user_role" checked] I am an owner of real property
             button.go-back.btn.btn-default[data-toggle="modal" data-target="#md-welcome" data-dismiss="modal"] Back
             button.go-next.btn.btn-danger[data-target-modal=""] Next
+        
+        .modal-footer
+            .text-left
+                p.text-primary Skip User Setup and Jump to
+                = render partial: 'layouts/header'
 
-#md-business.md-contact.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-business.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
-        .modal-body
+        .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h4.modal-title.text-primary User Setup
+        .modal-body
             h3 Welcome to 1031fun.com
             h4.business-step-title Business Setup
             form.under_construction[style="display: none"]
@@ -127,10 +142,17 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                 
                 a.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
                 button.btn.btn-danger[type="submit"] Save
+        .modal-footer
+            .text-left
+                p.text-primary Skip User Setup and Jump to
+                = render partial: 'layouts/header'
                 
 
-#md-individual.md-contact.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-individual.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
+        .modal-header
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h4.modal-title.text-primary User Setup
         .modal-body
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
             h3 Welcome to 1031fun.com
@@ -148,6 +170,11 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                 
                 button.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
                 button.btn.btn-danger Save
+        
+        .modal-footer
+            .text-left
+                p.text-primary Skip User Setup and Jump to
+                = render partial: 'layouts/header'
                 
 #md-new-property.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-sm

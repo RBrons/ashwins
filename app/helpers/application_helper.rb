@@ -668,7 +668,7 @@ module ApplicationHelper
     end
   end
 
-  def options_html_entities(sel_id, type_, sub_type_="entity")
+  def options_html_entities(sel_id, type_, sub_type_="entity", return_type="html")
     object_array = []
     poa_str = " (Principal Individual) "
     poa_str = " (Principal Entity) " if sub_type_ == "entity"
@@ -688,21 +688,28 @@ module ApplicationHelper
       groups[key] = [] if groups[key].nil?
       groups[key] << item
     end
-    result = "<option>Select One...</option>"
+    html_result = "<option>Select One...</option>"
+    array_result = []
     selflag = true
     groups.each do |k, v|
-      result += "<optgroup label='#{k}'>"
+      html_result += "<optgroup label='#{k}'>"
       v.each do |entity|
         if selflag && sel_id == entity[1]
-          result += "<option value=#{entity[1]} data-type='entity' selected='selected'>#{entity[0]}</option>"
+          html_result += "<option value=#{entity[1]} data-type='entity' selected='selected'>#{entity[0]}</option>"
           selflag = false
         else
-          result += "<option value=#{entity[1]} data-type='entity'>#{entity[0]}</option>"
+          html_result += "<option value=#{entity[1]} data-type='entity'>#{entity[0]}</option>"
         end
+
+        array_result << [entity[0], entity[1]]
       end
-      result += "</optgroup>"
+      html_result += "</optgroup>"
     end
-    return result.html_safe
+    if return_type == 'html'
+      return html_result.html_safe
+    else
+      return array_result
+    end
   end
 
   def options_html_entities_transaction(sel_id, etype="entity")

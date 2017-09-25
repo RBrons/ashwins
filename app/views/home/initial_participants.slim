@@ -2,6 +2,10 @@
     .modal-dialog.modal-extra-lg
         .modal-body
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            .clearfix
+            #completed-ipp.alert.alert-success.fade.in[style="display: none"]
+                p
+                    | Congratulations, you now have enough Initial Participants to complete a 1031 Exchange
             h3 
                 | Greetings 
                 span.visitor = current_user.first_name
