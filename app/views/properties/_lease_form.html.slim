@@ -1,3 +1,26 @@
+= content_for :rating_box do
+  fieldset.rating.pull-right
+    input type="radio" id="star5" name="rating" value="5"
+    label.full for="star5" title="Awesome - 5 stars"
+    input type="radio" id="star4half" name="rating" value="4 and a half"
+    label.half for="star4half" title="Pretty good - 4.5 stars"
+    input type="radio" id="star4" name="rating" value="4"
+    label.full for="star4" title="Pretty good - 4 stars"
+    input type="radio" id="star3half" name="rating" value="3 and a half"
+    label.half for="star3half" title="Meh - 3.5 stars"
+    input type="radio" id="star3" name="rating" value="3"
+    label.full for="star3" title="Meh - 3 stars"
+    input type="radio" id="star2half" name="rating" value="2 and a half"
+    label.half for="star2half" title="Kinda bad - 2.5 stars"
+    input type="radio" id="star2" name="rating" value="2"
+    label.full for="star2" title="Kinda bad - 2 stars"
+    input type="radio" id="star1half" name="rating" value="1 and a half"
+    label.half for="star1half" title="Meh - 1.5 stars"
+    input type="radio" id="star1" name="rating" value="1"
+    label.full for="star1" title="Sucks big time - 1 star"
+    input type="radio" id="starhalf" name="rating" value="half"
+    label.half for="starhalf" title="Sucks big time - 0.5 stars"
+
 div[role="tabpanel"]
     ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
@@ -36,7 +59,7 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              label Lease Anlaysis Date Perspective
+              label Lease Analysis Date Perspective
               .clearfix
               .form-group
                 .heading_blue.radio-inline
@@ -46,34 +69,34 @@ div[role="tabpanel"]
                   span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
                   span.margin-md-left Landlord's Perspective
             .form-group
-              label Lease Analysis Date
+              label.mg-top-5 Lease Analysis Date
               .clearfix
               = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
             h2.heading
                 | Original Parties
             .clearfix
             .form-group
-                label Original Landlord
+                label.mg-top-5 Original Landlord
                 .clearfix
                 = f.text_field :lease_original_landlord, class: 'form-control'
             .form-group
-                label Original Tenant
+                label.mg-top-5 Original Tenant
                 .clearfix
                 = f.text_field :lease_original_tenant, class: 'form-control'
             .form-group
-                label Original Guarantor
+                label.mg-top-5 Original Guarantor
                 .clearfix
                 = f.text_field :lease_original_guarantor, class: 'form-control'
             .form-group
-              label Lease Type
+              label.mg-top-5 Lease Type
               .clearfix
               = f.select :lease_type_is, Property::LEASE_TYPES, {}, class: 'form-control '
             .form-group
-              label Building Status
+              label.mg-top-5 Building Status
               .clearfix
               = f.select :building_status_is, Property::BUILDING_STATUS, {}, class: 'form-control'
             .form-group
-              label Date Of Lease
+              label.mg-top-5 Date Of Lease
               .clearfix
               .pull-left
                 = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
@@ -85,13 +108,13 @@ div[role="tabpanel"]
                   = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
               .clearfix
             .form-group
-                label Lease Base Rent
+                label.mg-top-5 Lease Base Rent
                 .clearfix
                 .input-group
                   .input-group-addon $
                   = f.text_field :current_rent, class: 'form-control input-mask-currency'
             .form-group
-              label Current Monthly Rent
+              label.mg-top-5 Current Monthly Rent
               .clearfix
               .input-group
                 .input-group-addon $
@@ -112,40 +135,40 @@ div[role="tabpanel"]
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .clearfix
             .form-group
-              label Date Of Lease
+              label.mg-top-5 Date Of Lease
               .clearfix
               = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}", disabled: true
               = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}", disabled: true
             .form-group
-              label Starting Date Of Lease Amendment
+              label.mg-top-5 Starting Date Of Lease Amendment
               .clearfix
               = f.date_select :starting_date_of_lease_amendment, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease"
             .form-group
-              label Lease Base Rent
+              label.mg-top-5 Lease Base Rent
               .input-group
                 .input-group-addon $
                 = f.text_field :current_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
-              label Current Monthly Rent
+              label.mg-top-5 Current Monthly Rent
               .input-group
                 .input-group-addon $
                 = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
-              label Duration of Base term
+              label.mg-top-5 Duration of Base term
               .clearfix
               =  f.text_field :lease_duration_in_years, class: 'form-control'
             .form-group
-              label Lease Rent Increase Percentage
+              label.mg-top-5 Lease Rent Increase Percentage
               .clearfix
               .input-group
                 = f.text_field :lease_rent_increase_percentage, class: 'form-control'
                 .input-group-addon %
             .form-group
-              label No of Years Before Rent Increase
+              label.mg-top-5 No of Years Before Rent Increase
               .clearfix
               =  f.text_field :lease_rent_slab_in_years, class: 'form-control'
             .form-group
-              label Date Of Lease Details
+              label.mg-top-5 Date Of Lease Details
               .clearfix
               = f.select :date_of_lease_details, Property::DATE_OF_LEASE_DETAILS, {}, class: 'form-control'
             .form-group
@@ -153,30 +176,30 @@ div[role="tabpanel"]
               .clearfix
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: 'form-control select_auto'
             .form-group
-              label Option to Extend
+              label.mg-top-5 Option to Extend
               .clearfix
               =  f.text_field :lease_option_to_extend, class: 'form-control'
             .form-group
-              label Delivery of the Premises
+              label.mg-top-5 Delivery of the Premises
               .clearfix
               =  f.text_field :lease_delivery_of_the_premises, class: 'form-control'
             .form-group
-              label Primary Term
+              label.mg-top-5 Primary Term
               .clearfix
               =  f.text_field :lease_primary_term, class: 'form-control'
             .form-group
-              label Pro Rated Rent?
+              label.mg-top-5 Pro Rated Rent?
               =  f.check_box :lease_is_pro_rated, class: ''
             .form-group
-              label Rent Commencement Date Details
+              label.mg-top-5 Rent Commencement Date Details
               .clearfix
               = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
             .form-group
-              label Number Of Option Period(s)
+              label.mg-top-5 Number Of Option Period(s)
               .clearfix
               = f.text_field :number_of_option_period, class: 'form-control'
             .form-group
-              label Length of an Option Period in Years
+              label.mg-top-5 Length of an Option Period in Years
               .clearfix
               = f.text_field :length_of_option_period, class: 'form-control'
             .form-group
@@ -269,8 +292,15 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              h2.heading Rent Abatement
-              = f.text_area :lease_rent_abatement, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Rent Abatement
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "abatement"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "abatement"}, class: "property-add-comment"
+                = f.text_area :lease_rent_abatement, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :lease_rent_abatement_keywords, class: 'form-control'
             .form-group
               label
                 | Percentage Rent Exist?
@@ -287,8 +317,15 @@ div[role="tabpanel"]
                   .input-group-addon $
                   = f.text_field :lease_breakpoint, class: 'form-control'
               .form-group
-                h2.heading Percentage Rent Exclusions
-                = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
+                .property-action-fields
+                  h2.heading.pull-left Percentage Rent Exclusions
+                  = content_for :rating_box
+                  .property-comments-box
+                    = link_to "Comments", "javascript:void(0)", data: {type: "rent_exclusions"}, class: "property-comments"
+                    = link_to "+", "javascript:void(0)", data: {type: "rent_exclusions"}, class: "property-add-comment"
+                  = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
+                  h2.heading.mg-top-5 Keywords (separate by commas)
+                  = f.text_field :lease_percentage_rent_exclusions_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_taxes_and_fees_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
@@ -322,23 +359,65 @@ div[role="tabpanel"]
                 = f.check_box :net_nature_of_lease, {multiple: true}, 'Tenant pays Common Area Maintenance'
                 | Tenant pays Common Area Maintenance
             .form-group
-              h2.heading Real Estate Taxes
-              = f.text_area :taxes_and_fees_restate, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Real Estate Taxes
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "restate"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "restate"}, class: "property-add-comment"
+                = f.text_area :taxes_and_fees_restate, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :taxes_and_fees_restate_keywords, class: 'form-control'
             .form-group
-              h2.heading Assessments
-              = f.text_area :taxes_and_fees_assessments, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Assessments
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "assessments"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "assessments"}, class: "property-add-comment"
+                = f.text_area :taxes_and_fees_assessments, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :taxes_and_fees_assessments_keywords, class: 'form-control'
             .form-group
-              h2.heading Separate Tax Parcel
-              = f.text_area :taxes_and_fees_separate_tax_parcel, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Separate Tax Parcel
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "sep_tax"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "sep_tax"}, class: "property-add-comment"
+                = f.text_area :taxes_and_fees_separate_tax_parcel, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :taxes_and_fees_separate_tax_parcel_keywords, class: 'form-control'
             .form-group
-              h2.heading Landlord Contesting Taxes
-              = f.text_area :taxes_and_fees_landlord_contesting, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Landlord Contesting Taxes
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "landlord_contesting"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "landlord_contesting"}, class: "property-add-comment"
+                = f.text_area :taxes_and_fees_landlord_contesting, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :taxes_and_fees_landlord_contesting_keywords, class: 'form-control'
             .form-group
-              h2.heading Tenant Contesting Taxes
-              = f.text_area :taxes_and_fees_tenant_contesting, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Tenant Contesting Taxes
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "tenant_contesting"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "tenant_contesting"}, class: "property-add-comment"
+                = f.text_area :taxes_and_fees_tenant_contesting, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :taxes_and_fees_tenant_contesting_keywords, class: 'form-control'
             .form-group
-              h2.heading Easements
-              = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Easements
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "easements"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "easements"}, class: "property-add-comment"
+                = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :taxes_and_fees_easements_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_site_preparation_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
@@ -354,17 +433,45 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              h2.heading Environmental Obligations for Site Preparation
-              = f.text_area :site_preparation_env_obligations, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Environmental Obligations for Site Preparation
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "env_obligations"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_obligations"}, class: "property-add-comment"
+                = f.text_area :site_preparation_env_obligations, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :site_preparation_env_obligations_keywords, class: 'form-control'
             .form-group
-              h2.heading Environmental Termination Rights
-              = f.text_area :site_preparation_env_termination_rights, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Environmental Termination Rights Preparation
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "env_termination"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_termination"}, class: "property-add-comment"
+                = f.text_area :site_preparation_env_termination_rights, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :site_preparation_env_termination_rights_keywords, class: 'form-control'
             .form-group
-              h2.heading Environmental Remediation
-              = f.text_area :site_preparation_env_remediation, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Environmental Remediation Preparation
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "env_remediation"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_remediation"}, class: "property-add-comment"
+                = f.text_area :site_preparation_env_remediation, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :site_preparation_env_remediation_keywords, class: 'form-control'
             .form-group
-              h2.heading Environmental Permits and Licenses
-              = f.text_area :site_preparation_env_permits_and_licenses, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Environmental Permits and Licenses
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "env_permits"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_permits"}, class: "property-add-comment"
+                = f.text_area :site_preparation_env_permits_and_licenses, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :site_preparation_env_permits_and_licenses_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
@@ -381,17 +488,45 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              h2.heading Construction
-              = f.text_area :construction, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Construction
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "construction"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "construction"}, class: "property-add-comment"
+                = f.text_area :construction, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :construction_keywords, class: 'form-control'
             .form-group
-              h2.heading Construction Deadline
-              = f.text_area :construction_deadline, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Construction Deadline
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "const_deadline"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "const_deadline"}, class: "property-add-comment"
+                = f.text_area :construction_deadline, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :construction_deadline_keywords, class: 'form-control'
             .form-group
-              h2.heading Liens
-              = f.text_area :construction_liens, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Liens
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "liens"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "liens"}, class: "property-add-comment"
+                = f.text_area :construction_liens, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :construction_liens_keywords, class: 'form-control'
             .form-group
-              h2.heading Approval of Plans and Specifications
-              = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Approval of Plans and Specifications
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "cons_approval"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "cons_approval"}, class: "property-add-comment"
+                = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :construction_approval_of_plans_and_specs_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_use_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
@@ -408,11 +543,25 @@ div[role="tabpanel"]
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .clearfix
             .form-group
-              h2.heading Use Clause
-              = f.text_area :use_clause, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Use Clause
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "use_clause"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "use_clause"}, class: "property-add-comment"
+                = f.text_area :use_clause, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :use_clause_keywords, class: 'form-control'
             .form-group
-              h2.heading Exclusive Clause
-              = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Exclusive Clause
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "ex_clause"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "ex_clause"}, class: "property-add-comment"
+                = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :use_exclusive_clause_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_premises_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
@@ -428,56 +577,175 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              h2.heading Tenant Rights Under the Declaration
-              = f.text_area :premises_tenant_rights, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Tenant Rights Under the Declaration
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "tenant_rights"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "tenant_rights"}, class: "property-add-comment"
+                = f.text_area :premises_tenant_rights, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_tenant_rights_keywords, class: 'form-control'
             .form-group
-              h2.heading Waste
-              = f.text_area :premises_waste, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Waste
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "waste"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "waste"}, class: "property-add-comment"
+                = f.text_area :premises_waste, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_waste_keywords, class: 'form-control'
             .form-group
-              h2.heading Initial Opening
-              = f.text_area :premises_initial_opening, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Initial Opening
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "initial_opening"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "initial_opening"}, class: "property-add-comment"
+                = f.text_area :premises_initial_opening, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_initial_opening_keywords, class: 'form-control'
             .form-group
-              h2.heading Recapture Clause
-              = f.text_area :premises_recapture_clause, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Recapture Clause
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "recapture_clause"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "recapture_clause"}, class: "property-add-comment"
+                = f.text_area :premises_recapture_clause, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_recapture_clause_keywords, class: 'form-control'
             .form-group
-              h2.heading Demolition
-              = f.text_area :premises_demolition, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Demolition
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "demolition"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "demolition"}, class: "property-add-comment"
+                = f.text_area :premises_demolition, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_demolition_keywords, class: 'form-control'
             .form-group
-              h2.heading Tenant's Equipment Defined
-              = f.text_area :premises_tenants_equipment_defined, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Tenant's Equipment Defined
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_equip"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_equip"}, class: "property-add-comment"
+                = f.text_area :premises_tenants_equipment_defined, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_tenants_equipment_defined_keywords, class: 'form-control'
             .form-group
-              h2.heading Ownership and Removal of Tenant's Equipment
-              = f.text_area :premises_ownership_and_removal, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Ownership and Removal of Tenant's Equipment
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "own_removal"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "own_removal"}, class: "property-add-comment"
+                = f.text_area :premises_ownership_and_removal, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_ownership_and_removal_keywords, class: 'form-control'
             .form-group
-              h2.heading Repairs
-              = f.text_area :premises_repairs, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Repairs
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "repairs"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "repairs"}, class: "property-add-comment"
+                = f.text_area :premises_repairs, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_repairs_keywords, class: 'form-control'
             .form-group
-              h2.heading Compliance with Laws
-              = f.text_area :premises_compliance_with_laws, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Compliance with Laws
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "compliance"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "compliance"}, class: "property-add-comment"
+                = f.text_area :premises_compliance_with_laws, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_compliance_with_laws_keywords, class: 'form-control'
             .form-group
-              h2.heading Surrender
-              = f.text_area :premises_surrender, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Surrender
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_surrender"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_surrender"}, class: "property-add-comment"
+                = f.text_area :premises_surrender, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_surrender_keywords, class: 'form-control'
             .form-group
-              h2.heading Inspection
-              = f.text_area :premises_inspection, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Inspection
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_inspection"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_inspection"}, class: "property-add-comment"
+                = f.text_area :premises_inspection, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_inspection_keywords, class: 'form-control'
             .form-group
-              h2.heading Insurance
-              = f.text_area :premises_insurance, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Insurance
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_insurance"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_insurance"}, class: "property-add-comment"
+                = f.text_area :premises_insurance, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_insurance_keywords, class: 'form-control'
             .form-group
-              h2.heading Destruction
-              = f.text_area :premises_destruction, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Destruction
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_destruction"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_destruction"}, class: "property-add-comment"
+                = f.text_area :premises_destruction, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_destruction_keywords, class: 'form-control'
             .form-group
-              h2.heading Total Taking
-              = f.text_area :premises_total_taking, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Total Taking
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "total_taking"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "total_taking"}, class: "property-add-comment"
+                = f.text_area :premises_total_taking, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_total_taking_keywords, class: 'form-control'
             .form-group
-              h2.heading Partial Taking
-              = f.text_area :premises_partial_taking, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Partial Taking
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "partial_taking"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "partial_taking"}, class: "property-add-comment"
+                = f.text_area :premises_partial_taking, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_partial_taking_keywords, class: 'form-control'
             .form-group
-              h2.heading Signs
-              = f.text_area :premises_signs, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Signs
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "signs"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "signs"}, class: "property-add-comment"
+                = f.text_area :premises_signs, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_signs_keywords, class: 'form-control'
             .form-group
-              h2.heading Utilities
-              = f.text_area :premises_utilities, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Utilities
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "utilities"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "utilities"}, class: "property-add-comment"
+                = f.text_area :premises_utilities, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :premises_utilities_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_transfer_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
@@ -493,17 +761,45 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              h2.heading Assignment and Subletting
-              = f.text_area :transfer_assignment_and_subletting, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Assignment and Subletting
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "ass_subletting"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "ass_subletting"}, class: "property-add-comment"
+                = f.text_area :transfer_assignment_and_subletting, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :transfer_assignment_and_subletting_keywords, class: 'form-control'
             .form-group
-              h2.heading Leasehold Mortgage
-              = f.text_area :transfer_leasehold_mortgage, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Leasehold Mortgage
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "leasehold"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "leasehold"}, class: "property-add-comment"
+                = f.text_area :transfer_leasehold_mortgage, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :transfer_leasehold_mortgage_keywords, class: 'form-control'
             .form-group
-              h2.heading Subordination
-              = f.text_area :transfer_subordination, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Subordination
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "subordination"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "subordination"}, class: "property-add-comment"
+                = f.text_area :transfer_subordination, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :transfer_subordination_keywords, class: 'form-control'
             .form-group
-              h2.heading Estoppel Certificate
-              = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Estoppel Certificate
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "estoppel"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "estoppel"}, class: "property-add-comment"
+                = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :transfer_estoppel_certificate_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_remedies_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
@@ -519,23 +815,65 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              h2.heading Rent Defaults by Tenant
-              = f.text_area :remedies_rent_defaults, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Rent Defaults by Tenant
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "rent_defaults"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "rent_defaults"}, class: "property-add-comment"
+                = f.text_area :remedies_rent_defaults, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :remedies_rent_defaults_keywords, class: 'form-control'
             .form-group
-              h2.heading Landlord Remedies for Tenant Defaults
-              = f.text_area :remedies_landlord, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Landlord Remedies for Tenant Defaults
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "landlord_remedies"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "landlord_remedies"}, class: "property-add-comment"
+                = f.text_area :remedies_landlord, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :remedies_landlord_keywords, class: 'form-control'
             .form-group
-              h2.heading Mitigation
-              = f.text_area :remedies_mitigation, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Mitigation
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "remedies_mitigation"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "remedies_mitigation"}, class: "property-add-comment"
+                = f.text_area :remedies_mitigation, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :remedies_mitigation_keywords, class: 'form-control'
             .form-group
-              h2.heading Dispute Resolution
-              = f.text_area :remedies_dispute_resolution, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Dispute Resolution
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "dispute_resol"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "dispute_resol"}, class: "property-add-comment"
+                = f.text_area :remedies_dispute_resolution, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :remedies_dispute_resolution_keywords, class: 'form-control'
             .form-group
-              h2.heading Landlord Exoneration after Sale
-              = f.text_area :remedies_landlord_exoneration, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Landlord Exoneration after Sale
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "exoneration"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "exoneration"}, class: "property-add-comment"
+                = f.text_area :remedies_landlord_exoneration, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :remedies_landlord_exoneration_keywords, class: 'form-control'
             .form-group
-              h2.heading Exculpation
-              = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Exculpation
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "exculpation"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "exculpation"}, class: "property-add-comment"
+                = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :remedies_exculpation_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_misc_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
@@ -552,10 +890,24 @@ div[role="tabpanel"]
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .clearfix
             .form-group
-              h2.heading Notices
-              = f.text_area :misc_notices, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Notices
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "notices"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "notices"}, class: "property-add-comment"
+                = f.text_area :misc_notices, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :misc_notices_keywords, class: 'form-control'
             .form-group
-              h2.heading Obligation to be reasonable
-              = f.text_area :misc_obligation, rows: 7, class: 'form-control'
+              .property-action-fields
+                h2.heading.pull-left Obligation to be reasonable
+                = content_for :rating_box
+                .property-comments-box
+                  = link_to "Comments", "javascript:void(0)", data: {type: "misc_obligation"}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "misc_obligation"}, class: "property-add-comment"
+                = f.text_area :misc_obligation, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :misc_obligation_keywords, class: 'form-control'
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
