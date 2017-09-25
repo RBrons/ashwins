@@ -27,6 +27,15 @@ $ ->
       if (!container.is(e.target) and (container.has(e.target).length == 0))
         container.hide()
 
+  $(document).on 'mouseover', '.property-action-fields textarea', ->
+    $(this).parent().find(".property-comments-box").show()
+
+  $(document).on 'mouseover', '.property-comments-box', ->
+    $(this).show()
+
+  $(document).on 'mouseout', '.property-action-fields textarea', ->
+    $(this).parent().find(".property-comments-box").hide()
+
   $(document).on 'click', '#property_lease_percentage_rent_exist', ->
     if $(this).is(':checked')
       $(".rent-percentage-wrapper").show()

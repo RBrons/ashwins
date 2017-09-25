@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170920034710) do
+ActiveRecord::Schema.define(version: 20170925033101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -494,6 +494,54 @@ ActiveRecord::Schema.define(version: 20170920034710) do
     t.string   "survey_described"
     t.decimal  "lease_breakpoint"
     t.boolean  "lease_analysis_perspective",                                                                 default: true
+    t.string   "lease_rent_abatement_keywords"
+    t.string   "lease_percentage_rent_exclusions_keywords"
+    t.string   "taxes_and_fees_restate_keywords"
+    t.string   "taxes_and_fees_assessments_keywords"
+    t.string   "taxes_and_fees_separate_tax_parcel_keywords"
+    t.string   "taxes_and_fees_landlord_contesting_keywords"
+    t.string   "taxes_and_fees_tenant_contesting_keywords"
+    t.string   "taxes_and_fees_easements_keywords"
+    t.string   "site_preparation_env_obligations_keywords"
+    t.string   "site_preparation_env_termination_rights_keywords"
+    t.string   "site_preparation_env_remediation_keywords"
+    t.string   "site_preparation_env_permits_and_licenses_keywords"
+    t.string   "construction_keywords"
+    t.string   "construction_deadline_keywords"
+    t.string   "construction_liens_keywords"
+    t.string   "construction_approval_of_plans_and_specs_keywords"
+    t.string   "use_clause_keywords"
+    t.string   "use_exclusive_clause_keywords"
+    t.string   "premises_tenant_rights_keywords"
+    t.string   "premises_waste_keywords"
+    t.string   "premises_initial_opening_keywords"
+    t.string   "premises_recapture_clause_keywords"
+    t.string   "premises_demolition_keywords"
+    t.string   "premises_tenants_equipment_defined_keywords"
+    t.string   "premises_ownership_and_removal_keywords"
+    t.string   "premises_repairs_keywords"
+    t.string   "premises_compliance_with_laws_keywords"
+    t.string   "premises_surrender_keywords"
+    t.string   "premises_inspection_keywords"
+    t.string   "premises_insurance_keywords"
+    t.string   "premises_destruction_keywords"
+    t.string   "premises_total_taking_keywords"
+    t.string   "premises_partial_taking_keywords"
+    t.string   "premises_signs_keywords"
+    t.string   "premises_utilities_keywords"
+    t.string   "transfer_assignment_and_subletting_keywords"
+    t.string   "transfer_leasehold_mortgage_keywords"
+    t.string   "transfer_subordination_keywords"
+    t.string   "transfer_estoppel_certificate_keywords"
+    t.string   "remedies_rent_defaults_keywords"
+    t.string   "remedies_landlord_keywords"
+    t.string   "remedies_mitigation_keywords"
+    t.string   "remedies_force_majeure_keywords"
+    t.string   "remedies_dispute_resolution_keywords"
+    t.string   "remedies_landlord_exoneration_keywords"
+    t.string   "remedies_exculpation_keywords"
+    t.string   "misc_notices_keywords"
+    t.string   "misc_obligation_keywords"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end

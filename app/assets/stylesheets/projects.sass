@@ -141,3 +141,63 @@ div.property-heading
 
 .mg-top-5
   margin-top: 5px
+
+.rating
+  margin: 0
+  padding: 0
+  border: none
+  float: left
+
+  label
+    margin: 0
+    padding: 0
+    color: #ddd
+    float: right
+
+  input
+    display: none
+
+  label:before
+    margin: 5px
+    font-size: 1.25em
+    font-family: FontAwesome
+    display: inline-block
+    content: "\f005"
+
+  .half:before
+    content: "\f089"
+    position: absolute
+
+  input:checked ~ label
+    color: #FFD700
+
+  input:checked + label:hover
+    color: #FFED85
+  input:checked ~ label:hover
+    color: #FFED85
+  label:hover ~ input:checked ~ label
+    color: #FFED85
+  input:checked ~ label:hover ~ label
+    color: #FFED85
+
+.rating:not(:checked)
+  label:hover
+    color: #FFD700
+  label:hover ~ label
+    color: #FFD700
+
+.property-action-fields
+  position: relative
+
+.property-comments-box
+  width: 85px
+  position: absolute
+  right: 20px
+  top: 45px
+  display: none
+
+  a
+    font-weight: 600
+
+  .property-comments
+    margin-right: 8px
