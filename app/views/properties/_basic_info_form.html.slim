@@ -36,14 +36,15 @@
     - if @property.ostatus == "Purchased"
       - entity_clients = options_html_entities(f.object.owner_entity_id, "properties", "entity", "array")
       - individual_clients = options_html_entities(f.object.owner_entity_id, "properties", "individual", "array")
+      - basic_str = "You have #{individual_clients.length} individual clients and #{entity_clients.length} business clients who could own this property."
 
       - if individual_clients.length == 1 && entity_clients.length == 0
         - f.object.owner_person_is = true
-        p.text-info = "You only have 1 client, an individual"
+        p.text-info = basic_str + " Therefore, it has been pre-selected"
       - elsif individual_clients.length == 0 && entity_clients.length == 1
-        p.text-info = "You only have 1 client, a business"
-      - elsif individual_clients.length == 1 && entity_clients.length == 1
-        p.text-info = "You have 2 clients, one business and one individual"
+        p.text-info = basic_str + " Therefore, it has been pre-selected"
+      - else
+        p.text-info = " Please select one."
         
       label Owning Client
       .form-group style=("#{('display: none;' if entity_clients.length == 0 || individual_clients.length == 0)}")
@@ -79,14 +80,15 @@
     - else
       - entity_owners = Contact.TransactionContacts("company")
       - individual_owners = Contact.TransactionContacts("individual")
+      - basic_str = "You have #{individual_owners.length} individual contacts and #{entity_owners.length} business contacts who could own this property."
 
       - if individual_owners.length == 1 && entity_owners.length == 0
         - f.object.owner_person_is = true
-        p.text-info = "You only have 1 owner, an individual"
+        p.text-info = basic_str + " Therefore, it has been pre-selected"
       - elsif individual_owners.length == 0 && entity_owners.length == 1
-        p.text-info = "You only have 1 owner, a business"
-      - elsif individual_owners.length == 1 && entity_owners.length == 1
-        p.text-info = "You have 2 owners, one business and one individual"
+        p.text-info = basic_str + " Therefore, it has been pre-selected"
+      - else
+        p.text-info = basic_str + " Please select one."
 
       label Owner
       .form-group style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")

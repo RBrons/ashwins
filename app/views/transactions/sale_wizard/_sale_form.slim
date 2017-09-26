@@ -23,6 +23,7 @@
 
   - entity_sellers = options_html_entities(@transaction.relinquishing_seller_entity_id, "transactions", "entity", "array")
   - individual_sellers = options_html_entities(@transaction.relinquishing_seller_entity_id, "transactions", "individual", "array")
+  - basic_str = "You have #{individual_sellers.length} individual clients and #{entity_sellers.length} business clients who own a purchased property to sell."
 
   .col-lg-4.col-md-4.col-sm-12.col-xs-12
     .transaction-note
@@ -45,12 +46,12 @@
           = "Relinquishing Seller #{require_field}".html_safe
         - if individual_sellers.length == 1 && entity_sellers.length == 0
           - f.object.seller_person_is = true
-          p.text-info = "You only have 1 client, an individual"
+          p.text-info = basic_str + " Therefore, it has been pre-selected."
         - elsif individual_sellers.length == 0 && entity_sellers.length == 1
-          p.text-info = "You only have 1 client, a business"
-        - elsif individual_sellers.length == 1 && entity_sellers.length == 1
-          p.text-info = "You have 2 clients, one business and one individual"
-      
+          p.text-info = basic_str + " Therefore, it has been pre-selected."
+        - else
+          p.text-info = basic_str + ". Please select one."
+              
       .form-group style=("#{('display: none;' if entity_sellers.length == 0 || individual_sellers.length == 0)}")
         .heading_blue.radio-inline
           span = f.radio_button :seller_person_is, true, checked: f.object.seller_person_is?, class: 'form-control flat-icheck radiobuttons'
