@@ -45,7 +45,7 @@ class User < ApplicationRecord
   def ability
     true
   end
-  
+
   def contact_info_entered?
     return !self.first_name.nil? || !self.business_name.nil? || !self.attorney_firm_id.nil?
   end
@@ -68,7 +68,7 @@ class User < ApplicationRecord
     if !attorney_firm_id.nil?
       return self.attorney_firm.name
     else
-      return ""  
+      return ""
     end
   end
 
@@ -120,6 +120,10 @@ class User < ApplicationRecord
       where.not(name: [nil, '']).order(name: :asc).pluck(:name, :id, :type_).map! {
         |x| ["#{x[0]} (#{MemberType.member_types[x[2]]})", x[1]]
       }
+  end
+
+  def name
+    "#{self.first_name.capitalize} #{self.last_name.capitalize}"
   end
 
 end

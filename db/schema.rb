@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925033101) do
+ActiveRecord::Schema.define(version: 20170926143047) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20170925033101) do
     t.datetime "updated_at"
     t.string   "key",              limit: 20
     t.integer  "user_id"
+    t.string   "comment_type"
     t.index ["key"], name: "index_comments_on_key", using: :btree
   end
 
@@ -544,6 +545,13 @@ ActiveRecord::Schema.define(version: 20170925033101) do
     t.string   "misc_obligation_keywords"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
+  end
+
+  create_table "property_comments", force: :cascade do |t|
+    t.integer "property_id"
+    t.integer "user_id"
+    t.string  "comments"
+    t.string  "type"
   end
 
   create_table "qualified_intermediaries", force: :cascade do |t|
