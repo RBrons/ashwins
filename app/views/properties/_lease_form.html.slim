@@ -1,3 +1,28 @@
+#comments-modal.modal.fade[data-keyboard="false" data-backdrop="static"]
+  .modal-dialog.modal-md
+    .modal-header
+      button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
+        span.lnr.lnr-cross
+      h4.modal-title Comments
+    .modal-body
+    .modal-footer
+      button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
+        | Close
+
+#new-comment-modal.modal.fade[data-keyboard="false" data-backdrop="static"]
+  .modal-dialog.modal-md
+    .modal-header
+      button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
+        span.lnr.lnr-cross
+      h4.modal-title Add Comment
+    .modal-body
+      textarea#comment-content rows=7
+    .modal-footer
+      button#add-comment.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
+        | Save
+      button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
+        | Close
+
 = content_for :rating_box do
   fieldset.rating.pull-right
     input type="radio" id="star5" name="rating" value="5"
@@ -296,8 +321,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Rent Abatement
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "abatement"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "abatement"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'abatement').count})", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :lease_rent_abatement, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :lease_rent_abatement_keywords, class: 'form-control'
@@ -321,8 +346,8 @@ div[role="tabpanel"]
                   h2.heading.pull-left Percentage Rent Exclusions
                   = content_for :rating_box
                   .property-comments-box
-                    = link_to "Comments", "javascript:void(0)", data: {type: "rent_exclusions"}, class: "property-comments"
-                    = link_to "+", "javascript:void(0)", data: {type: "rent_exclusions"}, class: "property-add-comment"
+                    = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_exclusions').count})", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-comments"
+                    = link_to "+", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-add-comment"
                   = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
                   h2.heading.mg-top-5 Keywords (separate by commas)
                   = f.text_field :lease_percentage_rent_exclusions_keywords, class: 'form-control'
@@ -363,8 +388,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Real Estate Taxes
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "restate"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "restate"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'restate').count})", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :taxes_and_fees_restate, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :taxes_and_fees_restate_keywords, class: 'form-control'
@@ -373,8 +398,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Assessments
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "assessments"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "assessments"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'assessments').count})", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :taxes_and_fees_assessments, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :taxes_and_fees_assessments_keywords, class: 'form-control'
@@ -383,8 +408,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Separate Tax Parcel
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "sep_tax"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "sep_tax"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'sep_tax').count})", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :taxes_and_fees_separate_tax_parcel, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :taxes_and_fees_separate_tax_parcel_keywords, class: 'form-control'
@@ -393,8 +418,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Landlord Contesting Taxes
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "landlord_contesting"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "landlord_contesting"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_contesting').count})", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :taxes_and_fees_landlord_contesting, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :taxes_and_fees_landlord_contesting_keywords, class: 'form-control'
@@ -403,8 +428,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Tenant Contesting Taxes
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "tenant_contesting"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "tenant_contesting"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_contesting').count})", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :taxes_and_fees_tenant_contesting, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :taxes_and_fees_tenant_contesting_keywords, class: 'form-control'
@@ -413,8 +438,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Easements
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "easements"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "easements"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'easements').count})", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :taxes_and_fees_easements_keywords, class: 'form-control'
@@ -437,8 +462,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Environmental Obligations for Site Preparation
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "env_obligations"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_obligations"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_obligations').count})", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :site_preparation_env_obligations, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :site_preparation_env_obligations_keywords, class: 'form-control'
@@ -447,8 +472,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Environmental Termination Rights Preparation
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "env_termination"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_termination"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_termination').count})", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :site_preparation_env_termination_rights, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :site_preparation_env_termination_rights_keywords, class: 'form-control'
@@ -457,8 +482,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Environmental Remediation Preparation
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "env_remediation"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_remediation"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_remediation').count})", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :site_preparation_env_remediation, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :site_preparation_env_remediation_keywords, class: 'form-control'
@@ -467,8 +492,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Environmental Permits and Licenses
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "env_permits"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_permits"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_permits').count})", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :site_preparation_env_permits_and_licenses, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :site_preparation_env_permits_and_licenses_keywords, class: 'form-control'
@@ -492,8 +517,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Construction
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "construction"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "construction"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'construction').count})", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :construction, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :construction_keywords, class: 'form-control'
@@ -502,8 +527,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Construction Deadline
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "const_deadline"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "const_deadline"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'const_deadline').count})", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :construction_deadline, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :construction_deadline_keywords, class: 'form-control'
@@ -512,8 +537,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Liens
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "liens"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "liens"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'liens').count})", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :construction_liens, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :construction_liens_keywords, class: 'form-control'
@@ -522,8 +547,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Approval of Plans and Specifications
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "cons_approval"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "cons_approval"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'cons_approval').count})", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :construction_approval_of_plans_and_specs_keywords, class: 'form-control'
@@ -547,8 +572,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Use Clause
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "use_clause"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "use_clause"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'use_clause').count})", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :use_clause, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :use_clause_keywords, class: 'form-control'
@@ -557,8 +582,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Exclusive Clause
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "ex_clause"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "ex_clause"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'ex_clause').count})", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :use_exclusive_clause_keywords, class: 'form-control'
@@ -581,8 +606,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Tenant Rights Under the Declaration
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "tenant_rights"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "tenant_rights"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_rights').count})", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_tenant_rights, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_tenant_rights_keywords, class: 'form-control'
@@ -591,8 +616,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Waste
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "waste"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "waste"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'waste').count})", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_waste, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_waste_keywords, class: 'form-control'
@@ -601,8 +626,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Initial Opening
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "initial_opening"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "initial_opening"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'initial_opening').count})", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_initial_opening, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_initial_opening_keywords, class: 'form-control'
@@ -611,8 +636,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Recapture Clause
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "recapture_clause"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "recapture_clause"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'recapture_clause').count})", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_recapture_clause, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_recapture_clause_keywords, class: 'form-control'
@@ -621,8 +646,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Demolition
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "demolition"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "demolition"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'demolition').count})", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_demolition, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_demolition_keywords, class: 'form-control'
@@ -631,8 +656,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Tenant's Equipment Defined
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_equip"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_equip"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_equip').count})", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_tenants_equipment_defined, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_tenants_equipment_defined_keywords, class: 'form-control'
@@ -641,8 +666,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Ownership and Removal of Tenant's Equipment
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "own_removal"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "own_removal"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'own_removal').count})", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_ownership_and_removal, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_ownership_and_removal_keywords, class: 'form-control'
@@ -651,8 +676,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Repairs
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "repairs"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "repairs"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'repairs').count})", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_repairs, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_repairs_keywords, class: 'form-control'
@@ -661,8 +686,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Compliance with Laws
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "compliance"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "compliance"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'compliance').count})", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_compliance_with_laws, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_compliance_with_laws_keywords, class: 'form-control'
@@ -671,8 +696,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Surrender
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_surrender"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_surrender"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_surrender').count})", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_surrender, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_surrender_keywords, class: 'form-control'
@@ -681,8 +706,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Inspection
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_inspection"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_inspection"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_inspection').count})", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_inspection, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_inspection_keywords, class: 'form-control'
@@ -691,8 +716,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Insurance
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_insurance"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_insurance"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_insurance').count})", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_insurance, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_insurance_keywords, class: 'form-control'
@@ -701,8 +726,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Destruction
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "premises_destruction"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_destruction"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_destruction').count})", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_destruction, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_destruction_keywords, class: 'form-control'
@@ -711,8 +736,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Total Taking
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "total_taking"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "total_taking"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'total_taking').count})", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_total_taking, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_total_taking_keywords, class: 'form-control'
@@ -721,8 +746,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Partial Taking
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "partial_taking"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "partial_taking"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'partial_taking').count})", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_partial_taking, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_partial_taking_keywords, class: 'form-control'
@@ -731,8 +756,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Signs
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "signs"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "signs"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'signs').count})", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_signs, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_signs_keywords, class: 'form-control'
@@ -741,8 +766,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Utilities
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "utilities"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "utilities"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'utilities').count})", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :premises_utilities, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :premises_utilities_keywords, class: 'form-control'
@@ -765,8 +790,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Assignment and Subletting
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "ass_subletting"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "ass_subletting"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'ass_subletting').count})", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :transfer_assignment_and_subletting, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :transfer_assignment_and_subletting_keywords, class: 'form-control'
@@ -775,8 +800,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Leasehold Mortgage
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "leasehold"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "leasehold"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'leasehold').count})", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :transfer_leasehold_mortgage, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :transfer_leasehold_mortgage_keywords, class: 'form-control'
@@ -785,8 +810,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Subordination
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "subordination"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "subordination"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'subordination').count})", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :transfer_subordination, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :transfer_subordination_keywords, class: 'form-control'
@@ -795,8 +820,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Estoppel Certificate
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "estoppel"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "estoppel"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'estoppel').count})", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :transfer_estoppel_certificate_keywords, class: 'form-control'
@@ -819,8 +844,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Rent Defaults by Tenant
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "rent_defaults"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "rent_defaults"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_defaults').count})", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :remedies_rent_defaults, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :remedies_rent_defaults_keywords, class: 'form-control'
@@ -829,8 +854,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Landlord Remedies for Tenant Defaults
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "landlord_remedies"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "landlord_remedies"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_remedies').count})", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :remedies_landlord, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :remedies_landlord_keywords, class: 'form-control'
@@ -839,8 +864,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Mitigation
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "remedies_mitigation"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "remedies_mitigation"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'remedies_mitigation').count})", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :remedies_mitigation, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :remedies_mitigation_keywords, class: 'form-control'
@@ -849,8 +874,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Dispute Resolution
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "dispute_resol"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "dispute_resol"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'dispute_resol').count})", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :remedies_dispute_resolution, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :remedies_dispute_resolution_keywords, class: 'form-control'
@@ -859,8 +884,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Landlord Exoneration after Sale
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "exoneration"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "exoneration"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'exoneration').count})", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :remedies_landlord_exoneration, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :remedies_landlord_exoneration_keywords, class: 'form-control'
@@ -869,8 +894,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Exculpation
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "exculpation"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "exculpation"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'exculpation').count})", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :remedies_exculpation_keywords, class: 'form-control'
@@ -894,8 +919,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Notices
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "notices"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "notices"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'notices').count})", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :misc_notices, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :misc_notices_keywords, class: 'form-control'
@@ -904,8 +929,8 @@ div[role="tabpanel"]
                 h2.heading.pull-left Obligation to be reasonable
                 = content_for :rating_box
                 .property-comments-box
-                  = link_to "Comments", "javascript:void(0)", data: {type: "misc_obligation"}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "misc_obligation"}, class: "property-add-comment"
+                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'misc_obligation').count})", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-add-comment"
                 = f.text_area :misc_obligation, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :misc_obligation_keywords, class: 'form-control'

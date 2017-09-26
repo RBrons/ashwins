@@ -35,6 +35,28 @@ class XhrController < ApplicationController
     @rent_tables = @property.rent_tables.where(version: params[:version])
   end
 
+  def property_comments
+    @property = Property.find(params[:id])
+    @user = User.find(params[:user_id])
+    @comments = @property.comments.where(user_id: @user.id, comment_type: params[:type]).order(created_at: :desc)
+
+    @html = (@comments.blank?) ? "<p>No Comments!</p>".html_safe : property_comments_html(@comments)
+  end
+
+  def add_property_comment
+    @property = Property.find(params[:id])
+    @user = User.find(params[:user_id])
+    @typeComment = params[:type]
+    @content = params[:comment]
+    # @comments = @property.comments.where(user_id: @user.id, comment_type: params[:type]).order(created_at: :desc)
+    # @html = (@comments.blank?) ? "<p>No Comments!</p>".html_safe : property_comments_html(@comments)
+    if @comment = Comment.create(user_id: @user.id, comment_type: @typeComment, comment: @content, commentable: @property)
+      render :json => {status: "success", length: @property.comments.where(user_id: @user.id, comment_type: params[:type]).count}
+    else
+      render :json => {status: "error"}
+    end
+  end
+
   def clients_options_html
     obj = (params[:id].present?) ? SuperEntity.find(params[:id]) : nil
     @html = options_html(params[:client_type], params[:is_person], obj, params[:cid])

@@ -748,4 +748,20 @@ module ApplicationHelper
     end
   end
 
+  def property_comments_html(comments)
+    result = "<div class='comments-wrapper'>"
+
+    comments.each do |comment|
+      result += "<div class='comment'>"
+      result += "<div class='comment-info clearfix'>"
+      result += "<span class='pull-right'>Commented by <b>#{comment.user.name}</b> at <b>#{comment.created_at}</b></span>"
+      result += "</div>"
+      result += "<div class='comment-content'>#{comment.comment}</div>"
+      result += "</div>"
+    end
+    result += "</div>"
+
+    return result.html_safe
+  end
+
 end

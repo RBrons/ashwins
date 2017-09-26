@@ -32,6 +32,49 @@ $ ->
       $(".rent-percentage-wrapper").show()
     else
       $(".rent-percentage-wrapper").hide()
+
+  # Comments
+  $(document).on 'click', '.property-comments', ->
+    typeComments = $(this).attr("data-type")
+    propertyId = $(this).attr("data-property")
+    userId = $(this).attr("data-user")
+
+    $.ajax
+      type: "POST"
+      url: "/xhr/property_comments"
+      data: {id: propertyId, type: typeComments, user_id: userId}
+      dataType: "html"
+      success: (val) ->
+        $("#comments-modal .modal-body").html(val)
+        $("#comments-modal").modal('show')
+      error: (e) ->
+        console.log e
+
+  tmpComments = 0
+  $(document).on 'click', '.property-add-comment', ->
+    tmpComments = $(this).prev()
+    $("#new-comment-modal #comment-content").val('')
+    $("#new-comment-modal #comment-content").attr("data-type", $(this).attr("data-type"))
+    $("#new-comment-modal #comment-content").attr("data-user", $(this).attr("data-user"))
+    $("#new-comment-modal #comment-content").attr("data-property", $(this).attr("data-property"))
+    $("#new-comment-modal").modal('show')
+
+  $("#new-comment-modal").on 'click', '#add-comment', ->
+    typeComments = $("#new-comment-modal #comment-content").attr("data-type")
+    propertyId = $("#new-comment-modal #comment-content").attr("data-property")
+    userId = $("#new-comment-modal #comment-content").attr("data-user")
+
+    $.ajax
+      type: "POST"
+      url: "/xhr/add_property_comment"
+      data: {id: propertyId, type: typeComments, user_id: userId, comment: $("#comment-content").val()}
+      dataType: "json"
+      success: (response) ->
+        console.log response.status
+        tmpComments.text('Comments(' + response.length + ')')
+      error: (e) ->
+        console.log e
+
   #      Inline EDIT
   $(document).on 'mouseover', '.property-heading-index', ->
     id = $(this).attr('data-id')
