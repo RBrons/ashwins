@@ -44,7 +44,7 @@
       - elsif individual_clients.length == 0 && entity_clients.length == 1
         p.text-info = basic_str + " Therefore, it has been pre-selected"
       - else
-        p.text-info = " Please select one."
+        p.text-info = basic_str + " Please select one."
         
       label Owning Client
       .form-group style=("#{('display: none;' if entity_clients.length == 0 || individual_clients.length == 0)}")
