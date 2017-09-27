@@ -87,13 +87,13 @@
 
     / .clearfix
     / .form-group.purchase-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.purchaser_person_is?)}")
-    /   = f.select :relqn_purchaser_contact_id, options_for_select(Contact.TransactionContacts("company"), f.object.relinquishing_purchaser_contact_id), {include_blank: true}, class: 'selectize-single'
+    /   = f.select :relqn_purchaser_contact_id, options_for_select(Contact.TransactionContacts("company", current_user.id), f.object.relinquishing_purchaser_contact_id), {include_blank: true}, class: 'selectize-single'
     /   - if f.object.persisted? && f.object.relinquishing_purchaser_contact.present?
     /     .clearfix.margin-sm-top
     /     = link_to f.object.relinquishing_purchaser_contact.name, contact_path(f.object.relinquishing_purchaser_contact.id), target: '_blank'
 
     / .form-group.purchase-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.purchaser_person_is?)}")
-    /   = f.select :relinquishing_purchaser_contact_id, options_for_select(Contact.TransactionContacts, f.object.relinquishing_purchaser_contact_id), {include_blank: true}, class: 'selectize-single'
+    /   = f.select :relinquishing_purchaser_contact_id, options_for_select(Contact.TransactionContacts("individual", current_user.id), f.object.relinquishing_purchaser_contact_id), {include_blank: true}, class: 'selectize-single'
     /   - if f.object.persisted? && f.object.relinquishing_purchaser_contact.present?
     /     .clearfix.margin-sm-top
     /     = link_to f.object.relinquishing_purchaser_contact.name, contact_path(f.object.relinquishing_purchaser_contact.id), target: '_blank'
