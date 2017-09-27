@@ -94,7 +94,7 @@ CLIENT_PARTICIPANT_ROLE = ["Principal",
     end
   end
 
-  def self.TransactionContacts(type_="individual")
+  def self.TransactionContacts(type_="individual", user_id = 0)
     if type_ == "company"
       @contacts = Contact.where('role ilike ? and company_name is not null', "Counter-Party")
     elsif type_ == "individual"
@@ -102,6 +102,7 @@ CLIENT_PARTICIPANT_ROLE = ["Principal",
     else
       @contacts = Contact.where('role ilike ? ', "Counter-Party")
     end
+    @contacts = @contacts.where(user_id: user_id)
     ret = []
     @contacts.each { |contact|
       cname = contact.try(:company_name) || ""
