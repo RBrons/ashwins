@@ -57,43 +57,24 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                
 / Initial Sign in Modal 
 input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]
-#md-welcome.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-us-step2.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
         .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
-            h4.modal-title.text-primary User Setup
+            h4.modal-title.text-primary User Setup -- Legal
         .modal-body
-            h3 Welcome to 1031fun.com
-            p 
-                | Is this account for a 
-                a.business_modal.underline-red[href='#'] business (including law firm)
-                | &nbsp;or&nbsp;
-                a.individual_modal.underline-red[href='#'] individual?
-        .modal-footer
-            .text-left
-                p.text-primary Skip User Setup and Jump to
-                = render partial: 'layouts/header'
-        
-#md-user-role.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
-    .modal-dialog.modal-extra-lg
-        .modal-header
-            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
-            h4.modal-title.text-primary User Setup
-        .modal-body
+            = render partial: 'home/user_setup_wizard'
             h3 Welcome to 1031fun.com
             div.form-group
+                label Is this an account for
                 .radio
                     label
-                        input.attorney_user[type="radio" name="user_role"] I am an attorney, work for or with an attorney or lawfirm, or am a client of an attorney
+                        input.individual_attorney[type="radio" name="user_role"] an individual attorney or staff members or
                 .radio
                     label
-                        input.fiduciary_user[type="radio" name="user_role"] I am not an attorney or working for or with an attorney but I am acting as a fiduciary (an executor or executrix, a Trustee, a Guardian or a holder of a Power of Attorney)
-                .radio
-                    label
-                        input.property_owner[type="radio" name="user_role" checked] I am an owner of real property
-            button.go-back.btn.btn-default[data-toggle="modal" data-target="#md-welcome" data-dismiss="modal"] Back
-            button.go-next.btn.btn-danger[data-target-modal=""] Next
-        
+                        input.law_firm[type="radio" name="user_role" checked] a law office and its staff?
+            a.btn.btn-default[data-toggle="modal" data-target="#md-us-step1" data-dismiss="modal"] Back
+            a.next-step.btn.btn-danger[data-toggle="modal" data-target="#md-business" data-dismiss="modal"] Save
         .modal-footer
             .text-left
                 p.text-primary Skip User Setup and Jump to
@@ -103,63 +84,69 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
     .modal-dialog.modal-extra-lg
         .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
-            h4.modal-title.text-primary User Setup
+            h4.modal-title.text-primary User Setup -- Legal
         .modal-body
+            = render partial: 'home/user_setup_wizard'
             h3 Welcome to 1031fun.com
-            h4.business-step-title Business Setup
-            form.under_construction[style="display: none"]
-                p.text-danger Under Construction
-                a.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
             form.create_contact
-                input[type="hidden" name="contact_type" value="business"]
-                input[type="hidden" name="user_type"]
+                input[type="hidden" name="user_type" value="Attorney"]
                 
-                div.law-firm-detail.form-group[class=(current_user.attorney_firm_id.nil? ? 'hide' : '')]
+                .law-firm-detail.form-group
                     label.form-label Please enter the name of the law firm that you are affiliated with:
                     div.row
                         div.col-md-2.col-xs-6
-                            select.existing_firm.form-control[name="firm_id"]
-                                option 
-                                option[value="0"] Add
-                                - @firms.each do |firm|
-                                    option[value="#{firm.id}" selected="#{firm.id == current_user.attorney_firm_id ? 'selected' : ''}"] = firm.name
-                        div.new_firm_field.col-md-2.col-xs-6[style=(current_user.attorney_firm_id.nil? ? '' : 'display: none')]
+                            = select_tag 'attorney_firm_id', options_for_select(['', 'Add'] + @firms.map{|firm| [firm.name, firm.id]}, current_user.attorney_firm_id), class: 'existing_firm form-control'
+                        div.new_firm_field.col-md-2.col-xs-6[style="display: none"]
                             input.form-control.input[name="firm_name" type="text"]
                 
-                div.business-detail.form-group[class=(current_user.business_name.nil? ? 'hide' : '')]
-                    label.form-label Please enter the name of the business that you are affiliated with:
-                    div.row
-                        div.col-md-2.col-xs-6
-                            input.form-control[name="business_name" type="text" disabled=(current_user.business_name.nil? ? 'disabled' : false) required]
-                                
-                div.shared-field.form-group
-                    label.form-label Please enter your first and last name:
-                    div.row
-                        div.col-md-2.col-xs-6
-                            input.form-control[name="first_name" type="text" required]
-                        div.col-md-2.col-xs-6
-                            input.form-control[name="last_name" type="text" required]
-                
-                a.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
+                a.btn.btn-default[data-toggle="modal" data-target="#md-us-step2" data-dismiss="modal"] Back
                 button.btn.btn-danger[type="submit"] Save
         .modal-footer
             .text-left
                 p.text-primary Skip User Setup and Jump to
                 = render partial: 'layouts/header'
-                
 
 #md-individual.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
         .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
-            h4.modal-title.text-primary User Setup
+            h4.modal-title.text-primary User Setup -- Legal
         .modal-body
-            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            = render partial: 'home/user_setup_wizard'
             h3 Welcome to 1031fun.com
-            h4 Individual Setup
             form.create_contact
-                input[type="hidden" name="contact_type" value="individual"]
-                input[type="hidden" name="user_type"]
+                input[type="hidden" name="user_type" value="Attorney"]
+                
+                .form-group
+                    p Are you an attorney
+                    label.radio-inline
+                        input.real-attorney[type="radio" name="is_attorney" checked] Yes
+                    label.radio-inline
+                        input.affiliate-attorney[type="radio" name="is_attorney"] No
+                .law-firm-detail.form-group[style="display: none"]
+                    label.form-label Please enter the name of the attorney that you are affiliated with:
+                    div.row
+                        div.col-md-2.col-xs-6
+                            = select_tag 'attorney_firm_id', options_for_select(['', 'Add'] + @firms.map{|firm| [firm.name, firm.id]}), class: 'existing_firm form-control'
+                        div.new_firm_field.col-md-2.col-xs-6[style="display: none"]
+                            input.form-control.input[name="firm_name" type="text"]
+                
+                a.btn.btn-default[data-toggle="modal" data-target="#md-us-step2" data-dismiss="modal"] Back
+                button.btn.btn-danger[type="submit"] Save
+        .modal-footer
+            .text-left
+                p.text-primary Skip User Setup and Jump to
+                = render partial: 'layouts/header'                
+
+#md-us-step1.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
+        .modal-header
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h4.modal-title.text-primary User Setup -- Legal
+        .modal-body
+            = render partial: 'home/user_setup_wizard'
+            h3 Welcome to 1031fun.com
+            form.create_contact
                 div.form-group
                     label.form-label Please enter your first and last name:
                     div.row
@@ -167,9 +154,7 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                             input.form-control[name="first_name" type="text" required]
                         div.col-md-2.col-xs-6
                             input.form-control[name="last_name" type="text" required]
-                
-                button.btn.btn-default[data-toggle="modal" data-target="#md-user-role" data-dismiss="modal"] Back
-                button.btn.btn-danger Save
+                button.btn.btn-danger[type="submit"] Save
         
         .modal-footer
             .text-left

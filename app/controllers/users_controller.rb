@@ -19,64 +19,23 @@ class UsersController < ApplicationController
 
   def set_contact_info
     @user = current_user
-    visitor = ''
-    if request.post?
-      if params[:contact_type] == 'business'
-        if params[:firm_id].present?
-          if params[:firm_id].to_i != 0
-            @user.attorney_firm_id = params[:firm_id].to_i
-          else
-            # Save new Attorney Firm.
-            if params[:firm_name].present?
-              if AttorneyFirm.exists?(:name => params[:firm_name])
-                firm = AttorneyFirm.where(:name => params[:firm_name]).first
-                firm.update(:name => params[:firm_name])
-              else
-                firm = AttorneyFirm.create(:name => params[:firm_name])
-              end
-              @user.attorney_firm_id = firm.id
-            else
-              # Big issue
-              return render json: {status: false}
-            end
-          end
-          @user.first_name = params[:first_name]
-          @user.last_name = params[:last_name]
-          @user.business_name = nil
-
-          @user.user_type = params[:user_type]
-                    
-          @user.save
-          visitor = @user.first_name + ' from ' + @user.attorney_firm.name
-        else
-          @user.business_name = params[:business_name]
-          @user.first_name = params[:first_name]
-          @user.last_name = params[:last_name]
-          @user.attorney_firm_id = nil
-          @user.user_type = params[:user_type]
-
-          @user.save
-          visitor = @user.first_name + ' from ' + @user.business_name
-        end
-      elsif params[:contact_type] == 'individual'
-        @user.first_name = params[:first_name]
-        @user.last_name = params[:last_name]
-        @user.business_name = nil
-        @user.attorney_firm_id = nil
-
-        @user.user_type = params[:user_type]
-
-        @user.save
-        visitor = @user.first_name
+    update_params = user_setup_params
+    # Save new Attorney Firm.
+    if params[:firm_name].present?
+      if AttorneyFirm.exists?(:name => params[:firm_name])
+        firm = AttorneyFirm.where(:name => params[:firm_name]).first
+        firm.update(:name => params[:firm_name])
       else
-        return render json: {status: false}
-      end  
-      
-      return render json: {status: true, visitor: visitor, user_type: @user.user_type}
-    else
-      return render json: {status: false}  
+        firm = AttorneyFirm.create(:name => params[:firm_name])
+      end
+      update_params.merge!(:attorney_firm_id => firm.id)
     end
-
+    
+    if @user.update(update_params)
+      return render json: {status: true}
+    else
+      return render json: {status: false}
+    end
   end
 
   def my
@@ -90,6 +49,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def user_setup_params
+    params.permit([:first_name, :last_name, :attorney_firm_id, :user_type])
+  end
 
   def build_update_attributes
     attributes = nil

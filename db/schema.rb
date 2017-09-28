@@ -795,9 +795,6 @@ ActiveRecord::Schema.define(version: 20170926143047) do
     t.string   "first_name"
     t.string   "last_name"
     t.boolean  "enabled",                                default: false
-    t.string   "business_name"
-    t.string   "business_contact_first_name"
-    t.string   "business_contact_last_name"
     t.string   "last_sign_out_page"
     t.string   "user_type"
     t.integer  "attorney_firm_id"

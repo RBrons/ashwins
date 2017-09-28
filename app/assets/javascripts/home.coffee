@@ -1,5 +1,5 @@
 $ ->
-  user_role = 'Non-Attorney Fiduciary'
+  user_role = 'Attorney'
   # replacement seller
   repls_contact_id = $(document).find('input.repls_contact_id').val()
   repls_contact_type = ""
@@ -29,102 +29,72 @@ $ ->
     $(document).find('#md-initial-participants').modal('show')
 
   if $(document).find('#show_initial_sign_in_modal').val() == 'true'
-    # show initial sign in modal
-    $(document).find('#md-welcome').modal('show')
+    # show user setup sequence
+    $(document).find('#md-us-step1').modal('show')
   else
     # show landing page modal
     if $(document).find('#is_show_landing_page').val() == 'true'
       $(document).find('#md-landing').modal('show')
   
-  $(document).find('#md-welcome .business_modal').on 'click', ->
-    $(document).find('#md-welcome').modal('hide')
-    $(document).find('#md-user-role .go-next').data('target-modal', '#md-business')
-    $(document).find('#md-user-role').modal('show')
-        
-  $(document).find('#md-welcome .individual_modal').on 'click', ->
-    $(document).find('#md-welcome').modal('hide')
-    $(document).find('#md-user-role .go-next').data('target-modal', '#md-individual')
-    $(document).find('#md-user-role').modal('show')
-    
-  $(document).find('#md-user-role .go-next').on 'click', -> 
-    if $(this).data('target-modal') == '#md-business'
-      if user_role == 'Attorney'
-        # begin temporary command
-        $(document).find('#md-business form.create_contact').show()
-        $(document).find('#md-business form.under_construction').hide()
-        # end
-        
-        $(document).find('.business-step-title').text('Legal Setup')
-        $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', false)
-        $(document).find('#md-business .law-firm-detail .new_firm_field').hide()
-        $(document).find('#md-business .shared-field').hide()
-        $(document).find('#md-business .law-firm-detail').removeClass('hide')
-        
-        $(document).find('#md-business .business-detail input').prop('disabled', 'disabled')
-        $(document).find('#md-business .business-detail').addClass('hide')
-      else if user_role == 'Normal User'
-        $(document).find('.business-step-title').text('Fiduciary Setup')
-        
-        # begin temporary command
-        $(document).find('#md-business form.create_contact').hide()
-        $(document).find('#md-business form.under_construction').show()
-        # end
-      else
-        # begin temporary command
-        $(document).find('#md-business form.create_contact').show()
-        $(document).find('#md-business form.under_construction').hide()
-        # end
-        $(document).find('.business-step-title').text('Business Setup')
-        $(document).find('#md-business .law-firm-detail input, #md-business .law-firm-detail select').prop('disabled', 'disabled')
-        $(document).find('#md-business .law-firm-detail').addClass('hide')
+  $(document).find('#md-us-step1').on 'shown', ->
+    $(document).find('.user-setup-wizard a#step_1').removeClass()
+                                                   .addClass('selected')
+    $(document).find('.user-setup-wizard a#step_2').removeClass()
+                                                   .addClass('disabled')
+    $(document).find('.user-setup-wizard a#step_3').removeClass()
+                                                   .addClass('disabled')
 
-        $(document).find('#md-business .business-detail input').prop('disabled', false)
-        $(document).find('#md-business .business-detail').removeClass('hide')
-        $(document).find('#md-business .shared-field').show()
-
-    # clear form fields
-    $(document).find('form.create_contact select.existing_firm').val($(document).find('form.create_contact select.existing_firm option:first').val())
-    $(document).find('form.create_contact input[type="text"]').val('')
-    
-  $(document).find('.go-back, .go-next').on 'click', (e) ->
-    e.preventDefault()
-    $(this).closest('.modal').modal('hide')
-    if $(this).data('target') == '#md-welcome'
-      $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
-    $(document).find($(this).data('target-modal')).modal('show')
-
-  $(document).find('.attorney_user, .fiduciary_user, .property_owner').on 'click', ->
-    if $('.attorney_user').is(':checked')
-      user_role = 'Attorney'
-      $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
-    else if $('.fiduciary_user').is(':checked')
-      user_role = 'Normal User'
-      $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
-    else
-      user_role = 'Non-Attorney Fiduciary'
-      $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
+  $(document).find('#md-us-step2').on 'shown', ->
+    $(document).find('.user-setup-wizard a#step_1').removeClass()
+                                                   .addClass('done')
+    $(document).find('.user-setup-wizard a#step_2').removeClass()
+                                                   .addClass('selected')
+    $(document).find('.user-setup-wizard a#step_3').removeClass()
+                                                   .addClass('disabled')
   
-  $(document).find('select.existing_firm').on 'change', ->
-    if $('.existing_firm option:selected').text() == ""
-      $(document).find('#md-business .law-firm-detail .new_firm_field').hide()
-      $(document).find('#md-business .shared-field').hide()
-    else
-      if $('.existing_firm option:selected').text() == "Add"
-        $('.law-firm-detail .new_firm_field input').prop('disabled', false)
-        $('.law-firm-detail .new_firm_field').show()
-      else
-        $('.law-firm-detail .new_firm_field input').prop('disabled', 'disabled')
-        $('.law-firm-detail .new_firm_field').hide()
-      $(document).find('#md-business .shared-field').show()
+  $(document).find('#md-individual, #md-business').on 'shown', ->
+    $(document).find('.user-setup-wizard a#step_1').removeClass()
+                                                   .addClass('done')
+    $(document).find('.user-setup-wizard a#step_2').removeClass()
+                                                   .addClass('done')
+    $(document).find('.user-setup-wizard a#step_3').removeClass()
+                                                   .addClass('selected')
 
+  $(document).find('.individual_attorney, .law_firm').on 'change', ->
+    if $('.individual_attorney').is(':checked')
+      $(this).closest('.md-user-setup').find('.next-step').attr('data-target', '#md-individual')
+    else if $('.law_firm').is(':checked')
+      $(this).closest('.md-user-setup').find('.next-step').attr('data-target', '#md-business')
+      
+  
+  $(document).find('.real-attorney, .affiliate-attorney').on 'change', ->
+    if $('.real-attorney').is(':checked')
+      $(this).closest('.md-user-setup').find('.law-firm-detail').hide()
+      $(this).closest('.md-user-setup').find('select.existing_firm option:first-child').attr("selected", true)
+    else if $('.affiliate-attorney').is(':checked')
+      $(this).closest('.md-user-setup').find('.law-firm-detail').show()
+        
+  $(document).find('select.existing_firm').on 'change', ->
+    modal = $(this).closest('.md-user-setup')
+    if $(this).find('option:selected').text() == ""
+      modal.find('.law-firm-detail .new_firm_field').hide()
+      modal.find('.shared-field').hide()
+    else
+      if $(this).find('option:selected').text() == "Add"
+        modal.find('.law-firm-detail .new_firm_field input').prop('disabled', false)
+        modal.find('.law-firm-detail .new_firm_field').show()
+      else
+        modal.find('.law-firm-detail .new_firm_field input').prop('disabled', 'disabled')
+        modal.find('.law-firm-detail .new_firm_field').hide()
+      
   $(document).find('.create_contact').submit (e) ->
     e.preventDefault()
-    if $(this).closest('.md-user-setup').attr('id') == 'md-business'
-      if user_role == 'Attorney' && !$(this).find('select.existing_firm').val()
+    modal = $(this).closest('.md-user-setup')
+    if modal.attr('id') == 'md-business'
+      if !$(this).find('select.existing_firm').val()
         $.notify 'Please select law firm!', 'error'
         return false
-    back_modal = $(this).closest('.md-user-setup').attr('id')
-    $(this).find('input[name="user_type"]').val(user_role)
+    
     contact_info = $(this).serialize()
     $.ajax
       url: '/users/set_contact_info/'
@@ -133,13 +103,11 @@ $ ->
       data: contact_info
       success: (data) ->
         if data.status
-          $(document).find('.md-user-setup').modal('hide')
-          if data.user_type == 'Non-Attorney Fiduciary'
-            $(document).find('.top_nav .navbar-nav .client-module').html('Holdings <span class="fa fa-plus-circle" id="add-client"></span>')
+          modal.modal('hide')
+          if modal.attr('id') == 'md-business' || modal.attr('id') == 'md-individual'
+            window.location.href = '/'
           else
-            $(document).find('.top_nav .navbar-nav .client-module').html('Clients <span class="fa fa-plus-circle" id="add-client"></span>')
-          
-          window.location.href = '/'
+            $(document).find('#md-us-step2').modal('show')
         else
           $.notify "Failed", "error"
 
