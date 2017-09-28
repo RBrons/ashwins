@@ -24,9 +24,9 @@
   - entity_sellers = options_html_entities(@transaction.relinquishing_seller_entity_id, "transactions", "entity", "array")
   - individual_sellers = options_html_entities(@transaction.relinquishing_seller_entity_id, "transactions", "individual", "array")
 
-  - plural_entity_sellers_str = entity_sellers.length > 1 ? 'business clients' : 'business client'
-  - plural_individual_sellers_str = individual_sellers.length > 1 ? 'individual clients' : 'individual client'
-  - basic_str = "You have #{individual_sellers.length} #{plural_individual_sellers_str} and #{entity_sellers.length} business clients who own a purchased property to sell."
+  - plural_entity_sellers_str = entity_sellers.length != 1 ? 'business clients' : 'business client'
+  - plural_individual_sellers_str = individual_sellers.length != 1 ? 'individual clients' : 'individual client'
+  - basic_str = "You have #{individual_sellers.length} #{plural_individual_sellers_str} and #{entity_sellers.length} #{plural_entity_sellers_str} who own a purchased property to sell."
 
   .col-lg-4.col-md-4.col-sm-12.col-xs-12
     .transaction-note

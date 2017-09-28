@@ -8,7 +8,7 @@
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - prepopulated_officers = options_html('officer', "true", @officer.super_entity, f.object.temp_id, 'array')
-    p.text-info = "You have #{prepopulated_officers.length} individual #{prepopulated_officers.length > 1 ? 'clients or contacts' : 'client or contact'} who could serve as Director for this Corporation."
+    p.text-info = "You have #{prepopulated_officers.length} individual #{prepopulated_officers.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Officer of this Corporation."
 
     .form-group#officer_entity
       = hidden_field_tag "officer[is_person]", true

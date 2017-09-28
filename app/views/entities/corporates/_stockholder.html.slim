@@ -10,8 +10,8 @@
   - entity_stockholders = options_html('stockholder', "false", @stockholder.super_entity, f.object.temp_id, 'array')
   - individual_stockholders = options_html('stockholder', "true", @stockholder.super_entity, f.object.temp_id, 'array')
   
-  - plural_entity_stockholders_str = entity_stockholders.length > 1 ? 'business clients or contacts' : 'business client or contact'
-  - plural_individual_stockholders_str = individual_stockholders.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - plural_entity_stockholders_str = entity_stockholders.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_stockholders_str = individual_stockholders.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_stockholders.length} #{plural_individual_stockholders_str} and #{entity_stockholders.length} #{plural_entity_stockholders_str} who could own stock in this corporation."
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12

@@ -8,7 +8,7 @@
           li = message
   
   - joint_tenants = options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id, 'array')
-  - plural_str = joint_tenants.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - plural_str = joint_tenants.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     p.text-info = "You have #{joint_tenants.length} #{plural_str} who could hold an undivided interest in this Joint Tenancy."

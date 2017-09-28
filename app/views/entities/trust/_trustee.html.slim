@@ -10,8 +10,8 @@
   - entity_trustees = options_html('trustee', "false", @trustee.super_entity, f.object.temp_id, 'array')
   - individual_trustees = options_html('trustee', "true", @trustee.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_str = entity_trustees.length > 1 ? 'business clients or contacts' : 'business client or contact'
-  - plural_individual_str = individual_trustees.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - plural_entity_str = entity_trustees.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_str = individual_trustees.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_trustees.length} #{plural_individual_str} and #{entity_trustees.length} #{plural_entity_str} who could serve as Trustee for this Trust."
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
