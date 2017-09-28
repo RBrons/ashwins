@@ -402,16 +402,18 @@ module ApplicationHelper
 
   # Just a reference and ignore this - [1: "Individual", 2: "Sole Proprietorship", 3: "Power of Attorney", 4: "Guardianship", 5: "Estate", 6: "Trust", 7: "Tenancy in Common", 8: "Joint Tenancy with Rights of Survivorship (JTWROS)", 9: "Tenancy by the Entirety", 10: "Partnership", 11: "LLC", 12: "LLP", 13: "Limited Partnership", 14: "Corporation"]
 
-  def options_html(type, is_person, super_entity, cid="00")
+  def options_html(type, is_person, super_entity, cid="00", return_type="html")
     sel_flag = true
     sel_str = ""
 
     poa_str = " (Principal Entity) "
     poa_str = " (Principal Individual) " if is_person == "true"
-
+    
+    array_result = []
+    select_one_html = "<option>Select One...</option>"
+    result = ""
+    
     if is_person == "true"
-      result = "<option>Select One...</option>"
-
       groups = {}
 
       case type
@@ -476,6 +478,7 @@ module ApplicationHelper
             sel_str = ""
           end
           result += "<option value='e#{entity.id}' data-type='entity' #{sel_str}>#{entity.name} </option>"
+          array_result << [entity.id, entity.name]
         end
         result += "</optgroup>"
       end
@@ -535,13 +538,21 @@ module ApplicationHelper
           sel_str = ""
         end
         result += "<option value='c#{contact.id}' data-type='contact' #{sel_str}>#{contact.name}</option>"
+        array_result << [contact.id, contact.name]
       end
 
       result += "</optgroup>"
-      return result.html_safe
-    else
-      result = "<option>Select One...</option>"
+      if return_type == 'html'
+        if array_result.length > 1
+          return (select_one_html + result).html_safe
+        else
+          return result.html_safe
+        end
+      else
+        return array_result
+      end
 
+    else
       groups = {}
 
       case type
@@ -590,6 +601,7 @@ module ApplicationHelper
             sel_str = ""
           end
           result += "<option value='e#{entity.id}' data-type='entity' #{sel_str}>#{entity.name} </option>"
+          array_result << [entity.id, entity.name]
         end
         result += "</optgroup>"
       end
@@ -629,10 +641,20 @@ module ApplicationHelper
           sel_str = ""
         end
         result += "<option value='c#{contact.id}' data-type='contact' #{sel_str}>#{contact.name}</option>"
+        array_result << [contact.id, contact.name]
       end
 
       result += "</optgroup>"
-      return result.html_safe
+      if return_type == 'html'
+        if array_result.length > 1
+          return (select_one_html + result).html_safe
+        else
+          return result.html_safe
+        end
+      else
+        return array_result
+      end
+      
     end
   end
 

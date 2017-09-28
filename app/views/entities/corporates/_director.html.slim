@@ -7,6 +7,9 @@
         - @director.errors.full_messages.each do |message|
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    - prepopulated_directors = options_html('director', "true", @director.super_entity, f.object.temp_id, 'array')
+    p.text-info = "You have #{prepopulated_directors.length} individual #{prepopulated_directors.length > 1 ? 'clients or contacts' : 'client or contact'} who could serve as Officer for this Corporation."
+    
     .form-group#director_entity
       = hidden_field_tag "director[is_person]", true
       = f.select :temp_id, options_html('director', "true", @director.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @director.super_entity.id, clienttype: 'director'}

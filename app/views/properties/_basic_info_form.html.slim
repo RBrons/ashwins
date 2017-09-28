@@ -37,9 +37,9 @@
       - entity_clients = options_html_entities(f.object.owner_entity_id, "properties", "entity", "array")
       - individual_clients = options_html_entities(f.object.owner_entity_id, "properties", "individual", "array")
 
-      - plural_entity_client = entity_clients.length > 1 ? 'business clients' : 'business client'
-      - plural_individual_client = individual_clients.length > 1 ? 'individual clients' : 'individual client'
-      - basic_str = "You have #{individual_clients.length} #{plural_individual_client} and #{entity_clients.length} #{plural_entity_client} who could own this property."
+      - plural_entity_client_str = entity_clients.length > 1 ? 'business clients' : 'business client'
+      - plural_individual_client_str = individual_clients.length > 1 ? 'individual clients' : 'individual client'
+      - basic_str = "You have #{individual_clients.length} #{plural_individual_client_str} and #{entity_clients.length} #{plural_entity_client_str} who could own this property."
 
       - if individual_clients.length == 1 && entity_clients.length == 0
         - f.object.owner_person_is = true
@@ -84,9 +84,9 @@
       - entity_owners = Contact.TransactionContacts("company", current_user.id)
       - individual_owners = Contact.TransactionContacts("individual", current_user.id)
 
-      - plural_entity_contact = entity_owners.length > 1 ? 'business contacts' : 'business contact'
-      - plural_individual_contact = individual_owners.length > 1 ? 'individual contacts' : 'individual contact'
-      - basic_str = "You have #{individual_owners.length} #{plural_individual_contact} and #{entity_owners.length} #{plural_entity_contact} who could own this property."
+      - plural_entity_contact_str = entity_owners.length > 1 ? 'business contacts' : 'business contact'
+      - plural_individual_contact_str = individual_owners.length > 1 ? 'individual contacts' : 'individual contact'
+      - basic_str = "You have #{individual_owners.length} #{plural_individual_contact_str} and #{entity_owners.length} #{plural_entity_contact_str} who could own this property."
 
       - if individual_owners.length == 1 && entity_owners.length == 0
         - f.object.owner_person_is = true
