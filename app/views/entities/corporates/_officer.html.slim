@@ -7,6 +7,9 @@
         - @officer.errors.full_messages.each do |message|
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    - prepopulated_officers = options_html('officer', "true", @officer.super_entity, f.object.temp_id, 'array')
+    p.text-info = "You have #{prepopulated_officers.length} individual #{prepopulated_officers.length > 1 ? 'clients or contacts' : 'client or contact'} who could serve as Director for this Corporation."
+
     .form-group#officer_entity
       = hidden_field_tag "officer[is_person]", true
       = f.select :temp_id, options_html('officer', "true", @officer.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @officer.super_entity.id, clienttype: 'officer'}
@@ -17,6 +20,7 @@
         = linkbacks f.object.temp_id
         .add-list-entity-links.pull-right
           = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+    .form-group
       = f.label "office", class: "control-label"
       = f.text_field :office, class: "form-control"
     .form-group

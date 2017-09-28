@@ -6,9 +6,26 @@
       ul
         - override_active_record_errors(@tenant_in_common.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+  
+  - entity_tenants = options_html('tenant-in-common', "false", @tenant_in_common.super_entity, f.object.temp_id, 'array')
+  - individual_tenants = options_html('tenant-in-common', "true", @tenant_in_common.super_entity, f.object.temp_id, 'array')
 
-    .form-group
+  - plural_entity_str = entity_tenants.length > 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_str = individual_tenants.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - basic_str = "You have #{individual_tenants.length} #{plural_individual_str} and #{entity_tenants.length} #{plural_entity_str} who could hold an undivided interest in this Tenancy in Common."
+
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    - if individual_tenants.length == 0 && entity_tenants.length == 0
+      p.text-info = basic_str + " Please create new one."
+    - elsif individual_tenants.length == 1 && entity_tenants.length == 0
+      - @tenant_in_common.is_person = true
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - elsif individual_tenants.length == 0 && entity_tenants.length == 1
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - else
+      p.text-info = basic_str + " Please select one."
+
+    .form-group style=("#{('display: none;' if entity_tenants.length == 0 || individual_tenants.length == 0)}")
       .option-1
         = f.label "Individual"
         = f.radio_button :is_person, true, checked: @tenant_in_common.is_person

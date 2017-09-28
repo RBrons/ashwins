@@ -110,7 +110,7 @@ $ ->
       $(document).find("input[id$=_email]").val(json.email)
       $(document).find("input[id$=_postal_address]").val(json.postal_address)
       $(document).find("input[id$=_city]").val(json.city)
-      $(document).find("input[id$=_state]").find('option:selected').removeAttr("selected");
+      $(document).find("input[id$=_state]").find('option:selected').removeAttr("selected")
       $(document).find("input[id$=_state], option[value='"+json.state+"']").attr("selected", "selected")
       $(document).find("input[id$=_zip]").val(json.zip)
     catch
@@ -279,7 +279,7 @@ $ ->
 
   hashquery = queryString.parse(location.search)
   if hashquery.xhr != undefined
-    $(document).find("a[href='"+hashquery.xhr+"']:first").trigger("click");
+    $(document).find("a[href='"+hashquery.xhr+"']:first").trigger("click")
 
   $(document).on "click", "input[id$='is_honorific']", ->
     stock_holder_honorific_fun(this)

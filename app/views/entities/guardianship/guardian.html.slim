@@ -6,8 +6,26 @@
       ul
         - override_active_record_errors(@guardian.errors.messages, {}).each do |message|
           li = message
+  
+  - entity_guardians = options_html('guardian', "false", @guardian.super_entity, f.object.temp_id, 'array')
+  - individual_guardians = options_html('guardian', "true", @guardian.super_entity, f.object.temp_id, 'array')
+
+  - plural_entity_str = entity_guardians.length > 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_str = individual_guardians.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - basic_str = "You have #{individual_guardians.length} #{plural_individual_str} and #{entity_guardians.length} #{plural_entity_str} who could serve as Guardian for this Guaridanship."
+
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group
+    - if individual_guardians.length == 0 && entity_guardians.length == 0
+      p.text-info = basic_str + " Please create new one."
+    - elsif individual_guardians.length == 1 && entity_guardians.length == 0
+      - @guardian.is_person = true
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - elsif individual_guardians.length == 0 && entity_guardians.length == 1
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - else
+      p.text-info = basic_str + " Please select one."
+
+    .form-group style=("#{('display: none;' if entity_guardians.length == 0 || individual_guardians.length == 0)}")
       .option-1
         = f.label "Individual"
         = f.radio_button :is_person, true, checked: @guardian.is_person

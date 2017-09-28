@@ -6,10 +6,16 @@
       ul
         - override_active_record_errors(@joint_tenant.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
+  
+  - joint_tenants = options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id, 'array')
+  - plural_str = joint_tenants.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    p.text-info = "You have #{joint_tenants.length} #{plural_str} who could hold an undivided interest in this Joint Tenancy."
+
     .form-group#joint_tenant_entity
       = hidden_field_tag "joint_tenant[is_person]", true
-      = f.select :temp_id, options_html('joint-tenant', "true", @joint_tenant.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @joint_tenant.super_entity.id, clienttype: 'joint-tenant'}
+      = f.select :temp_id, options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @joint_tenant.super_entity.id, clienttype: 'joint-tenant'}
       = hidden_field_tag "joint_tenant[member_type_id]", MemberType.getJointTenancyId
       = hidden_field_tag :cid, @joint_tenant.temp_id
       .clearfix

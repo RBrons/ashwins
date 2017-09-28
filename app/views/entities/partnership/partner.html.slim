@@ -6,7 +6,12 @@
       ul
         - override_active_record_errors(@partner.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
+  - prepopulated_partners = options_html('partner', "true", @partner.super_entity, f.object.temp_id, 'array')
+  - plural_str = prepopulated_partners.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    p.text-info = "You have #{prepopulated_partners.length} #{plural_str} who could hold a partnership interest in this Partnership."
+
     .form-group#partner_entity
       = hidden_field_tag "partner[is_person]", true
       = f.select :temp_id, options_html('partner', "true", @partner.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @partner.super_entity.id, clienttype: 'partner'}
