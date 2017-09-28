@@ -10,8 +10,8 @@
   - entity_partners = options_html('general-partner', "false", @partner.super_entity, f.object.temp_id, 'array')
   - individual_partners = options_html('general-partner', "true", @partner.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_str = entity_partners.length > 1 ? 'business clients or contacts' : 'business client or contact'
-  - plural_individual_str = individual_partners.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - plural_entity_str = entity_partners.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_str = individual_partners.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_partners.length} #{plural_individual_str} and #{entity_partners.length} #{plural_entity_str} who could be the General Partner of this Limited Partnership."
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12

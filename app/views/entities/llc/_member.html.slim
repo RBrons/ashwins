@@ -10,8 +10,8 @@
   - entity_members = options_html('member', "false", @member.super_entity, f.object.temp_id, 'array')
   - individual_members = options_html('member', "true", @member.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_str = entity_members.length > 1 ? 'business clients or contacts' : 'business client or contact'
-  - plural_individual_str = individual_members.length > 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - plural_entity_str = entity_members.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_str = individual_members.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_members.length} #{plural_individual_str} and #{entity_members.length} #{plural_entity_str} who could hold a membership interest in this LLC."
   
   .col-lg-4.close-md-4.col-sm-12.col-xs-12

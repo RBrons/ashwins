@@ -8,7 +8,7 @@
           li = message
 
   - prepopulated_spouses = options_html('spouse', "true", @spouse.super_entity, f.object.temp_id, 'array')
-  - plural_str = prepopulated_spouses.length > 1 ? 'individual clients' : 'individual client'
+  - plural_str = prepopulated_spouses.length != 1 ? 'individual clients' : 'individual client'
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     p.text-info = "You have #{prepopulated_spouses.length} #{plural_str} who could be identified as one of the Spouses that will hold an individed interest in this Tenancy by the Entirety."
