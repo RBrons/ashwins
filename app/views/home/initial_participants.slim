@@ -32,7 +32,7 @@
                             form[action=""]
                                 input[type="hidden" name="entity_type" value=""]
                                 div.form-group[style="display: none"]
-                                    label.form-label Name your first Exchangor
+                                    label.form-label Name your first Exchangor *
                                     div.entity-individual-detail.row
                                         div.col-md-2.col-xs-6
                                             input.form-control[name="entity[first_name]" type="text"]
@@ -77,7 +77,7 @@
                             input[type="hidden" name="contact[is_company]" value="false"]
                             
                             div.form-group[style="display: none"]
-                                label.form-label Name your first Relinquishing Purchaser
+                                label.form-label Name your first Relinquishing Purchaser *
                                 div.relinp-individual-detail.row
                                     div.col-md-2.col-xs-6
                                         input.form-control[name="contact[first_name]" type="text"]
@@ -110,7 +110,7 @@
                             input[type="hidden" name="contact[is_company]" value="false"]
 
                             div.form-group[style="display:none"]
-                                label.form-label Name your first Replacement Seller
+                                label.form-label Name your first Replacement Seller *
                                 div.repls-individual-detail.row
                                     div.col-md-2.col-xs-6
                                         input.form-control[name="contact[first_name]" type="text"]
@@ -146,15 +146,15 @@
                 input#property_title[type="hidden" name="property[title]"]
                 
                 .form-group
-                    label.control-label Tenant
+                    label.control-label Tenant *
                     = select_tag 'property[tenant_id]', options_for_select(Tenant.all().pluck(:name, :id)), {class: 'form-control'}
                     = link_to "New", "javascript:void(0)", class: "new-tenant-button"
                 .form-group
-                    label.control-label City
+                    label.control-label City *
                     span.error-msg
                     input#property_location_city.form-control[type="text" name="property[location_city]" required data-parsley-error-message="Please input a city"]
                 .form-group
-                    label.control-label Rent
+                    label.control-label Rent *
                     span.error-msg
                     .input-group
                         .input-group-addon $

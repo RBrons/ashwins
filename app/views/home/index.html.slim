@@ -64,15 +64,15 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
             h4.modal-title.text-primary User Setup -- Legal
         .modal-body
             = render partial: 'home/user_setup_wizard'
-            h3 Welcome to 1031fun.com
+            
             div.form-group
                 label Is this an account for
                 .radio
                     label
-                        input.individual_attorney[type="radio" name="user_role"] an individual attorney or staff members or
+                        input.individual_attorney[type="radio" name="user_role"] an individual attorney or one of its staff members or
                 .radio
                     label
-                        input.law_firm[type="radio" name="user_role" checked] a law office and its staff?
+                        input.law_firm[type="radio" name="user_role" checked] a law office and one of its staff members?
             a.btn.btn-default[data-toggle="modal" data-target="#md-us-step1" data-dismiss="modal"] Back
             a.next-step.btn.btn-danger[data-toggle="modal" data-target="#md-business" data-dismiss="modal"] Save
         .modal-footer
@@ -87,7 +87,7 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
             h4.modal-title.text-primary User Setup -- Legal
         .modal-body
             = render partial: 'home/user_setup_wizard'
-            h3 Welcome to 1031fun.com
+            
             form.create_contact
                 input[type="hidden" name="user_type" value="Attorney"]
                 
@@ -113,7 +113,7 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
             h4.modal-title.text-primary User Setup -- Legal
         .modal-body
             = render partial: 'home/user_setup_wizard'
-            h3 Welcome to 1031fun.com
+            
             form.create_contact
                 input[type="hidden" name="user_type" value="Attorney"]
                 
@@ -145,7 +145,7 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
             h4.modal-title.text-primary User Setup -- Legal
         .modal-body
             = render partial: 'home/user_setup_wizard'
-            h3 Welcome to 1031fun.com
+            
             form.create_contact
                 div.form-group
                     label.form-label Please enter your first and last name:
