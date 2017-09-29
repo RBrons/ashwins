@@ -101,7 +101,7 @@ class User < ApplicationRecord
       # { show: 'Name', call: 'name' },
       { show: 'User Role', call: 'get_user_type' },
       { show: 'Law Firm', call: 'get_law_firm' },
-      { show: 'Business', call: 'business_name' },
+      # { show: 'Business', call: 'business_name' },
       { show: 'First Name', call: 'first_name' },
       { show: 'Last Name', call: 'last_name' },
       { show: 'Email', call: 'email' },
