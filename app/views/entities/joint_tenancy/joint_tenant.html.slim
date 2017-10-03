@@ -6,36 +6,39 @@
       ul
         - override_active_record_errors(@joint_tenant.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
-  
+
   - joint_tenants = options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id, 'array')
-  - plural_str = joint_tenants.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
-  
+
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    p.text-info = "You have #{joint_tenants.length} #{plural_str} who could hold an undivided interest in this Joint Tenancy."
+    - if joint_tenants.length == 0
+      p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint <span class='ipp-modal' data-id='add-contact'><b>Contact</b>.").html_safe
+    - else
+      p.text-info = "You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy."
 
-    .form-group#joint_tenant_entity
-      = hidden_field_tag "joint_tenant[is_person]", true
-      = f.select :temp_id, options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @joint_tenant.super_entity.id, clienttype: 'joint-tenant'}
-      = hidden_field_tag "joint_tenant[member_type_id]", MemberType.getJointTenancyId
-      = hidden_field_tag :cid, @joint_tenant.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group#joint_tenant_entity
+        = hidden_field_tag "joint_tenant[is_person]", true
+        = f.select :temp_id, options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if joint_tenants.length == 1}", data: {id: @joint_tenant.super_entity.id, clienttype: 'joint-tenant'}, readonly: (joint_tenants.length == 1)
 
-    .form-group
-      = f.label "Undivided interest of this member"
-      = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
-    .form-group
-      = f.label "Undivided interest remaining to be assigned"
-      = text_field_tag "remaining_number_of_assets", @joint_tenant.remaining_share_or_interest,
-              "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control",
-              "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
-      = hidden_field_tag "remaining_number_of_assets", @joint_tenant.remaining_share_or_interest
-      = hidden_field_tag "remaining_number_of_assets_warning", 'Undivided Interest Cannot Be Negative'
-    .form-group
-      = f.submit "Save", class: "btn btn-primary"
+        = hidden_field_tag "joint_tenant[member_type_id]", MemberType.getJointTenancyId
+        = hidden_field_tag :cid, @joint_tenant.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+
+      .form-group
+        = f.label "Undivided interest of this member"
+        = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
+      .form-group
+        = f.label "Undivided interest remaining to be assigned"
+        = text_field_tag "remaining_number_of_assets", @joint_tenant.remaining_share_or_interest,
+                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control",
+                "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
+        = hidden_field_tag "remaining_number_of_assets", @joint_tenant.remaining_share_or_interest
+        = hidden_field_tag "remaining_number_of_assets_warning", 'Undivided Interest Cannot Be Negative'
+      .form-group
+        = f.submit "Save", class: "btn btn-primary"
 
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"

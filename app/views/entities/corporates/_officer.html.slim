@@ -8,23 +8,26 @@
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - prepopulated_officers = options_html('officer', "true", @officer.super_entity, f.object.temp_id, 'array')
-    p.text-info = "You have #{prepopulated_officers.length} individual #{prepopulated_officers.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Officer of this Corporation."
+    - if prepopulated_officers.length == 0
+      p.text-info = ("You have #{prepopulated_officers.length} individual #{prepopulated_officers.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Officer of this Corporation. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Corporate Officer <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - else
+      p.text-info = "You have #{prepopulated_officers.length} individual #{prepopulated_officers.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Officer of this Corporation."
 
-    .form-group#officer_entity
-      = hidden_field_tag "officer[is_person]", true
-      = f.select :temp_id, options_html('officer', "true", @officer.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @officer.super_entity.id, clienttype: 'officer'}
-      = hidden_field_tag "officer[member_type_id]", MemberType.getCorporationId
-      = hidden_field_tag :cid, @officer.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      = f.label "office", class: "control-label"
-      = f.text_field :office, class: "form-control"
-    .form-group
-      = f.submit 'Save', class: "btn btn-primary"
+      .form-group#officer_entity
+        = hidden_field_tag "officer[is_person]", true
+        = f.select :temp_id, options_html('officer', "true", @officer.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_officers.length == 1}", data: {id: @officer.super_entity.id, clienttype: 'officer'}, readonly: (prepopulated_officers.length == 1)
+        = hidden_field_tag "officer[member_type_id]", MemberType.getCorporationId
+        = hidden_field_tag :cid, @officer.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group
+        = f.label "office", class: "control-label"
+        = f.text_field :office, class: "form-control"
+      .form-group
+        = f.submit 'Save', class: "btn btn-primary"
 
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"

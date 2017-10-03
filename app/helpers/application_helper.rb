@@ -408,11 +408,11 @@ module ApplicationHelper
 
     poa_str = " (Principal Entity) "
     poa_str = " (Principal Individual) " if is_person == "true"
-    
+
     array_result = []
     select_one_html = "<option>Select One...</option>"
     result = ""
-    
+
     if is_person == "true"
       groups = {}
 
@@ -468,22 +468,6 @@ module ApplicationHelper
           groups[key] << entity
         end
       end
-      groups.each do |k,v|
-        result += "<optgroup label='#{k}'>"
-        v.each do |entity|
-          if sel_flag && "e#{entity.id}" == cid
-            sel_flag = false
-            sel_str = " selected='selected' "
-          else
-            sel_str = ""
-          end
-          result += "<option value='e#{entity.id}' data-type='entity' #{sel_str}>#{entity.name} </option>"
-          array_result << [entity.id, entity.name]
-        end
-        result += "</optgroup>"
-      end
-
-      result += "<optgroup label='Contacts'>"
 
       case type
       when "stockholder"
@@ -530,8 +514,25 @@ module ApplicationHelper
         person_true_contacts = []
       end
 
+      groups.each do |k,v|
+        result += "<optgroup label='#{k}'>"
+        v.each do |entity|
+          if (sel_flag && "e#{entity.id}" == cid) || (person_true_entities.count + person_true_contacts.count == 1)
+            sel_flag = false
+            sel_str = " selected='selected' "
+          else
+            sel_str = ""
+          end
+          result += "<option value='e#{entity.id}' data-type='entity' #{sel_str}>#{entity.name} </option>"
+          array_result << [entity.id, entity.name]
+        end
+        result += "</optgroup>"
+      end
+
+      result += "<optgroup label='Contacts'>"
+
       person_true_contacts.each do |contact|
-        if sel_flag && "c#{contact.id}" == cid
+        if (sel_flag && "c#{contact.id}" == cid) || (person_true_entities.count + person_true_contacts.count == 1)
           sel_flag = false
           sel_str = " selected='selected' "
         else
@@ -591,22 +592,6 @@ module ApplicationHelper
           groups[key] << entity
         end
       end
-      groups.each do |k,v|
-        result += "<optgroup label='#{k}'>"
-        v.each do |entity|
-          if sel_flag && "e#{entity.id}" == cid
-            sel_flag = false
-            sel_str = " selected='selected' "
-          else
-            sel_str = ""
-          end
-          result += "<option value='e#{entity.id}' data-type='entity' #{sel_str}>#{entity.name} </option>"
-          array_result << [entity.id, entity.name]
-        end
-        result += "</optgroup>"
-      end
-
-      result += "</optgroup><optgroup label='Contacts '>"
 
       case type
       when "stockholder"
@@ -633,8 +618,25 @@ module ApplicationHelper
         person_false_contacts = []
       end
 
+      groups.each do |k,v|
+        result += "<optgroup label='#{k}'>"
+        v.each do |entity|
+          if (sel_flag && "e#{entity.id}" == cid) || (person_false_entities.count + person_false_contacts.count == 1)
+            sel_flag = false
+            sel_str = " selected='selected' "
+          else
+            sel_str = ""
+          end
+          result += "<option value='e#{entity.id}' data-type='entity' #{sel_str}>#{entity.name} </option>"
+          array_result << [entity.id, entity.name]
+        end
+        result += "</optgroup>"
+      end
+
+      result += "</optgroup><optgroup label='Contacts '>"
+
       person_false_contacts.each do |contact|
-        if sel_flag && "c#{contact.id}" == cid
+        if (sel_flag && "c#{contact.id}" == cid) || (person_false_entities.count + person_false_contacts.count == 1)
           sel_flag = false
           sel_str = " selected='selected' "
         else
@@ -654,7 +656,7 @@ module ApplicationHelper
       else
         return array_result
       end
-      
+
     end
   end
 

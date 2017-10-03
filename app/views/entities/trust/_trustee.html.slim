@@ -6,7 +6,7 @@
       ul
         - @trustee.errors.full_messages.each do |message|
           li = message
-  
+
   - entity_trustees = options_html('trustee', "false", @trustee.super_entity, f.object.temp_id, 'array')
   - individual_trustees = options_html('trustee', "true", @trustee.super_entity, f.object.temp_id, 'array')
 
@@ -16,7 +16,7 @@
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if individual_trustees.length == 0 && entity_trustees.length == 0
-      p.text-info = basic_str + " Please create new one."
+      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_trustees.length == 1 && entity_trustees.length == 0
       - @trustee.is_person = true
       p.text-info = basic_str + " Therefore, it has been pre-selected."
@@ -25,30 +25,34 @@
     - else
       p.text-info = basic_str + " Please select one."
 
-    .form-group style=("#{('display: none;' if entity_trustees.length == 0 || individual_trustees.length == 0)}")
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @trustee.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@trustee.is_person
+    - if individual_trustees.length != 0 || entity_trustees.length != 0
+      .form-group style=("#{('display: none;' if entity_trustees.length == 0 || individual_trustees.length == 0)}")
+        .option-1
+          = f.label "Individual"
+          = f.radio_button :is_person, true, checked: @trustee.is_person
+        .option-2
+          = f.label "Entity"
+          = f.radio_button :is_person, false, checked: !@trustee.is_person
 
-    .form-group#trustee_entity
-      label.is-person-hide style=("#{('display: none;' if @trustee.is_person)}") Trustee Entity
+      .form-group#trustee_entity
+        label.is-person-hide style=("#{('display: none;' if @trustee.is_person)}") Trustee Entity
 
-      - if @trustee.is_person
-        = f.select :temp_id, options_html('trustee', "true", @trustee.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @trustee.super_entity.id, clienttype: 'trustee'}
-      - else
-        = f.select :temp_id, options_html('trustee', "false", @trustee.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @trustee.super_entity.id, clienttype: 'trustee'}
-      = hidden_field_tag "trustee[member_type_id]", MemberType.getTrustId
-      = hidden_field_tag :cid, @trustee.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      = f.submit 'Save', class: "btn btn-primary"
+        - if @trustee.is_person
+          = f.select :temp_id, options_html('trustee', "true", @trustee.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if individual_trustees.length == 1}", data: {id: @trustee.super_entity.id, clienttype: 'trustee'}, readonly: (individual_trustees.length == 1)
+        - else
+          = f.select :temp_id, options_html('trustee', "false", @trustee.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_trustees.length == 1}", data: {id: @trustee.super_entity.id, clienttype: 'trustee'}, readonly: (entity_trustees.length == 1)
+
+        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_trustees.length == 1}"
+        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_trustees.length == 1}"
+        = hidden_field_tag "trustee[member_type_id]", MemberType.getTrustId
+        = hidden_field_tag :cid, @trustee.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group
+        = f.submit 'Save', class: "btn btn-primary"
 
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
