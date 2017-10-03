@@ -7,31 +7,37 @@
         - override_active_record_errors(@partner.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group#limited_liability_partner_entity
-      = hidden_field_tag "partner[is_person]", true
-      = f.select :temp_id, options_html('limited-liability-partner', "true", @partner.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @partner.super_entity.id, clienttype: 'limited-liability-partner'}
-      = hidden_field_tag "partner[member_type_id]", MemberType.getLLPId
-      = hidden_field_tag :cid, @partner.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      label Partnership Interest of this Member
-      = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
-    .form-group
-      label Remaining Partnership Interest to be Assigned
-      = text_field_tag "remaining_number_of_assets", @partner.remaining_share_or_interest,
-              "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-contro",
-              "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
-      = hidden_field_tag "remaining_number_of_assets", @partner.remaining_share_or_interest
-      = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
-    .form-group
-      label Tax Matters Member
-      = f.check_box :tax_member
-    .form-group
-      = f.submit "Save", class: "btn btn-primary"
+    - prepopulated_partners = options_html('limited-liability-partner', "true", @partner.super_entity, f.object.temp_id, 'array')
+    - if prepopulated_partners.length == 0
+      p.text-info = ("You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new LLP Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - else
+      p.text-info = "You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP."
+
+      .form-group#limited_liability_partner_entity
+        = hidden_field_tag "partner[is_person]", true
+        = f.select :temp_id, options_html('limited-liability-partner', "true", @partner.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_partners.length == 1}", data: {id: @partner.super_entity.id, clienttype: 'limited-liability-partner'}, readonly: (prepopulated_partners.length == 1)
+        = hidden_field_tag "partner[member_type_id]", MemberType.getLLPId
+        = hidden_field_tag :cid, @partner.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group
+        label Partnership Interest of this Member
+        = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
+      .form-group
+        label Remaining Partnership Interest to be Assigned
+        = text_field_tag "remaining_number_of_assets", @partner.remaining_share_or_interest,
+                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-contro",
+                "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
+        = hidden_field_tag "remaining_number_of_assets", @partner.remaining_share_or_interest
+        = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
+      .form-group
+        label Tax Matters Member
+        = f.check_box :tax_member
+      .form-group
+        = f.submit "Save", class: "btn btn-primary"
 
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"

@@ -6,7 +6,7 @@
       ul
         - override_active_record_errors(@guardian.errors.messages, {}).each do |message|
           li = message
-  
+
   - entity_guardians = options_html('guardian', "false", @guardian.super_entity, f.object.temp_id, 'array')
   - individual_guardians = options_html('guardian', "true", @guardian.super_entity, f.object.temp_id, 'array')
 
@@ -16,7 +16,7 @@
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if individual_guardians.length == 0 && entity_guardians.length == 0
-      p.text-info = basic_str + " Please create new one."
+      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Guardian <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_guardians.length == 1 && entity_guardians.length == 0
       - @guardian.is_person = true
       p.text-info = basic_str + " Therefore, it has been pre-selected."
@@ -25,30 +25,35 @@
     - else
       p.text-info = basic_str + " Please select one."
 
-    .form-group style=("#{('display: none;' if entity_guardians.length == 0 || individual_guardians.length == 0)}")
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @guardian.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@guardian.is_person
+    - if individual_guardians.length != 0 || entity_guardians.length != 0
+      .form-group style=("#{('display: none;' if entity_guardians.length == 0 || individual_guardians.length == 0)}")
+        .option-1
+          = f.label "Individual"
+          = f.radio_button :is_person, true, checked: @guardian.is_person
+        .option-2
+          = f.label "Entity"
+          = f.radio_button :is_person, false, checked: !@guardian.is_person
 
-    .form-group#guardian_entity
-      label.is-person-hide style=("#{('display: none;' if @guardian.is_person)}") Owning Entity
+      .form-group#guardian_entity
+        label.is-person-hide style=("#{('display: none;' if @guardian.is_person)}") Owning Entity
 
-      - if @guardian.is_person
-        = f.select :temp_id, options_html('guardian', "true", @guardian.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @guardian.super_entity.id, clienttype: 'guardian'}
-      - else
-        = f.select :temp_id, options_html('guardian', "false", @guardian.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @guardian.super_entity.id, clienttype: 'guardian'}
-      = hidden_field_tag "guardian[member_type_id]", MemberType.getGuardianshipId
-      = hidden_field_tag :cid, @guardian.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      = f.submit 'Save', class: "btn btn-primary"
+        - if @guardian.is_person
+          = f.select :temp_id, options_html('guardian', "true", @guardian.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if individual_guardians.length == 1}", data: {id: @guardian.super_entity.id, clienttype: 'guardian'}, readonly: (individual_guardians.length == 1)
+        - else
+          = f.select :temp_id, options_html('guardian', "false", @guardian.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_guardians.length == 1}", data: {id: @guardian.super_entity.id, clienttype: 'guardian'}, readonly: (entity_guardians.length == 1)
+
+        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_guardians.length == 1}"
+        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_guardians.length == 1}"
+
+        = hidden_field_tag "guardian[member_type_id]", MemberType.getGuardianshipId
+        = hidden_field_tag :cid, @guardian.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group
+        = f.submit 'Save', class: "btn btn-primary"
 
 
 /! Modal

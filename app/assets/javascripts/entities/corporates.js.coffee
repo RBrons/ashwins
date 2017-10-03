@@ -12,6 +12,14 @@ $ ->
         dataType: "html"
         success: (val) ->
           $(document).find("select[id$=temp_id]").html(val)
+
+          if $("#person_false_class").val() == 'disabled-like'
+            $(document).find("select[id$=temp_id]").removeClass('disabled-like')
+            $(document).find("select[id$=temp_id]").addClass('disabled-like')
+            $(document).find("select[id$=temp_id]").attr('readonly', true)
+          else
+            $(document).find("select[id$=temp_id]").removeClass('disabled-like')
+            $(document).find("select[id$=temp_id]").attr('readonly', false)
         error: (e) ->
           console.log e
 
@@ -30,6 +38,14 @@ $ ->
         dataType: "html"
         success: (val) ->
           $(document).find("select[id$=temp_id]").html(val)
+
+          if $("#person_true_class").val() == 'disabled-like'
+            $(document).find("select[id$=temp_id]").removeClass('disabled-like')
+            $(document).find("select[id$=temp_id]").addClass('disabled-like')
+            $(document).find("select[id$=temp_id]").attr('readonly', true)
+          else
+            $(document).find("select[id$=temp_id]").removeClass('disabled-like')
+            $(document).find("select[id$=temp_id]").attr('readonly', false)
         error: (e) ->
           console.log e
 
@@ -327,3 +343,18 @@ $ ->
     else
       toggle_comma("on")
 
+  # Show modal for internal client participants 0-0 case
+  $(document).on 'click', 'p.text-info span.ipp-modal', (e)->
+    e.preventDefault()
+    if($(this).attr('data-id') == 'add-client')
+      $.ajax
+        type: "POST"
+        url: "/xhr/entity_type_list"
+        dataType: "html"
+        success: (val) ->
+          $(document).find("#md-add-client .modal-body").html(val)
+        error: (e) ->
+          console.log e
+
+    modal_id = '#md-' + $(this).attr('data-id')
+    $(modal_id).modal()

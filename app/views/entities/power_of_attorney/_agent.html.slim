@@ -6,33 +6,56 @@
       ul
         - @agent.errors.full_messages.each do |message|
           li = message
+
+  - entity_agents = options_html('agent', "false", @agent.super_entity, f.object.temp_id, 'array')
+  - individual_agents = options_html('agent', "true", @agent.super_entity, f.object.temp_id, 'array')
+
+  - plural_entity_stockholders_str = entity_agents.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_stockholders_str = individual_agents.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - basic_str = "You have #{individual_agents.length} #{plural_individual_stockholders_str} and #{entity_agents.length} #{plural_entity_stockholders_str} who serve as Agent for this Power of Attorney."
+
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
 
-    .form-group
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @agent.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@agent.is_person
+    - if individual_agents.length == 0 && entity_agents.length == 0
+      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Agent <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - elsif individual_agents.length == 1 && entity_agents.length == 0
+      - @agent.is_person = true
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - elsif individual_agents.length == 0 && entity_agents.length == 1
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - else
+      p.text-info = basic_str + " Please select one."
 
-    .form-group#agent_entity
-      label.is-person-hide style=("#{('display: none;' if @agent.is_person)}") Agent Entity
+    - if individual_agents.length != 0 || entity_agents.length != 0
+      .form-group style=("#{('display: none;' if entity_agents.length == 0 || individual_agents.length == 0)}")
+        .option-1
+          = f.label "Individual"
+          = f.radio_button :is_person, true, checked: @agent.is_person
+        .option-2
+          = f.label "Entity"
+          = f.radio_button :is_person, false, checked: !@agent.is_person
 
-      - if @agent.is_person
-        = f.select :temp_id, options_html('agent', "true", @agent.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @agent.super_entity.id, clienttype: 'agent'}
-      - else
-        = f.select :temp_id, options_html('agent', "false", @agent.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @agent.super_entity.id, clienttype: 'agent'}
-      = hidden_field_tag "agent[member_type_id]", MemberType.getPowerOfAttorneyId
-      = hidden_field_tag :cid, @agent.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group#agent_entity
+        label.is-person-hide style=("#{('display: none;' if @agent.is_person)}") Agent Entity
 
-    .form-group
-      = f.submit 'Save', class: 'btn btn-sm btn-primary'
+        - if @agent.is_person
+          = f.select :temp_id, options_html('agent', "true", @agent.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if individual_agents.length == 1}", data: {id: @agent.super_entity.id, clienttype: 'agent'}, readonly: (individual_agents.length == 1)
+        - else
+          = f.select :temp_id, options_html('agent', "false", @agent.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_agents.length == 1}", data: {id: @agent.super_entity.id, clienttype: 'agent'}, readonly: (entity_agents.length == 1)
+
+        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_agents.length == 1}"
+        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_agents.length == 1}"
+
+        = hidden_field_tag "agent[member_type_id]", MemberType.getPowerOfAttorneyId
+        = hidden_field_tag :cid, @agent.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+
+      .form-group
+        = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"

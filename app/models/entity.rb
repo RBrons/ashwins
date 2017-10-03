@@ -6,7 +6,7 @@ class Entity < ApplicationRecord
 
   class_attribute :basic_info_only
   validates_presence_of :date_of_formation
-  validates_presence_of :first_name, :last_name , unless: :validation_for_names
+  validates_presence_of :first_name, :last_name , unless: :validation_for_first_and_last_names
   validates :name, presence: true, uniqueness: true,  allow_blank: false, if: :validation_for_names
   validates :email, email: true, if: "self.email.present?"
   # validate :phone_validation
@@ -398,6 +398,10 @@ class Entity < ApplicationRecord
   end
 
   def validation_for_names
+    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? #|| self.power_of_attorney?
+  end
+
+  def validation_for_first_and_last_names
     self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? || self.power_of_attorney?
   end
 

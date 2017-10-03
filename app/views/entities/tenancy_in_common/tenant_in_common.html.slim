@@ -6,7 +6,7 @@
       ul
         - override_active_record_errors(@tenant_in_common.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
-  
+
   - entity_tenants = options_html('tenant-in-common', "false", @tenant_in_common.super_entity, f.object.temp_id, 'array')
   - individual_tenants = options_html('tenant-in-common', "true", @tenant_in_common.super_entity, f.object.temp_id, 'array')
 
@@ -16,7 +16,7 @@
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if individual_tenants.length == 0 && entity_tenants.length == 0
-      p.text-info = basic_str + " Please create new one."
+      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_tenants.length == 1 && entity_tenants.length == 0
       - @tenant_in_common.is_person = true
       p.text-info = basic_str + " Therefore, it has been pre-selected."
@@ -25,41 +25,45 @@
     - else
       p.text-info = basic_str + " Please select one."
 
-    .form-group style=("#{('display: none;' if entity_tenants.length == 0 || individual_tenants.length == 0)}")
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @tenant_in_common.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@tenant_in_common.is_person
+    - if individual_tenants.length != 0 || entity_tenants.length != 0
+      .form-group style=("#{('display: none;' if entity_tenants.length == 0 || individual_tenants.length == 0)}")
+        .option-1
+          = f.label "Individual"
+          = f.radio_button :is_person, true, checked: @tenant_in_common.is_person
+        .option-2
+          = f.label "Entity"
+          = f.radio_button :is_person, false, checked: !@tenant_in_common.is_person
 
-    .form-group#tenant_in_common_entity
-      label.is-person-hide style=("#{('display: none;' if @tenant_in_common.is_person)}") Owning Entity
+      .form-group#tenant_in_common_entity
+        label.is-person-hide style=("#{('display: none;' if @tenant_in_common.is_person)}") Owning Entity
 
-      - if @tenant_in_common.is_person
-        = f.select :temp_id, options_html('tenant-in-common', "true", @tenant_in_common.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @tenant_in_common.super_entity.id, clienttype: 'tenant-in-common'}
-      - else
-        = f.select :temp_id, options_html('tenant-in-common', "false", @tenant_in_common.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @tenant_in_common.super_entity.id, clienttype: 'tenant-in-common'}
-      = hidden_field_tag "tenant_in_common[member_type_id]", MemberType.getTenancyinCommonId
-      = hidden_field_tag :cid, @tenant_in_common.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+        - if @tenant_in_common.is_person
+          = f.select :temp_id, options_html('tenant-in-common', "true", @tenant_in_common.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if individual_tenants.length == 1}", data: {id: @tenant_in_common.super_entity.id, clienttype: 'tenant-in-common'}, readonly: (individual_tenants.length == 1)
+        - else
+          = f.select :temp_id, options_html('tenant-in-common', "false", @tenant_in_common.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_tenants.length == 1}", data: {id: @tenant_in_common.super_entity.id, clienttype: 'tenant-in-common'}, readonly: (entity_tenants.length == 1)
 
-    .form-group.required
-      label.control-label Undivided Interest of this Member
-      = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
-    .form-group.required
-      label Undivided Interest Remaining to be Assigned
-      = text_field_tag "remaining_number_of_assets", @tenant_in_common.remaining_share_or_interest,
-              "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control",
-              "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
-      = hidden_field_tag "remaining_number_of_assets", @tenant_in_common.remaining_share_or_interest
-      = hidden_field_tag "remaining_number_of_assets_warning", 'Undivided Interest Cannot Be Negative'
-    .form-group
-      = f.submit "Save", class: "btn btn-primary"
+        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_tenants.length == 1}"
+        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_tenants.length == 1}"
+        = hidden_field_tag "tenant_in_common[member_type_id]", MemberType.getTenancyinCommonId
+        = hidden_field_tag :cid, @tenant_in_common.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+
+      .form-group.required
+        label.control-label Undivided Interest of this Member
+        = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
+      .form-group.required
+        label Undivided Interest Remaining to be Assigned
+        = text_field_tag "remaining_number_of_assets", @tenant_in_common.remaining_share_or_interest,
+                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control",
+                "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
+        = hidden_field_tag "remaining_number_of_assets", @tenant_in_common.remaining_share_or_interest
+        = hidden_field_tag "remaining_number_of_assets_warning", 'Undivided Interest Cannot Be Negative'
+      .form-group
+        = f.submit "Save", class: "btn btn-primary"
 
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"

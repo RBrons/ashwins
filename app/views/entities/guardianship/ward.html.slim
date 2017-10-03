@@ -7,18 +7,25 @@
         - override_active_record_errors(@ward.errors.messages, {}).each do |message|
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group#ward_entity
-      = f.select :temp_id, options_html('ward', "true", @ward.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @ward.super_entity.id, clienttype: 'ward'}
-      = hidden_field_tag "ward[member_type_id]", MemberType.getGuardianshipId
-      = hidden_field_tag :cid, @ward.temp_id
-      = hidden_field_tag :is_person, true
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      = f.submit 'Save', class: "btn btn-primary"
+    - prepopulated_wards = options_html('ward', "true", @ward.super_entity, f.object.temp_id, 'array')
+    - if prepopulated_wards.length == 0
+      p.text-info = ("You have #{prepopulated_wards.length} individual #{prepopulated_wards.length != 1 ? 'clients or contacts' : 'client or contact'} who could be the Ward of this Guardianship. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Guardianship Ward <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - else
+      p.text-info = "You have #{prepopulated_wards.length} individual #{prepopulated_wards.length != 1 ? 'clients or contacts' : 'client or contact'} who could be the Ward of this Guardianship."
+
+      .form-group#ward_entity
+        = f.select :temp_id, options_html('ward', "true", @ward.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_wards.length == 1}", data: {id: @ward.super_entity.id, clienttype: 'ward'}, readonly: (prepopulated_wards.length == 1)
+
+        = hidden_field_tag "ward[member_type_id]", MemberType.getGuardianshipId
+        = hidden_field_tag :cid, @ward.temp_id
+        = hidden_field_tag :is_person, true
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group
+        = f.submit 'Save', class: "btn btn-primary"
 
 
 /! Modal

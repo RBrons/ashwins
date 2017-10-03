@@ -6,31 +6,55 @@
       ul
         - override_active_record_errors(@judge.errors.messages, {}).each do |message|
           li = message
+
+  - entity_judges = options_html('judge', "false", @judge.super_entity, f.object.temp_id, 'array')
+  - individual_judges = options_html('judge', "true", @judge.super_entity, f.object.temp_id, 'array')
+
+  - plural_entity_str = entity_judges.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_str = individual_judges.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - basic_str = "You have #{individual_judges.length} #{plural_individual_str} and #{entity_judges.length} #{plural_entity_str} who could serve as Judge for this Guardianship."
+
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @judge.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@judge.is_person
 
-    .form-group#judge_entity
-      label.is-person-hide style=("#{('display: none;' if @judge.is_person)}") Owning Entity
+    -if individual_judges.length == 0 && entity_judges.length == 0
+      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Judge <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - elsif individual_judges.length == 1 && entity_judges.length == 0
+      - @judge.is_person = true
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - elsif individual_judges.length == 0 && entity_judges.length == 1
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - else
+      p.text-info = basic_str + " Please select one."
 
-      - if @judge.is_person
-        = f.select :temp_id, options_html('judge', "true", @judge.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @judge.super_entity.id, clienttype: 'judge'}
-      - else
-        = f.select :temp_id, options_html('judge', "false", @judge.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @judge.super_entity.id, clienttype: 'judge'}
-      = hidden_field_tag "judge[member_type_id]", MemberType.getGuardianshipId
-      = hidden_field_tag :cid, @judge.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      = f.submit 'Save', class: "btn btn-primary"
+    - if individual_judges.length != 0 || entity_judges.length != 0
+      .form-group style=("#{('display: none;' if entity_judges.length == 0 || individual_judges.length == 0)}")
+        .option-1
+          = f.label "Individual"
+          = f.radio_button :is_person, true, checked: @judge.is_person
+        .option-2
+          = f.label "Entity"
+          = f.radio_button :is_person, false, checked: !@judge.is_person
+
+      .form-group#judge_entity
+        label.is-person-hide style=("#{('display: none;' if @judge.is_person)}") Owning Entity
+
+        - if @judge.is_person
+          = f.select :temp_id, options_html('judge', "true", @judge.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if individual_judges.length == 1}", data: {id: @judge.super_entity.id, clienttype: 'judge'}, readonly: (individual_judges.length == 1)
+        - else
+          = f.select :temp_id, options_html('judge', "false", @judge.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_judges.length == 1}", data: {id: @judge.super_entity.id, clienttype: 'judge'}, readonly: (entity_judges.length == 1)
+
+        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_judges.length == 1}"
+        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_judges.length == 1}"
+
+        = hidden_field_tag "judge[member_type_id]", MemberType.getGuardianshipId
+        = hidden_field_tag :cid, @judge.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group
+        = f.submit 'Save', class: "btn btn-primary"
 
 
 /! Modal
