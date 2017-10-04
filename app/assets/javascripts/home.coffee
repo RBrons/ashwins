@@ -1,4 +1,6 @@
 $ ->
+  isLeavingUserSetup = false
+
   attorney_type = 'LawFirm' # Individual or LawFirm
   # replacement seller
   repls_contact_id = $(document).find('input.repls_contact_id').val()
@@ -24,13 +26,30 @@ $ ->
   replacement_property_id = $(document).find('input.replacement_property_id').val()
   replacement_property_info_html = ''
 
+  # when user leave user setup sequence
+  $(document).on 'click', '.navbar-nav a', (e) ->
+    if e.target.nodeName == 'A'
+      isLeavingUserSetup = true
+  
+  $(window).on 'beforeunload', ->
+    if $('body').hasClass('user-setup-page')
+      if isLeavingUserSetup
+        console.log 'user is leaving user-setup page...'
+        $.ajax
+          url: '/xhr/turn_off_user_setup/'
+          type: 'POST'
+          dataType: 'json'
+      return undefined
+          
   # show initial participants modal
   if $(document).find('#md-initial-participants').length > 0
     $(document).find('#md-initial-participants').modal('show')
+    $('body').addClass('ipp-page')
 
   if $(document).find('#show_initial_sign_in_modal').val() == 'true'
     # show user setup sequence
     $(document).find('#md-us-step1').modal('show')
+    $('body').addClass('user-setup-page')
   else
     # show landing page modal
     if $(document).find('#is_show_landing_page').val() == 'true'
