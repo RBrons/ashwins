@@ -19,53 +19,75 @@
         - override_active_record_errors(@entity.errors.messages, {base: ''}).each do |message|
           li = message
 
+  - entity_principals = options_html('principal', "false", @principal.super_entity, @principal.temp_id, 'array')
+  - individual_principals = options_html('principal', "true", @principal.super_entity, @principal.temp_id, 'array')
+
+  - plural_entity_stockholders_str = entity_principals.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_individual_stockholders_str = individual_principals.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
+  - basic_str = "You have #{individual_principals.length} #{plural_individual_stockholders_str} and #{entity_principals.length} #{plural_entity_stockholders_str} who serve as Principal for this Power of Attorney."
+
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group
-      .option-1
-        = f.label "Individual"
-        = radio_button_tag "is_person", true, @principal.is_person
-      .option-2
-        = f.label "Entity"
-        = radio_button_tag "is_person", false, !@principal.is_person
+    - if individual_principals.length == 0 && entity_principals.length == 0
+      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Principal <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - elsif individual_principals.length == 1 && entity_principals.length == 0
+      - @principal.is_person = true
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - elsif individual_principals.length == 0 && entity_principals.length == 1
+      p.text-info = basic_str + " Therefore, it has been pre-selected."
+    - else
+      p.text-info = basic_str + " Please select one."
 
-    .form-group#principal_entity
-      label Principal
+    - if individual_principals.length != 0 || entity_principals.length != 0
+      .form-group style=("#{('display: none;' if entity_principals.length == 0 || individual_principals.length == 0)}")
+        .option-1
+          = f.label "Individual"
+          = radio_button_tag "is_person", true, @principal.is_person
+        .option-2
+          = f.label "Entity"
+          = radio_button_tag "is_person", false, !@principal.is_person
 
-      - if @principal.is_person
-        = select_tag "temp_id", options_html('principal', "true", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}
-      - else
-        = select_tag "temp_id", options_html('principal', "false", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}
-      = hidden_field_tag :cid, @principal.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks @principal.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group#principal_entity
+        label Principal
 
-    .clearfix
-    .form-group.required
-      label.control-label Date of Formation
-      .clearfix
-      .pull-left
-        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
-        = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
-      .pull-right
-        .pull-left
-          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-        .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
-
-    .clearfix
-    .form-group.margin-sm-top
-      = f.label "State of Formation"
-      = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction),class: "form-control selectize-single"
-    .clearfix
-      .form-group
-        - if @entity.persisted?
-          - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+        - if @principal.is_person
+          = select_tag "temp_id", options_html('principal', "true", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if individual_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (individual_principals.length == 1)
         - else
-          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          = select_tag "temp_id", options_html('principal', "false", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if entity_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (entity_principals.length == 1)
+
+        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_principals.length == 1}"
+        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_principals.length == 1}"
+
+        = hidden_field_tag :cid, @principal.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks @principal.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+
+      .clearfix
+      .form-group.required
+        label.control-label Date of Formation
+        .clearfix
+        .pull-left
+          = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
+          = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
+        .pull-right
+          .pull-left
+            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+          .pull-right
+            = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
+
+      .clearfix
+      .form-group.margin-sm-top
+        = f.label "State of Formation"
+        = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction),class: "form-control selectize-single"
+      .clearfix
+        .form-group
+          - if @entity.persisted?
+            - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+          - else
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 #popup-should-not-change.corporate
   = hidden_field_tag "should_not_change[name]", (@entity.persisted? ? @entity.reload["name"] : '')

@@ -12,11 +12,11 @@
 
   - plural_entity_str = entity_beneficiaries.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
   - plural_individual_str = individual_beneficiaries.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
-  - basic_str = "You have #{individual_beneficiaries.length} #{plural_individual_str} and #{entity_beneficiaries.length} #{plural_entity_str} who could benefit from the proceeds of this Trust."
+  - basic_str = "You have #{individual_beneficiaries.length} #{plural_individual_str} and #{entity_beneficiaries.length} #{plural_entity_str} who could be a beneficiary of this Trust."
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if individual_beneficiaries.length == 0 && entity_beneficiaries.length == 0
-      p.text-info = basic_str + " Please create new one."
+      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trust Beneficiary <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_beneficiaries.length == 1 && entity_beneficiaries.length == 0
       - @beneficiary.is_person = true
       p.text-info = basic_str + " Therefore, it has been pre-selected."
@@ -25,45 +25,49 @@
     - else
       p.text-info = basic_str + " Please select one."
 
-    .form-group style=("#{('display: none;' if entity_beneficiaries.length == 0 || individual_beneficiaries.length == 0)}")
-      .option-1
-        = f.label "Individual"
-        = f.radio_button :is_person, true, checked: @beneficiary.is_person
-      .option-2
-        = f.label "Entity"
-        = f.radio_button :is_person, false, checked: !@beneficiary.is_person
-    .form-group#beneficiary_entity
-      label.is-person-hide style=("#{('display: none;' if @beneficiary.is_person)}") Beneficial Entity
+    - if individual_beneficiaries.length != 0 || entity_beneficiaries.length != 0
+      .form-group style=("#{('display: none;' if entity_beneficiaries.length == 0 || individual_beneficiaries.length == 0)}")
+        .option-1
+          = f.label "Individual"
+          = f.radio_button :is_person, true, checked: @beneficiary.is_person
+        .option-2
+          = f.label "Entity"
+          = f.radio_button :is_person, false, checked: !@beneficiary.is_person
+      .form-group#beneficiary_entity
+        label.is-person-hide style=("#{('display: none;' if @beneficiary.is_person)}") Beneficial Entity
 
-      - if @beneficiary.is_person
-        = f.select :temp_id, options_html('beneficiary', "true", @beneficiary.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @beneficiary.super_entity.id, clienttype: 'beneficiary'}
-      - else
-        = f.select :temp_id, options_html('beneficiary', "false", @beneficiary.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @beneficiary.super_entity.id, clienttype: 'beneficiary'}
-      = hidden_field_tag "beneficiary[member_type_id]", MemberType.getTrustId
-      = hidden_field_tag :cid, @beneficiary.temp_id
-      .clearfix
-      div#linkbacks
-        = linkbacks f.object.temp_id
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-    .form-group
-      .col-sm-6
-        label Beneficiary Interest
-        br
-        = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
-        .percentage-text
-          | %
-      .col-sm-6
-        label Remaining Beneficiary Interest to be Assigned
-        br
-        = text_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest,
-                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control", "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage_was : 0)
-        .percentage-text
-          | %
-        = hidden_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest
-        = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
-    .form-group
-      .actions = f.submit "Save", class: "btn btn-primary"
+        - if @beneficiary.is_person
+          = f.select :temp_id, options_html('beneficiary', "true", @beneficiary.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if individual_beneficiaries.length == 1}", data: {id: @beneficiary.super_entity.id, clienttype: 'beneficiary'}, readonly: (individual_beneficiaries.length == 1)
+        - else
+          = f.select :temp_id, options_html('beneficiary', "false", @beneficiary.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_beneficiaries.length == 1}", data: {id: @beneficiary.super_entity.id, clienttype: 'beneficiary'}, readonly: (entity_beneficiaries.length == 1)
+
+        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_beneficiaries.length == 1}"
+        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_beneficiaries.length == 1}"
+        = hidden_field_tag "beneficiary[member_type_id]", MemberType.getTrustId
+        = hidden_field_tag :cid, @beneficiary.temp_id
+        .clearfix
+        div#linkbacks
+          = linkbacks f.object.temp_id
+          .add-list-entity-links.pull-right
+            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      .form-group
+        .col-sm-6
+          label Beneficiary Interest
+          br
+          = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
+          .percentage-text
+            | %
+        .col-sm-6
+          label Remaining Beneficiary Interest to be Assigned
+          br
+          = text_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest,
+                  "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control", "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage_was : 0)
+          .percentage-text
+            | %
+          = hidden_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest
+          = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
+      .form-group
+        .actions = f.submit "Save", class: "btn btn-primary"
 
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
