@@ -1,14 +1,18 @@
 .user-setup-wizard
     ul.wizard_steps
         li
-            a#step_1.selected
+            a.selected[data-step=1]
                 span.step_no 1
                 span.step_descr Name
         li
-            a#step_2.disabled
+            a.disabled[data-step=2]
                 span.step_no 2
                 span.step_descr Individual Attorney or Law Firm
         li
-            a#step_3.disabled
+            a.disabled[data-step=3]
                 span.step_no 3
-                span.step_descr Identify Law Officer
+                span.step_descr Identify Law Office
+        li
+            a.disabled[data-step=4]
+                span.step_no 4
+                span.step_descr Position at Law Office

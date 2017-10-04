@@ -51,7 +51,7 @@ class UsersController < ApplicationController
   private
 
   def user_setup_params
-    params.permit([:first_name, :last_name, :attorney_firm_id, :user_type])
+    params.permit([:first_name, :last_name, :attorney_firm_id, :user_type, :user_role_at_law_firm])
   end
 
   def build_update_attributes

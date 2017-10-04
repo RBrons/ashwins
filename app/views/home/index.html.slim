@@ -55,9 +55,9 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                     #tasks_section.tab-pane.fade[role="tabpanel"]
                         span Coming soon
                
-/ Initial Sign in Modal 
+/ User Setup Sequence 
 input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]
-#md-us-step2.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-us-step2.md-user-setup.modal.fade[data-us-step=2 data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
         .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
@@ -80,7 +80,7 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                 p.text-primary Skip User Setup and Jump to
                 = render partial: 'layouts/header'
 
-#md-business.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-business.md-user-setup.modal.fade[data-us-step=3 data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
         .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
@@ -106,7 +106,7 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                 p.text-primary Skip User Setup and Jump to
                 = render partial: 'layouts/header'
 
-#md-individual.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-individual.last-step.md-user-setup.modal.fade[data-us-step=3 data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
         .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
@@ -138,7 +138,7 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                 p.text-primary Skip User Setup and Jump to
                 = render partial: 'layouts/header'                
 
-#md-us-step1.md-user-setup.modal.fade[data-keyboard="false" data-backdrop="static"]
+#md-us-step1.md-user-setup.modal.fade[data-us-step=1 data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-extra-lg
         .modal-header
             = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
@@ -154,6 +154,31 @@ input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_mo
                             input.form-control[name="first_name" type="text" required]
                         div.col-md-2.col-xs-6
                             input.form-control[name="last_name" type="text" required]
+                button.btn.btn-danger[type="submit"] Save
+        
+        .modal-footer
+            .text-left
+                p.text-primary Skip User Setup and Jump to
+                = render partial: 'layouts/header'
+
+#md-us-step4.last-step.md-user-setup.modal.fade[data-us-step=4 data-keyboard="false" data-backdrop="static"]
+    .modal-dialog.modal-extra-lg
+        .modal-header
+            = link_to 'Logout', destroy_user_session_path, method: :delete, class: 'pull-right'
+            h4.modal-title.text-primary User Setup -- Legal
+        .modal-body
+            = render partial: 'home/user_setup_wizard'
+            
+            form.create_contact
+                div.form-group
+                    label.form-label Please select your position at law firm:
+                    .row
+                        div.law_firm_position.col-md-3.col-xs-12
+                            = select_tag 'user_role_at_law_firm', options_for_select(User::LAW_FIRM_POSTIONS), class: 'form-control '
+                        div.individual_attorney_position.col-md-3.col-xs-12
+                            = select_tag 'user_role_at_law_firm', options_for_select(User::INDIVIDUAL_ATTORNEY_POSITIONS), class: 'form-control'
+                        
+                a.btn.btn-default[data-toggle="modal" data-target="#md-business" data-dismiss="modal"] Back
                 button.btn.btn-danger[type="submit"] Save
         
         .modal-footer
