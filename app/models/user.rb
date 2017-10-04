@@ -10,6 +10,28 @@ class User < ApplicationRecord
 
   belongs_to :attorney_firm, foreign_key: :attorney_firm_id
 
+  LAW_FIRM_POSTIONS = [
+    "Managing Partner",
+    "Partner",
+    "Associate",
+    "Staff Attorney",
+    "Paralegal",
+    "Clerk",
+    "Secretary",
+    "Accountant",
+    "Bookkeeper",
+    "Other"
+  ]
+
+  INDIVIDUAL_ATTORNEY_POSITIONS = [
+    "Paralegal",
+    "Clerk",
+    "Secretary",
+    "Accountant",
+    "Bookkeeper",
+    "Other"
+  ]
+
   private
   def move_remove_entry_from_unregistered
     unregistered = Users::Unregistered.find_by(email: self.email)

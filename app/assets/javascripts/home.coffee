@@ -1,5 +1,5 @@
 $ ->
-  user_role = 'Attorney'
+  attorney_type = 'LawFirm' # Individual or LawFirm
   # replacement seller
   repls_contact_id = $(document).find('input.repls_contact_id').val()
   repls_contact_type = ""
@@ -36,43 +36,47 @@ $ ->
     if $(document).find('#is_show_landing_page').val() == 'true'
       $(document).find('#md-landing').modal('show')
   
-  $(document).find('#md-us-step1').on 'shown', ->
-    $(document).find('.user-setup-wizard a#step_1').removeClass()
-                                                   .addClass('selected')
-    $(document).find('.user-setup-wizard a#step_2').removeClass()
-                                                   .addClass('disabled')
-    $(document).find('.user-setup-wizard a#step_3').removeClass()
-                                                   .addClass('disabled')
+  $(document).find('.md-user-setup').on 'shown', ->
+    modal = $(this)
+    if modal.attr('id') == 'md-us-step4'
+      if attorney_type == 'LawFirm'
+        modal.find('.law_firm_position').show()
+        modal.find('.law_firm_position select').attr('disabled', false)
+        modal.find('.individual_attorney_position').hide()
+        modal.find('.individual_attorney_position select').attr('disabled', 'disabled')
+      else if attorney_type == 'Individual'
+        modal.find('.law_firm_position').hide()
+        modal.find('.law_firm_position select').attr('disabled', 'disabled')
+        modal.find('.individual_attorney_position').show()
+        modal.find('.individual_attorney_position select').attr('disabled', false)
 
-  $(document).find('#md-us-step2').on 'shown', ->
-    $(document).find('.user-setup-wizard a#step_1').removeClass()
-                                                   .addClass('done')
-    $(document).find('.user-setup-wizard a#step_2').removeClass()
-                                                   .addClass('selected')
-    $(document).find('.user-setup-wizard a#step_3').removeClass()
-                                                   .addClass('disabled')
-  
-  $(document).find('#md-individual, #md-business').on 'shown', ->
-    $(document).find('.user-setup-wizard a#step_1').removeClass()
-                                                   .addClass('done')
-    $(document).find('.user-setup-wizard a#step_2').removeClass()
-                                                   .addClass('done')
-    $(document).find('.user-setup-wizard a#step_3').removeClass()
-                                                   .addClass('selected')
+    $(document).find('.user-setup-wizard a').each (index) ->
+      if $(this).data('step') < modal.data('us-step')
+        $(this).removeClass()
+               .addClass('done')
+      else if $(this).data('step') == modal.data('us-step')
+        $(this).removeClass()
+               .addClass('selected')
+      else if $(this).data('step') > modal.data('us-step')
+        $(this).removeClass()
+              .addClass('disabled')
 
   $(document).find('.individual_attorney, .law_firm').on 'change', ->
     if $('.individual_attorney').is(':checked')
       $(this).closest('.md-user-setup').find('.next-step').attr('data-target', '#md-individual')
+      attorney_type = 'Individual'
     else if $('.law_firm').is(':checked')
       $(this).closest('.md-user-setup').find('.next-step').attr('data-target', '#md-business')
+      attorney_type = 'LawFirm'
       
-  
   $(document).find('.real-attorney, .affiliate-attorney').on 'change', ->
     if $('.real-attorney').is(':checked')
       $(this).closest('.md-user-setup').find('.law-firm-detail').hide()
       $(this).closest('.md-user-setup').find('select.existing_firm option:first-child').attr("selected", true)
+      $(this).closest('.md-user-setup').addClass('last-step')
     else if $('.affiliate-attorney').is(':checked')
       $(this).closest('.md-user-setup').find('.law-firm-detail').show()
+      $(this).closest('.md-user-setup').removeClass('last-step')
         
   $(document).find('select.existing_firm').on 'change', ->
     modal = $(this).closest('.md-user-setup')
@@ -104,10 +108,11 @@ $ ->
       success: (data) ->
         if data.status
           modal.modal('hide')
-          if modal.attr('id') == 'md-business' || modal.attr('id') == 'md-individual'
+          if modal.hasClass('last-step')
             window.location.href = '/'
           else
-            $(document).find('#md-us-step2').modal('show')
+            next_modal = "#md-us-step" + (parseInt(modal.data('us-step')) + 1)
+            $(document).find(next_modal).modal('show')
         else
           $.notify "Failed", "error"
 
