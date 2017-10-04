@@ -21,7 +21,7 @@ class HomeController < ApplicationController
     else
       @show_initial_sign_in_modal = false
     end
-    # @show_initial_sign_in_modal &&= !current_user.contact_info_entered?
+    @show_initial_sign_in_modal &&= !current_user.contact_info_entered?
 
     @transactions_in_user = []
     if !@show_initial_sign_in_modal
