@@ -11,9 +11,9 @@
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if prepopulated_spouses.length == 0
-      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} one of the two Spouses of this Tenancy by the Entirety. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.".html_safe
+      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.".html_safe
     - else
-      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} one of the two Spouses of this Tenancy by the Entirety."
+      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety."
 
       .form-group#spouse_entity
         = hidden_field_tag "spouse[is_person]", true

@@ -1,9 +1,9 @@
 - if @entity.key.present?
   = link_to "Basic info", entities_limited_partnership_basic_info_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'basic_info' ? 'active' : ''}"
   = link_to "Contact info", entities_limited_partnership_contact_info_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'contact_info' ? 'active' : ''}"
-  = link_to "General Partners", entities_limited_partnership_general_partners_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'partners' ? 'active' : ''}"
-  = link_to "+", entities_limited_partnership_general_partner_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'partners' ? 'active' : ''}"
-  = link_to "Limited Partners", entities_limited_partnership_limited_partners_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'partners' ? 'active' : ''}"
-  = link_to "+", entities_limited_partnership_limited_partner_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'partners' ? 'active' : ''}"
+  = link_to "General Partners", entities_limited_partnership_general_partners_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'general_partners' ? 'active' : ''}"
+  = link_to "+", entities_limited_partnership_general_partner_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'general_partner' ? 'active' : ''}"
+  = link_to "Limited Partners", entities_limited_partnership_limited_partners_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'limited_partners' ? 'active' : ''}"
+  = link_to "+", entities_limited_partnership_limited_partner_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'limited_partner' ? 'active' : ''}"
   = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
   = link_to "Owns", entities_limited_partnership_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"
