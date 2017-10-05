@@ -146,11 +146,8 @@ class XhrController < ApplicationController
     end
   end
 
-  def turn_off_user_setup
-    initial_sign_in_modal_action = DefaultValue.where(entity_name: 'ShowInitialSignInModal').first
-    if initial_sign_in_modal_action.present?
-      initial_sign_in_modal_action.update(value: false)
-    end
-    render json: true
+  def skip_user_setup
+    user = current_user
+    user.update(:skipped_user_setup => true)
   end
 end

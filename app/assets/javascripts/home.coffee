@@ -36,7 +36,7 @@ $ ->
       if isLeavingUserSetup
         console.log 'user is leaving user-setup page...'
         $.ajax
-          url: '/xhr/turn_off_user_setup/'
+          url: '/xhr/skip_user_setup/'
           type: 'POST'
           dataType: 'json'
       return undefined
