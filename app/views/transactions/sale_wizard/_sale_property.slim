@@ -54,7 +54,7 @@
         input[type="hidden" class="property_with_no_tenant" value="#{transaction_property_form.object.property.with_no_tenant?}"]
         .transaction-property-header
           / = link_to "◇", "#", class: 'pull-left'
-          = transaction_property_form.check_box :is_selected, disabled: transaction_property_form.object.is_selected, class: 'pull-left flat-icheck is_selected_property'
+          = transaction_property_form.check_box :is_selected, checked: @transaction.transaction_properties.length == 1 ? true : false, disabled: transaction_property_form.object.is_selected, class: 'pull-left flat-icheck is_selected_property'
           / = transaction_property_form.link_to_remove '⊗', class: 'pull-right'
           .clearfix
         .margin-lg-top
