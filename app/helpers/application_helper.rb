@@ -471,45 +471,45 @@ module ApplicationHelper
 
       case type
       when "stockholder"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Corporate Stockholder')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Corporate Stockholder', user_id: current_user.id)
       when "principal"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Principal')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Principal', user_id: current_user.id)
       when "agent"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Agent')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Agent', user_id: current_user.id)
       when "settlor"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Settlor')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Settlor', user_id: current_user.id)
       when "trustee"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Trustee')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Trustee', user_id: current_user.id)
       when "beneficiary"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Beneficiary')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Beneficiary', user_id: current_user.id)
       when "member"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LLC Member')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LLC Member', user_id: current_user.id)
       when "manager"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LLC Outside Manager')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LLC Outside Manager', user_id: current_user.id)
       when "general-partner"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LP General Partner')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LP General Partner', user_id: current_user.id)
       when "limited-partner"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LP Limited Partner')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'LP Limited Partner', user_id: current_user.id)
       when "partner"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Partner')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Partner', user_id: current_user.id)
       when "limited-liability-partner"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Limited Liability Partner')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Limited Liability Partner', user_id: current_user.id)
       when "director"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Corporate Director')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Corporate Director', user_id: current_user.id)
       when "officer"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Corporate Officer')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Corporate Officer', user_id: current_user.id)
       when "tenant-in-common"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Tenant in Common')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Tenant in Common', user_id: current_user.id)
       when "spouse"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Tenant by Entirety')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Tenant by Entirety', user_id: current_user.id)
       when "joint-tenant"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Joint Tenant')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Joint Tenant', user_id: current_user.id)
       when "judge"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Judge')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Judge', user_id: current_user.id)
       when "guardian"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Guardian')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Guardian', user_id: current_user.id)
       when "ward"
-        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Ward')
+        person_true_contacts = Contact.all.where(is_company: false, contact_type: 'Client Participant', role: 'Ward', user_id: current_user.id)
       else
         person_true_contacts = []
       end
@@ -595,25 +595,25 @@ module ApplicationHelper
 
       case type
       when "stockholder"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Corporate Stockholder')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Corporate Stockholder', user_id: current_user.id)
       when "principal"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Principal')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Principal', user_id: current_user.id)
       when "agent"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Agent')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Agent', user_id: current_user.id)
       when "trustee"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Trustee')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Trustee', user_id: current_user.id)
       when "member"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LLC Member')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LLC Member', user_id: current_user.id)
       when "manager"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LLC Outside Manager')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LLC Outside Manager', user_id: current_user.id)
       when "general-partner"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LP General Partner')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LP General Partner', user_id: current_user.id)
       when "limited-partner"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LP Limited Partner')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'LP Limited Partner', user_id: current_user.id)
       when "tenant-in-common"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Tenant in Common')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Tenant in Common', user_id: current_user.id)
       when "judge"
-        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Judge')
+        person_false_contacts = Contact.all.where(is_company: true, contact_type: 'Client Participant', role: 'Judge', user_id: current_user.id)
       else
         person_false_contacts = []
       end

@@ -11,7 +11,7 @@
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if joint_tenants.length == 0
-      p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint <span class='ipp-modal' data-id='add-contact'><b>Contact</b>.").html_safe
+      p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b>.").html_safe
     - else
       p.text-info = "You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy."
 
