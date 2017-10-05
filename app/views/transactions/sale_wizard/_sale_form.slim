@@ -38,7 +38,7 @@
           - comma_str = ","
         - name_str = "#{e.name.strip}#{comma_str} #{e.legal_ending}"
         p
-          | You have selected #{ link_to name_str, entity_path(f.object.relinquishing_seller_entity.key), target: '_blank' } to be your seller
+          | You have selected #{ link_to name_str, entity_path(f.object.relinquishing_seller_entity.key), target: '_blank', class: 'underline-red' } to be your seller
       - else
         p
           = "<b>Note: </b> To commence your 1031 exchange, please select a client who will sell (relinquish) a property and then hit Save & Next".html_safe
