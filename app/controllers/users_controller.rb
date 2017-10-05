@@ -22,11 +22,11 @@ class UsersController < ApplicationController
     update_params = user_setup_params
     # Save new Attorney Firm.
     if params[:firm_name].present?
-      if AttorneyFirm.exists?(:name => params[:firm_name])
-        firm = AttorneyFirm.where(:name => params[:firm_name]).first
+      if AttorneyFirm.exists?(:name => params[:firm_name], :type_ => params[:firm_type])
+        firm = AttorneyFirm.where(:name => params[:firm_name], :type_ => params[:firm_type]).first
         firm.update(:name => params[:firm_name])
       else
-        firm = AttorneyFirm.create(:name => params[:firm_name])
+        firm = AttorneyFirm.create(:name => params[:firm_name], :type_ => params[:firm_type])
       end
       update_params.merge!(:attorney_firm_id => firm.id)
     end
