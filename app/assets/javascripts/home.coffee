@@ -370,10 +370,10 @@ $ ->
               form.attr('action', '/contacts/' + data.id)
               repls_contact_id = data.id
               if data.is_company
-                repls_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
+                repls_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Seller.</span>'
                 repls_name = data.company_name
               else if data.first_name != '' && data.last_name != ""
-                repls_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
+                repls_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Seller.</span>'
                 repls_name = data.first_name + ' ' + data.last_name
               if repls_info_html != ""
                 $(document).find('.replacement-seller-info').html(repls_info_html)
@@ -477,10 +477,17 @@ $ ->
   )
 
   $('table#pt_data_table').DataTable
+    'oLanguage': 'sEmptyTable': 'You have not engaged in any Transactions, when you do, this tab will track your activity.'
     'bSort': false
     'bPaginate': true
     'bInfo': false
     'bFilter': false
     'iDisplayLength': 20
-    
+    'fnDrawCallback': ->
+      paginate = this.siblings('.dataTables_paginate')
+      if this.api().data().length <= this.fnSettings()._iDisplayLength
+        paginate.hide()
+      else
+        paginate.show()
+      
   $(document).find('#pt_data_table_length').hide()
