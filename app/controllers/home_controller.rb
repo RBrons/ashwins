@@ -14,14 +14,18 @@ class HomeController < ApplicationController
     else
       @show_landing_page = false
     end
-
-    initial_sign_in_modal_action = DefaultValue.where(entity_name: 'ShowInitialSignInModal').first
-    if initial_sign_in_modal_action.present?
-      @show_initial_sign_in_modal = initial_sign_in_modal_action.value
+    
+    if params[:shown_modal] != 'user-setup'
+      initial_sign_in_modal_action = DefaultValue.where(entity_name: 'ShowInitialSignInModal').first
+      if initial_sign_in_modal_action.present?
+        @show_initial_sign_in_modal = initial_sign_in_modal_action.value
+      else
+        @show_initial_sign_in_modal = false
+      end
+      @show_initial_sign_in_modal &&= !current_user.contact_info_entered? && !current_user.skipped_user_setup
     else
-      @show_initial_sign_in_modal = false
+      @show_initial_sign_in_modal = true
     end
-    @show_initial_sign_in_modal &&= !current_user.contact_info_entered? && !current_user.skipped_user_setup
 
     @transactions_in_user = []
     if !@show_initial_sign_in_modal
@@ -57,10 +61,10 @@ class HomeController < ApplicationController
 
     @greeting = DefaultValue.where(entity_name: 'Greeting').first.present? ? DefaultValue.where(entity_name: 'Greeting').first.value : ''
     
-    @back_path = URI(request.referer || '').path
-    if @back_path == '/users/sign_in'
+    back_path = URI(request.referer || '').path
+    if back_path == '/users/sign_in'
       @back_url = current_user.last_sign_out_page || '#'
-    elsif @back_path == '/' || @back_path.include?('admin/')
+    elsif back_path == '/' || back_path.include?('admin/') || back_path.empty?
       @back_url = '#'
     else
       @back_url = request.referer
