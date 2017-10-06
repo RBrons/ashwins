@@ -24,7 +24,8 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                             .checkbox
                                 label
                                     input[type="checkbox" name=""] I don't need this tab anymore
-                        h2 = "Welcome #{current_user.first_name || 'No Name'} of #{current_user.attorney_firm.present? ? current_user.attorney_firm.name : 'Individual Attorney'}."
+                        h2 = "Welcome #{current_user.first_name || 'No Name'}."
+                        p = @greeting
 
                     #transaction_participants_section.tab-pane.fade[role="tabpanel"]
                         div.col-md-8.col-xs-12
