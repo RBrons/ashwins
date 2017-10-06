@@ -27,8 +27,7 @@ input#google_api_app_id[type="hidden" value="#{ENV['GOOGLE_API_APP_ID']}"]
             li             
               = link_to 'Admin Panel', admin_users_path
           li
-            a[href="javascript:;"]
-              |  Profile
+            = link_to 'Profile', users_profile_path
           li
             = link_to "Change Password", edit_user_registration_path
           li

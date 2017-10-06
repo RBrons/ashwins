@@ -1,0 +1,20 @@
+div
+  .page-title
+    .title_left
+      h3 
+        | User Profile&nbsp;
+        = link_to '<i class="fa fa-pencil-square-o"></i>'.html_safe, root_path(shown_modal: 'user-setup')
+  
+  .clearfix
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_content
+          .form-group
+            h4
+              | Name:&nbsp;
+              = @user.first_name + ', ' + @user.last_name
+          .form-gropu
+            h4
+              | Organization:&nbsp;
+              = @user.attorney_firm.try(:name)
