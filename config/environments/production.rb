@@ -67,7 +67,7 @@ Rails.application.configure do
   config.i18n.fallbacks = true
 
 
-  config.action_mailer.default_url_options = { :host => 'dvnomessenger.com' } # for Devise
+  config.action_mailer.default_url_options = { :host => '1031fun.com' } # for Devise
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
       :address              => 'smtp.gmail.com',
