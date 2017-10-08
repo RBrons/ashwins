@@ -7,13 +7,15 @@
         - override_active_record_errors(@joint_tenant.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
 
-  - joint_tenants = options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id, 'array')
+  - joint_tenants = options_html('joint-tenant', "true", @joint_tenant.super_entity, f.object.temp_id, 'array')
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if joint_tenants.length == 0
       p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b>.").html_safe
+    - elsif joint_tenants.length == 1
+      p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = "You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy."
+      p.text-info = "You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire."
 
       .form-group#joint_tenant_entity
         = hidden_field_tag "joint_tenant[is_person]", true
@@ -21,11 +23,6 @@
 
         = hidden_field_tag "joint_tenant[member_type_id]", MemberType.getJointTenancyId
         = hidden_field_tag :cid, @joint_tenant.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
 
       .form-group
         = f.label "Undivided interest of this member"
@@ -39,17 +36,3 @@
         = hidden_field_tag "remaining_number_of_assets_warning", 'Undivided Interest Cannot Be Negative'
       .form-group
         = f.submit "Save", class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Joint Tenancy
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

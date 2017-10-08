@@ -10,7 +10,7 @@
   - entity_judges = options_html('judge', "false", @judge.super_entity, f.object.temp_id, 'array')
   - individual_judges = options_html('judge', "true", @judge.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_str = entity_judges.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_entity_str = entity_judges.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
   - plural_individual_str = individual_judges.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_judges.length} #{plural_individual_str} and #{entity_judges.length} #{plural_entity_str} who could serve as Judge for this Guardianship."
 
@@ -20,11 +20,11 @@
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Judge <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_judges.length == 1 && entity_judges.length == 0
       - @judge.is_person = true
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Judge <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - elsif individual_judges.length == 0 && entity_judges.length == 1
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Judge <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = basic_str + " Please select one."
+      p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Judge <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
     - if individual_judges.length != 0 || entity_judges.length != 0
       .form-group style=("#{('display: none;' if entity_judges.length == 0 || individual_judges.length == 0)}")
@@ -48,25 +48,5 @@
 
         = hidden_field_tag "judge[member_type_id]", MemberType.getGuardianshipId
         = hidden_field_tag :cid, @judge.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
-
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Judge
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

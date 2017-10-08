@@ -10,19 +10,16 @@
     - prepopulated_partners = options_html('limited-liability-partner', "true", @partner.super_entity, f.object.temp_id, 'array')
     - if prepopulated_partners.length == 0
       p.text-info = ("You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new LLP Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - elsif prepopulated_partners.length == 1
+      p.text-info = ("You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new LLP Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = "You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP."
+      ("You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new LLP Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
       .form-group#limited_liability_partner_entity
         = hidden_field_tag "partner[is_person]", true
         = f.select :temp_id, options_html('limited-liability-partner', "true", @partner.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_partners.length == 1}", data: {id: @partner.super_entity.id, clienttype: 'limited-liability-partner'}, readonly: (prepopulated_partners.length == 1)
         = hidden_field_tag "partner[member_type_id]", MemberType.getLLPId
         = hidden_field_tag :cid, @partner.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
       .form-group
         label Partnership Interest of this Member
         = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
@@ -38,17 +35,3 @@
         = f.check_box :tax_member
       .form-group
         = f.submit "Save", class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for LLP Partner
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

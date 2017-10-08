@@ -10,7 +10,7 @@
   - entity_stockholders = options_html('stockholder', "false", @stockholder.super_entity, f.object.temp_id, 'array')
   - individual_stockholders = options_html('stockholder', "true", @stockholder.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_stockholders_str = entity_stockholders.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_entity_stockholders_str = entity_stockholders.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
   - plural_individual_stockholders_str = individual_stockholders.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_stockholders.length} #{plural_individual_stockholders_str} and #{entity_stockholders.length} #{plural_entity_stockholders_str} who could hold stock in this corporation."
 
@@ -19,11 +19,11 @@
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_stockholders.length == 1 && entity_stockholders.length == 0
       - @stockholder.is_person = true
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - elsif individual_stockholders.length == 0 && entity_stockholders.length == 1
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = basic_str + " Please select one."
+      p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
     - if individual_stockholders.length != 0 || entity_stockholders.length != 0
       .form-group style=("#{('display: none;' if entity_stockholders.length == 0 || individual_stockholders.length == 0)}")
@@ -44,12 +44,6 @@
         = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_stockholders.length == 1}"
         = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_stockholders.length == 1}"
 
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-
         = hidden_field_tag "stock_holder[member_type_id]", MemberType.getCorporationId
         = hidden_field_tag :cid, @stockholder.temp_id
       span#corporate_decimal_count style="display: none"
@@ -69,21 +63,6 @@
         = hidden_field_tag "remaining_number_of_assets_warning", 'Stock Share Cannot Be Negative'
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
-
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Stockholder
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close
 
 javascript:
   var decimalCount = $("#corporate_decimal_count").text().trim();
