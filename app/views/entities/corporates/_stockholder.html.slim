@@ -1,96 +1,109 @@
-= form_for @stockholder, url: entities_corporates_stockholder_path(@entity.key, @stockholder.id), html: {class: "entity-page-xhr"} do |f|
-  = hidden_field_tag :int_action, 'Add Stockholder'
-  - if @stockholder.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@stockholder.errors.count, "error")} prohibited this Stockholder from being saved:"
-      ul
-        - override_active_record_errors(@stockholder.errors.messages, {share_error: 'All Stock Share are assigned!'}).each do |message|
-          li = message
+- if @stockholder.remaining_share_or_interest <= 0
+  .modal.fade#stockholder-empty-modal tabindex="-3" role="dialog" aria-labelledby="stockholder-empty-modal" data-referrer="#{@referrer}"
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close aria-label="Close" data-dismiss="modal" type="button"
+            span aria-hidden="true"  &times;
+        .modal-body
+          .stockholder-empty-message
+            = "Unfortunately, this corporation does not yet have any stock. Therefore, you cannot add a stockholder yet. Please assign stock to the corporation and then add stockholders."
+        .modal-footer
+          button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Close
+- else
+  = form_for @stockholder, url: entities_corporates_stockholder_path(@entity.key, @stockholder.id), html: {class: "entity-page-xhr"} do |f|
+    = hidden_field_tag :int_action, 'Add Stockholder'
+    - if @stockholder.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@stockholder.errors.count, "error")} prohibited this Stockholder from being saved:"
+        ul
+          - override_active_record_errors(@stockholder.errors.messages, {share_error: 'All Stock Share are assigned!'}).each do |message|
+            li = message
 
-  - entity_stockholders = options_html('stockholder', "false", @stockholder.super_entity, f.object.temp_id, 'array')
-  - individual_stockholders = options_html('stockholder', "true", @stockholder.super_entity, f.object.temp_id, 'array')
+    - entity_stockholders = options_html('stockholder', "false", @stockholder.super_entity, f.object.temp_id, 'array')
+    - individual_stockholders = options_html('stockholder', "true", @stockholder.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_stockholders_str = entity_stockholders.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
-  - plural_individual_stockholders_str = individual_stockholders.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
-  - basic_str = "You have #{individual_stockholders.length} #{plural_individual_stockholders_str} and #{entity_stockholders.length} #{plural_entity_stockholders_str} who could hold stock in this corporation."
+    - plural_entity_stockholders_str = entity_stockholders.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
+    - plural_individual_stockholders_str = individual_stockholders.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
+    - basic_str = "You have #{individual_stockholders.length} #{plural_individual_stockholders_str} and #{entity_stockholders.length} #{plural_entity_stockholders_str} who could hold stock in this corporation."
 
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    - if individual_stockholders.length == 0 && entity_stockholders.length == 0
-      p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
-    - elsif individual_stockholders.length == 1 && entity_stockholders.length == 0
-      - @stockholder.is_person = true
-      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
-    - elsif individual_stockholders.length == 0 && entity_stockholders.length == 1
-      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
-    - else
-      p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+    .col-lg-4.close-md-4.col-sm-12.col-xs-12
+      - if individual_stockholders.length == 0 && entity_stockholders.length == 0
+        p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+      - elsif individual_stockholders.length == 1 && entity_stockholders.length == 0
+        - @stockholder.is_person = true
+        p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+      - elsif individual_stockholders.length == 0 && entity_stockholders.length == 1
+        p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+      - else
+        p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Stockholder <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
-    - if individual_stockholders.length != 0 || entity_stockholders.length != 0
-      .form-group style=("#{('display: none;' if entity_stockholders.length == 0 || individual_stockholders.length == 0)}")
-        .option-1
-          = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @stockholder.is_person
-        .option-2
-          = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@stockholder.is_person
+      - if individual_stockholders.length != 0 || entity_stockholders.length != 0
+        .form-group style=("#{('display: none;' if entity_stockholders.length == 0 || individual_stockholders.length == 0)}")
+          .option-1
+            = f.label "Individual"
+            = f.radio_button :is_person, true, checked: @stockholder.is_person
+          .option-2
+            = f.label "Entity"
+            = f.radio_button :is_person, false, checked: !@stockholder.is_person
 
-      .form-group#stockholder_entity
-        label.is-person-hide style=("#{('display: none;' if @stockholder.is_person)}") Owning Entity
-        - if @stockholder.is_person
-          = f.select :temp_id, options_html('stockholder', "true", @stockholder.super_entity, f.object.temp_id), {readonly: individual_stockholders.length == 1}, class: "form-control #{'disabled-like' if individual_stockholders.length == 1}", data: {id: @stockholder.super_entity.id, clienttype: 'stockholder'}, readonly: (individual_stockholders.length == 1)
-        - else
-          = f.select :temp_id, options_html('stockholder', "false", @stockholder.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_stockholders.length == 1}", data: {id: @stockholder.super_entity.id, clienttype: 'stockholder'}, readonly: (entity_stockholders.length == 1)
+        .form-group#stockholder_entity
+          label.is-person-hide style=("#{('display: none;' if @stockholder.is_person)}") Owning Entity
+          - if @stockholder.is_person
+            = f.select :temp_id, options_html('stockholder', "true", @stockholder.super_entity, f.object.temp_id), {readonly: individual_stockholders.length == 1}, class: "form-control #{'disabled-like' if individual_stockholders.length == 1}", data: {id: @stockholder.super_entity.id, clienttype: 'stockholder'}, readonly: (individual_stockholders.length == 1)
+          - else
+            = f.select :temp_id, options_html('stockholder', "false", @stockholder.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if entity_stockholders.length == 1}", data: {id: @stockholder.super_entity.id, clienttype: 'stockholder'}, readonly: (entity_stockholders.length == 1)
 
-        = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_stockholders.length == 1}"
-        = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_stockholders.length == 1}"
+          = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_stockholders.length == 1}"
+          = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_stockholders.length == 1}"
 
-        = hidden_field_tag "stock_holder[member_type_id]", MemberType.getCorporationId
-        = hidden_field_tag :cid, @stockholder.temp_id
-      span#corporate_decimal_count style="display: none"
-        = @stockholder.super_entity.shares_decimal_count
-      .form-group
-        label Stock Share
-        = f.text_field :my_percentage_stockholder, "autocomplete" => "off", class: "form-control input-mask-integer"
-      .form-group
-        label Total Stock Share
-        = text_field_tag "number_of_assets", @stockholder.total_stock_share, "disabled" => "disabled", class: "form-control input-mask-integer"
-      .form-group
-        label Remaining Total Stock Share
-        = text_field_tag "remaining_number_of_assets", @stockholder.remaining_share_or_interest,
-                "disabled" => "disabled", "autocomplete" => "off", class: "form-control input-mask-integer",
-                "data-init" => (f.object.my_percentage_stockholder_was.present? ? f.object.my_percentage_stockholder : 0)
-        = hidden_field_tag "remaining_number_of_assets", @stockholder.remaining_share_or_interest
-        = hidden_field_tag "remaining_number_of_assets_warning", 'Stock Share Cannot Be Negative'
-      .form-group
-        = f.submit 'Save', class: "btn btn-primary"
+          = hidden_field_tag "stock_holder[member_type_id]", MemberType.getCorporationId
+          = hidden_field_tag :cid, @stockholder.temp_id
+        span#corporate_decimal_count style="display: none"
+          = @stockholder.super_entity.shares_decimal_count
+        .form-group
+          label Stock Share
+          = f.text_field :my_percentage_stockholder, "autocomplete" => "off", class: "form-control input-mask-integer"
+        .form-group
+          label Total Stock Share
+          = text_field_tag "number_of_assets", @stockholder.total_stock_share, "disabled" => "disabled", class: "form-control input-mask-integer"
+        .form-group
+          label Remaining Total Stock Share
+          = text_field_tag "remaining_number_of_assets", @stockholder.remaining_share_or_interest,
+                  "disabled" => "disabled", "autocomplete" => "off", class: "form-control input-mask-integer",
+                  "data-init" => (f.object.my_percentage_stockholder_was.present? ? f.object.my_percentage_stockholder : 0)
+          = hidden_field_tag "remaining_number_of_assets", @stockholder.remaining_share_or_interest
+          = hidden_field_tag "remaining_number_of_assets_warning", 'Stock Share Cannot Be Negative'
+        .form-group
+          = f.submit 'Save', class: "btn btn-primary"
 
-javascript:
-  var decimalCount = $("#corporate_decimal_count").text().trim();
-  var realDecimalCount = 0;
+  javascript:
+    var decimalCount = $("#corporate_decimal_count").text().trim();
+    var realDecimalCount = 0;
 
-  if (isNaN(parseInt(decimalCount)) || parseInt(decimalCount) == 0) {
-    realDecimalCount = 0;
-  } else {
-    realDecimalCount = parseInt(decimalCount);
-  }
-
-  $(document).find('.input-mask-integer').inputmask({
-    'alias': 'decimal',
-    rightAlign: false,
-    'groupSeparator': ',',
-    'autoGroup': true,
-    digits: realDecimalCount,
-    removeMaskOnSubmit: true
-  })
-
-  $(document).find('.input-mask-integer').each(function(index){
-    var maskValue = $(this).val().replace(/\,/g, "");
-    var realMaskValue = 0.0;
-
-    if (isNaN(parseFloat(maskValue))) {
-      realMaskValue = 0;
+    if (isNaN(parseInt(decimalCount)) || parseInt(decimalCount) == 0) {
+      realDecimalCount = 0;
     } else {
-      realMaskValue = parseFloat(maskValue);
+      realDecimalCount = parseInt(decimalCount);
     }
-    $(this).val(realMaskValue.toFixed(realDecimalCount));
-  });
+
+    $(document).find('.input-mask-integer').inputmask({
+      'alias': 'decimal',
+      rightAlign: false,
+      'groupSeparator': ',',
+      'autoGroup': true,
+      digits: realDecimalCount,
+      removeMaskOnSubmit: true
+    })
+
+    $(document).find('.input-mask-integer').each(function(index){
+      var maskValue = $(this).val().replace(/\,/g, "");
+      var realMaskValue = 0.0;
+
+      if (isNaN(parseFloat(maskValue))) {
+        realMaskValue = 0;
+      } else {
+        realMaskValue = parseFloat(maskValue);
+      }
+      $(this).val(realMaskValue.toFixed(realDecimalCount));
+    });

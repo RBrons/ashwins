@@ -76,3 +76,9 @@ $ ->
     setTimeout(->
       $(document).find("div#entity-creation-message").modal("hide")
     , 10000)
+
+  if $(document).has("div#stockholder-empty-modal")
+    $(document).find("div#stockholder-empty-modal").modal()
+    setTimeout(->
+      $(document).find("div#stockholder-empty-modal").modal("hide")
+    , 10000)

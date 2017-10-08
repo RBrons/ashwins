@@ -190,6 +190,7 @@ class Entities::CorporatesController < ApplicationController
 
   def stockholder
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
+    @referrer = request.referrer
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
       id      = params[:id]
@@ -202,6 +203,8 @@ class Entities::CorporatesController < ApplicationController
       if request.get?
         if @stockholder.new_record?
           add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Stockholder </a></h4></div>".html_safe
+
+          puts request.referrer
         else
           add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Stockholder </a></h4></div>".html_safe
         end
