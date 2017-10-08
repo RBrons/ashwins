@@ -15,11 +15,11 @@
     - elsif joint_tenants.length == 1
       p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = "You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire."
+      p.text-info = "You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
       .form-group#joint_tenant_entity
         = hidden_field_tag "joint_tenant[is_person]", true
-        = f.select :temp_id, options_html('joint_tenant', "true", @joint_tenant.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if joint_tenants.length == 1}", data: {id: @joint_tenant.super_entity.id, clienttype: 'joint-tenant'}, readonly: (joint_tenants.length == 1)
+        = f.select :temp_id, options_html('joint-tenant', "true", @joint_tenant.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if joint_tenants.length == 1}", data: {id: @joint_tenant.super_entity.id, clienttype: 'joint-tenant'}, readonly: (joint_tenants.length == 1)
 
         = hidden_field_tag "joint_tenant[member_type_id]", MemberType.getJointTenancyId
         = hidden_field_tag :cid, @joint_tenant.temp_id
