@@ -10,7 +10,7 @@
   - entity_tenants = options_html('tenant-in-common', "false", @tenant_in_common.super_entity, f.object.temp_id, 'array')
   - individual_tenants = options_html('tenant-in-common', "true", @tenant_in_common.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_str = entity_tenants.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_entity_str = entity_tenants.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
   - plural_individual_str = individual_tenants.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_tenants.length} #{plural_individual_str} and #{entity_tenants.length} #{plural_entity_str} who could hold an undivided interest in this Tenancy in Common."
 
@@ -19,11 +19,11 @@
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_tenants.length == 1 && entity_tenants.length == 0
       - @tenant_in_common.is_person = true
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - elsif individual_tenants.length == 0 && entity_tenants.length == 1
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = basic_str + " Please select one."
+      p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
     - if individual_tenants.length != 0 || entity_tenants.length != 0
       .form-group style=("#{('display: none;' if entity_tenants.length == 0 || individual_tenants.length == 0)}")
@@ -46,11 +46,6 @@
         = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_tenants.length == 1}"
         = hidden_field_tag "tenant_in_common[member_type_id]", MemberType.getTenancyinCommonId
         = hidden_field_tag :cid, @tenant_in_common.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
 
       .form-group.required
         label.control-label Undivided Interest of this Member
@@ -64,17 +59,3 @@
         = hidden_field_tag "remaining_number_of_assets_warning", 'Undivided Interest Cannot Be Negative'
       .form-group
         = f.submit "Save", class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Tenant in Common
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

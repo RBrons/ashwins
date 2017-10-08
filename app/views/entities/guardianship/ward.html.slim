@@ -10,8 +10,10 @@
     - prepopulated_wards = options_html('ward', "true", @ward.super_entity, f.object.temp_id, 'array')
     - if prepopulated_wards.length == 0
       p.text-info = ("You have #{prepopulated_wards.length} individual #{prepopulated_wards.length != 1 ? 'clients or contacts' : 'client or contact'} who could be the Ward of this Guardianship. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Guardianship Ward <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - elsif prepopulated_wards.length == 1
+      p.text-info = ("You have #{prepopulated_wards.length} individual #{prepopulated_wards.length != 1 ? 'clients or contacts' : 'client or contact'} who could be the Ward of this Guardianship. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Guardianship Ward <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = "You have #{prepopulated_wards.length} individual #{prepopulated_wards.length != 1 ? 'clients or contacts' : 'client or contact'} who could be the Ward of this Guardianship."
+      p.text-info = "You have #{prepopulated_wards.length} individual #{prepopulated_wards.length != 1 ? 'clients or contacts' : 'client or contact'} who could be the Ward of this Guardianship. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Guardianship Ward <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
       .form-group#ward_entity
         = f.select :temp_id, options_html('ward', "true", @ward.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_wards.length == 1}", data: {id: @ward.super_entity.id, clienttype: 'ward'}, readonly: (prepopulated_wards.length == 1)
@@ -20,24 +22,5 @@
         = hidden_field_tag :cid, @ward.temp_id
         = hidden_field_tag :is_person, true
         .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
-
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Ward
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

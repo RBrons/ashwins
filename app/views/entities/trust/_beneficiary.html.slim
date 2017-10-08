@@ -19,11 +19,11 @@
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trust Beneficiary <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_beneficiaries.length == 1 && entity_beneficiaries.length == 0
       - @beneficiary.is_person = true
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trust Beneficiary <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - elsif individual_beneficiaries.length == 0 && entity_beneficiaries.length == 1
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trust Beneficiary <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = basic_str + " Please select one."
+      p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trust Beneficiary <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
     - if individual_beneficiaries.length != 0 || entity_beneficiaries.length != 0
       .form-group style=("#{('display: none;' if entity_beneficiaries.length == 0 || individual_beneficiaries.length == 0)}")
@@ -45,11 +45,6 @@
         = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_beneficiaries.length == 1}"
         = hidden_field_tag "beneficiary[member_type_id]", MemberType.getTrustId
         = hidden_field_tag :cid, @beneficiary.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
       .form-group
         .col-sm-6
           label Beneficiary Interest
@@ -68,17 +63,3 @@
           = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
       .form-group
         .actions = f.submit "Save", class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Beneficiary
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

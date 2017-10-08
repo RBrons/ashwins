@@ -11,8 +11,10 @@
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if prepopulated_partners.length == 0
       p.text-info = "You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could be a Partner of this Partnership. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.".html_safe
+    - elsif prepopulated_partners.length == 1
+      p.text-info = "You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could be a Partner of this Partnership. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
     - else
-      p.text-info = "You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could be a Partner of this Partnership."
+      p.text-info = "You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could be a Partner of this Partnership. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
       .form-group#partner_entity
         = hidden_field_tag "partner[is_person]", true
@@ -20,11 +22,6 @@
 
         = hidden_field_tag "partner[member_type_id]", MemberType.getPartnershipId
         = hidden_field_tag :cid, @partner.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
 
       .form-group.required
         label.control-label Partnership Interest of this Member
@@ -41,17 +38,3 @@
         = f.check_box :tax_member
       .form-group
         = f.submit "Save", class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Partnership
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

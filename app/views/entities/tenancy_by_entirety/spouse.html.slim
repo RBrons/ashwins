@@ -12,19 +12,16 @@
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if prepopulated_spouses.length == 0
       p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.".html_safe
+    - elsif prepopulated_spouses.length == 1
+      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
     - else
-      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety."
+      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
       .form-group#spouse_entity
         = hidden_field_tag "spouse[is_person]", true
         = f.select :temp_id, options_html('spouse', "true", @spouse.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_spouses.length == 1}", data: {id: @spouse.super_entity.id, clienttype: 'spouse'}, readonly: (prepopulated_spouses.length == 1)
         = hidden_field_tag "spouse[member_type_id]", MemberType.getTenancyByTheEntiretyId
         = hidden_field_tag :cid, @spouse.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
       .form-group
         = f.label "Gender"
         .option-1
@@ -35,17 +32,3 @@
           = f.radio_button :gender, 'Female', checked: @spouse.gender == 'Female'
       .form-group
         = f.submit "Save", class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Spouse
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

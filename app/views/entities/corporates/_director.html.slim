@@ -11,32 +11,15 @@
 
     - if prepopulated_directors.length == 0
       p.text-info = ("You have #{prepopulated_directors.length} individual #{prepopulated_directors.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Director of this Corporation. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Corporate Director <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
+    - elsif prepopulated_directors.length == 1
+      p.text-info = ("You have #{prepopulated_directors.length} individual #{prepopulated_directors.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Director of this Corporation. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Coporate Director <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = "You have #{prepopulated_directors.length} individual #{prepopulated_directors.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Director of this Corporation."
+      p.text-info = "You have #{prepopulated_directors.length} individual #{prepopulated_directors.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Director of this Corporation. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Coporate Director <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
       .form-group#director_entity
         = hidden_field_tag "director[is_person]", true
         = f.select :temp_id, options_html('director', "true", @director.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_directors.length == 1}", data: {id: @director.super_entity.id, clienttype: 'director'}, readonly: (prepopulated_directors.length == 1)
         = hidden_field_tag "director[member_type_id]", MemberType.getCorporationId
         = hidden_field_tag :cid, @director.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Director
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close

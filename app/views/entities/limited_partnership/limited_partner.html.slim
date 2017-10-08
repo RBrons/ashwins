@@ -9,7 +9,7 @@
   - entity_partners = options_html('limited-partner', "false", @partner.super_entity, f.object.temp_id, 'array')
   - individual_partners = options_html('limited-partner', "true", @partner.super_entity, f.object.temp_id, 'array')
 
-  - plural_entity_str = entity_partners.length != 1 ? 'business clients or contacts' : 'business client or contact'
+  - plural_entity_str = entity_partners.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
   - plural_individual_str = individual_partners.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_partners.length} #{plural_individual_str} and #{entity_partners.length} #{plural_entity_str} who could hold a limited partnership interest in this Limited Partnership."
 
@@ -18,11 +18,11 @@
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Limited Partnership <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_partners.length == 1 && entity_partners.length == 0
       - @partner.is_person = true
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Limited Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - elsif individual_partners.length == 0 && entity_partners.length == 1
-      p.text-info = basic_str + " Therefore, it has been pre-selected."
+      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Limited Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = basic_str + " Please select one."
+      p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Limited Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
     - if individual_partners.length != 0 || entity_partners.length != 0
       = hidden_field_tag :int_action, 'Add Limited Partner'
@@ -46,11 +46,6 @@
         = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_partners.length == 1}"
         = hidden_field_tag "partner[member_type_id]", MemberType.getLimitedPartnershipId
         = hidden_field_tag :cid, @partner.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
       .form-group
         label Partnership Interest of this Member
         = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
@@ -66,17 +61,3 @@
         = f.check_box :tax_member
       .form-group
         = f.submit "Save", class: "btn btn-primary"
-
-/! Modal
-#ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Entity for Limited Partner
-      .model-body
-        | &nbsp;
-      .modal-footer
-        button type="button" class="btn btn-primary btn-xs" data-dismiss="modal"
-          | close
