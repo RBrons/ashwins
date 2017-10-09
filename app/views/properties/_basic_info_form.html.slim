@@ -22,13 +22,20 @@
       = label_tag 'Tenant'
       / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
       = f.select :tenant_id, Tenant.all().pluck(:name, :id), {}, class: 'form-control width-field-md'
-      = link_to "New", "javascript:void(0)", class: "new-tenant-button"
     .form-group
       = label_tag 'City'
       = f.text_field :location_city, class: 'form-control width-field-md'
     .form-group.tilte_basic_info
       = label_tag 'Title'
       = f.text_field :title, class: 'form-control width-field-md'
+    .form-group
+      label Document
+      .input-group.select_in_gdrive
+        input.form-control[type="text"]
+        span.input-group-btn
+          button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+            = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+            span.margin-md-left.blue Select in Google Drive
     .form-group
       = label_tag 'Description'
       = f.text_area :description, class: 'form-control width-field-lg'
@@ -47,7 +54,10 @@
       - elsif individual_clients.length == 0 && entity_clients.length == 1
         p.text-info = basic_str + " Therefore, it has been pre-selected"
       - else
-        p.text-info = basic_str + " Please select one."
+        p.text-info 
+          = basic_str + " Please select one from the dropdown or make a "
+          = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
+          = " one."
         
       label Owning Client
       .form-group style=("#{('display: none;' if entity_clients.length == 0 || individual_clients.length == 0)}")
@@ -94,7 +104,10 @@
       - elsif individual_owners.length == 0 && entity_owners.length == 1
         p.text-info = basic_str + " Therefore, it has been pre-selected"
       - else
-        p.text-info = basic_str + " Please select one."
+        p.text-info 
+          = basic_str + " Please select one from the dropdown or make a "
+          = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
+          = " one."
 
       label Owner
       .form-group style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")

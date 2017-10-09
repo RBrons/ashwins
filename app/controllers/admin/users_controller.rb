@@ -20,4 +20,8 @@ class Admin::UsersController < Admin::AdminController
     redirect_to :back
   end
 
+  def user_invite
+    
+  end
+
 end
