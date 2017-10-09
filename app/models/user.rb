@@ -121,9 +121,9 @@ class User < ApplicationRecord
   def self.view_index_columns
     [
       # { show: 'Name', call: 'name' },
-      { show: 'User Role', call: 'get_user_type' },
-      { show: 'Law Firm', call: 'get_law_firm' },
-      # { show: 'Business', call: 'business_name' },
+      { show: 'Attorney', call: 'get_user_type' },
+      { show: 'Role', call: 'user_role_at_law_firm' },
+      { show: 'Affiliation', call: 'get_law_firm' },
       { show: 'First Name', call: 'first_name' },
       { show: 'Last Name', call: 'last_name' },
       { show: 'Email', call: 'email' },

@@ -2,6 +2,8 @@
 - if resource_class_with_condition == Property
   = link_to 'All Sold Properties to Purchased', sold_to_purchased_admin_properties_path, class: "#{edit_xs}"
 - if resources.present?
+  - if resources.first.class == User
+    = link_to 'Generate Invite Code', '#', class: "#{edit_xs}"
   = display_standard_table(resources.first.class, resources, {table_id: 'data_table'})
 
   .clearfix.margin-lg-top

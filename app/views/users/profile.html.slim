@@ -13,7 +13,7 @@ div
           .form-group
             h4
               | Name:&nbsp;
-              = @user.first_name + ', ' + @user.last_name
+              = @user.first_name.rstrip + ', ' + @user.last_name.lstrip
           .form-gropu
             h4
               | Organization:&nbsp;
