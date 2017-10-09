@@ -19,9 +19,9 @@
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_tenants.length == 1 && entity_tenants.length == 0
       - @tenant_in_common.is_person = true
-      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - elsif individual_tenants.length == 0 && entity_tenants.length == 1
-      p.text-info = (basic_str + " However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
       p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Tenant in Common <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
