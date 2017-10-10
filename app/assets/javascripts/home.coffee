@@ -208,7 +208,7 @@ $ ->
           if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
             $(document).find('#completed-ipp').show()
             $(document).find('.final-step').removeAttr('data-dismiss')
-            $(document).find('.final-step').attr('href', '/')
+            $(document).find('.final-step').attr('href', $(document).find('.final-step').data('done-href'))
             $(document).find('.final-step').text('Done')
           else
             $(document).find('.final-step').text('Skip This Step')
@@ -294,7 +294,7 @@ $ ->
             if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
               $(document).find('#completed-ipp').show()
               $(document).find('.final-step').removeAttr('data-dismiss')
-              $(document).find('.final-step').attr('href', '/')
+              $(document).find('.final-step').attr('href', $(document).find('.final-step').data('done-href'))
               $(document).find('.final-step').text('Next')
             else
               $(document).find('.final-step').text('Skip This Step')
@@ -341,7 +341,7 @@ $ ->
               if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
                 $(document).find('#completed-ipp').show()
                 $(document).find('.final-step').removeAttr('data-dismiss')
-                $(document).find('.final-step').attr('href', '/')
+                $(document).find('.final-step').attr('href', $(document).find('.final-step').data('done-href'))
                 $(document).find('.final-step').text('Next')
               else
                 $(document).find('.final-step').text('Skip This Step')
@@ -383,7 +383,7 @@ $ ->
               if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
                 $(document).find('#completed-ipp').show()
                 $(document).find('.final-step').removeAttr('data-dismiss')
-                $(document).find('.final-step').attr('href', '/')
+                $(document).find('.final-step').attr('href', $(document).find('.final-step').data('done-href'))
                 $(document).find('.final-step').text('Next')
               else
                 $(document).find('.final-step').text('Skip This Step')
@@ -463,7 +463,7 @@ $ ->
     if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
       $(document).find('#completed-ipp').show()
       $(document).find('.final-step').removeAttr('data-dismiss')
-      $(document).find('.final-step').attr('href', '/')
+      $(document).find('.final-step').attr('href', $(document).find('.final-step').data('done-href'))
       $(document).find('.final-step').text('Next')
     else
       $(document).find('.final-step').text('Skip This Step')

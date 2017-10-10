@@ -17,6 +17,7 @@ div#entities-list.pull-right style=style_str
       = hidden_field_tag :multi_remove_entities, ''
       = hidden_field_tag :group_id, @current_grp
       = link_to 'Remove Selected From Group', 'javascript:void(0);', class: 'btn btn-sm btn-danger', id: 'multi_remove_entities', 'data-confirm' => 'false'
+  h2.text-center Client List View
   table#data_table
     thead
       tr

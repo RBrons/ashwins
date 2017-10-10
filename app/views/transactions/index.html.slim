@@ -1,3 +1,4 @@
+h2.text-center Transaction List View
 .clearfix.margin-lg-top
 .text-center
   = link_to 'Sale Mode', transactions_path(mode: :sale), class: "btn #{(params[:mode].blank? || params[:mode] == 'sale') ? 'btn-primary' : 'btn-default'}"
