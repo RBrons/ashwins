@@ -126,9 +126,9 @@
         .modal-footer
             / a.go-back.btn.btn-danger.pull-left[href="#"] Back
             - if @exchangor.present? && @has_purchased_properties && @relinquishing_purchaser.present? && @replacement_property.present?
-                a.final-step.btn.btn-warning.pull-left[data-dismiss="modal"] Done
+                a.final-step.btn.btn-warning.pull-left[href=(new_transaction_path(transaction_type: '1031 Still Selling', type: 'sale'))] Done
             - else
-                a.final-step.btn.btn-warning.pull-left[data-dismiss="modal"] Skip This Step
+                a.final-step.btn.btn-warning.pull-left[data-dismiss="modal" data-done-href=(new_transaction_path(transaction_type: '1031 Still Selling', type: 'sale'))] Skip This Step
             
 #md-new-property.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-sm
