@@ -14,7 +14,7 @@ class ClientsController < ApplicationController
     #@entities_absent = []
     if request.post?
       if params[:form_type] == 'addmultitogroup'
-        grp_ = Group.where(id: params[:group_id]).first
+        grp_ = current_user.groups.where(id: params[:group_id]).first
         entities_ = []
         ids    = params[:multi_add_entities].split(',').map(&:to_i).compact
         entities_ = Entity.where(id: ids) if !grp_.nil?
@@ -26,7 +26,7 @@ class ClientsController < ApplicationController
           end
         end
       elsif params[:form_type] == 'removemultifromgroup' && params[:group_id] && params[:group_id] != '0'
-        grp_ = Group.where(id: params[:group_id]).first
+        grp_ = current_user.groups.where(id: params[:group_id]).first
         ids    = params[:multi_remove_entities].split(',').map(&:to_i).compact
         GroupMember.where(group_id: grp_.id, gmember_id: ids,
           gmember_type: 'Entity').delete_all if !grp_.nil?
@@ -35,14 +35,14 @@ class ClientsController < ApplicationController
         params[:grp] = @current_grp
     end
     if @current_grp != '0'
-      grp_ = Group.where(id: @current_grp).first
+      grp_ = current_user.groups.where(id: @current_grp).first
       if grp_
         @entities = grp_.entities.where(user_id: current_user.id)
         #@entities_present = Entity.where(id: @entities).pluck('name, id')
         #@entities_absent = Entity.where.not(id: @entities).pluck('name, id')
       end
     else
-      @groups = Group.where(gtype: 'Entity').pluck('name, id')
+      @groups = current_user.groups.where(gtype: 'Entity').pluck('name, id')
       @entities   = Entity.with_deleted.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'}))
       @entities   = @entities.where(deleted_at: nil) unless params[:trashed].to_b
       @entities   = @entities.where.not(deleted_at: nil) if params[:trashed].to_b
@@ -55,7 +55,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1
   # GET /clients/1.json
-  def show;
+  def show
   end
 
   # GET /clients/new

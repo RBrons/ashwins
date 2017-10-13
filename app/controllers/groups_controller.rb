@@ -13,7 +13,7 @@ class GroupsController < ApplicationController
   # GET /groups/new
   def new
     @group = Group.new
-    @groups = [["", 0]] + Group.all.pluck('name, id') 
+    @groups = [["", 0]] + Group.all.pluck('name, id')
   end
 
   # GET /groups/1/edit
@@ -22,7 +22,7 @@ class GroupsController < ApplicationController
 
   # POST /groups
   def create
-    @group = Group.new(group_params)
+    @group = current_user.groups.new(group_params)
 
     if @group.save
       #redirect_to @group, notice: 'Group was successfully created.'
@@ -42,7 +42,7 @@ class GroupsController < ApplicationController
       respond_to do |format|
         format.html { redirect_to @group, notice: 'Group was successfully updated.' }
         format.json { render :json => @group.to_json  }
-      end    
+      end
     else
       render :edit
     end
