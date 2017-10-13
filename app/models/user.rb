@@ -7,6 +7,7 @@ class User < ApplicationRecord
   after_create :move_remove_entry_from_unregistered, :create_default_tenants
 
   has_many :tenants
+  has_many :groups
 
   belongs_to :attorney_firm, foreign_key: :attorney_firm_id
 
