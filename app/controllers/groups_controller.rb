@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
 
   # GET /groups
   def index
-    @groups = Group.all
+    @groups = current_user.groups
   end
 
   # GET /groups/1
@@ -12,8 +12,8 @@ class GroupsController < ApplicationController
 
   # GET /groups/new
   def new
-    @group = Group.new
-    @groups = [["", 0]] + Group.all.pluck('name, id')
+    @group = current_user.groups.new
+    @groups = [["", 0]] + current_user.groups.pluck('name, id')
   end
 
   # GET /groups/1/edit
