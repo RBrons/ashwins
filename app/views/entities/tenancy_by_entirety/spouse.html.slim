@@ -17,6 +17,7 @@
     - else
       p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
+    - if prepopulated_spouses.length == 0
       .form-group#spouse_entity
         = hidden_field_tag "spouse[is_person]", true
         = f.select :temp_id, options_html('spouse', "true", @spouse.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_spouses.length == 1}", data: {id: @spouse.super_entity.id, clienttype: 'spouse'}, readonly: (prepopulated_spouses.length == 1)

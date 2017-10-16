@@ -72,11 +72,21 @@ class XhrController < ApplicationController
     #@types = MemberType.objects
     #MemberType.InitMemberTypes if @types.nil?
     @types = MemberType.objects
+
+    # as per card here - https://trello.com/c/XsDTR0MC/505-redo-clients-modal-comment-out-guardianship
+    # And further conversation on skype - change only new client modal, NOT other modal with entity type selection
+
+    if params[:design_with_labels] == "1"
+      render "entity_type_list_with_groups"      
+    else
+      render "entity_type_list"
+    end
+    
   end
 
   def entity_groups
     @groups = [{id: '0', parent: '#', text: 'All Clients'}]
-    groups = Group.where(gtype: 'Entity')
+    groups = current_user.groups.where(gtype: 'Entity')
     groups.each do |grp|
       obj = {id: grp.id.to_s, parent: grp.parent_id.to_s,
         text: (grp.name + ' <a href="#" class="addtogroup" id="grp_' + grp.id.to_s + '"><img ' +
@@ -94,7 +104,7 @@ class XhrController < ApplicationController
 
   def entity_child_groups
     @groups = []
-    groups = Group.where(gtype: 'Entity', parent_id: params[:id])
+    groups = current_user.groups.where(gtype: 'Entity', parent_id: params[:id])
     groups.each do |grp|
       obj = {id: grp.id.to_s, parent: '0', text: grp.name}
       @groups << obj
