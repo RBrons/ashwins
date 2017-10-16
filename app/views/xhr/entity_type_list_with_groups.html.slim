@@ -1,0 +1,27 @@
+-# Creating custom grouping and re-ordering as per redesign, without changing DB so other modals won't be affected
+
+- groups_with_type = []
+- groups_with_type << { "Individual Entities" => [@types[0],@types[1]], "Concurrent Estates in Land" => [@types[6],@types[7],@types[8]] }
+- groups_with_type << {"Fiduciary Entities" => [@types[2],@types[3], @types[4], @types[5]]}
+- groups_with_type << {"Tax Pass Through Entities" => [@types[9], @types[10], @types[11], @types[12]], "Taxed Separately" => [@types[13]]}
+
+
+-groups_with_type.each do |type_groups|
+   .row.AltClientModal
+    - type_groups.each do |type_group|
+      .ClientGroup class=("client_group_#{type_group[0].parameterize.underscore}")
+        .TypeGroupName
+          span
+            = type_group[0]
+        ul.nav.navbar-nav
+          - type_group[1].each do |type|
+            li
+              = link_to "/entities/new?type=" + type["name"], class: 'padding-md' do
+                = image_tag('icons/' + type['name'].downcase.gsub(/\s+/, '-') + '.svg', class: 'icon')
+                - if [4,5].include?(type.id) # those are under construction
+                  span.UnderConstruction
+                    | Not Yet Unfortunately
+                    br
+                    | Under Heavy Construction
+
+              span = type["name"]
