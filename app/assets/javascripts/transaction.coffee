@@ -816,7 +816,7 @@ $ ->
     if($(this).attr('id') == 'add-client')
       $.ajax
         type: "POST"
-        url: "/xhr/entity_type_list"
+        url: "/xhr/entity_type_list?design_with_labels=1"
         dataType: "html"
         success: (val) ->
           $(document).find("#md-add-client .modal-body").html(val)

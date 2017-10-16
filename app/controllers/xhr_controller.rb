@@ -72,6 +72,16 @@ class XhrController < ApplicationController
     #@types = MemberType.objects
     #MemberType.InitMemberTypes if @types.nil?
     @types = MemberType.objects
+
+    # as per card here - https://trello.com/c/XsDTR0MC/505-redo-clients-modal-comment-out-guardianship
+    # And further conversation on skype - change only new client modal, NOT other modal with entity type selection
+
+    if params[:design_with_labels] == "1"
+      render "entity_type_list_with_groups"      
+    else
+      render "entity_type_list"
+    end
+    
   end
 
   def entity_groups
