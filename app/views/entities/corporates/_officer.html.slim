@@ -15,6 +15,7 @@
     - else
       p.text-info = "You have #{prepopulated_officers.length} individual #{prepopulated_officers.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Officer of this Corporation. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Coporate Officer <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
+    - if prepopulated_officers.length > 0
       .form-group#officer_entity
         = hidden_field_tag "officer[is_person]", true
         = f.select :temp_id, options_html('officer', "true", @officer.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_officers.length == 1}", data: {id: @officer.super_entity.id, clienttype: 'officer'}, readonly: (prepopulated_officers.length == 1)

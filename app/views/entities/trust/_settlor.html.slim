@@ -15,6 +15,7 @@
     - else
       p.text-info = ("You have #{prepopulated_settlors.length} individual #{prepopulated_settlors.length != 1 ? 'clients or contacts' : 'client or contact'} who could be the Settlor of this Trust. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trust Settlor <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
+    - if prepopulated_settlors.length > 0
       .form-group#settlor_entity
         = hidden_field_tag :is_person, true
         = f.select :temp_id, options_html('settlor', "true", @settlor.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_settlors.length == 1}", data: {id: @settlor.super_entity.id, clienttype: 'settlor'}, readonly: (prepopulated_settlors.length == 1)
