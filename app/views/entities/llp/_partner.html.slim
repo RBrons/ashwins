@@ -15,6 +15,7 @@
     - else
       ("You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new LLP Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
+    - if prepopulated_partners.length > 0
       .form-group#limited_liability_partner_entity
         = hidden_field_tag "partner[is_person]", true
         = f.select :temp_id, options_html('limited-liability-partner', "true", @partner.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_partners.length == 1}", data: {id: @partner.super_entity.id, clienttype: 'limited-liability-partner'}, readonly: (prepopulated_partners.length == 1)

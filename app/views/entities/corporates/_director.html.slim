@@ -16,6 +16,7 @@
     - else
       p.text-info = "You have #{prepopulated_directors.length} individual #{prepopulated_directors.length != 1 ? 'clients or contacts' : 'client or contact'} who could serve as Director of this Corporation. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Coporate Director <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
 
+    - if prepopulated_directors.length > 0
       .form-group#director_entity
         = hidden_field_tag "director[is_person]", true
         = f.select :temp_id, options_html('director', "true", @director.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_directors.length == 1}", data: {id: @director.super_entity.id, clienttype: 'director'}, readonly: (prepopulated_directors.length == 1)
