@@ -788,4 +788,49 @@ module ApplicationHelper
     return result.html_safe
   end
 
+  def property_owned_by(property)
+    e = Entity.where(property_id: property)
+
+    if e.present?
+      if (e.first.type_ == 7)
+        result = "Tenancy in Common -- "
+
+        if e.first.tenants_in_common.length == 0
+          result += "Unspecified"
+        else
+          e.first.tenants_in_common.each do |t|
+            result += "#{t.name} "
+          end
+        end
+      elsif (e.first.type_ == 8)
+        result = "Joint Tenancy -- "
+
+        if e.first.joint_tenants.length == 0
+          result += "Unspecified"
+        else
+          e.first.joint_tenants.each do |t|
+            result += "#{t.name} "
+          end
+        end
+      elsif (e.first.type_ == 9)
+        result = "Tenancy by the Entirety -- "
+
+        if e.first.spouses.length == 0
+          result += "Unspecified"
+        else
+          e.first.spouses.each do |t|
+            result += "#{t.name} "
+          end
+        end
+      else
+        # Not sure case
+        return ""
+      end
+    else
+      return ""
+    end
+
+    return result
+  end
+
 end
