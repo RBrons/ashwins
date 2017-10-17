@@ -49,7 +49,7 @@
 div[role="tabpanel"]
     ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
-          a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Basics
+          a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Parties
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
           a#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
@@ -84,7 +84,7 @@ div[role="tabpanel"]
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
-              label Lease Analysis Date Perspective
+              label Lease Analysis Perspective
               .clearfix
               .form-group
                 .heading_blue.radio-inline
