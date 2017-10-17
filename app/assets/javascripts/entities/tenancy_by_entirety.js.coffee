@@ -59,7 +59,7 @@ $ ->
     else
       tab_ = $("#int_action").val()
       if tab_ == 'Spouses List'
-        $('.tbe_icp_list').text('Tenants by the Entirety Spouses List View')
+        $('.tbe_icp_list').text('Spouses List View')
       else
         $('.tbe_icp_list').text('')
       
