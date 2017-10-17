@@ -1,6 +1,7 @@
 - if request.xhr?
   == render partial: "entities/trust/basic_info"
 - else
+  h2.text-center Trustees List View
   .corporate-forms
     == render partial: "entities/trust/links"
     .clearfix

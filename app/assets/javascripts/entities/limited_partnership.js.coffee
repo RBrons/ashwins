@@ -14,7 +14,7 @@ $ ->
       $("#comma").show()
       $("#comma-grey").hide()
       $("#entity_has_comma").val(true)
-    else 
+    else
       $("#comma").hide()
       $("#comma-grey").show()
       $("#entity_has_comma").val(false)
@@ -30,7 +30,7 @@ $ ->
     else
       toggle_comma("on")
 
-  $(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr", (data, xhr, status)->
+  $(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr", (data, xhr, status) ->
     v = $("#entity_has_comma").val()
     name = $("#entity_name").val()
     legal_ending_str = $("#entity_legal_ending").val()
@@ -42,13 +42,21 @@ $ ->
       toggle_comma("on")
     if name
       name = name.trim()
-      $('#edit-title-lp').html(name+comma_str+legal_ending_str)
+      $('#edit-title-lp').html(name + comma_str + legal_ending_str)
     if (typeof xhr) == "object" && xhr.redirect != undefined
-      window.location.href = xhr.redirect+"?just_created="+xhr.just_created      
+      window.location.href = xhr.redirect + "?just_created=" + xhr.just_created
     else
       tab_ = $("#int_action").val()
+      switch tab_
+        when 'General Partners List'
+          $('.lp_icp_list').text('General Partners List View')
+        when 'Limited Partners List'
+          $('.lp_icp_list').text('Limited Partners List View')
+        else
+          $('.lp_icp_list').text('')
+                
       if tab_
-        str_ = " / "        
-        $("#int-action-lp").html(str_ + '<a href="#">'+tab_+'</a>')
+        str_ = " / "
+        $("#int-action-lp").html(str_ + '<a href="#">' + tab_ + '</a>')
       $.scrollTo(0)
       $.unblockUI()

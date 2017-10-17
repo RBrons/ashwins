@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171012140515) do
+ActiveRecord::Schema.define(version: 20171017145639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -545,6 +545,7 @@ ActiveRecord::Schema.define(version: 20171012140515) do
     t.string   "remedies_exculpation_keywords"
     t.string   "misc_notices_keywords"
     t.string   "misc_obligation_keywords"
+    t.string   "document_in_gdrive"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end

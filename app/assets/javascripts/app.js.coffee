@@ -124,14 +124,14 @@ $ ->
 
   # iCheck checkbox
   flat_icheckbox()
-  #Mask currency for input
+  # Mask currency for input
   input_mask_currency()
 
   $(document).ajaxComplete ->
     selectize_single()
     selectize_single_contact()
 
-  #Select file in Google Drive
+  # Select file in Google Drive
   $().gdrive 'init',
     'devkey': $('#google_api_dev_key').val()
     'appid': $('#google_api_app_id').val()

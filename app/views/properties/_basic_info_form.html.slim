@@ -31,9 +31,9 @@
     .form-group
       label Document
       .input-group.select_in_gdrive
-        input.form-control[type="text"]
+        = f.text_field :document_in_gdrive, id: 'gd_property_document', class: 'form-control'
         span.input-group-btn
-          button.btn-gdrive.btn.btn-default.border-blue[type="button"]
+          button#select_property_document.btn-gdrive.btn.btn-default.border-blue[type="button"]
             = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
             span.margin-md-left.blue Select in Google Drive
     .form-group
