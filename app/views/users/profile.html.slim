@@ -13,7 +13,8 @@ div
           .form-group
             h4
               | Name:&nbsp;
-              = @user.first_name.rstrip + ', ' + @user.last_name.lstrip
+              - if @user.first_name.present? && @user.last_name.present?
+                = @user.first_name.rstrip + ', ' + @user.last_name.lstrip
           .form-gropu
             h4
               | Organization:&nbsp;
