@@ -2,7 +2,8 @@ class PropertiesController < ApplicationController
   before_action :set_property, only: [:show, :edit, :destroy]
   before_action :current_page
   before_action :add_breadcrum
-  before_action :validate_user_assets, except: [:index]
+  # before_action :validate_ipp, except: [:index]
+  
   # GET /properties
   # GET /properties.json
   def index
@@ -334,7 +335,7 @@ class PropertiesController < ApplicationController
 
   end
 
-  def validate_user_assets
+  def validate_ipp
     exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
     replacement_seller =  Contact.where(contact_type: 'Counter-Party', user_id: current_user.id).first
     if !exchangor.present? && !replacement_seller.present?
