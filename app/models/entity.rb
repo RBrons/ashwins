@@ -293,7 +293,7 @@ class Entity < ApplicationRecord
       c = Entity.where(id: poa).pluck(:name, :id, :type_, :has_comma, :legal_ending)
     else
       # exclude all individual member types and concurrent estates
-      a = Entity.where.not(name: [nil, ''], type_: [1,2,3,4]).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      a = Entity.where.not(name: [nil, ''], type_: [1,2,3,4,7,8,9]).pluck(:name, :id, :type_, :has_comma, :legal_ending)
       # include sole props with business names
       b = Entity.where("name2 is not null and name2 <> '' and type_ = ?", 2).pluck(:name, :id, :type_, :has_comma, :legal_ending)
       # include poa for entities
