@@ -1,6 +1,7 @@
 - if request.xhr?
   == render partial: "entities/power_of_attorney/basic_info"
 - else
+  h2.text-center Power of Attorney Agents List View
   .corporate-forms
     == render partial: "entities/power_of_attorney/links"
     .clearfix

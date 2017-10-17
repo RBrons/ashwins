@@ -9,18 +9,24 @@ $(document).on "click", "div.entity-object-action", ->
   $("input[name$='entity_tenancy_in_common[name]']").val(val)
   $(document).find("div#ResourceFormProperties").modal("hide")
 
-$(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr, form.new_property_xhr", (data, xhr, status)->
-    #console.log(data)    
+$(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr, form.new_property_xhr", (data, xhr, status) ->
+    #console.log(data)
     name = $("#entity_tenancy_in_common_property_id option:selected").text()
-    if name 
+    if name
       $('#edit-title-tic').html(name)
     if (typeof xhr) == "object" && xhr.redirect != undefined
-      window.location.href = xhr.redirect+"?just_created="+xhr.just_created      
+      window.location.href = xhr.redirect + "?just_created=" + xhr.just_created
     else
+      $(document).find("div.corporate-contact-form").html(xhr)
       tab_ = $("#int_action").val()
+      if tab_ == 'Tenants in Common List'
+        $('.tic_icp_list').text('Tenants in Common List View')
+      else
+        $('.tic_icp_list').text('')
+
       if tab_
-        str_ = " / "        
-        $("#int-action-tic").html(str_ + '<a href="#">'+tab_+'</a>')
+        str_ = " / "
+        $("#int-action-tic").html(str_ + '<a href="#">' + tab_ + '</a>')
       $.scrollTo(0)
       $.unblockUI()
 

@@ -1,6 +1,7 @@
 - if request.xhr?
   == render partial: "entities/limited_partnership/basic_info"
 - else
+  h2.lp_icp_list.text-center
   .corporate-forms
     == render partial: "entities/limited_partnership/links"
     .clearfix
