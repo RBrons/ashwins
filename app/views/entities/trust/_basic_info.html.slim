@@ -24,6 +24,8 @@
     .form-group.required
       = f.label "Name", class: "control-label"
       = f.text_field :name, class: "form-control"
+      .clearfix
+      = linkbacks_entity(@entity)
     .form-group
       = f.label "Ein"
       = f.text_field :ein_or_ssn, class: "form-control"
