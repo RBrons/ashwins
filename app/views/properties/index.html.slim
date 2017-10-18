@@ -26,11 +26,10 @@ table#data_table
           = link_to 'Delete', property_path(property.key), method: :delete, class: "#{delete_xs}"
         td = property.ownership_status
         td
-          - if property.ownership_status == "Prospective Purchase"
-            -if property.owner.is_a?(Entity)
-              = link_to property.owner.try(:display_name), entity_path(property.owner.key)
-            - elsif property.owner.is_a?(Contact)
-              = link_to property.owner.try(:name), edit_contact_path(property.owner.id)
+          -if property.owner.is_a?(Entity)
+            = link_to property.owner.try(:display_name), entity_path(property.owner.key)
+          - elsif property.owner.is_a?(Contact)
+            = link_to property.owner.try(:name), edit_contact_path(property.owner.id)
           - else
             = property_owned_by(property)
         td = property.title
