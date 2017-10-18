@@ -41,15 +41,16 @@
                                     div.entity-business-detail.row[style="display: none"]
                                         div.col-md-2.col-xs-6
                                             input.form-control[name="entity[name]" type="text"]
-                            / p
-                            /     a.create-initial-client-type.text-danger[href="#"] What type of Entity will your Exchangor be?
                             p 
                                 a.create-exchangor-property.text-danger[href="#"] Create a property to be Relinquished by your first Exchangor
                         - else
                             - if @exchangor.type_ == 1
                                 p.text-success = "You have created a data record for #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name} to be your first Exchangor."
                             - else 
-                                p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
+                                p.text-success 
+                                    = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
+                                    a#edit-ipp-exchangor.margin-sm-left[href="#" data-entity-id=(@exchangor.id)]
+                                        i.fa.fa-edit
                             - if @exchangor.has_purchased_properties?
                                 input.purchased_property_id[type="hidden" value="#{@purchased_property_id}"]
                                 p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
