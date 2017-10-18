@@ -398,11 +398,11 @@ class Entity < ApplicationRecord
   end
 
   def validation_for_names
-    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? #|| self.power_of_attorney?
+    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? || self.power_of_attorney? || self.TenancyinCommon?
   end
 
   def validation_for_first_and_last_names
-    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? || self.power_of_attorney?
+    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? || self.power_of_attorney? || self.TenancyinCommon?
   end
 
   public

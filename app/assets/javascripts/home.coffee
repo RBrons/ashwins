@@ -185,6 +185,9 @@ $ ->
       when 'Corporation'
         legal_ending = ''
         legal_ending_html = '<select class="select_auto corporation_legal_ending"><option>Inc</option><option>Corp</option><option>Ltd</option></select>'
+      when 'Tenancy in Common'
+        legal_ending = 'Tenancy in Common'
+        legal_ending_html = 'Tenancy in Common'
 
     entity_params =  {}
     entity_params['entity[name]'] = entity_business_name
