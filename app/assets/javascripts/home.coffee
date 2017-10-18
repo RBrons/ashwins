@@ -185,6 +185,9 @@ $ ->
       when 'Corporation'
         legal_ending = ''
         legal_ending_html = '<select class="select_auto corporation_legal_ending"><option>Inc</option><option>Corp</option><option>Ltd</option></select>'
+      when 'Tenancy in Common'
+        legal_ending = 'Tenancy in Common'
+        legal_ending_html = 'Tenancy in Common'
 
     entity_params =  {}
     entity_params['entity[name]'] = entity_business_name
@@ -475,6 +478,14 @@ $ ->
         $err = em.$element.parents('.form-group').find('.error-msg')
         return $err
   )
+
+  $(document).on 'ifChanged', '#has-lease-rent', ->
+    if this.checked
+      $('#property_rent_price').prop('required', false)
+      $('#property_rent_price').closest('.form-group').find('label').text('Rent')
+    else
+      $('#property_rent_price').prop('required', true)
+      $('#property_rent_price').closest('.form-group').find('label').text('Rent *')
 
   $('table#pt_data_table').DataTable
     'oLanguage': 'sEmptyTable': 'You have not engaged in any Transactions, when you do, this tab will track your activity.'

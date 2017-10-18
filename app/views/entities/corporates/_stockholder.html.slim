@@ -1,15 +1,28 @@
 - if @stockholder.remaining_share_or_interest <= 0
   .modal.fade#stockholder-empty-modal tabindex="-3" role="dialog" aria-labelledby="stockholder-empty-modal" data-referrer="#{@referrer}"
-    .modal-dialog
+    .modal-dialog id="modal-dialog"
       .modal-content
         .modal-header
           button.close aria-label="Close" data-dismiss="modal" type="button"
             span aria-hidden="true"  &times;
         .modal-body
-          .stockholder-empty-message
-            = "Unfortunately, this corporation does not yet have any stock. Therefore, you cannot add a stockholder yet. Please assign stock to the corporation and then add stockholders."
-        .modal-footer
-          button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Close
+          - if @entity.number_of_share.nil?
+            .stockholder-empty-message
+              = "Unfortunately, this corporation does not yet have any stock. Therefore, you cannot add a stockholder yet. Please assign stock to the corporation and then add stockholders."
+            = form_for @entity do |f|
+              br
+              = f.label :"Enter Number Of Share:", style: "padding-right: 5px;"
+              = f.text_field :number_of_share, id: "number_of_share_input"
+              = f.submit 'Save', id: "number_of_share_submit", class: "btn btn-primary should-not-change-date-of-formation-cancel"
+          - else
+            = form_for @entity do |f|
+              br
+              = f.label :"Enter Number Of Share:", style: "padding-right: 5px;"
+              = f.text_field :number_of_share, id: "number_of_share_input" 
+              = f.submit 'Save', id: "number_of_share_submit", class: "btn btn-primary should-not-change-date-of-formation-cancel"
+          button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button" id="close_btn" Close 
+          
+          
 - else
   = form_for @stockholder, url: entities_corporates_stockholder_path(@entity.key, @stockholder.id), html: {class: "entity-page-xhr"} do |f|
     = hidden_field_tag :int_action, 'Add Stockholder'
