@@ -199,7 +199,7 @@ class Entities::CorporatesController < ApplicationController
       @stockholder                 ||= StockHolder.new
       @stockholder.super_entity_id = @entity.id
       @stockholder.class_name      = "StockHolder"
-
+      
       if request.get?
         if @stockholder.new_record?
           add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Stockholder </a></h4></div>".html_safe
