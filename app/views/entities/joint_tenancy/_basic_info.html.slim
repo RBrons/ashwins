@@ -20,7 +20,7 @@
           li = message
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    - available_properties = Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased', owner_entity_id: [0, nil])
+    - available_properties = Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased', owner_entity_id: [0, nil]).select {|s| !s.is_owned_by_concurrent_estate?}
     - if available_properties.length > 0
       .clearfix
       .form-group
@@ -52,17 +52,17 @@
         - else
           = f.select :property_id, options_for_select(available_properties.pluck(:title, :id), available_properties.pluck(:title, :id).first[1]), {}, class: 'form-control disabled-like', readonly: true
 
-    - if @entity.persisted?
-      .field
-        .part123.heading
-          = "#{(100 - TenantInCommon.new(super_entity_id: @entity.id).remaining_share_or_interest rescue 0) }% of Undivided Interest have been assigned out of 100%"
-    .clearfix
-      .form-group
-        - if @entity.persisted?
-          - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
-        - else
-          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+      - if @entity.persisted?
+        .field
+          .part123.heading
+            = "#{(100 - TenantInCommon.new(super_entity_id: @entity.id).remaining_share_or_interest rescue 0) }% of Undivided Interest have been assigned out of 100%"
+      .clearfix
+        .form-group
+          - if @entity.persisted?
+            - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+          - else
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 #popup-should-not-change.corporate
   = hidden_field_tag "should_not_change[name]", (@entity.persisted? ? @entity.reload["name"] : '')
