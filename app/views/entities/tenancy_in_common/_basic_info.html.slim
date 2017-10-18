@@ -35,12 +35,13 @@
             = f.check_box :m_date_of_formation, data: { class: 'entity_tenancy_in_common_date_of_formation' }, class: 'manually_date'
 
     .clearfix
-    - if available_properties.length == 0
-      p.text-info.con-current = "You have 0 properties that can be the property of this Tenancy in Common. Please create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner.".html_safe
-    - elsif available_properties.length == 1
-      p.text-info.con-current = "You have 1 property that can be the property of this Tenancy in Common. Therefore, it has been pre-selected. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
-    - else
-      p.text-info.con-current = "You have #{available_properties.length} properties that can be the property of this Tenancy in Common. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
+    - if @entity.new_record?
+      - if available_properties.length == 0
+        p.text-info.con-current = "You have 0 properties that can be the property of this Tenancy in Common. Please create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner.".html_safe
+      - elsif available_properties.length == 1
+        p.text-info.con-current = "You have 1 property that can be the property of this Tenancy in Common. Therefore, it has been pre-selected. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
+      - else
+        p.text-info.con-current = "You have #{available_properties.length} properties that can be the property of this Tenancy in Common. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
 
     - if available_properties.length > 0
       .clearfix
