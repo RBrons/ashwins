@@ -20,7 +20,7 @@
           li = message
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    - available_properties = Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased', owner_entity_id: 0)
+    - available_properties = Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased', owner_entity_id: [0, nil])
     - if available_properties.length > 0
       .clearfix
       .form-group
