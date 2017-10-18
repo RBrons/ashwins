@@ -154,6 +154,10 @@
                     span.error-msg
                     input#property_location_city.form-control[type="text" name="property[location_city]" required data-parsley-error-message="Please input a city"]
                 .form-group
+                    label
+                        input.flat-icheck[type="checkbox" id="has-lease-rent" data-parsley-ui-enabled="false"]
+                        | &nbsp;Lease currently doesn't require Tenant to pay rent
+                .form-group
                     label.control-label Rent *
                     span.error-msg
                     .input-group
