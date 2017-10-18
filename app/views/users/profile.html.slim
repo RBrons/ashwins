@@ -17,7 +17,7 @@ div
                 = @user.first_name.rstrip + ', ' + @user.last_name.lstrip
               - else
                 | Not Yet Inputted
-          .form-gropu
+          .form-group
             h4
               | Organization:&nbsp;
               - if @user.attorney_firm.present?

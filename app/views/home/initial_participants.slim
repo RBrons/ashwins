@@ -154,6 +154,10 @@
                     span.error-msg
                     input#property_location_city.form-control[type="text" name="property[location_city]" required data-parsley-error-message="Please input a city"]
                 .form-group
+                    label
+                        input.flat-icheck[type="checkbox" id="has-lease-rent" data-parsley-ui-enabled="false"]
+                        | &nbsp;Lease currently doesn't require Tenant to pay rent
+                .form-group
                     label.control-label Rent *
                     span.error-msg
                     .input-group
@@ -172,10 +176,8 @@
           span.lnr.lnr-cross
         h4.modal-title Select Entity Type
       .modal-body
+        p This is a selection of some of the most popular entities that you can create with this app. However, there are several others available when you select Client + when you get to the main part of the app.
         ul.nav.navbar-nav
-            / li[data-entity-type="#{MemberType.getSoleProprietorshipId}" data-entity-name="Sole Proprietorship"]
-            /     = link_to image_tag('icons/sole-proprietorship.svg', class: 'icon'), "#", class: 'padding-md'
-            /     span Sole Proprietorship
             li[data-entity-type="#{MemberType.getPartnershipId}" data-entity-name="Partnership"]
                 = link_to image_tag('icons/partnership.svg', class: 'icon'), "#", class: 'padding-md'
                 span Partnership
@@ -188,3 +190,6 @@
             li[data-entity-type="#{MemberType.getCorporationId}" data-entity-name="Corporation"]
                 = link_to image_tag('icons/corporation.svg', class: 'icon'), "#", class: 'padding-md'
                 span Corporation
+            li[data-entity-type="#{MemberType.getTenancyinCommonId}" data-entity-name="Tenancy in Common"]
+                = link_to image_tag('icons/tenancy-in-common.svg', class: 'icon'), "#", class: 'padding-md'
+                span Tenancy in Common
