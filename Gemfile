@@ -22,7 +22,7 @@ gem 'font-awesome-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'web-console', '~> 3.0'
+gem 'web-console', '~> 3.0', group: [:development, :test]
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 #gem 'turbolinks'
