@@ -479,6 +479,14 @@ $ ->
         return $err
   )
 
+  $(document).on 'ifChanged', '#has-lease-rent', ->
+    if this.checked
+      $('#property_rent_price').prop('required', false)
+      $('#property_rent_price').closest('.form-group').find('label').text('Rent')
+    else
+      $('#property_rent_price').prop('required', true)
+      $('#property_rent_price').closest('.form-group').find('label').text('Rent *')
+
   $('table#pt_data_table').DataTable
     'oLanguage': 'sEmptyTable': 'You have not engaged in any Transactions, when you do, this tab will track your activity.'
     'bSort': false
