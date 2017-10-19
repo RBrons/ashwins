@@ -6,21 +6,14 @@
           button.close aria-label="Close" data-dismiss="modal" type="button"
             span aria-hidden="true"  &times;
         .modal-body
-          - if @entity.number_of_share.nil?
-            .stockholder-empty-message
-              = "Unfortunately, this corporation does not yet have any stock. Therefore, you cannot add a stockholder yet. Please assign stock to the corporation and then add stockholders."
-            = form_for @entity do |f|
-              br
-              = f.label :"Enter Number Of Share:", style: "padding-right: 5px;"
-              = f.text_field :number_of_share, id: "number_of_share_input"
-              = f.submit 'Save', id: "number_of_share_submit", class: "btn btn-primary should-not-change-date-of-formation-cancel"
-          - else
-            = form_for @entity do |f|
-              br
-              = f.label :"Enter Number Of Share:", style: "padding-right: 5px;"
-              = f.text_field :number_of_share, id: "number_of_share_input" 
-              = f.submit 'Save', id: "number_of_share_submit", class: "btn btn-primary should-not-change-date-of-formation-cancel"
-          button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button" id="close_btn" Close 
+          .stockholder-empty-message
+            = "Unfortunately, this corporation does not yet have any stock. Therefore, you cannot add a stockholder yet. Please assign stock to the corporation and then add stockholders."
+          = form_for @entity do |f|
+            br
+            = f.label :"Enter Number Of Share:", style: "padding-right: 5px;"
+            = f.text_field :number_of_assets, id: "number_of_assets_input"
+            = f.submit 'Save', id: "number_of_assets_submit", class: "btn btn-primary should-not-change-date-of-formation-cancel"
+          button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button" id="close_btn" Close
           
           
 - else
@@ -91,6 +84,7 @@
           = f.submit 'Save', class: "btn btn-primary"
 
   javascript:
+    window.onload = stockshare;
     var decimalCount = $("#corporate_decimal_count").text().trim();
     var realDecimalCount = 0;
 

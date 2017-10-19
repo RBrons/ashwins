@@ -86,7 +86,8 @@ class EntitiesController < ApplicationController
   def update
     respond_to do |format|
       if @entity.update(entity_params)
-        format.html { redirect_to @entity, notice: 'Entity was successfully updated.' }
+        # cookies['update_entity_flag'] = { value: true, expires: 1.hour.from_now }
+        format.html { redirect_to entities_corporates_stockholder_path( @entity.key ), notice: 'Entity was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

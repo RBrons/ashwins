@@ -190,6 +190,7 @@ class Entities::CorporatesController < ApplicationController
 
   def stockholder
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
+    
     @referrer = request.referrer
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
@@ -229,6 +230,7 @@ class Entities::CorporatesController < ApplicationController
         return redirect_to entities_corporates_stockholder_path( @entity.key, @stockholder.id )
       end
     elsif request.patch?
+
       @stockholder.assign_attributes(stockholder_params)
       @stockholder.use_temp_id
       if (@stockholder.entity.present? || @stockholder.contact.present?) && @stockholder.save
