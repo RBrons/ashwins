@@ -35,7 +35,7 @@
             = f.check_box :m_date_of_formation, data: { class: 'entity_tenancy_by_entirety_date_of_formation' }, class: 'manually_date'
 
     .clearfix
-    - if @entity.new_record?
+    - unless @entity.key.present?
       - if available_properties.length == 0
         p.text-info.con-current = "You have 0 properties that can be the property of this Tenancy By Entirety. Please create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner.".html_safe
       - elsif available_properties.length == 1
