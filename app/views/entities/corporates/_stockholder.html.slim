@@ -11,7 +11,7 @@
           = form_for @entity do |f|
             br
             = f.label :"Enter Number Of Share:", style: "padding-right: 5px;"
-            = f.text_field :number_of_assets, id: "number_of_assets_input"
+            = f.text_field :number_of_assets, id: "number_of_assets_input", :value => 0
             = f.submit 'Save', id: "number_of_assets_submit", class: "btn btn-primary should-not-change-date-of-formation-cancel"
           button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button" id="close_btn" Close
           
@@ -84,7 +84,6 @@
           = f.submit 'Save', class: "btn btn-primary"
 
   javascript:
-    window.onload = stockshare;
     var decimalCount = $("#corporate_decimal_count").text().trim();
     var realDecimalCount = 0;
 
