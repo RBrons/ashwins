@@ -24,32 +24,59 @@
                         input.exchangor_name[type="hidden" value="#{@exchangor.present? ? (@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name) : ''}"]
                         
                         - if !@exchangor.present?
-                            p.exchangor-info.text-danger
-                                | Will your first Exchangor be a&nbsp;
-                                a.is_entity_business.text-danger.underline-red[href='#'] business
-                                | &nbsp;or&nbsp;
-                                a.is_entity_individual.text-danger.underline-red[href='#'] individual?
-                            form[action=""]
-                                input[type="hidden" name="entity_type" value=""]
-                                div.form-group[style="display: none"]
-                                    label.form-label Name your first Exchangor *
-                                    div.entity-individual-detail.row
-                                        div.col-md-2.col-xs-6
-                                            input.form-control[name="entity[first_name]" type="text"]
-                                        div.col-md-2.col-xs-6
-                                            input.form-control[name="entity[last_name]" type="text"]
-                                    div.entity-business-detail.row[style="display: none"]
-                                        div.col-md-2.col-xs-6
-                                            input.form-control[name="entity[name]" type="text"]
-                            / p
-                            /     a.create-initial-client-type.text-danger[href="#"] What type of Entity will your Exchangor be?
+                            p.exchangor-info.text-success
+                            .form-wrapper
+                                p.text-danger
+                                    | Will your first Exchangor be a&nbsp;
+                                    a.is_entity_business.text-danger.underline-red[href='#'] business
+                                    | &nbsp;or&nbsp;
+                                    a.is_entity_individual.text-danger.underline-red[href='#'] individual?
+                                form[action=""]
+                                    input[type="hidden" name="entity[id]" value=""]
+                                    input[type="hidden" name="entity_type" value=""]
+                                    div.form-group[style="display: none"]
+                                        label.form-label Name your first Exchangor *
+                                        div.entity-individual-detail.row
+                                            div.col-md-2.col-xs-6
+                                                input.form-control[name="entity[first_name]" type="text"]
+                                            div.col-md-2.col-xs-6
+                                                input.form-control[name="entity[last_name]" type="text"]
+                                        div.entity-business-detail.row[style="display: none"]
+                                            div.col-md-2.col-xs-6
+                                                input.form-control[name="entity[name]" type="text"]
                             p 
                                 a.create-exchangor-property.text-danger[href="#"] Create a property to be Relinquished by your first Exchangor
                         - else
                             - if @exchangor.type_ == 1
-                                p.text-success = "You have created a data record for #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name} to be your first Exchangor."
+                                p.exchangor-info.text-success 
+                                    = "You have created a data record for #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name} to be your first Exchangor."
+                                    a#edit-ipp-exchangor.margin-sm-left[href="#" data-entity-id=(@exchangor.id)]
+                                        i.fa.fa-edit
                             - else 
-                                p.text-success = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
+                                p.exchangor-info.text-success 
+                                    = "#{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}, #{@exchangor.try(:legal_ending)} will be your first Exchangor."
+                                    a#edit-ipp-exchangor.margin-sm-left[href="#" data-entity-id=(@exchangor.id)]
+                                        i.fa.fa-edit
+                            .form-wrapper[style="display: none"]
+                                p.text-danger
+                                    | Will your Exchangor be a&nbsp;
+                                    a.is_entity_business.text-danger.underline-red[href='#'] business
+                                    | &nbsp;or&nbsp;
+                                    a.is_entity_individual.text-danger.underline-red[href='#'] individual?
+                                form[action=""]
+                                    input[type="hidden" name="entity[id]" value=(@exchangor.id)]
+                                    input[type="hidden" name="entity_type" value=""]
+                                    div.form-group[style="display: none"]
+                                        label.form-label Name your first Exchangor *
+                                        div.entity-individual-detail.row
+                                            div.col-md-2.col-xs-6
+                                                input.form-control[name="entity[first_name]" type="text"]
+                                            div.col-md-2.col-xs-6
+                                                input.form-control[name="entity[last_name]" type="text"]
+                                        div.entity-business-detail.row[style="display: none"]
+                                            div.col-md-2.col-xs-6
+                                                input.form-control[name="entity[name]" type="text"]
+                            
                             - if @exchangor.has_purchased_properties?
                                 input.purchased_property_id[type="hidden" value="#{@purchased_property_id}"]
                                 p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
@@ -154,6 +181,12 @@
                     span.error-msg
                     input#property_location_city.form-control[type="text" name="property[location_city]" required data-parsley-error-message="Please input a city"]
                 .form-group
+                    .field_list
+                        .left
+                            input.flat-icheck[type="checkbox" id="has-lease-rent" data-parsley-ui-enabled="false"]
+                        .right
+                            label Lease currently doesn't require Tenant to pay rent
+                .form-group
                     label.control-label Rent *
                     span.error-msg
                     .input-group
@@ -172,10 +205,8 @@
           span.lnr.lnr-cross
         h4.modal-title Select Entity Type
       .modal-body
+        p.text-center.text-danger This is a selection of some of the most popular entities that you can create with this app. However, there are several others available when you select Client + when you get to the main part of the app.
         ul.nav.navbar-nav
-            / li[data-entity-type="#{MemberType.getSoleProprietorshipId}" data-entity-name="Sole Proprietorship"]
-            /     = link_to image_tag('icons/sole-proprietorship.svg', class: 'icon'), "#", class: 'padding-md'
-            /     span Sole Proprietorship
             li[data-entity-type="#{MemberType.getPartnershipId}" data-entity-name="Partnership"]
                 = link_to image_tag('icons/partnership.svg', class: 'icon'), "#", class: 'padding-md'
                 span Partnership
@@ -188,3 +219,6 @@
             li[data-entity-type="#{MemberType.getCorporationId}" data-entity-name="Corporation"]
                 = link_to image_tag('icons/corporation.svg', class: 'icon'), "#", class: 'padding-md'
                 span Corporation
+            li[data-entity-type="#{MemberType.getTenancyinCommonId}" data-entity-name="Tenancy in Common"]
+                = link_to image_tag('icons/tenancy-in-common.svg', class: 'icon'), "#", class: 'padding-md'
+                span Tenancy in Common

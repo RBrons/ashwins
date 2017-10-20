@@ -25,17 +25,21 @@ $ ->
     $("div#ResourceFormNewProperty").modal()
     enable_datetimepicker_corporation()
 
-  $(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr", (data, xhr, status)->
+  $(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr", (data, xhr, status) ->
     name = $("#entity_joint_tenancy_property_id option:selected").text()
-    if name 
+    if name
       $('#edit-title-jt').html(name)
     if (typeof xhr) == "object" && xhr.redirect != undefined
-      window.location.href = xhr.redirect+"?just_created="+xhr.just_created      
+      window.location.href = xhr.redirect + "?just_created=" + xhr.just_created
     else
       tab_ = $("#int_action").val()
+      if tab_ == 'Joint Tenants List'
+        $('.jt_icp_list').text('Joint Tenants List View')
+      else
+        $('.jt_icp_list').text('')
       if tab_
-        str_ = " / "        
-        $("#int-action-jt").html(str_ + '<a href="#">'+tab_+'</a>')
+        str_ = " / "
+        $("#int-action-jt").html(str_ + '<a href="#">' + tab_ + '</a>')
       $.scrollTo(0)
       $.unblockUI()
 

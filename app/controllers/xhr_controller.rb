@@ -148,9 +148,18 @@ class XhrController < ApplicationController
   end
 
   def update_entity
-    @entity = Entity.where(id: params[:id]).first
-    if @entity.update(:legal_ending => params[:legal_ending])
-      render json: true
+    entity_params = params.require(:entity).permit(:id, :name, :first_name, :last_name, :type_, :legal_ending)
+    @entity = Entity.where(id: entity_params[:id]).first
+    if params[:entity_type] == 'individual'
+      entity_params[:type_] = MemberType.getIndividualId
+      entity_params[:name] = entity_params[:first_name] + ' ' + entity_params[:last_name]
+      entity_params[:legal_ending] = nil
+    else
+      entity_params[:first_name] = nil
+      entity_params[:last_name] = nil
+    end
+    if @entity.update(entity_params)
+      render json: @entity
     else
       render json: false
     end

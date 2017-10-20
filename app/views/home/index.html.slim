@@ -26,11 +26,11 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                                     input[type="checkbox" name=""] I don't need this tab anymore
                         - if current_user.attorney_firm.present?
                             - if current_user.attorney_firm.type_ == "Firm"
-                                h2 = "Welcome #{current_user.first_name} of #{current_user.attorney_firm.name}."    
+                                h2 = "Welcome #{current_user.first_name} of #{current_user.attorney_firm.name}"
                             - else
-                                h2 = "Welcome #{current_user.first_name} of the law office of #{current_user.attorney_firm.name}."
+                                h2 = "Welcome #{current_user.first_name} of the law office of #{current_user.attorney_firm.name}"
                         - else
-                            h2 = "Welcome #{current_user.first_name || 'No Name'}."
+                            h2 = "Welcome #{current_user.first_name}"
                         p = @greeting
 
                     #transaction_participants_section.tab-pane.fade[role="tabpanel"]
@@ -70,6 +70,10 @@ input#is_show_landing_page[type="hidden" value="#{@show_landing_page}"]
                         span Coming soon
                     #tasks_section.tab-pane.fade[role="tabpanel"]
                         span Coming soon
+        .modal-footer
+            .text-left
+                p.text-primary Jump to
+                = render partial: 'layouts/header'
                
 / User Setup Sequence
 input#show_initial_sign_in_modal[type="hidden" value="#{@show_initial_sign_in_modal}"]

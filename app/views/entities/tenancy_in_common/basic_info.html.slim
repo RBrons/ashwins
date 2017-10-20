@@ -1,6 +1,7 @@
 - if request.xhr?
   == render partial: "entities/tenancy_in_common/basic_info"
 - else
+  h2.tic_icp_list.text-center
   .corporate-forms
     == render partial: "entities/tenancy_in_common/links"
     .clearfix

@@ -185,13 +185,22 @@ $ ->
       when 'Corporation'
         legal_ending = ''
         legal_ending_html = '<select class="select_auto corporation_legal_ending"><option>Inc</option><option>Corp</option><option>Ltd</option></select>'
+      when 'Tenancy in Common'
+        legal_ending = 'Tenancy in Common'
+        legal_ending_html = 'Tenancy in Common'
 
     entity_params =  {}
+    if parseInt(exchangor_entity_id)
+      url = '/xhr/update_entity'
+      entity_params['entity[id]'] = exchangor_entity_id
+    else
+      url = '/xhr/create_entity'
     entity_params['entity[name]'] = entity_business_name
     entity_params['entity[type_]'] = entity_em.data('entity-type')
     entity_params['entity[legal_ending]'] = legal_ending
+    
     $.ajax
-      url: '/xhr/create_entity'
+      url: url
       type: 'POST'
       dataType: 'json'
       data: entity_params
@@ -199,10 +208,10 @@ $ ->
         if data.id
           exchangor_entity_id = data.id
           exchangor_name = data.name
-          exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + legal_ending_html + ' will be your first Exchangor</span>'
-          # $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
+          exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + legal_ending_html + ' will be your first Exchangor</span>' +
+                                '<a class="margin-sm-left" data-entity-id="' + exchangor_entity_id + '" href="#" id="edit-ipp-exchangor"><i class="fa fa-edit"></i></a>'
           $(document).find('.exchangor-info').html(exchangor_info_html)
-          $(document).find('.exchangor-wrapper form').hide()
+          $(document).find('.exchangor-wrapper .form-wrapper').hide()
           
           $(document).find('#md-add-initial-client').modal('hide')
           if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
@@ -217,11 +226,14 @@ $ ->
     
   $(document).on 'change', '.corporation_legal_ending', ->
     console.log $(this).find('option:selected').text()
+    entity_params = {}
+    entity_params['entity[id]'] = exchangor_entity_id
+    entity_params['entity[legal_ending]'] = $(this).find('option:selected').text()
     $.ajax
       url: '/xhr/update_entity'
       type: 'POST'
       dataType: 'json'
-      data: {id: exchangor_entity_id, legal_ending: $(this).find('option:selected').text()}
+      data: entity_params
       success: (data) ->
         if data
           console.log 'success'
@@ -274,9 +286,14 @@ $ ->
           return this.value != ''
       if none_empty_inputs.length != 2
         return false
+      if parseInt(exchangor_entity_id)
+        url = '/xhr/update_entity'
+        form.find('input[name="entity[id]"]').val(exchangor_entity_id)
+      else
+        url = '/xhr/create_entity'
       
       $.ajax
-        url: '/xhr/create_entity'
+        url: url
         type: 'POST'
         dataType: 'json'
         data: form.serialize()
@@ -285,10 +302,11 @@ $ ->
             exchangor_entity_id = data.id
             if data.first_name && data.last_name
               exchangor_name = data.first_name + ' ' + data.last_name
-              exchangor_info_html = '<span class="text-success">You have created a data record for ' + exchangor_name + ' to be your first Exchangor.</span>'
+              exchangor_info_html = '<span class="text-success">You have created a data record for ' + exchangor_name + ' to be your first Exchangor.</span>' + 
+                                    '<a class="margin-sm-left" data-entity-id="' + exchangor_entity_id + '" href="#" id="edit-ipp-exchangor"><i class="fa fa-edit"></i></a>'
               $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
               $(document).find('.exchangor-info').html(exchangor_info_html)
-              $(document).find('.exchangor-wrapper form').hide()
+              $(document).find('.exchangor-wrapper .form-wrapper').hide()
               current_em.off('blur')
               
             if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
@@ -301,7 +319,10 @@ $ ->
           else
             $.notify "Failed!", "error"
   
-  $(document).find('.entity-business-detail input').on 'blur keypress', (e)->
+  $(document).on 'click', '#edit-ipp-exchangor', ->
+    $(document).find('.exchangor-wrapper .form-wrapper').show()
+  
+  $(document).find('.entity-business-detail input').on 'blur keypress', (e) ->
     if e.type == 'blur' || e.keyCode == 13
       if $(this).val() == ''
         sweetAlert('First input the Name', '', 'info')
@@ -475,6 +496,14 @@ $ ->
         $err = em.$element.parents('.form-group').find('.error-msg')
         return $err
   )
+
+  $(document).on 'ifChanged', '#has-lease-rent', ->
+    if this.checked
+      $('#property_rent_price').prop('required', false)
+      $('#property_rent_price').closest('.form-group').find('label').text('Rent')
+    else
+      $('#property_rent_price').prop('required', true)
+      $('#property_rent_price').closest('.form-group').find('label').text('Rent *')
 
   $('table#pt_data_table').DataTable
     'oLanguage': 'sEmptyTable': 'You have not engaged in any Transactions, when you do, this tab will track your activity.'

@@ -293,7 +293,7 @@ class Entity < ApplicationRecord
       c = Entity.where(id: poa).pluck(:name, :id, :type_, :has_comma, :legal_ending)
     else
       # exclude all individual member types and concurrent estates
-      a = Entity.where.not(name: [nil, ''], type_: [1,2,3,4]).pluck(:name, :id, :type_, :has_comma, :legal_ending)
+      a = Entity.where.not(name: [nil, ''], type_: [1,2,3,4,7,8,9]).pluck(:name, :id, :type_, :has_comma, :legal_ending)
       # include sole props with business names
       b = Entity.where("name2 is not null and name2 <> '' and type_ = ?", 2).pluck(:name, :id, :type_, :has_comma, :legal_ending)
       # include poa for entities
@@ -398,11 +398,11 @@ class Entity < ApplicationRecord
   end
 
   def validation_for_names
-    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? #|| self.power_of_attorney?
+    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? || self.power_of_attorney? || self.TenancyinCommon?
   end
 
   def validation_for_first_and_last_names
-    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? || self.power_of_attorney?
+    self.LLC? || self.LLP? || self.LimitedPartnership? || self.Corporation? || self.Partnership? || self.Trust? || self.power_of_attorney? || self.TenancyinCommon?
   end
 
   public

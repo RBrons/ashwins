@@ -19,34 +19,45 @@
         - override_active_record_errors(@entity.errors.messages, {name: :property_address, base: ''}).each do |message|
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .clearfix
-    .form-group
-      label.control-label Date of Formation
+    - available_properties = Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased', owner_entity_id: [0, nil]).select {|s| !s.is_owned_by_concurrent_estate?}
+    - if available_properties.length > 0
       .clearfix
-      .pull-left
-        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_tenancy_in_common_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
-        = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
-      .pull-right
+      .form-group
+        label.control-label Date of Formation
+        .clearfix
         .pull-left
-          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+          = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_tenancy_in_common_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
+          = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
         .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_tenancy_in_common_date_of_formation' }, class: 'manually_date'
+          .pull-left
+            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+          .pull-right
+            = f.check_box :m_date_of_formation, data: { class: 'entity_tenancy_in_common_date_of_formation' }, class: 'manually_date'
 
     .clearfix
-    .form-group.required.margin-sm-top
-      label.control-label Property Title
-      = f.select :property_id, options_for_select(Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased').pluck(:title, :id), f.object.property_id), {}, class: 'selectize-single'
-      div#linkbacks
-        = linkbacks_property @entity.property
-        .add-list-entity-links.pull-right
-          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
-
-    .form-group
-      - if @entity.persisted?
-        - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
-        = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+    - unless @entity.key.present?
+      - if available_properties.length == 0
+        p.text-info.con-current = "You have 0 properties that can be the property of this Tenancy in Common. Please create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner.".html_safe
+      - elsif available_properties.length == 1
+        p.text-info.con-current = "You have 1 property that can be the property of this Tenancy in Common. Therefore, it has been pre-selected. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
       - else
-        = f.submit 'Save', class: 'btn btn-sm btn-primary'
+        p.text-info.con-current = "You have #{available_properties.length} properties that can be the property of this Tenancy in Common. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
+
+    - if available_properties.length > 0
+      .clearfix
+      .form-group.required.margin-sm-top
+        label.control-label Property Title
+        - if available_properties.length > 1
+          = f.select :property_id, options_for_select(available_properties.pluck(:title, :id), f.object.property_id), {}, class: 'form-control'
+        - else
+          = f.select :property_id, options_for_select(available_properties.pluck(:title, :id), available_properties.pluck(:title, :id).first[1]), {}, class: 'form-control disabled-like', readonly: true
+
+      .form-group
+        - if @entity.persisted?
+          - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
+          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+        - else
+          = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 #popup-should-not-change.corporate
   = hidden_field_tag "should_not_change[name]", (@entity.persisted? ? @entity.reload["name"] : '')

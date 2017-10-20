@@ -30,6 +30,8 @@ table#data_table
             = link_to property.owner.try(:display_name), entity_path(property.owner.key)
           - elsif property.owner.is_a?(Contact)
             = link_to property.owner.try(:name), edit_contact_path(property.owner.id)
+          - else
+            = property_owned_by(property)
         td = property.title
         td = property.location_county
         td = property.abbreviations_state

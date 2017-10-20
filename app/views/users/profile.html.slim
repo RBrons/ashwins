@@ -13,8 +13,14 @@ div
           .form-group
             h4
               | Name:&nbsp;
-              = @user.first_name.rstrip + ', ' + @user.last_name.lstrip
-          .form-gropu
+              - if @user.first_name.present? && @user.last_name.present?
+                = @user.first_name.rstrip + ', ' + @user.last_name.lstrip
+              - else
+                | Not Yet Inputted
+          .form-group
             h4
               | Organization:&nbsp;
-              = @user.attorney_firm.try(:name)
+              - if @user.attorney_firm.present?
+                = @user.attorney_firm.try(:name)
+              - else
+                | Not Yet Inputted

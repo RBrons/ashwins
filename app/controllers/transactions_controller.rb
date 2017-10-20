@@ -5,7 +5,7 @@ class TransactionsController < ApplicationController
                                          :personnel_update, :get_status, :set_status, :qi_status, :inspection_update]
   before_action :current_page
   before_action :add_breadcrum, only: [:index]
-  before_action :validate_user_assets, except: [:index]
+  before_action :validate_ipp, except: [:index]
   # GET /project
   # GET /project.json
 
@@ -1022,7 +1022,7 @@ class TransactionsController < ApplicationController
     @current_page = 'project'
   end
 
-  def validate_user_assets
+  def validate_ipp
     @exchangor = Entity.where(id: AccessResource.get_ids({user: current_user, resource_klass: 'Entity'})).first
     @initial_relinquishing_purchaser = Contact.where(contact_type: 'Counter-Party', user_id: current_user.id).first
     @initial_replacement_property =  Property.where('ownership_status = ? and title is not null and user_id = ?', 'Prospective Purchase', current_user.id).first

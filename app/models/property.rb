@@ -323,4 +323,8 @@ class Property < ApplicationRecord
     end
   end
 
+  def is_owned_by_concurrent_estate?
+    Entity.where(property_id: self.id, type_: [7, 8, 9]).length > 0
+  end
+
 end
