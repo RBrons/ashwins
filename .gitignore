@@ -55,3 +55,5 @@ dvnobackup.sql
 
 # Ignore any db dumps
 *.dump
+
+.byebug_history
