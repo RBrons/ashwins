@@ -422,7 +422,7 @@ module ApplicationHelper
       when "principal"
         person_true_entities = current_user.entities_list(super_entity).where(type_: [1, 2, 4]).order(type_: :asc)
       when "agent"
-        person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2]).order(type_: :asc)
+        person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2]).where('id != ?', super_entity.principal.entity_id).order(type_: :asc)
       when "settlor"
         person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2, 3, 4]).order(type_: :asc)
       when "trustee"
@@ -562,7 +562,7 @@ module ApplicationHelper
       when "principal"
         person_false_entities = current_user.entities_list(super_entity).where(type_: [6, 10, 11, 12, 13, 14]).order(type_: :asc)
       when "agent"
-        person_false_entities = current_user.entities_list(super_entity.id).where(type_: [10, 11, 12, 13, 14]).order(type_: :asc)
+        person_false_entities = current_user.entities_list(super_entity.id).where(type_: [10, 11, 12, 13, 14]).where('id != ?', super_entity.principal.entity_id).order(type_: :asc)
       when "trustee"
         person_false_entities = current_user.entities_list(super_entity.id).where(type_: [10, 11, 12, 13, 14]).order(type_: :asc)
       when "beneficiary"
