@@ -422,13 +422,21 @@ module ApplicationHelper
       when "principal"
         person_true_entities = current_user.entities_list(super_entity).where(type_: [1, 2, 4]).order(type_: :asc)
       when "agent"
-        person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2]).order(type_: :asc)
+        person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2]).where('id != ?', super_entity.principal.entity_id).order(type_: :asc)
       when "settlor"
         person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2, 3, 4]).order(type_: :asc)
       when "trustee"
-        person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 3, 4]).order(type_: :asc)
+        if super_entity.beneficiaries.select(:entity_id).map(&:entity_id).blank?
+          person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 3, 4]).order(type_: :asc)
+        else
+          person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 3, 4]).where('id not in (?)', super_entity.beneficiaries.select(:entity_id).map(&:entity_id)).order(type_: :asc)
+        end
       when "beneficiary"
-        person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2, 3, 4]).order(type_: :asc)
+        if super_entity.trustees.select(:entity_id).map(&:entity_id).blank?
+          person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2, 3, 4]).order(type_: :asc)
+        else
+          person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2, 3, 4]).where('id not in (?)', super_entity.trustees.select(:entity_id).map(&:entity_id)).order(type_: :asc)
+        end
       when "member"
         person_true_entities = current_user.entities_list(super_entity.id).where(type_: [1, 2, 3, 4]).order(type_: :asc)
       when "manager"
@@ -562,7 +570,7 @@ module ApplicationHelper
       when "principal"
         person_false_entities = current_user.entities_list(super_entity).where(type_: [6, 10, 11, 12, 13, 14]).order(type_: :asc)
       when "agent"
-        person_false_entities = current_user.entities_list(super_entity.id).where(type_: [10, 11, 12, 13, 14]).order(type_: :asc)
+        person_false_entities = current_user.entities_list(super_entity.id).where(type_: [10, 11, 12, 13, 14]).where('id != ?', super_entity.principal.entity_id).order(type_: :asc)
       when "trustee"
         person_false_entities = current_user.entities_list(super_entity.id).where(type_: [10, 11, 12, 13, 14]).order(type_: :asc)
       when "beneficiary"
