@@ -3,7 +3,7 @@ class Entities::JointTenancyController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -15,6 +15,10 @@ class Entities::JointTenancyController < ApplicationController
       #end
       @entity       ||= EntityJointTenancy.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      add_breadcrumb "Clients", clients_path, :title => "Clients" 
+      add_breadcrumb "Joint Tenancy", '',  :title => "Joint Tenancy"
+      # add_breadcrumb "Joint Tenant", '',  :title => "Joint Tenant"
+      add_breadcrumb "Declare Property", '',  :title => "Declare Property"
     elsif request.post?
       @entity                 = EntityJointTenancy.new(entity_joint_tenancy_params)
       @entity.type_           = MemberType.getJointTenancyId
@@ -47,6 +51,12 @@ class Entities::JointTenancyController < ApplicationController
       @joint_tenant                 = JointTenant.find(id) if id.present?
       @joint_tenant                 ||= JointTenant.new
       @joint_tenant.super_entity_id = @entity.id
+      if request.get?
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Joint Tenancy", '',  :title => "Joint Tenancy"
+        add_breadcrumb "Joint Tenant", '',  :title => "Joint Tenant"
+        add_breadcrumb "Declare Property", '',  :title => "Declare Property"
+      end
     end
     if request.post?
       @joint_tenant                 = JointTenant.new(joint_tenant_params)

@@ -3,7 +3,7 @@ class Entities::LimitedPartnershipController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -12,6 +12,16 @@ class Entities::LimitedPartnershipController < ApplicationController
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      if @entity.name == ""
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Limited Partnership", '',  :title => "Limited Partnership" 
+        add_breadcrumb "Create", '',  :title => "Create" 
+      else
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+        add_breadcrumb "Limited Partnership", '',  :title => "Limited Partnership" 
+        add_breadcrumb "Create", '',  :title => "Create" 
+      end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getLimitedPartnershipId
@@ -59,6 +69,19 @@ class Entities::LimitedPartnershipController < ApplicationController
       @partner                 = LimitedPartner.find(id) if id.present?
       @partner                 ||= LimitedPartner.new
       @partner.super_entity_id = @entity.id
+      if @partner.new_record?
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Partner", '',  :title => "Limited Partner"
+          add_breadcrumb "Limited Partner", '',  :title => "Limited Partner"
+          add_breadcrumb "Create", '',  :title => "Create" 
+        else
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Partner", '',  :title => "Limited Partner"
+          add_breadcrumb "Eidt: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Limited Partner", '',  :title => "Limited Partner"
+        end
     end
     if request.post?
       @partner                 = LimitedPartner.new(limited_partner_params)
@@ -105,6 +128,19 @@ class Entities::LimitedPartnershipController < ApplicationController
       @partner                 ||= GeneralPartner.new
       @partner.super_entity_id = @entity.id
       @partner.class_name      = "GeneralPartner"
+      if @partner.new_record?
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Partner", '',  :title => "Limited Partner"
+          add_breadcrumb "General Partner", '',  :title => "General Partner"
+          add_breadcrumb "Create", '',  :title => "Create" 
+        else
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Partner", '',  :title => "Limited Partner"
+          add_breadcrumb "Eidt: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "General Partner", '',  :title => "General Partner"
+        end
     end
     if request.post?
       @partner                 = GeneralPartner.new(general_partner_params)

@@ -1,3 +1,6 @@
+.bread_crumb_limited_partnership
+  = render_breadcrumbs :separator => ' / '
+
 = form_for @settlor, url: entities_trust_settlor_path(@entity.key, @settlor.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Settlor'
   - if @settlor.errors.any?

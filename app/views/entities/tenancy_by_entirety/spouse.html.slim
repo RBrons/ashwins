@@ -1,3 +1,6 @@
+.bread_crumb_limited_partnership
+  = render_breadcrumbs :separator => ' / '
+
 = form_for @spouse, url: entities_tenancy_by_entirety_spouse_path( @entity.key, @spouse.id ), remote: true, html: { class: "entity-page-xhr" } do |f|
   = hidden_field_tag :int_action, 'Add Spouse'
   - if @spouse.errors.any?
