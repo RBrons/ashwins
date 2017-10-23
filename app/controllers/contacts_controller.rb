@@ -6,7 +6,6 @@ class ContactsController < ApplicationController
     @contact.cprefix =  (params[:contact_type] == "company") ? "Contact " : ""
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\">Add #{(params[:contact_type] || "contact").titleize} </a></h4></div>".html_safe
-    # add_breadcrumb "Add #{(params[:contact_type] || "contact").titleize}", new_contact_path
     render layout: false, template: "contacts/new" if request.xhr?
   end
 
