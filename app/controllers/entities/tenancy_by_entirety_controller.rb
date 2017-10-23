@@ -2,7 +2,7 @@ class Entities::TenancyByEntiretyController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -45,6 +45,12 @@ class Entities::TenancyByEntiretyController < ApplicationController
       @spouse                 = Spouse.find(id) if id.present?
       @spouse                 ||= Spouse.new
       @spouse.super_entity_id = @entity.id
+      if request.get?
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+        add_breadcrumb "Tenant by the Entirety", '',  :title => "Tenant by the Entirety"
+        add_breadcrumb "Create", '',  :title => "Create"
+      end
     end
     if request.post?
       if @entity.spouses.count >= 2
