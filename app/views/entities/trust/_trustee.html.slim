@@ -1,6 +1,3 @@
-.bread_crumb_limited_partnership
-  = render_breadcrumbs :separator => ' / '
-
 = form_for @trustee, url: entities_trust_trustee_path(@entity.key, @trustee.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Trustee'
   - if @trustee.errors.any?
@@ -16,18 +13,17 @@
   - plural_entity_str = entity_trustees.length != 1 ? 'entity clients or contacts' : 'entity client or contact'
   - plural_individual_str = individual_trustees.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_trustees.length} #{plural_individual_str} and #{entity_trustees.length} #{plural_entity_str} who could serve as Trustee for this Trust."
-  - basic_str_no_zero = "serve as Trustee for this Trust."
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - if individual_trustees.length == 0 && entity_trustees.length == 0
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_trustees.length == 1 && entity_trustees.length == 0
       - @trustee.is_person = true
-      p.text-info = (basic_str_no_zero + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - elsif individual_trustees.length == 0 && entity_trustees.length == 1
-      p.text-info = (basic_str_no_zero + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+      p.text-info = (basic_str + " Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
     - else
-      p.text-info = (basic_str_no_zero + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+      p.text-info = (basic_str + " Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Trustee <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
 
     - if individual_trustees.length != 0 || entity_trustees.length != 0
       .form-group style=("#{('display: none;' if entity_trustees.length == 0 || individual_trustees.length == 0)}")
