@@ -3,7 +3,7 @@ class Entities::LlpController < ApplicationController
   before_action :current_page
   # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  # before_action :add_breadcrum
+  before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -12,15 +12,6 @@ class Entities::LlpController < ApplicationController
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
-      if @entity.name == ""
-        add_breadcrumb "Clients", clients_path, :title => "Clients" 
-        add_breadcrumb "Limited Liability Partnership", '',  :title => "Limited Liability Partnership" 
-        add_breadcrumb "Create", '',  :title => "Create" 
-      else
-        add_breadcrumb "Clients", clients_path, :title => "Clients" 
-        add_breadcrumb "Limited Liability Partnership", '',  :title => "Limited Liability Partnership" 
-        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
-      end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getLLPId
@@ -72,23 +63,10 @@ class Entities::LlpController < ApplicationController
       @partner.super_entity_id = @entity.id
 
       if request.get?
-        # if @partner.new_record?
-        #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Partner </a></h4></div>".html_safe
-        # else
-        #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Partner </a></h4></div>".html_safe
-        # endLimited Liability PartnershipLimited Liability Partnership
         if @partner.new_record?
-          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
-          add_breadcrumb "Clients", clients_path, :title => "Clients" 
-          add_breadcrumb "Limited Liability Partnership", '',  :title => "Limited Liability Partnership" 
-          add_breadcrumb "Limited Liability Partner", '',  :title => "Limited Liability Partner" 
-          add_breadcrumb "Create", '',  :title => "Create" 
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Partner </a></h4></div>".html_safe
         else
-          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
-          add_breadcrumb "Clients", clients_path, :title => "Clients" 
-          add_breadcrumb "Limited Liability Partnership", '',  :title => "Limited Liability Partnership" 
-          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
-          add_breadcrumb "Limited Liability Partner", '',  :title => "Limited Liability Partner" 
+          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Partner </a></h4></div>".html_safe
         end
       else
         add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Partner </a></h4></div>".html_safe

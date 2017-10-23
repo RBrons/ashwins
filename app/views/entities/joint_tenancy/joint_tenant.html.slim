@@ -1,5 +1,3 @@
-
-
 = form_for @joint_tenant, url: entities_joint_tenancy_joint_tenant_path( @entity.key, @joint_tenant.id ), remote: true, html: { class: "entity-page-xhr" } do |f|
   = hidden_field_tag :int_action, 'Add Joint Tenant'
   - if @joint_tenant.errors.any?
