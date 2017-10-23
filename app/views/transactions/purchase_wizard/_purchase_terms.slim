@@ -116,7 +116,7 @@
           span &nbsp;is selling&nbsp;
           span = @property.title + " for "
           span = number_to_currency(get_sale_price(@transaction_property))
-        .col-md-6.col-sm-12.col-xs-12
+        .col-md-8.col-sm-12.col-xs-12
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
               .form-group
@@ -186,23 +186,26 @@
                               span.margin-md-left.blue Select in Google Drive
                   .checkbox-inline
                       input.flat-icheck[type="checkbox" name=""]
-                          span.margin-sm-left Directory
-                  .checkbox-inline
-                      input.flat-icheck[type="checkbox" name="" checked]
-                          span.margin-sm-left Draft
+                        span.margin-sm-left Directory
                   .checkbox-inline
                       input.flat-icheck[type="checkbox" name=""]
-                          span.margin-sm-left Executable
+                        span.margin-sm-left Executable
                   .checkbox-inline
                       input.flat-icheck[type="checkbox" name=""]
-                          span.margin-sm-left Executed
+                        span.margin-sm-left Client Executed
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""]
+                        span.margin-sm-left Counterparty Executed
+                  .checkbox-inline
+                      input.flat-icheck[type="checkbox" name=""]
+                        span.margin-sm-left Merged
 
             .clearfix
             .divider
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
 
-        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+        .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .note
             h2 Tasks
             ul.to_do
@@ -244,7 +247,7 @@
                     span Document Property Filed?
 
       #purchase_sale_agreement_section.tab-pane.fade[role="tabpanel"]
-        .col-md-6.col-sm-12.col-xs-12
+        .col-md-8.col-sm-12.col-xs-12
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
 
@@ -259,16 +262,19 @@
                           span.margin-md-left.blue Select in Google Drive
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
-                            span.margin-sm-left Directory
-                    .checkbox-inline
-                        input.flat-icheck[type="checkbox" name="" checked]
-                            span.margin-sm-left Draft
+                          span.margin-sm-left Directory
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
-                            span.margin-sm-left Executable
+                          span.margin-sm-left Executable
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
-                            span.margin-sm-left Executed
+                          span.margin-sm-left Client Executed
+                    .checkbox-inline
+                        input.flat-icheck[type="checkbox" name=""]
+                          span.margin-sm-left Counterparty Executed
+                    .checkbox-inline
+                        input.flat-icheck[type="checkbox" name=""]
+                          span.margin-sm-left Merged
 
                     .clearfix.margin-sm-top
                     button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
@@ -352,7 +358,7 @@
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
 
-        .col-lg-6.col-md-6.col-sm-12.col-xs-12
+        .col-lg-4.col-md-4.col-sm-12.col-xs-12
           .note
             h2 Tasks
             ul.to_do

@@ -1360,6 +1360,15 @@ $ ->
     priceBox.find('label').text('Propose an Asking Price')
     capBox.find('label').text('This will result in a Cap Rate of')
 
+  $(document).on 'keyup', ".transaction-property-calculation-readonly input[name^='updated_current_rent']", (e)->
+    currentRent = $(this).val().replace(/\,/g, '')
+    if $(this).parents('.fields').find('.radio_edit_mode_cap').is(':checked')
+      currentCapRate = $(this).parents('.fields').find("input[name*='cap_rate']").val().replace(/\,/g, '')
+      $(this).parents('.fields').find("input[name*='sale_price']").val(parseFloat(currentRent) * 100 / parseFloat(currentCapRate))  
+    else
+      currentPrice = $(this).parents('.fields').find("input[name*='sale_price']").val().replace(/\,/g, '')
+      $(this).parents('.fields').find("input[name*='cap_rate']").val(parseFloat(currentRent) / parseFloat(currentPrice) * 100)
+      
   $(document).on 'keyup', ".transaction-property-calculation input[name*='cap_rate']", (e)->
     currentRent = $(this).parents('.fields').find('.transaction-property-calculation-readonly .current-rent').val().replace(/\,/g, '')
     currentCapRate = $(this).val().replace(/\,/g, '')

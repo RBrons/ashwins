@@ -211,6 +211,7 @@ $ ->
           exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + legal_ending_html + ' will be your first Exchangor</span>' +
                                 '<a class="margin-sm-left" data-entity-id="' + exchangor_entity_id + '" href="#" id="edit-ipp-exchangor"><i class="fa fa-edit"></i></a>'
           $(document).find('.exchangor-info').html(exchangor_info_html)
+          $(document).find('.exchangor-info').removeClass('text-cancel')
           $(document).find('.exchangor-wrapper .form-wrapper').hide()
           
           $(document).find('#md-add-initial-client').modal('hide')
@@ -306,6 +307,7 @@ $ ->
                                     '<a class="margin-sm-left" data-entity-id="' + exchangor_entity_id + '" href="#" id="edit-ipp-exchangor"><i class="fa fa-edit"></i></a>'
               $(document).find('.exchangor-wrapper .create-initial-client-type').hide()
               $(document).find('.exchangor-info').html(exchangor_info_html)
+              $(document).find('.exchangor-info').removeClass('text-cancel')
               $(document).find('.exchangor-wrapper .form-wrapper').hide()
               current_em.off('blur')
               
@@ -320,6 +322,7 @@ $ ->
             $.notify "Failed!", "error"
   
   $(document).on 'click', '#edit-ipp-exchangor', ->
+    $(document).find('.exchangor-info').addClass('text-cancel')
     $(document).find('.exchangor-wrapper .form-wrapper').show()
   
   $(document).find('.entity-business-detail input').on 'blur keypress', (e) ->
@@ -350,11 +353,14 @@ $ ->
             if data.id
               form.attr('action', '/contacts/' + data.id)
               relinp_id = data.id
+              relinp_info_html = ''
               if data.is_company
                 relinp_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Purchaser.</span>'
               else if data.first_name != '' && data.last_name != ""
                 relinp_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Purchaser.</span>'
               if relinp_info_html != ""
+                relinp_info_html += '<a class="margin-sm-left" data-contact-id="' + relinp_id + '" href="#" id="edit-ipp-relinq_purchaser"><i class="fa fa-edit"></i></a>'
+                $(document).find('.relinquishing-purchaser-info').removeClass('text-cancel')
                 $(document).find('.relinquishing-purchaser-info').html(relinp_info_html)
                 $(document).find('.relinquishing-purchaser-wrapper form').hide()
                 current_em.off('blur')
@@ -368,6 +374,11 @@ $ ->
                 $(document).find('.final-step').text('Skip This Step')
             else
               $.notify "Failed!", "error"
+
+  $(document).on 'click', '#edit-ipp-relinq_purchaser', (e) ->
+    $(document).find('.relinquishing-purchaser-info').addClass('text-cancel')
+    $(document).find('.relinquishing-purchaser-wrapper form').attr('action', '/contacts/' + relinp_id)
+    $(document).find('.relinquishing-purchaser-wrapper form').show()
 
   $(document).find('.repls-individual-detail input, .repls-business-detail input').on 'blur keypress', (e)->
     form = $(this).closest('form')
@@ -390,6 +401,7 @@ $ ->
             if data.id
               form.attr('action', '/contacts/' + data.id)
               repls_contact_id = data.id
+              repls_info_html = ''
               if data.is_company
                 repls_info_html = '<span class="text-success">You have created a data record for ' + data.company_name + ' to be your first Seller.</span>'
                 repls_name = data.company_name
@@ -397,6 +409,8 @@ $ ->
                 repls_info_html = '<span class="text-success">You have created a data record for ' + data.first_name + ' ' + data.last_name + ' to be your first Seller.</span>'
                 repls_name = data.first_name + ' ' + data.last_name
               if repls_info_html != ""
+                repls_info_html += '<a class="margin-sm-left" data-contact-id="' + repls_contact_id + '" href="#" id="edit-ipp-replacement_seller"><i class="fa fa-edit"></i></a>'
+                $(document).find('.replacement-seller-info').removeClass('text-cancel')
                 $(document).find('.replacement-seller-info').html(repls_info_html)
                 $(document).find('.replacement-seller-wrapper form').hide()
                 current_em.off('blur')
@@ -410,8 +424,13 @@ $ ->
                 $(document).find('.final-step').text('Skip This Step')
             else
               $.notify "Failed!", "error"
+  
+  $(document).on 'click', '#edit-ipp-replacement_seller', (e) ->
+    $(document).find('.replacement-seller-info').addClass('text-cancel')
+    $(document).find('.replacement-seller-wrapper form').attr('action', '/contacts/' + repls_contact_id)
+    $(document).find('.replacement-seller-wrapper form').show()
 
-  $(document).find('.create-exchangor-property').on 'click', ->
+  $(document).on 'click', '.create-exchangor-property', ->
     if parseInt(exchangor_entity_id) == 0 || exchangor_entity_id == undefined
       sweetAlert 'First create your Exchangor', '', 'info'
       return
@@ -419,6 +438,7 @@ $ ->
     form = $(document).find('#md-new-property form')
     form.parsley().reset()
     form.find('input').val('')
+    form.find('.fields_for_create input').attr('disabled', false)
     form.find('input#ostatus').val('Purchased')
     form.find('input#property_ownership_status').val('Purchased')
     if exchangor_entity_type == 'Individual'
@@ -430,8 +450,24 @@ $ ->
       form.find('input#property_owner_entity_id_indv').val('')
       form.find('input#property_owner_person_is').val('false')
     $(document).find('#md-new-property').modal('show')
+  
+  $(document).on 'click', '#edit-ipp-purchased-property', (e) ->
+    form = $(document).find('#md-new-property form')
+    $(document).find('.purchased-property-info').addClass('text-cancel')
+    if parseInt(purchased_property_id) != 0
+      form.find("input[name='_method']").val('patch')
+      form.attr('action', '/properties/' + purchased_property_id)
+    else
+      form.find("input[name='_method']").val('post')
+      form.attr('action', '/properties/')
 
-  $(document).find('.create-seller-property').on 'click', ->
+    form.find('.fields_for_create input').attr('disabled', true)
+    $(document).find('#md-new-property').modal('show')
+
+  $(document).on 'click', '#cancel-property', (e) ->
+    $(document).find('.purchased-property-info').removeClass('text-cancel')
+
+  $(document).on 'click', '.create-seller-property', ->
     if parseInt(repls_contact_id) == 0 || repls_contact_id == undefined
       sweetAlert 'First create your\n Replacement Seller', '', 'info'
       return
@@ -449,6 +485,19 @@ $ ->
       form.find('input#property_owner_entity_id').val('')
       form.find('input#property_owner_entity_id_indv').val(repls_contact_id)
       form.find('input#property_owner_person_is').val('true')
+    $(document).find('#md-new-property').modal('show')
+  
+  $(document).on 'click', '#edit-ipp-prospective-property', (e) ->
+    form = $(document).find('#md-new-property form')
+    $(document).find('.prospective-property-info').addClass('text-cancel')
+    if parseInt(replacement_property_id) != 0
+      form.find("input[name='_method']").val('patch')
+      form.attr('action', '/properties/' + replacement_property_id)
+    else
+      form.find("input[name='_method']").val('post')
+      form.attr('action', '/properties/')
+
+    form.find('.fields_for_create input').attr('disabled', true)
     $(document).find('#md-new-property').modal('show')
 
   $(document).find('#md-new-property form select#property_tenant_id').on 'change', ->
@@ -475,12 +524,17 @@ $ ->
     $(document).find('#md-new-property').modal('hide')
     if JSON.parse(data.responseText).ownership_status == 'Purchased'
       purchased_property_id = JSON.parse(data.responseText).id
-      purchased_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Purchased Property of ' + exchangor_name + '</span>.'
-      $(document).find('.create-exchangor-property').parent('p').html(purchased_info_html)
+      purchased_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Purchased Property of ' + exchangor_name + '</span>.' + 
+                            '<a class="margin-sm-left" data-property-id="' + purchased_property_id + '" href="#" id="edit-ipp-purchased-property"><i class="fa fa-edit"></i></a>'
+      $(document).find('.purchased-property-info').removeClass('text-cancel')
+      $(document).find('.purchased-property-info').html(purchased_info_html)
     else
       replacement_property_id = JSON.parse(data.responseText).id
-      replacement_property_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Prospective Purchase Property of ' + repls_name + '</span>.'
-      $(document).find('.create-seller-property').parent('p').html(replacement_property_info_html)
+      replacement_property_info_html = '<span class="text-success">You have a created a data record for ' + JSON.parse(data.responseText).title + ' to be the first Prospective Purchase Property of ' + repls_name + '</span>.' + 
+                                       '<a class="margin-sm-left" data-property-id="' + replacement_property_id + '" href="#" id="edit-ipp-prospective-property"><i class="fa fa-edit"></i></a>'
+      $(document).find('.prospective-property-info').removeClass('text-cancel')
+      $(document).find('.prospective-property-info').html(replacement_property_info_html)
+    
     if exchangor_entity_id && purchased_property_id && relinp_id && repls_contact_id && replacement_property_id
       $(document).find('#completed-ipp').show()
       $(document).find('.final-step').removeAttr('data-dismiss')

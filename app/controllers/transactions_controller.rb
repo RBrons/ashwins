@@ -260,6 +260,14 @@ class TransactionsController < ApplicationController
         @transaction.save! if flag
         
         if params[:type] == 'sale'
+          # Update property when transaction properties' current rent would be changed
+          transaction_property_params[:transaction_properties_attributes].each do |key, property_params|
+            property_in_transaction = Property.find(property_params[:property_id])
+            if property_in_transaction.present?
+              property_in_transaction.update!(:current_rent => params[:updated_current_rent]["#{property_params[:property_id]}".to_sym])
+            end
+          end
+
           @transaction.update!(transaction_property_params)
         else
           if params[:identification_rule] == '200_percent' || params[:identification_rule] == 'three_property'
@@ -320,7 +328,7 @@ class TransactionsController < ApplicationController
         end
       end
 
-      #return redirect_to personnel_transaction_path(@transaction, sub: 'personnel', type: params[:type], main_id: params[:main_id])
+      # return redirect_to personnel_transaction_path(@transaction, sub: 'personnel', type: params[:type], main_id: params[:main_id])
       if @transaction.get_sale_purchase_text == 'sale'
         return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: @transaction.get_sale_purchase_text, main_id: @transaction_main.id)
       else

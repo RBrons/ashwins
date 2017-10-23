@@ -79,9 +79,12 @@
                             
                             - if @exchangor.has_purchased_properties?
                                 input.purchased_property_id[type="hidden" value="#{@purchased_property_id}"]
-                                p.text-success = "You have created a data record for #{@exchangor.property.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
+                                p.purchased-property-info.text-success
+                                    = "You have created a data record for #{@exchangor.purchased_properties.first.try(:title)} to be the first Purchased Property of #{@exchangor.name.nil? ? @exchangor.first_name + ' ' + @exchangor.last_name : @exchangor.name}."
+                                    a#edit-ipp-purchased-property.margin-sm-left[href="#" data-property-id=(@exchangor.purchased_properties.first.id)]
+                                        i.fa.fa-edit
                             - else
-                                p 
+                                p.purchased-property-info
                                     a.create-exchangor-property.text-danger[href="#"] Create a property for your first Exchangor
                 
                 li
@@ -91,14 +94,20 @@
                     section.relinquishing-purchaser-wrapper.margin-lg-left
                         - if @relinquishing_purchaser.present?
                             input.relinp_id[type="hidden" value="#{@relinquishing_purchaser.id}"]
-                            p.text-success = "You have created a data record for #{@relinquishing_purchaser.name} to be your first purchaser."
+                            p.relinquishing-purchaser-info.text-success
+                                = "You have created a data record for #{@relinquishing_purchaser.name} to be your first purchaser."
+                                a#edit-ipp-relinq_purchaser.margin-sm-left[href="#" data-contact-id=(@relinquishing_purchaser.id)]
+                                    i.fa.fa-edit
                         - else
-                            p.relinquishing-purchaser-info.text-danger
+                            p.relinquishing-purchaser-info.text-success
+
+                        form[action="" style=(@relinquishing_purchaser.present? ? 'display: none' : '')]
+                            p.text-danger
                                 | Will your first Relinquishing Purchaser be a 
                                 a.is_relinp_business.text-danger.underline-red[href="#"] business
                                 | &nbsp;or&nbsp;
                                 a.is_relinp_individual.text-danger.underline-red[href="#"] individual
-                        form[action=""]
+                            
                             input[type="hidden" name="contact[role]" value="Counter-Party"]
                             input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
                             input[type="hidden" name="contact[is_company]" value="false"]
@@ -123,15 +132,20 @@
                             - if @replacement_property.owner.present?
                                 input.repls_contact_id[type="hidden" value="#{@replacement_property.owner.id}"]
                                 input.replacement_property_id[type="hidden" value="#{@replacement_property.id}"]
-                                p.text-success = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
+                                p.replacement_seller_info.text-success 
+                                    = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
+                                    a#edit-ipp-replacement_seller.margin-sm-left[href="#" data-contact-id=(@replacement_property.owner.id)]
+                                        i.fa.fa-edit
                         - else
-                            p.replacement-seller-info.text-danger
+                            p.replacement-seller-info.text-success
+                        
+                        form[action="" style=(@replacement_property.present? ? (@replacement_property.owner.present? ? 'display: none' : '') : '')]
+                            p.text-danger
                                 | Will your first Replacement Seller be a 
                                 a.is_repls_business.text-danger.underline-red[href="#"] business
                                 | &nbsp;or&nbsp;
                                 a.is_repls_individual.text-danger.underline-red[href="#"] individual
-                                        
-                        form[action=""]
+                                
                             input[type="hidden" name="contact[role]" value="Counter-Party"]
                             input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
                             input[type="hidden" name="contact[is_company]" value="false"]
@@ -147,7 +161,7 @@
                                     div.col-md-2.col-xs-6
                                         input.form-control[name="contact[company_name]" type="text"]
                         - if !@replacement_property.present?
-                            p 
+                            p.prospective-property-info
                                 a.create-seller-property.text-danger[href="#"] Create a property for your first Replacement Seller
 
         .modal-footer
@@ -165,12 +179,14 @@
             h4.modal-title Add Property
         .modal-body
             form[action="/properties" data-remote="true" method="post"]
+                input[type="hidden" name="_method" value="post"]
                 input#ostatus[type="hidden" name="ostatus" value=""]
-                input#property_ownership_status[type="hidden" name="property[ownership_status]" value=""]
-                input#property_owner_entity_id[type="hidden" name="property[owner_entity_id]" value=""]
-                input#property_owner_entity_id_indv[type="hidden" name="property[owner_entity_id_indv]" value=""]
-                input#property_owner_person_is[type="hidden" name="property[owner_person_is]" value=""]
                 input#property_title[type="hidden" name="property[title]"]
+                .fields_for_create.form-group
+                    input#property_ownership_status[type="hidden" name="property[ownership_status]" value=""]
+                    input#property_owner_entity_id[type="hidden" name="property[owner_entity_id]" value=""]
+                    input#property_owner_entity_id_indv[type="hidden" name="property[owner_entity_id_indv]" value=""]
+                    input#property_owner_person_is[type="hidden" name="property[owner_person_is]" value=""]
                 
                 .form-group
                     label.control-label Tenant *
@@ -194,7 +210,7 @@
                         input#property_rent_price.form-control.input-mask-currency[type="text" name="property[current_rent]" required data-parsley-error-message="Please input the monthly rental amount"]
                         
                 button.btn.btn-primary[type="submit"] Save
-                a.btn.btn-default[href="#" data-dismiss="modal"] Close
+                a#cancel-property.btn.btn-default[href="#" data-dismiss="modal"] Close
 
 /! Clients Modal For Adding Entities on Initial Sign Up Sequence
 #md-add-initial-client.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]

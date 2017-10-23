@@ -5313,3 +5313,7 @@ ol.number_with_parentheses > li:before {
     position: absolute;
     left: -1.8em;
 }
+
+.text-cancel{
+    text-decoration: line-through
+}

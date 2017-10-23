@@ -235,6 +235,7 @@ class PropertiesController < ApplicationController
           else
             format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is], lease_sub: params[:lease_sub]) }
           end
+          format.js { render json: @property.to_json, status: :ok }
           format.json { render action: 'show', status: :created, location: @property }
         else
           format.html { render action: 'edit' }
