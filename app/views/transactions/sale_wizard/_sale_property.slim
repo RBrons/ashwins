@@ -73,9 +73,9 @@
             .input-group
               .input-group-addon $
               - unless transaction_property_form.object.property.nil?
-                input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=transaction_property_form.object.property.current_rent
+                input type='text' name='updated_current_rent[#{transaction_property_form.object.property.id}]' class='form-control input-mask-currency current-rent' value=transaction_property_form.object.property.current_rent
               - else
-                input type='text' disabled='disabled' class='form-control input-mask-currency current-rent' value=''
+                input type='text' name='updated_current_rent[#{transaction_property_form.object.property.id}]' class='form-control input-mask-currency current-rent' value=''
               / = transaction_property_form.text_field :cap_rate, disabled: 'disabled', class: 'form-control input-mask-currency'
         .transaction-property-image
           - if !transaction_property_form.object.property.nil? && !transaction_property_form.object.property.property_cover_image.nil? && !transaction_property_form.object.property.property_cover_image.cl_image_public_id.nil?
