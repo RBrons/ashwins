@@ -3,7 +3,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
   before_action :current_page
   # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     key = params[:entity_key]
@@ -18,6 +18,18 @@ class Entities::PowerOfAttorneyController < ApplicationController
       else
         @principal = Principal.new
       end
+
+      if @entity.name == ""
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Power of Attorney", '',  :title => "Power of Attorney"
+        add_breadcrumb "Principal", '',  :title => "Principal"
+        add_breadcrumb "Create", '',  :title => "Create" 
+      else
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Power of Attorney", '',  :title => "Power of Attorney" 
+        add_breadcrumb "Edit: #{@principal.name}", '',  :title => "Edit" 
+      end
+
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getPowerOfAttorneyId
@@ -123,7 +135,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
   # end
 
   def agent
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Agent </a></h4></div>".html_safe
+    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Agent </a></h4></div>".html_safe
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key] || params[:key])
       id      = params[:id]
@@ -132,6 +144,20 @@ class Entities::PowerOfAttorneyController < ApplicationController
       @agent                 = @entity.agents.first if @entity.agents.present?
       @agent                 ||= Agent.new
       @agent.super_entity_id = @entity.id
+      if request.get?
+        if @agent.new_record?
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Power of Attorney", '',  :title => "Power of Attorney" 
+          add_breadcrumb "Agent", '',  :title => "Agent" 
+          add_breadcrumb "Create", '',  :title => "Create" 
+        else
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Power of Attorney", '',  :title => "Power of Attorney" 
+          add_breadcrumb "Edit: #{@agent.name}", '',  :title => "Edit" 
+        end
+      end
     end
     if request.post?
       @agent                 = Agent.new(agent_params)

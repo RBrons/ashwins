@@ -3,7 +3,7 @@ class Entities::TrustController < ApplicationController
   before_action :current_page
   # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -12,6 +12,15 @@ class Entities::TrustController < ApplicationController
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      if @entity.name == ""
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Trust", '',  :title => "Trust" 
+        add_breadcrumb "Create", '',  :title => "Create" 
+      else
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Trust", '',  :title => "Trust" 
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+      end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getTrustId
@@ -61,6 +70,21 @@ class Entities::TrustController < ApplicationController
       @settlor                 = Settlor.find(id) if id.present?
       @settlor                 ||= Settlor.new
       @settlor.super_entity_id = @entity.id
+      if request.get?
+        if @settlor.new_record?
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Trust", '',  :title => "Trust" 
+          add_breadcrumb "Settlor", '',  :title => "Settlor" 
+          add_breadcrumb "Create", '',  :title => "Create" 
+        else
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Trust", '',  :title => "Trust" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Settlor", '',  :title => "Settlor" 
+        end
+      end
     end
     if request.post?
       @settlor                 = Settlor.new(settlor_params)
@@ -117,6 +141,21 @@ class Entities::TrustController < ApplicationController
       @trustee                 ||= Trustee.new
       @trustee.super_entity_id = @entity.id
       @trustee.class_name      = "Trustee"
+      if request.get?
+        if @trustee.new_record?
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Trust", '',  :title => "Trust" 
+          add_breadcrumb "Trustee", '',  :title => "Trustee" 
+          add_breadcrumb "Create", '',  :title => "Create" 
+        else
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Trust", '',  :title => "Trust" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Trustee", '',  :title => "Trustee" 
+        end
+      end
     end
     if request.post?
       @trustee                 = Trustee.new(trustee_params)
@@ -173,6 +212,21 @@ class Entities::TrustController < ApplicationController
       @beneficiary                 ||= Beneficiary.new
       @beneficiary.super_entity_id = @entity.id
       @beneficiary.class_name      = "Beneficiary"
+      if request.get?
+        if @beneficiary.new_record?
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Trust", '',  :title => "Trust" 
+          add_breadcrumb "Beneficiary", '',  :title => "Beneficiary" 
+          add_breadcrumb "Create", '',  :title => "Create" 
+        else
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Trust", '',  :title => "Trust" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Beneficiary", '',  :title => "Beneficiary" 
+        end
+      end
     end
     if request.post?
       debugger

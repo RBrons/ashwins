@@ -1,3 +1,6 @@
+.bread_crumb_limited_partnership
+  = render_breadcrumbs :separator => ' / '
+
 = form_for @beneficiary, url: entities_trust_beneficiary_path(@entity.key, @beneficiary.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Beneficiary'
   - if @beneficiary.errors.any?

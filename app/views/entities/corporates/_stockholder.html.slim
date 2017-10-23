@@ -1,4 +1,5 @@
-= render_breadcrumbs :separator => ' / '
+.bread_crumb_limited_partnership
+  = render_breadcrumbs :separator => ' / '
 
 - if @stockholder.remaining_share_or_interest <= 0
   .modal.fade#stockholder-empty-modal tabindex="-3" role="dialog" aria-labelledby="stockholder-empty-modal" data-referrer="#{@referrer}"

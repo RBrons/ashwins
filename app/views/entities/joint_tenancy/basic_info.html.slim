@@ -1,3 +1,5 @@
+= render_breadcrumbs :separator => ' / '
+
 - if request.xhr?
   == render partial: "entities/joint_tenancy/basic_info"
 - else

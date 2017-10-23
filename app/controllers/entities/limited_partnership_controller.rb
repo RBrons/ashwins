@@ -14,12 +14,13 @@ class Entities::LimitedPartnershipController < ApplicationController
       @just_created = params[:just_created].to_b
       if @entity.name == ""
         add_breadcrumb "Clients", clients_path, :title => "Clients" 
-        add_breadcrumb "Limited Partner", '',  :title => "Limited Partner" 
+        add_breadcrumb "Limited Partnership", '',  :title => "Limited Partnership" 
         add_breadcrumb "Create", '',  :title => "Create" 
       else
         add_breadcrumb "Clients", clients_path, :title => "Clients" 
         add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
-        add_breadcrumb "Limited Partner", '',  :title => "Limited Partner" 
+        add_breadcrumb "Limited Partnership", '',  :title => "Limited Partnership" 
+        add_breadcrumb "Create", '',  :title => "Create" 
       end
     elsif request.post?
       @entity                 = Entity.new(entity_params)

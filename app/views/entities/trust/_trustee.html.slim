@@ -1,3 +1,6 @@
+.bread_crumb_limited_partnership
+  = render_breadcrumbs :separator => ' / '
+
 = form_for @trustee, url: entities_trust_trustee_path(@entity.key, @trustee.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Trustee'
   - if @trustee.errors.any?
