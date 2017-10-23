@@ -175,6 +175,7 @@ class Entities::TrustController < ApplicationController
       @beneficiary.class_name      = "Beneficiary"
     end
     if request.post?
+      debugger
       @beneficiary                 = Beneficiary.new(beneficiary_params)
       @beneficiary.use_temp_id
       @beneficiary.super_entity_id = @entity.id
