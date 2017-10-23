@@ -24,7 +24,7 @@ class Entities::SoleProprietorshipController < ApplicationController
       if @entity.save
         AccessResource.add_access({user: current_user, resource: @entity})
         #return render json: {redirect: view_context.entities_sole_proprietorship_basic_info_path( @entity.key ), just_created: true}
-        flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_sole_proprietorship_basic_info_path( @entity.key )
       end
     elsif request.patch?

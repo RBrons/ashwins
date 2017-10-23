@@ -20,7 +20,7 @@ class Entities::LlpController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_llp_basic_info_path( @entity.key )
         # return render json: {redirect: view_context.entities_llp_basic_info_path( @entity.key ), just_created: true}
         #return redirect_to clients_path
@@ -79,7 +79,7 @@ class Entities::LlpController < ApplicationController
       @partner.use_temp_id
       if @partner.save
         @partners = @partner.super_entity.partners
-        flash[:success] = "New Partner Successfully Created.</br><a href='#{entities_llp_partners_path( @entity.key, active_id: @partner.id )}'>Show in List</a>"
+        # flash[:success] = "New Partner Successfully Created.</br><a href='#{entities_llp_partners_path( @entity.key, active_id: @partner.id )}'>Show in List</a>"
         return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
         # return render layout: false, template: "entities/llp/partners"
       else

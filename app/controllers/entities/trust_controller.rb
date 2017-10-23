@@ -22,7 +22,7 @@ class Entities::TrustController < ApplicationController
         AccessResource.add_access({ user: current_user, resource: @entity })
         # return render json: {redirect: view_context.entities_trust_basic_info_path( @entity.key ), just_created: true}
         #return redirect_to clients_path
-        flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_trust_basic_info_path( @entity.key )
       end
     elsif request.patch?
@@ -70,7 +70,7 @@ class Entities::TrustController < ApplicationController
       if @settlor.save
         @settlors = @settlor.super_entity.settlors
         # return render layout: false, template: "entities/trust/settlors"
-        flash[:success] = "New Settlor Successfully Created.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
+        # flash[:success] = "New Settlor Successfully Created.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
         return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       else
         # return render layout: false, template: "entities/trust/settlor"
@@ -125,7 +125,7 @@ class Entities::TrustController < ApplicationController
       if @trustee.save
         @trustees = @trustee.super_entity.trustees
         # return render layout: false, template: "entities/trust/trustees"
-        flash[:success] = "New Trustee Successfully Created.</br><a href='#{entities_trust_trustees_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
+        # flash[:success] = "New Trustee Successfully Created.</br><a href='#{entities_trust_trustees_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
         return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       else
         # return render layout: false, template: "entities/trust/trustee"
@@ -182,7 +182,7 @@ class Entities::TrustController < ApplicationController
       if @beneficiary.save
         @beneficiaries = @beneficiary.super_entity.beneficiaries
         # return render layout: false, template: "entities/trust/beneficiaries"
-        flash[:success] = "New Beneficiary Successfully Created.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
+        # flash[:success] = "New Beneficiary Successfully Created.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
         return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       else
         # return render layout: false, template: "entities/trust/beneficiary"
