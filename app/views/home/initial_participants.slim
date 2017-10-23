@@ -94,14 +94,20 @@
                     section.relinquishing-purchaser-wrapper.margin-lg-left
                         - if @relinquishing_purchaser.present?
                             input.relinp_id[type="hidden" value="#{@relinquishing_purchaser.id}"]
-                            p.text-success = "You have created a data record for #{@relinquishing_purchaser.name} to be your first purchaser."
+                            p.relinquishing-purchaser-info.text-success
+                                = "You have created a data record for #{@relinquishing_purchaser.name} to be your first purchaser."
+                                a#edit-ipp-relinq_purchaser.margin-sm-left[href="#" data-contact-id=(@relinquishing_purchaser.id)]
+                                    i.fa.fa-edit
                         - else
-                            p.relinquishing-purchaser-info.text-danger
+                            p.relinquishing-purchaser-info.text-success
+
+                        form[action="" style=(@relinquishing_purchaser.present? ? 'display: none' : '')]
+                            p.text-danger
                                 | Will your first Relinquishing Purchaser be a 
                                 a.is_relinp_business.text-danger.underline-red[href="#"] business
                                 | &nbsp;or&nbsp;
                                 a.is_relinp_individual.text-danger.underline-red[href="#"] individual
-                        form[action=""]
+                            
                             input[type="hidden" name="contact[role]" value="Counter-Party"]
                             input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
                             input[type="hidden" name="contact[is_company]" value="false"]
@@ -126,15 +132,20 @@
                             - if @replacement_property.owner.present?
                                 input.repls_contact_id[type="hidden" value="#{@replacement_property.owner.id}"]
                                 input.replacement_property_id[type="hidden" value="#{@replacement_property.id}"]
-                                p.text-success = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
+                                p.replacement_seller_info.text-success 
+                                    = "You have created a data record #{@replacement_property.owner.name} to be your first seller."
+                                    a#edit-ipp-replacement_seller.margin-sm-left[href="#" data-contact-id=(@replacement_property.owner.id)]
+                                        i.fa.fa-edit
                         - else
-                            p.replacement-seller-info.text-danger
+                            p.replacement-seller-info.text-success
+                        
+                        form[action="" style=(@replacement_property.present? ? (@replacement_property.owner.present? ? 'display: none' : '') : '')]
+                            p.text-danger
                                 | Will your first Replacement Seller be a 
                                 a.is_repls_business.text-danger.underline-red[href="#"] business
                                 | &nbsp;or&nbsp;
                                 a.is_repls_individual.text-danger.underline-red[href="#"] individual
-                                        
-                        form[action=""]
+                                
                             input[type="hidden" name="contact[role]" value="Counter-Party"]
                             input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
                             input[type="hidden" name="contact[is_company]" value="false"]
@@ -150,7 +161,7 @@
                                     div.col-md-2.col-xs-6
                                         input.form-control[name="contact[company_name]" type="text"]
                         - if !@replacement_property.present?
-                            p
+                            p.prospective-property-info
                                 a.create-seller-property.text-danger[href="#"] Create a property for your first Replacement Seller
 
         .modal-footer

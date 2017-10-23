@@ -82,8 +82,7 @@ class HomeController < ApplicationController
     @replacement_property =  Property.where('ownership_status = ? and title is not null and user_id = ?', 'Prospective Purchase', current_user.id).first
     
     if @exchangor.present?
-      @has_purchased_properties = @exchangor.has_purchased_properties?
-      if @has_purchased_properties
+      if @exchangor.has_purchased_properties?
         @purchased_property_id = Property.where(ownership_status: 'Purchased', owner_entity_id: @exchangor.id).first.id
       end
     end
