@@ -1,3 +1,6 @@
+.bread_crumb_limited_partnership
+  = render_breadcrumbs :separator => ' / '
+
 = form_for @director, url: entities_corporates_director_path(@entity.key, @director.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Director'
   - if @director.errors.any?

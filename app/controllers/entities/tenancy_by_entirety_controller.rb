@@ -14,6 +14,9 @@ class Entities::TenancyByEntiretyController < ApplicationController
       #end
       @entity       ||= EntityTenancyByEntirety.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      add_breadcrumb "Clients", clients_path, :title => "Clients" 
+      add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+      add_breadcrumb "Declare Property", '',  :title => "Declare Property"
     elsif request.post?
       @entity                 = EntityTenancyByEntirety.new(entity_tenancy_by_entirety_params)
       @entity.type_           = MemberType.getTenancyByTheEntiretyId
@@ -45,6 +48,11 @@ class Entities::TenancyByEntiretyController < ApplicationController
       @spouse                 = Spouse.find(id) if id.present?
       @spouse                 ||= Spouse.new
       @spouse.super_entity_id = @entity.id
+      if request.get?
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+        add_breadcrumb "Tenant by the Entirety", '',  :title => "Tenant by the Entirety"
+        add_breadcrumb "Create", '',  :title => "Create"
     end
     if request.post?
       if @entity.spouses.count >= 2
