@@ -1,3 +1,5 @@
+= render_breadcrumbs
+
 - url = @client.persisted? ? client_path(@client.key) : clients_path
 - heading = @client.persisted? ? "Edit Client" : "New Client"
 = form_for @client, url: url,remote: (request.xhr?) do |f|
