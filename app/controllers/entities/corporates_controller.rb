@@ -3,7 +3,7 @@ class Entities::CorporatesController < ApplicationController
   before_action :current_page
   # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -12,6 +12,17 @@ class Entities::CorporatesController < ApplicationController
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+
+      if @entity.name == ""
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Corporation", '',  :title => "Corporation" 
+        add_breadcrumb "Create", '',  :title => "Create" 
+      else
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Corporation", '',  :title => "Corporation" 
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+      end
+
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getCorporationId
@@ -62,9 +73,17 @@ class Entities::CorporatesController < ApplicationController
 
       if request.get?
         if @director.new_record?
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Corporation", '',  :title => "Corporation" 
+          add_breadcrumb "Director", '',  :title => "Director" 
+          add_breadcrumb "Create", '',  :title => "Create" 
         else
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Corporation", '',  :title => "Corporation" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Director", '',  :title => "Director" 
         end
       else
         add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Director </a></h4></div>".html_safe
@@ -131,9 +150,17 @@ class Entities::CorporatesController < ApplicationController
 
       if request.get?
         if @officer.new_record?
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Officer </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Corporation", "",  :title => "Corporation" 
+          add_breadcrumb "Officers", '',  :title => "Officers"
+          add_breadcrumb "Create", '',  :title => "Create" 
         else
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Officer </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Corporation", '',  :title => "Corporation" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Officers", '',  :title => "Officers" 
         end
       else
         add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officer </a></h4></div>".html_safe
@@ -202,12 +229,21 @@ class Entities::CorporatesController < ApplicationController
       @stockholder.class_name      = "StockHolder"
 
       if request.get?
+        
         if @stockholder.new_record?
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Stockholder </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Stockholder </a></h4></div>".html_safe
 
-          puts request.referrer
+          # puts request.referrer
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Corporation", '',  :title => "Corporation" 
+          add_breadcrumb "Stockholder", '',  :title => "Stockholder" 
+          add_breadcrumb "Create", '',  :title => "Create" 
         else
           add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Stockholder </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Corporation", '',  :title => "Corporation" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Stockholder", '',  :title => "Stockholder" 
         end
       else
         add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
@@ -323,7 +359,8 @@ class Entities::CorporatesController < ApplicationController
     if params[:entity_key] and @entity.present? and !@entity.new_record?
       add_breadcrumb ("<div class=\"pull-left\"><h4><a href=\"#{edit_entity_path(@entity.key)}\">Edit Corporation: <span id='edit-title-corp'>#{@entity.display_name}</span></a><span id='int-action-corp'></span></h4></div>").html_safe
     else
-      add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/clients\">#{params[:action] == "basic_info" ? "Add" : "" } Corporation </a></h4></div>".html_safe
+      # add_breadcrumb "#{params[:action] == "basic_info" ? "" : "" }", clients_path
+      # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/clients\">#{params[:action] == "basic_info" ? "Add" : "" } Corporation </a></h4></div>".html_safe
     end
 
     if params[:action] != "basic_info"

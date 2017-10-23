@@ -1,3 +1,5 @@
+= render_breadcrumbs :separator => ' / '
+
 = form_for @officer, url: entities_corporates_officer_path(@entity.key, @officer.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Officer'
   - if @officer.errors.any?

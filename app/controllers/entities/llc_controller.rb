@@ -3,7 +3,7 @@ class Entities::LlcController < ApplicationController
   before_action :current_page
   # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -12,6 +12,15 @@ class Entities::LlcController < ApplicationController
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      if @entity.name == ""
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb " Limited Liability Company", '',  :title => " Limited Liability Company" 
+        add_breadcrumb "Create", '',  :title => "Create" 
+      else
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb " Limited Liability Company", '',  :title => " Limited Liability Company" 
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+      end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getLLCId
@@ -63,13 +72,26 @@ class Entities::LlcController < ApplicationController
       @manager.super_entity_id = @entity.id
 
       if request.get?
+        # if @manager.new_record?
+        #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Manager </a></h4></div>".html_safe
+        # else
+        #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Manager </a></h4></div>".html_safe
+        # end
         if @manager.new_record?
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Manager </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Liability Company", "",  :title => "Limited Liability Company" 
+          add_breadcrumb "Manager", '',  :title => "Manager"
+          add_breadcrumb "Create", '',  :title => "Create" 
         else
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Manager </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Liability Company", '',  :title => "Limited Liability Company" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Manager", '',  :title => "Manager" 
         end
-      else
-        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Manager </a></h4></div>".html_safe
+      # else
+      #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Manager </a></h4></div>".html_safe
       end
     end
     if request.post?
@@ -129,13 +151,26 @@ class Entities::LlcController < ApplicationController
       @member.class_name      = "Member"
 
       if request.get?
+        # if @member.new_record?
+        #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Member </a></h4></div>".html_safe
+        # else
+        #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Member </a></h4></div>".html_safe
+        # end
         if @member.new_record?
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Member </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Liability Company", "",  :title => "Limited Liability Company" 
+          add_breadcrumb "Member", '',  :title => "Member"
+          add_breadcrumb "Create", '',  :title => "Create" 
         else
-          add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Member </a></h4></div>".html_safe
+          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Officer </a></h4></div>".html_safe
+          add_breadcrumb "Clients", clients_path, :title => "Clients" 
+          add_breadcrumb "Limited Liability Company", '',  :title => "Limited Liability Company" 
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
+          add_breadcrumb "Member", '',  :title => "Member" 
         end
-      else
-        add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Member </a></h4></div>".html_safe
+      # else
+      #   add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Member </a></h4></div>".html_safe
       end
     end
     if request.post?

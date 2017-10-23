@@ -1,3 +1,5 @@
+= render_breadcrumbs :separator => ' / '
+
 = form_for @member, url: entities_llc_member_path( @entity.key, @member.id ), html: { class: "entity-page-xhr" } do |f|
   = hidden_field_tag :int_action, 'Add Member'
   - if @member.errors.any?

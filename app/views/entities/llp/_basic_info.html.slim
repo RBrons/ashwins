@@ -11,6 +11,8 @@
         .modal-footer
           button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Close
 
+= render_breadcrumbs :separator => ' / '
+
 = form_for @entity, url: entities_llp_basic_info_path( @entity.key ), html: { class: "entity-page-xhr" } do |f|
   - if @entity.errors.any?
     #error_explanation
