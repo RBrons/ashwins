@@ -2,7 +2,7 @@ class Entities::TenancyByEntiretyController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
