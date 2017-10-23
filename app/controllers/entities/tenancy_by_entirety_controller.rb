@@ -53,6 +53,7 @@ class Entities::TenancyByEntiretyController < ApplicationController
         add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
         add_breadcrumb "Tenant by the Entirety", '',  :title => "Tenant by the Entirety"
         add_breadcrumb "Create", '',  :title => "Create"
+      end
     end
     if request.post?
       if @entity.spouses.count >= 2
