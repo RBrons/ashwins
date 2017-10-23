@@ -3,7 +3,7 @@ class Entities::TenancyInCommonController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  # before_action :add_breadcrum
+  before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -15,16 +15,6 @@ class Entities::TenancyInCommonController < ApplicationController
       #end
       @entity       ||= EntityTenancyInCommon.new(type_: params[:type])
       @just_created = params[:just_created].to_b
-      # if @entity.name == ""
-      add_breadcrumb "Clients", clients_path, :title => "Clients" 
-      add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
-      add_breadcrumb "Declare Property", '',  :title => "Declare Property"
-        # add_breadcrumb "Create", '',  :title => "Create" 
-      # else
-      #   add_breadcrumb "Clients", clients_path, :title => "Clients" 
-      #   add_breadcrumb "Power of Attorney", '',  :title => "Power of Attorney" 
-      #   add_breadcrumb "Edit: #{@principal.name}", '',  :title => "Edit" 
-      # end
     elsif request.post?
       @entity                 = EntityTenancyInCommon.new(entity_tenancy_in_common_params)
       @entity.type_           = MemberType.getTenancyinCommonId
@@ -57,21 +47,6 @@ class Entities::TenancyInCommonController < ApplicationController
       @tenant_in_common                 = TenantInCommon.find(id) if id.present?
       @tenant_in_common                 ||= TenantInCommon.new
       @tenant_in_common.super_entity_id = @entity.id
-      if request.get?
-        # if @tenant_in_common.new_record?
-          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Add Director </a></h4></div>".html_safe
-        add_breadcrumb "Clients", clients_path, :title => "Clients" 
-        add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common" 
-        add_breadcrumb "Tenant_in_common", '',  :title => "Tenant_in_common" 
-        add_breadcrumb "Create", '',  :title => "Create" 
-        # else
-          # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\"> Edit Director </a></h4></div>".html_safe
-          # add_breadcrumb "Clients", clients_path, :title => "Clients" 
-          # add_breadcrumb "Corporation", '',  :title => "Corporation" 
-          # add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit" 
-          # add_breadcrumb "Director", '',  :title => "Director" 
-        # end
-      end
     end
     if request.post?
       @tenant_in_common                 = TenantInCommon.new(tenant_in_common_params)
