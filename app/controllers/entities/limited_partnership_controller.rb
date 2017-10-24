@@ -74,6 +74,7 @@ class Entities::LimitedPartnershipController < ApplicationController
     elsif request.patch?
       if @partner.update(limited_partner_params)
         @partner.use_temp_id
+        @partner.save
         @partners = @partner.super_entity.limited_partners
         return render layout: false, template: "entities/limited_partnership/limited_partners"
       else
@@ -119,6 +120,7 @@ class Entities::LimitedPartnershipController < ApplicationController
     elsif request.patch?
       if @partner.update(general_partner_params)
         @partner.use_temp_id
+        @partner.save
         @partners = @partner.super_entity.general_partners
         return render layout: false, template: "entities/limited_partnership/general_partners"
       else

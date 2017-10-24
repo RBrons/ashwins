@@ -63,6 +63,7 @@ class Entities::TenancyInCommonController < ApplicationController
     elsif request.patch?
       if @tenant_in_common.update(tenant_in_common_params)
         @tenant_in_common.use_temp_id
+        @tenant_in_common.save
         @tenants_in_common = @tenant_in_common.super_entity.tenants_in_common
         return render layout: false, template: "entities/tenancy_in_common/tenants_in_common"
       else
@@ -86,28 +87,28 @@ class Entities::TenancyInCommonController < ApplicationController
     @tenants_in_common = @entity.tenants_in_common
     render layout: false if request.xhr?
   end
-  
+
   # Never trust parameters from the scary internet, only allow the white list through.
   private
   def entity_tenancy_in_common_params
-    params.require(:entity_tenancy_in_common).permit(:name, :name2, :address, :type_, :jurisdiction, 
-                                                     :number_of_assets, :first_name, :last_name, :phone1, :phone2, 
-                                                     :fax, :email, :property_id, :postal_address, :postal_address2, 
-                                                     :city, :city2, :state, :state2, :zip, :zip2, :date_of_formation, 
-                                                     :m_date_of_formation, :ein_or_ssn, :s_corp_status, 
+    params.require(:entity_tenancy_in_common).permit(:name, :name2, :address, :type_, :jurisdiction,
+                                                     :number_of_assets, :first_name, :last_name, :phone1, :phone2,
+                                                     :fax, :email, :property_id, :postal_address, :postal_address2,
+                                                     :city, :city2, :state, :state2, :zip, :zip2, :date_of_formation,
+                                                     :m_date_of_formation, :ein_or_ssn, :s_corp_status,
                                                      :not_for_profit_status, :legal_ending, :honorific, :is_honorific,
-                                                     :date_of_appointment, :m_date_of_appointment, :country, 
+                                                     :date_of_appointment, :m_date_of_appointment, :country,
                                                      :date_of_commission, :m_date_of_commission, :index)
   end
 
   def tenant_in_common_params
-    params.require(:tenant_in_common).permit(:temp_id, :member_type_id, :name, :name2, :address, :type_, :jurisdiction, 
-                                             :number_of_assets, :first_name, :last_name, :phone1, :phone2, :fax, 
-                                             :email, :property_id, :postal_address, :postal_address2, :city, :city2, 
+    params.require(:tenant_in_common).permit(:temp_id, :member_type_id, :name, :name2, :address, :type_, :jurisdiction,
+                                             :number_of_assets, :first_name, :last_name, :phone1, :phone2, :fax,
+                                             :email, :property_id, :postal_address, :postal_address2, :city, :city2,
                                              :state, :state2, :zip, :zip2, :date_of_formation, :m_date_of_formation,
-                                             :ein_or_ssn, :s_corp_status, :not_for_profit_status, :legal_ending, 
-                                             :honorific, :is_honorific, :date_of_appointment, :m_date_of_appointment, 
-                                             :country, :date_of_commission, :m_date_of_commission, :index, :country2, 
+                                             :ein_or_ssn, :s_corp_status, :not_for_profit_status, :legal_ending,
+                                             :honorific, :is_honorific, :date_of_appointment, :m_date_of_appointment,
+                                             :country, :date_of_commission, :m_date_of_commission, :index, :country2,
                                              :part, :my_percentage, :contact_id, :is_person)
   end
 
