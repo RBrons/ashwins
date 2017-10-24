@@ -156,7 +156,7 @@ class XhrController < ApplicationController
       entity_params[:legal_ending] = nil
     else
       entity_params[:first_name] = nil
-      entity_params[:last_name] = nil
+      entity_params[:last_name] = nil    
     end
     if @entity.update(entity_params)
       render json: @entity

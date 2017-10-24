@@ -118,7 +118,9 @@ class PropertiesController < ApplicationController
       @property.lease_base_rent = @property.current_rent
 
       if !@property.owner_person_is.nil?
-        @property.owner_entity_id = @property.owner_entity_id_indv if @property.owner_person_is
+        if @property.owner_person_is && !@property.owner_entity_id_indv.nil?
+          @property.owner_entity_id = @property.owner_entity_id_indv 
+        end
       end
 
       if @property.rent_table_version.nil?
