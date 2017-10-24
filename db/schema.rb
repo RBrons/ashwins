@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017145639) do
+ActiveRecord::Schema.define(version: 20171024011420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -410,7 +410,7 @@ ActiveRecord::Schema.define(version: 20171017145639) do
     t.decimal  "price",                                                             precision: 15, scale: 2
     t.decimal  "current_rent",                                                      precision: 15, scale: 2
     t.decimal  "cap_rate",                                                          precision: 15, scale: 2
-    t.boolean  "owner_person_is"
+    t.integer  "owner_person_is"
     t.integer  "owner_entity_id"
     t.integer  "owner_person_id"
     t.boolean  "m_closing_date",                                                                             default: false
@@ -798,6 +798,9 @@ ActiveRecord::Schema.define(version: 20171017145639) do
     t.string   "first_name"
     t.string   "last_name"
     t.boolean  "enabled",                                default: false
+    t.string   "business_name"
+    t.string   "business_contact_first_name"
+    t.string   "business_contact_last_name"
     t.string   "last_sign_out_page"
     t.string   "user_type"
     t.integer  "attorney_firm_id"

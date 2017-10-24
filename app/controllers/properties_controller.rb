@@ -3,7 +3,7 @@ class PropertiesController < ApplicationController
   before_action :current_page
   before_action :add_breadcrum
   # before_action :validate_ipp, except: [:index]
-  
+
   # GET /properties
   # GET /properties.json
   def index
@@ -54,8 +54,10 @@ class PropertiesController < ApplicationController
       @longitude = @latLng[1]
     end
 
-    if !@property.owner_person_is.nil?
-      @property.owner_entity_id_indv = @property.owner_entity_id if @property.owner_person_is
+    if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
+      @property.owner_entity_id_indv = @property.owner_entity_id if @property.owner_person_is == 1
+    else
+      @property.owner_entity_id = @property.owner_entity_id_indv = 0
     end
     add_breadcrumb ("<div class=\"pull-left\"><h4><a href=\'" + edit_property_path(@property.key) +
       "\'> Edit " + @property.ownership_status + " Property - " + @property.title + " </a></h4></div>").html_safe
@@ -69,8 +71,10 @@ class PropertiesController < ApplicationController
     @property.rent_table_version = 0
     @property.lease_base_rent = @property.current_rent
     @property.user_id = current_user.id
-    if !@property.owner_person_is.nil?
-      @property.owner_entity_id = @property.owner_entity_id_indv if @property.owner_person_is
+    if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
+      @property.owner_entity_id = @property.owner_entity_id_indv if @property.owner_person_is == 1
+    else
+      @property.owner_entity_id = @property.owner_entity_id_indv = 0
     end
     respond_to do |format|
       if @property.save
@@ -117,8 +121,10 @@ class PropertiesController < ApplicationController
       @property.assign_attributes(property_params)
       @property.lease_base_rent = @property.current_rent
 
-      if !@property.owner_person_is.nil?
-        @property.owner_entity_id = @property.owner_entity_id_indv if @property.owner_person_is
+      if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
+        @property.owner_entity_id = @property.owner_entity_id_indv if @property.owner_person_is == 1
+      else
+        @property.owner_entity_id = @property.owner_entity_id_indv = 0
       end
 
       if @property.rent_table_version.nil?
