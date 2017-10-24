@@ -141,15 +141,23 @@ $ ->
       $('#person_owner').hide()
       $('#entity_owner').show()
 
-  $(document).on 'ifChecked', '#property_owner_person_is_true', ->
+  $(document).on 'ifChecked', '#property_owner_person_is_1', ->
     #alert "is person"
     $(document).find('div.sale-tr-pr-detail').show()
     $(document).find('div.sale-tr-et-detail').hide()
 
-  $(document).on 'ifChecked', '#property_owner_person_is_false', ->
+  $(document).on 'ifChecked', '#property_owner_person_is_2', ->
     #alert "is not a person"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').show()
+
+  $(document).on 'ifChecked', '#property_owner_person_is_0', ->
+    #alert "is not a person"
+    $(document).find('div.sale-tr-pr-detail').hide()
+    $(document).find('div.sale-tr-et-detail').hide()
+
+  $(document).on 'blur', '#property_location_city', ->
+    $("#property-readonly-city").val($(this).val())
 
   $(document).on "click", "a.ownership-form-new-entity", ->
     if $('#status_poperty')[0].value == "Purchased"

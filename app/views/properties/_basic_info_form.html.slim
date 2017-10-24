@@ -15,7 +15,6 @@
         - @property.errors.full_messages.each do |message|
           li = message
 
-
   .col-lg-6.col-md-6.col-sm-12.col-xs-12
     .clearfix
     .form-group
@@ -49,26 +48,30 @@
       - basic_str = "You have #{individual_clients.length} #{plural_individual_client_str} and #{entity_clients.length} #{plural_entity_client_str} who could own this property."
 
       - if individual_clients.length == 1 && entity_clients.length == 0
-        - f.object.owner_person_is = true
+        - f.object.owner_person_is = 1
         p.text-info = basic_str + " Therefore, it has been pre-selected"
       - elsif individual_clients.length == 0 && entity_clients.length == 1
+        - f.object.owner_person_is = 2
         p.text-info = basic_str + " Therefore, it has been pre-selected"
       - else
-        p.text-info 
+        p.text-info
           = basic_str + " Please select one from the dropdown or make a "
           = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
           = " one."
-        
-      label Owning Client
-      .form-group style=("#{('display: none;' if entity_clients.length == 0 || individual_clients.length == 0)}")
-        .heading_blue.radio-inline
-          span = f.radio_button :owner_person_is, true, checked: f.object.owner_person_is?, class: 'form-control flat-icheck radiobuttons'
-          span.margin-md-left Individual
-        .heading_blue.radio-inline
-          span.margin-md-left = f.radio_button :owner_person_is, false, checked: !f.object.owner_person_is?, class: 'form-control flat-icheck radiobuttons'
-          span.margin-md-left Entity
 
-      .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is?)}")
+      label Owning Client
+      .form-group style=("#{('display: none;' if entity_clients.length == 0 && individual_clients.length == 0)}")
+        .heading_blue.radio-inline style=("#{('display: none;' if individual_clients.length == 0)}")
+          span = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Individual
+        .heading_blue.radio-inline style=("#{('display: none;' if entity_clients.length == 0)}")
+          span.margin-md-left = f.radio_button :owner_person_is, 2, checked: f.object.owner_person_is == 2, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Entity
+        .heading_blue.radio-inline
+          span.margin-md-left = f.radio_button :owner_person_is, 0, checked: (f.object.owner_person_is == 0 || f.object.owner_person_is == nil), class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left No Current Owner
+
+      .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 2)}")
         - if entity_clients.length > 1
           = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single width-field-lg'
         - elsif entity_clients.length == 1
@@ -79,7 +82,7 @@
           - owner_entity = Entity.find(@property.owner_entity_id)
           = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank'
 
-      .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is?)}")
+      .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 1)}")
         - if individual_clients.length > 1
           = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single width-field-lg'
         - elsif individual_clients.length == 1
@@ -99,12 +102,12 @@
       - basic_str = "You have #{individual_owners.length} #{plural_individual_contact_str} and #{entity_owners.length} #{plural_entity_contact_str} who could own this property."
 
       - if individual_owners.length == 1 && entity_owners.length == 0
-        - f.object.owner_person_is = true
+        - f.object.owner_person_is = 1
         p.text-info = basic_str + " Therefore, it has been pre-selected"
       - elsif individual_owners.length == 0 && entity_owners.length == 1
         p.text-info = basic_str + " Therefore, it has been pre-selected"
       - else
-        p.text-info 
+        p.text-info
           = basic_str + " Please select one from the dropdown or make a "
           = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
           = " one."
@@ -112,13 +115,13 @@
       label Owner
       .form-group style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")
         .heading_blue.radio-inline
-          span = f.radio_button :owner_person_is, true, checked: f.object.owner_person_is?, class: 'form-control flat-icheck radiobuttons'
+          span = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
           span.margin-md-left Individual
         .heading_blue.radio-inline
-          span.margin-md-left = f.radio_button :owner_person_is, false, checked: !f.object.owner_person_is?, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left = f.radio_button :owner_person_is, 2, checked: f.object.owner_person_is != 1, class: 'form-control flat-icheck radiobuttons'
           span.margin-md-left Company
 
-      .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is?)}")
+      .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is == 1)}")
         - if entity_owners.length > 1
           = f.select :owner_entity_id, options_for_select(entity_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
         - elsif entity_owners.length == 1
@@ -129,7 +132,7 @@
           - owner_contact = Contact.find(@property.owner_entity_id)
           = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank'
 
-      .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is?)}")
+      .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is == 1)}")
         - if individual_owners.length > 1
           = f.select :owner_entity_id_indv, options_for_select(individual_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
         - elsif individual_owners.length == 1
@@ -192,6 +195,9 @@
       .clearfix
       div#location_street_address_from_county_tax_authorities style="#{ 'display: none;' unless f.object.location_street_address_from_county_tax_authorities_is?}"
         = f.text_field :location_street_address_from_county_tax_authorities, class: 'form-control width-field-md'
+    .form-group
+      = label_tag 'City'
+      input type='text' disabled='true' value = "#{f.object.location_city}" id='property-readonly-city' class='form-control width-field-md'
     .form-group
       = label_tag 'State'
       = f.select :location_state, Property::US_STATES, {}, class: 'form-control selectize-single width-field-md'

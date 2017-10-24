@@ -447,11 +447,11 @@ $ ->
     if exchangor_entity_type == 'Individual'
       form.find('input#property_owner_entity_id').val('')
       form.find('input#property_owner_entity_id_indv').val(exchangor_entity_id)
-      form.find('input#property_owner_person_is').val('true')
+      form.find('input#property_owner_person_is').val(1)
     else
       form.find('input#property_owner_entity_id').val(exchangor_entity_id)
       form.find('input#property_owner_entity_id_indv').val('')
-      form.find('input#property_owner_person_is').val('false')
+      form.find('input#property_owner_person_is').val(0)
     $(document).find('#md-new-property').modal('show')
   
   $(document).on 'click', '#edit-ipp-purchased-property', (e) ->
@@ -459,9 +459,9 @@ $ ->
     form.find('#has-lease-rent').iCheck('uncheck')
     $(document).find('.purchased-property-info').addClass('text-cancel')
     if exchangor_entity_type == 'Individual'
-      form.find('input#property_owner_person_is').val('true')
+      form.find('input#property_owner_person_is').val(1)
     else
-      form.find('input#property_owner_person_is').val('false')
+      form.find('input#property_owner_person_is').val(0)
 
     if parseInt(purchased_property_id) != 0
       form.find("input[name='_method']").val('patch')
@@ -489,11 +489,11 @@ $ ->
     if repls_contact_type == 'business'
       form.find('input#property_owner_entity_id').val(repls_contact_id)
       form.find('input#property_owner_entity_id_indv').val('')
-      form.find('input#property_owner_person_is').val('false')
+      form.find('input#property_owner_person_is').val(0)
     else
       form.find('input#property_owner_entity_id').val('')
       form.find('input#property_owner_entity_id_indv').val(repls_contact_id)
-      form.find('input#property_owner_person_is').val('true')
+      form.find('input#property_owner_person_is').val(1)
     $(document).find('#md-new-property').modal('show')
   
   $(document).on 'click', '#edit-ipp-prospective-property', (e) ->
@@ -501,9 +501,9 @@ $ ->
     form.find('#has-lease-rent').iCheck('uncheck')
     $(document).find('.prospective-property-info').addClass('text-cancel')
     if repls_contact_type == 'business'
-      form.find('input#property_owner_person_is').val('false')
+      form.find('input#property_owner_person_is').val(0)
     else
-      form.find('input#property_owner_person_is').val('true')
+      form.find('input#property_owner_person_is').val(1)
 
     if parseInt(replacement_property_id) != 0
       form.find("input[name='_method']").val('patch')

@@ -75,6 +75,7 @@ class Entities::PartnershipController < ApplicationController
     elsif request.patch?
       if @partner.update(partner_params)
         @partner.use_temp_id
+        @partner.save
         @partners = @partner.super_entity.partners
         return render layout: false, template: "entities/partnership/partners"
       else

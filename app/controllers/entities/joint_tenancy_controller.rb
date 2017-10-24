@@ -62,6 +62,7 @@ class Entities::JointTenancyController < ApplicationController
     elsif request.patch?
       if @joint_tenant.update(joint_tenant_params)
         @joint_tenant.use_temp_id
+        @joint_tenant.save
         @joint_tenants = @joint_tenant.super_entity.joint_tenants
         return render layout: false, template: "entities/joint_tenancy/joint_tenants"
       else
