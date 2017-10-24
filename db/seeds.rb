@@ -8,6 +8,4 @@
 
 # Add default autorecognition format
 
-adminDan = User.create! :first_name => 'Dan', :last_name => 'Halper', 
-  :email => 'danhalper@gmail.com', :password => 'welcome22', 
-  :password_confirmation => 'welcome22', :enabled => true, :admin => true
+adminDan = User.create! :first_name => 'Dan', :last_name => 'Halper', :email => 'danhalper@gmail.com', :password => 'welcome22', :password_confirmation => 'welcome22', :enabled => true, :admin => true
