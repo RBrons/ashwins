@@ -207,6 +207,7 @@ $ ->
       success: (data) ->
         if data.id
           exchangor_entity_id = data.id
+          exchangor_entity_type = entity_em.data('entity-name')
           exchangor_name = data.name
           exchangor_info_html = '<span class="text-success">' + exchangor_name + ', ' + legal_ending_html + ' will be your first Exchangor</span>' +
                                 '<a class="margin-sm-left" data-entity-id="' + exchangor_entity_id + '" href="#" id="edit-ipp-exchangor"><i class="fa fa-edit"></i></a>'
@@ -301,6 +302,7 @@ $ ->
         success: (data) ->
           if data.id
             exchangor_entity_id = data.id
+            exchangor_entity_type = 'Individual'
             if data.first_name && data.last_name
               exchangor_name = data.first_name + ' ' + data.last_name
               exchangor_info_html = '<span class="text-success">You have created a data record for ' + exchangor_name + ' to be your first Exchangor.</span>' + 
@@ -438,22 +440,29 @@ $ ->
     form = $(document).find('#md-new-property form')
     form.parsley().reset()
     form.find('input').val('')
+    form.find('#has-lease-rent').iCheck('uncheck')
     form.find('.fields_for_create input').attr('disabled', false)
     form.find('input#ostatus').val('Purchased')
     form.find('input#property_ownership_status').val('Purchased')
     if exchangor_entity_type == 'Individual'
       form.find('input#property_owner_entity_id').val('')
       form.find('input#property_owner_entity_id_indv').val(exchangor_entity_id)
-      form.find('input#property_owner_person_is').val('true')
+      form.find('input#property_owner_person_is').val(1)
     else
       form.find('input#property_owner_entity_id').val(exchangor_entity_id)
       form.find('input#property_owner_entity_id_indv').val('')
-      form.find('input#property_owner_person_is').val('false')
+      form.find('input#property_owner_person_is').val(0)
     $(document).find('#md-new-property').modal('show')
   
   $(document).on 'click', '#edit-ipp-purchased-property', (e) ->
     form = $(document).find('#md-new-property form')
+    form.find('#has-lease-rent').iCheck('uncheck')
     $(document).find('.purchased-property-info').addClass('text-cancel')
+    if exchangor_entity_type == 'Individual'
+      form.find('input#property_owner_person_is').val(1)
+    else
+      form.find('input#property_owner_person_is').val(0)
+
     if parseInt(purchased_property_id) != 0
       form.find("input[name='_method']").val('patch')
       form.attr('action', '/properties/' + purchased_property_id)
@@ -464,7 +473,7 @@ $ ->
     form.find('.fields_for_create input').attr('disabled', true)
     $(document).find('#md-new-property').modal('show')
 
-  $(document).on 'click', '#cancel-property', (e) ->
+  $(document).on 'click', '#cancel-property, #md-new-property button.close', (e) ->
     $(document).find('.purchased-property-info').removeClass('text-cancel')
 
   $(document).on 'click', '.create-seller-property', ->
@@ -480,16 +489,22 @@ $ ->
     if repls_contact_type == 'business'
       form.find('input#property_owner_entity_id').val(repls_contact_id)
       form.find('input#property_owner_entity_id_indv').val('')
-      form.find('input#property_owner_person_is').val('false')
+      form.find('input#property_owner_person_is').val(0)
     else
       form.find('input#property_owner_entity_id').val('')
       form.find('input#property_owner_entity_id_indv').val(repls_contact_id)
-      form.find('input#property_owner_person_is').val('true')
+      form.find('input#property_owner_person_is').val(1)
     $(document).find('#md-new-property').modal('show')
   
   $(document).on 'click', '#edit-ipp-prospective-property', (e) ->
     form = $(document).find('#md-new-property form')
+    form.find('#has-lease-rent').iCheck('uncheck')
     $(document).find('.prospective-property-info').addClass('text-cancel')
+    if repls_contact_type == 'business'
+      form.find('input#property_owner_person_is').val(0)
+    else
+      form.find('input#property_owner_person_is').val(1)
+
     if parseInt(replacement_property_id) != 0
       form.find("input[name='_method']").val('patch')
       form.attr('action', '/properties/' + replacement_property_id)
@@ -555,6 +570,7 @@ $ ->
     if this.checked
       $('#property_rent_price').prop('required', false)
       $('#property_rent_price').closest('.form-group').find('label').text('Rent')
+      $('#property_rent_price').val('')
     else
       $('#property_rent_price').prop('required', true)
       $('#property_rent_price').closest('.form-group').find('label').text('Rent *')

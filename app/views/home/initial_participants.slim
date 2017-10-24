@@ -44,7 +44,7 @@
                                         div.entity-business-detail.row[style="display: none"]
                                             div.col-md-2.col-xs-6
                                                 input.form-control[name="entity[name]" type="text"]
-                            p 
+                            p.purchased-property-info
                                 a.create-exchangor-property.text-danger[href="#"] Create a property to be Relinquished by your first Exchangor
                         - else
                             - if @exchangor.type_ == 1
@@ -174,7 +174,7 @@
 #md-new-property.modal.fade[data-keyboard="false" data-backdrop="static"]
     .modal-dialog.modal-sm
         .modal-header
-            button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
+            button.close[type="button" data-dismiss="modal" aria-label="Close"]
                 span.lnr.lnr-cross
             h4.modal-title Add Property
         .modal-body
@@ -182,6 +182,7 @@
                 input[type="hidden" name="_method" value="post"]
                 input#ostatus[type="hidden" name="ostatus" value=""]
                 input#property_title[type="hidden" name="property[title]"]
+                input#property_owner_person_is[type="hidden" name="property[owner_person_is]" value=""]
                 .fields_for_create.form-group
                     input#property_ownership_status[type="hidden" name="property[ownership_status]" value=""]
                     input#property_owner_entity_id[type="hidden" name="property[owner_entity_id]" value=""]
