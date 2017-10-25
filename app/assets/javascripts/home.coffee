@@ -484,6 +484,7 @@ $ ->
     form = $(document).find('#md-new-property form')
     form.parsley().reset()
     form.find('input').val('')
+    form.find('#has-lease-rent').iCheck('uncheck')
     form.find('input#ostatus').val('Prospective Purchase')
     form.find('input#property_ownership_status').val('Prospective Purchase')
     if repls_contact_type == 'business'

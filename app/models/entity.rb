@@ -7,7 +7,7 @@ class Entity < ApplicationRecord
   class_attribute :basic_info_only
   validates_presence_of :date_of_formation
   validates_presence_of :first_name, :last_name , unless: :validation_for_first_and_last_names
-  validates :name, presence: true, uniqueness: true,  allow_blank: false, if: :validation_for_names
+  validates :name, presence: true, allow_blank: false, if: :validation_for_names
   validates :email, email: true, if: "self.email.present?"
   # validate :phone_validation
   validates_length_of :name, maximum: 250
