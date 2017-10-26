@@ -130,7 +130,7 @@ $ ->
     if $(this).find('option:selected').text() == 'No Tenant'
       $(document).find('#property_current_rent').prop('required', false)
     else
-      $(document).find('#property_current_rent').prop('required', true)
+      $(document).find('#property_current_rent').prop('required', false)
     setTitleValue()
 
   $(document).on 'click', '.entity_owner', ->
