@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024011420) do
+ActiveRecord::Schema.define(version: 20171026122607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -546,6 +546,13 @@ ActiveRecord::Schema.define(version: 20171024011420) do
     t.string   "misc_notices_keywords"
     t.string   "misc_obligation_keywords"
     t.string   "document_in_gdrive"
+    t.boolean  "preliminary_term_status",                                                                    default: false
+    t.boolean  "optional_extensions_status",                                                                 default: true
+    t.string   "condition_for_preliminary_term"
+    t.decimal  "base_rent_increase_percentage",                                     precision: 5,  scale: 2
+    t.boolean  "rent_increase_in_base_term_status",                                                          default: false
+    t.boolean  "rent_commencement_depend_on_expiration",                                                     default: true
+    t.boolean  "preliminary_term_expired",                                                                   default: false
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
