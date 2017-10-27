@@ -12,6 +12,7 @@ table#data_table
       th Price
       th style=("width: 70px;") Current Rent
       th Cap. Rate
+      th Closing Date
       th Current Term
       th Term Ends
       th Time Remaining in Term
@@ -38,6 +39,11 @@ table#data_table
         td = number_to_currency(property.price)
         td = number_to_currency(property.current_rent)
         td = property.show_cap_rate
+        td
+          -if property.ownership_status == 'Purchased'
+            = property.closing_date
+          -else
+            = ""
         td = ""
         td = property.number_of_years_in_term
         td = property.date_of_lease
