@@ -50,6 +50,8 @@ div[role="tabpanel"]
     ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
           a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Parties
+      li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_terms_section'}")
+          a#lease_terms[href="#lease_terms_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease Term
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
           a#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
@@ -146,6 +148,107 @@ div[role="tabpanel"]
                 = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
               = f.submit 'Save', class: 'btn btn-sm btn-primary'
+      #lease_terms_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          = hidden_field_tag :lease_sub, 'lease_terms_section'
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-6.col-md-6.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              label.mg-top-5 Date Of Lease
+              .clearfix
+              = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}", disabled: true
+              = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}", disabled: true
+            .form-group
+              label.mg-top-5 Date Of Lease Details
+              .clearfix
+              = f.select :date_of_lease_details, Property::DATE_OF_LEASE_DETAILS, {}, class: 'form-control'
+            .form-group
+              h2.heading Lease Terms 
+              .clearfix
+                = f.check_box :preliminary_term_status
+                | Preliminary
+                <br>
+                <input type="checkbox" disabled readonly>Base
+                <br>
+                = f.check_box :optional_extensions_status
+                | Optional Extensions  
+            .form-group
+              label 
+              .clearfix
+              div#preliminary_term style="#{ 'display: none;' unless f.object.preliminary_term_status?}"            
+                .form-group
+                  h2.heading Preliminary Terms
+                  .clearfix    
+                  = f.check_box :rent_commencement_depend_on_expiration, class: 'product-list'
+                  | Is the Rent Commencement Date dependent on the Expiration of the Preliminary Terms? <br>
+                  = f.check_box :preliminary_term_expired, class: 'product-list'
+                  | Has the Preliminary Term Expired?
+                .form-group
+                  label Conditions for the End of Preliminary Terms 
+                  .clearfix 
+                  = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
+                  <br>
+            h2.heading Base Terms 
+            .form-group
+              label Rent Commencement Date
+              .clearfix
+              = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
+            .form-group
+              label.mg-top-5 Pro Rated Rent?
+              =  f.check_box :lease_is_pro_rated, class: ''
+            .form-group
+              label.mg-top-5 Rent Commencement Date Details
+              .clearfix
+              = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
+            .form-group
+              label.mg-top-5 Duration of Base term
+              .clearfix
+              =  f.text_field :lease_duration_in_years, class: 'form-control'
+            .form-group
+              label Are there Rent Increases in the Base Terms
+              .clearfix    
+              = f.check_box :rent_increase_in_base_term_status
+                .form-group
+            .form-group
+              .clearfix
+              div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
+                label.mg-top-5 No of Years Before Rent Increase
+                .clearfix
+                 =  f.text_field :lease_rent_slab_in_years, class: 'form-control'
+                label.mg-top-5 Base Term Rent Increase Percentage
+                .clearfix
+                .input-group
+                  = f.text_field :base_rent_increase_percentage, class: 'form-control'
+                  .input-group-addon %
+            .form-group
+              label 
+              .clearfix
+              div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
+                h2.heading Optional Extensions
+                .form-group
+                  label.mg-top-5 Number Of Option Period(s)
+                  .clearfix
+                  = f.text_field :number_of_option_period, class: 'form-control'
+                .form-group
+                  label.mg-top-5 Length of an Option Period in Years
+                  .clearfix
+                  = f.text_field :length_of_option_period, class: 'form-control'
+                .form-group
+                  label.mg-top-5 Lease Rent Increase Percentage
+                  .clearfix
+                  .input-group
+                    = f.text_field :lease_rent_increase_percentage, class: 'form-control'
+                    .input-group-addon %         
+            .form-group
+              = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
       #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -228,82 +331,82 @@ div[role="tabpanel"]
               .clearfix
               = f.text_field :length_of_option_period, class: 'form-control'
             .form-group
-              = f.submit 'Save', class: 'btn btn-sm btn-primary'
-        - if @property.rent_tables.present?
-          .clearfix
-          .col-sm-4
-            .form-group
-              = label_tag "Rent Table Version"
-              = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control', data: {id: @property.id}, style: "width: 200px"
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'           
+          - if @property.rent_tables.present?
+            .clearfix
+            .col-sm-4
+              .form-group
+                = label_tag "Rent Table Version"
+                = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control', data: {id: @property.id}, style: "width: 200px"
 
-          .clearfix
-          div#rent-table-wrapper
-            table.table.table-striped.table-bordered#rent-table
-              thead
-                tr
-                  th Particulars
-                  th Amount
-              tbody
-                - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
+            .clearfix
+            div#rent-table-wrapper
+              table.table.table-striped.table-bordered#rent-table
+                thead
                   tr
-                    td
-                      = rent_row.display_info
-                    td
-                      = number_to_currency rent_row.rent
+                    th Particulars
+                    th Amount
+                tbody
+                  - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
+                    tr
+                      td
+                        = rent_row.display_info
+                      td
+                        = number_to_currency rent_row.rent
 
-          .clearfix
-          .clearfix
-          div#monthly-rent-table-wrapper
-            table.table.table-striped.table-bordered
-              thead
-                tr
-                  th Year
-                  th Jan
-                  th Feb
-                  th Mar
-                  th Apr
-                  th May
-                  th Jun
-                  th Jul
-                  th Aug
-                  th Sep
-                  th Oct
-                  th Nov
-                  th Dec
-                  th Annual
-              tbody
-                - @property.monthly_rent_table.each do |row|
+            .clearfix
+            .clearfix
+            div#monthly-rent-table-wrapper
+              table.table.table-striped.table-bordered
+                thead
                   tr
-                    td
-                      = row[0]
-                    td
-                      = number_to_currency row[1]
-                    td
-                      = number_to_currency row[2]
-                    td
-                      = number_to_currency row[3]
-                    td
-                      = number_to_currency row[4]
-                    td
-                      = number_to_currency row[5]
-                    td
-                      = number_to_currency row[6]
-                    td
-                      = number_to_currency row[7]
-                    td
-                      = number_to_currency row[8]
-                    td
-                      = number_to_currency row[9]
-                    td
-                      = number_to_currency row[10]
-                    td
-                      = number_to_currency row[11]
-                    td
-                      = number_to_currency row[12]
-                    td
-                      = number_to_currency row[13]
-        - else
-          p Rent Table is not available right now.
+                    th Year
+                    th Jan
+                    th Feb
+                    th Mar
+                    th Apr
+                    th May
+                    th Jun
+                    th Jul
+                    th Aug
+                    th Sep
+                    th Oct
+                    th Nov
+                    th Dec
+                    th Annual
+                tbody
+                  - @property.monthly_rent_table.each do |row|
+                    tr
+                      td
+                        = row[0]
+                      td
+                        = number_to_currency row[1]
+                      td
+                        = number_to_currency row[2]
+                      td
+                        = number_to_currency row[3]
+                      td
+                        = number_to_currency row[4]
+                      td
+                        = number_to_currency row[5]
+                      td
+                        = number_to_currency row[6]
+                      td
+                        = number_to_currency row[7]
+                      td
+                        = number_to_currency row[8]
+                      td
+                        = number_to_currency row[9]
+                      td
+                        = number_to_currency row[10]
+                      td
+                        = number_to_currency row[11]
+                      td
+                        = number_to_currency row[12]
+                      td
+                        = number_to_currency row[13]
+          - else
+            p Rent Table is not available right now.
       #lease_rent_details_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]

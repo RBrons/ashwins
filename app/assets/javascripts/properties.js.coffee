@@ -106,6 +106,33 @@ $ ->
     else
       $(document).find('#location_street_address_from_county_tax_authorities').hide()
 
+  $(document).on 'click', '.title', ->
+    url = $(this).parent().attr('url')
+    window.location.href = url if url.length > 0
+  $(document).on 'click', 'input#property_rent_increase_in_base_term_status', ->
+    if this.checked
+      $(document).find('#rent_increase_in_base_term').show()
+    else
+      $(document).find('#rent_increase_in_base_term').hide()
+
+  $(document).on 'click', '.title', ->
+    url = $(this).parent().attr('url')
+    window.location.href = url if url.length > 0
+  $(document).on 'click', 'input#property_preliminary_term_status', ->
+    if this.checked
+      $(document).find('#preliminary_term').show()
+    else
+      $(document).find('#preliminary_term').hide()
+
+  $(document).on 'click', '.title', ->
+    url = $(this).parent().attr('url')
+    window.location.href = url if url.length > 0
+  $(document).on 'click', 'input#property_optional_extensions_status', ->
+    if this.checked
+      $(document).find('#optional_extensions').show()
+    else
+      $(document).find('#optional_extensions').hide()
+
   setTitleValue = ->
     if $('#property_location_city').val().length > 0
       $(document).find('.tilte_basic_info').show()
@@ -130,7 +157,7 @@ $ ->
     if $(this).find('option:selected').text() == 'No Tenant'
       $(document).find('#property_current_rent').prop('required', false)
     else
-      $(document).find('#property_current_rent').prop('required', false)
+      $(document).find('#property_current_rent').prop('required', true)
     setTitleValue()
 
   $(document).on 'click', '.entity_owner', ->
@@ -141,23 +168,15 @@ $ ->
       $('#person_owner').hide()
       $('#entity_owner').show()
 
-  $(document).on 'ifChecked', '#property_owner_person_is_1', ->
+  $(document).on 'ifChecked', '#property_owner_person_is_true', ->
     #alert "is person"
     $(document).find('div.sale-tr-pr-detail').show()
     $(document).find('div.sale-tr-et-detail').hide()
 
-  $(document).on 'ifChecked', '#property_owner_person_is_2', ->
+  $(document).on 'ifChecked', '#property_owner_person_is_false', ->
     #alert "is not a person"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').show()
-
-  $(document).on 'ifChecked', '#property_owner_person_is_0', ->
-    #alert "is not a person"
-    $(document).find('div.sale-tr-pr-detail').hide()
-    $(document).find('div.sale-tr-et-detail').hide()
-
-  $(document).on 'blur', '#property_location_city', ->
-    $("#property-readonly-city").val($(this).val())
 
   $(document).on "click", "a.ownership-form-new-entity", ->
     if $('#status_poperty')[0].value == "Purchased"
