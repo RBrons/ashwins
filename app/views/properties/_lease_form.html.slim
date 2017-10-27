@@ -207,9 +207,8 @@ div[role="tabpanel"]
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
             .form-group
               .checkbox
-                label
-                  = f.check_box :lease_is_pro_rated, class: ''
-                  | Pro Rated Rent?
+                label Pro Rated Rent?
+                = f.check_box :lease_is_pro_rated, class: ''
             .form-group
               label Rent Commencement Date Details
               .clearfix
@@ -219,9 +218,8 @@ div[role="tabpanel"]
               =  f.text_field :lease_duration_in_years, class: 'form-control'
             .form-group
               .checkbox
-                label 
-                  | Are there Rent Increases in the Base Terms
-                  = f.check_box :rent_increase_in_base_term_status
+                label Are there Rent Increases in the Base Terms
+                = f.check_box :rent_increase_in_base_term_status
             div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
               .form-group
                 label.mg-top-5 No of Years Between Rent Increase
@@ -330,7 +328,7 @@ div[role="tabpanel"]
               .clearfix
               = f.text_field :length_of_option_period, class: 'form-control'
             .form-group
-              = f.submit 'Save', class: 'btn btn-sm btn-primary'           
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
           - if @property.rent_tables.present?
             .clearfix
             .col-sm-4

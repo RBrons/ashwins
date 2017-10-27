@@ -174,7 +174,7 @@ $ ->
     $(document).find('div.sale-tr-et-detail').hide()
 
   $(document).on 'ifChecked', '#property_owner_person_is_2', ->
-    #alert "is not a person"
+    #alert "is a entity"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').show()
   
@@ -185,6 +185,11 @@ $ ->
 
   $(document).on 'blur', '#property_location_city', ->
     $("#property-readonly-city").val($(this).val())
+
+  $(document).on 'ifChecked', '#property_owner_person_is_0', ->
+    #alert "is not a person"
+    $(document).find('div.sale-tr-pr-detail').hide()
+    $(document).find('div.sale-tr-et-detail').hide()
 
   $(document).on "click", "a.ownership-form-new-entity", ->
     if $('#status_poperty')[0].value == "Purchased"
