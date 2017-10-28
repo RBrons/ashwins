@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+ActiveRecord::Schema.define(version: 20171028054353) do
 ActiveRecord::Schema.define(version: 20171026122607) do
 
   # These are extensions that must be enabled in order to support this database
@@ -553,6 +554,54 @@ ActiveRecord::Schema.define(version: 20171026122607) do
     t.boolean  "rent_increase_in_base_term_status",                                                          default: false
     t.boolean  "rent_commencement_depend_on_expiration",                                                     default: true
     t.boolean  "preliminary_term_expired",                                                                   default: false
+    t.string   "lease_rent_abatement_rating"
+    t.string   "lease_percentage_rent_exclusions_rating"
+    t.string   "taxes_and_fees_restate_rating"
+    t.string   "taxes_and_fees_assessments_rating"
+    t.string   "taxes_and_fees_separate_tax_parcel_rating"
+    t.string   "taxes_and_fees_landlord_contesting_rating"
+    t.string   "taxes_and_fees_tenant_contesting_rating"
+    t.string   "taxes_and_fees_easements_rating"
+    t.string   "site_preparation_env_obligations_rating"
+    t.string   "site_preparation_env_termination_rights_rating"
+    t.string   "site_preparation_env_remediation_rating"
+    t.string   "site_preparation_env_permits_and_licenses_rating"
+    t.string   "construction_rating"
+    t.string   "construction_deadline_rating"
+    t.string   "construction_liens_rating"
+    t.string   "construction_approval_of_plans_and_specs_rating"
+    t.string   "use_clause_rating"
+    t.string   "use_exclusive_clause_rating"
+    t.string   "premises_tenant_rights_rating"
+    t.string   "premises_waste_ratingpremises_initial_opening_rating"
+    t.string   "premises_recapture_clause_rating"
+    t.string   "premises_demolition_rating"
+    t.string   "premises_tenants_equipment_defined_rating"
+    t.string   "premises_ownership_and_removal_rating"
+    t.string   "premises_repairs_rating"
+    t.string   "premises_compliance_with_laws_rating"
+    t.string   "premises_surrender_rating"
+    t.string   "premises_inspection_rating"
+    t.string   "premises_insurance_rating"
+    t.string   "premises_destruction_rating"
+    t.string   "premises_total_taking_rating"
+    t.string   "premises_partial_taking_rating"
+    t.string   "premises_signs_rating"
+    t.string   "premises_utilities_rating"
+    t.string   "transfer_assignment_and_subletting_rating"
+    t.string   "transfer_leasehold_mortgage_rating"
+    t.string   "transfer_subordination_rating"
+    t.string   "transfer_estoppel_certificate_rating"
+    t.string   "remedies_rent_defaults_rating"
+    t.string   "remedies_landlord_rating"
+    t.string   "remedies_mitigation_rating"
+    t.string   "remedies_dispute_resolution_rating"
+    t.string   "remedies_landlord_exoneration_rating"
+    t.string   "remedies_exculpation_rating"
+    t.string   "misc_notices_rating"
+    t.string   "misc_obligation_rating"
+    t.string   "premises_waste_rating"
+    t.string   "premises_initial_opening_rating"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end

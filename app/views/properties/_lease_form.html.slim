@@ -23,29 +23,6 @@
       button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
         | Close
 
-= content_for :rating_box do
-  fieldset.rating.pull-right
-    input type="radio" id="star5" name="rating" value="5"
-    label.full for="star5" title="Awesome - 5 stars"
-    input type="radio" id="star4half" name="rating" value="4 and a half"
-    label.half for="star4half" title="Pretty good - 4.5 stars"
-    input type="radio" id="star4" name="rating" value="4"
-    label.full for="star4" title="Pretty good - 4 stars"
-    input type="radio" id="star3half" name="rating" value="3 and a half"
-    label.half for="star3half" title="Meh - 3.5 stars"
-    input type="radio" id="star3" name="rating" value="3"
-    label.full for="star3" title="Meh - 3 stars"
-    input type="radio" id="star2half" name="rating" value="2 and a half"
-    label.half for="star2half" title="Kinda bad - 2.5 stars"
-    input type="radio" id="star2" name="rating" value="2"
-    label.full for="star2" title="Kinda bad - 2 stars"
-    input type="radio" id="star1half" name="rating" value="1 and a half"
-    label.half for="star1half" title="Meh - 1.5 stars"
-    input type="radio" id="star1" name="rating" value="1"
-    label.full for="star1" title="Sucks big time - 1 star"
-    input type="radio" id="starhalf" name="rating" value="half"
-    label.half for="starhalf" title="Sucks big time - 0.5 stars"
-
 div[role="tabpanel"]
     ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
@@ -409,7 +386,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Rent Abatement
-                = content_for :rating_box
+                - $attribute_name = 'property[lease_rent_abatement_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_rent_abatement_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'abatement').count})", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -434,7 +412,8 @@ div[role="tabpanel"]
               .form-group
                 .property-action-fields
                   h2.heading.pull-left Percentage Rent Exclusions
-                  = content_for :rating_box
+                  - $attribute_name = 'property[lease_percentage_rent_exclusions_rating]'
+                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_percentage_rent_exclusions_rating}
                   .property-comments-box
                     = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_exclusions').count})", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-comments"
                     = link_to "+", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -476,7 +455,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Real Estate Taxes
-                = content_for :rating_box
+                - $attribute_name = 'property[taxes_and_fees_restate_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_restate_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'restate').count})", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -486,7 +466,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Assessments
-                = content_for :rating_box
+                - $attribute_name = 'property[taxes_and_fees_assessments_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_assessments_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'assessments').count})", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -496,7 +477,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Separate Tax Parcel
-                = content_for :rating_box
+                - $attribute_name = 'property[taxes_and_fees_separate_tax_parcel_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_separate_tax_parcel_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'sep_tax').count})", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -506,7 +488,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Landlord Contesting Taxes
-                = content_for :rating_box
+                - $attribute_name = 'property[taxes_and_fees_landlord_contesting_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_landlord_contesting_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_contesting').count})", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -516,7 +499,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Tenant Contesting Taxes
-                = content_for :rating_box
+                - $attribute_name = 'property[taxes_and_fees_tenant_contesting_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_tenant_contesting_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_contesting').count})", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -526,7 +510,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Easements
-                = content_for :rating_box
+                - $attribute_name = 'property[taxes_and_fees_easements_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_easements_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'easements').count})", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -550,7 +535,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Environmental Obligations for Site Preparation
-                = content_for :rating_box
+                - $attribute_name = 'property[site_preparation_env_obligations_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_obligations_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_obligations').count})", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -560,7 +546,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Environmental Termination Rights Preparation
-                = content_for :rating_box
+                - $attribute_name = 'property[site_preparation_env_termination_rights_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_termination_rights_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_termination').count})", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -570,7 +557,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Environmental Remediation Preparation
-                = content_for :rating_box
+                - $attribute_name = 'property[site_preparation_env_remediation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_remediation_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_remediation').count})", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -580,7 +568,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Environmental Permits and Licenses
-                = content_for :rating_box
+                - $attribute_name = 'property[site_preparation_env_permits_and_licenses_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_permits_and_licenses_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_permits').count})", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -605,7 +594,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Construction
-                = content_for :rating_box
+                - $attribute_name = 'property[construction_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'construction').count})", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -615,7 +605,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Construction Deadline
-                = content_for :rating_box
+                - $attribute_name = 'property[construction_deadline_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_deadline_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'const_deadline').count})", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -625,7 +616,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Liens
-                = content_for :rating_box
+                - $attribute_name = 'property[construction_liens_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_liens_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'liens').count})", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -635,7 +627,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Approval of Plans and Specifications
-                = content_for :rating_box
+                - $attribute_name = 'property[construction_approval_of_plans_and_specs_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_approval_of_plans_and_specs_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'cons_approval').count})", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -660,7 +653,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Use Clause
-                = content_for :rating_box
+                - $attribute_name = 'property[use_clause_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_clause_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'use_clause').count})", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -670,7 +664,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Exclusive Clause
-                = content_for :rating_box
+                - $attribute_name = 'property[use_exclusive_clause_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_exclusive_clause_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'ex_clause').count})", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -694,7 +689,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Tenant Rights Under the Declaration
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_tenant_rights_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenant_rights_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_rights').count})", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -704,7 +700,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Waste
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_waste_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_waste_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'waste').count})", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -714,7 +711,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Initial Opening
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_initial_opening_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_initial_opening_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'initial_opening').count})", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -724,7 +722,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Recapture Clause
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_recapture_clause_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_recapture_clause_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'recapture_clause').count})", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -734,7 +733,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Demolition
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_demolition_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_demolition_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'demolition').count})", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -744,7 +744,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Tenant's Equipment Defined
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_tenants_equipment_defined_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenants_equipment_defined_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_equip').count})", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -754,7 +755,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Ownership and Removal of Tenant's Equipment
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_ownership_and_removal_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_ownership_and_removal_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'own_removal').count})", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -764,7 +766,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Repairs
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_repairs_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_repairs_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'repairs').count})", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -774,7 +777,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Compliance with Laws
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_compliance_with_laws_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_compliance_with_laws_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'compliance').count})", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -784,7 +788,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Surrender
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_surrender_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_surrender_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_surrender').count})", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -794,7 +799,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Inspection
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_inspection_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_inspection_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_inspection').count})", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -804,7 +810,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Insurance
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_insurance_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_insurance_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_insurance').count})", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -814,7 +821,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Destruction
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_destruction_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_destruction_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_destruction').count})", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -824,7 +832,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Total Taking
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_total_taking_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_total_taking_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'total_taking').count})", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -834,7 +843,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Partial Taking
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_partial_taking_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_partial_taking_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'partial_taking').count})", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -844,7 +854,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Signs
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_signs_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_signs_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'signs').count})", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -854,7 +865,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Utilities
-                = content_for :rating_box
+                - $attribute_name = 'property[premises_utilities_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_utilities_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'utilities').count})", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -878,7 +890,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Assignment and Subletting
-                = content_for :rating_box
+                - $attribute_name = 'property[transfer_assignment_and_subletting_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_assignment_and_subletting_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'ass_subletting').count})", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -888,7 +901,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Leasehold Mortgage
-                = content_for :rating_box
+                - $attribute_name = 'property[transfer_leasehold_mortgage_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_leasehold_mortgage_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'leasehold').count})", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -898,7 +912,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Subordination
-                = content_for :rating_box
+                - $attribute_name = 'property[transfer_subordination_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_subordination_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'subordination').count})", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -908,7 +923,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Estoppel Certificate
-                = content_for :rating_box
+                - $attribute_name = 'property[transfer_estoppel_certificate_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_estoppel_certificate_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'estoppel').count})", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -932,7 +948,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Rent Defaults by Tenant
-                = content_for :rating_box
+                - $attribute_name = 'property[remedies_rent_defaults_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_rent_defaults_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_defaults').count})", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -942,7 +959,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Landlord Remedies for Tenant Defaults
-                = content_for :rating_box
+                - $attribute_name = 'property[remedies_landlord_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_remedies').count})", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -952,7 +970,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Mitigation
-                = content_for :rating_box
+                - $attribute_name = 'property[remedies_mitigation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_mitigation_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'remedies_mitigation').count})", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -962,7 +981,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Dispute Resolution
-                = content_for :rating_box
+                - $attribute_name = 'property[remedies_dispute_resolution_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_dispute_resolution_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'dispute_resol').count})", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -972,7 +992,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Landlord Exoneration after Sale
-                = content_for :rating_box
+                - $attribute_name = 'property[remedies_landlord_exoneration_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_exoneration_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'exoneration').count})", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -982,7 +1003,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Exculpation
-                = content_for :rating_box
+                - $attribute_name = 'property[remedies_exculpation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_exculpation_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'exculpation').count})", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -1007,7 +1029,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Notices
-                = content_for :rating_box
+                - $attribute_name = 'property[misc_notices_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_notices_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'notices').count})", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-add-comment"
@@ -1017,7 +1040,8 @@ div[role="tabpanel"]
             .form-group
               .property-action-fields
                 h2.heading.pull-left Obligation to be reasonable
-                = content_for :rating_box
+                - $attribute_name = 'property[misc_obligation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_obligation_rating}
                 .property-comments-box
                   = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'misc_obligation').count})", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-comments"
                   = link_to "+", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-add-comment"

@@ -267,6 +267,9 @@ $ ->
     $("#new-tenant #new-tenant-name").val("")
     $("#new-tenant").modal()
 
+  $(document).on 'click', '.rating label', ->
+    $(this).prev().attr('checked', true)
+
   $(document).on 'click', '#save-new-tenant', ->
     newTenantName = $("#new-tenant-name").val()
 
