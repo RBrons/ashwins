@@ -268,7 +268,9 @@ $ ->
     $("#new-tenant").modal()
 
   $(document).on 'click', '.rating label', ->
-    $(this).prev().attr('checked', true)
+    $selector = $(this).prev();
+    $action = () -> $selector.click()
+    setTimeout($action, 100)
 
   $(document).on 'click', '#save-new-tenant', ->
     newTenantName = $("#new-tenant-name").val()
