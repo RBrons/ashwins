@@ -28,7 +28,7 @@ div[role="tabpanel"]
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
           a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Parties
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_terms_section'}")
-          a#lease_terms[href="#lease_terms_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease Term
+          a#lease_terms[href="#lease_terms_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease Terms
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
           a#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
       li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
@@ -147,83 +147,79 @@ div[role="tabpanel"]
               label.mg-top-5 Date Of Lease Details
               .clearfix
               = f.select :date_of_lease_details, Property::DATE_OF_LEASE_DETAILS, {}, class: 'form-control'
+
             .form-group
               h2.heading Lease Terms 
-              .clearfix
-                = f.check_box :preliminary_term_status
-                | Preliminary
-                <br>
-                <input type="checkbox" disabled readonly>Base
-                <br>
-                = f.check_box :optional_extensions_status
-                | Optional Extensions  
+              .checkbox
+                label
+                  = f.check_box :preliminary_term_status
+                  | Preliminary
+              .checkbox
+                label
+                  <input type="checkbox" readonly>
+                  | Base
+              .checkbox
+                label
+                  = f.check_box :optional_extensions_status
+                  | Optional Extensions  
+            div#preliminary_term style="#{ 'display: none;' unless f.object.preliminary_term_status?}"            
+              .form-group
+                h2.heading Preliminary Term
+                .checkbox
+                  label
+                    = f.check_box :rent_commencement_depend_on_expiration, class: 'product-list'
+                    | Is the Rent Commencement Date dependent on the Expiration of the Preliminary Terms? <br>
+                .checkbox
+                  label
+                    = f.check_box :preliminary_term_expired, class: 'product-list'
+                    | Has the Preliminary Term Expired?
+              .form-group
+                label Conditions for the End of Preliminary Term
+                = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
+            
             .form-group
-              label 
-              .clearfix
-              div#preliminary_term style="#{ 'display: none;' unless f.object.preliminary_term_status?}"            
-                .form-group
-                  h2.heading Preliminary Terms
-                  .clearfix    
-                  = f.check_box :rent_commencement_depend_on_expiration, class: 'product-list'
-                  | Is the Rent Commencement Date dependent on the Expiration of the Preliminary Terms? <br>
-                  = f.check_box :preliminary_term_expired, class: 'product-list'
-                  | Has the Preliminary Term Expired?
-                .form-group
-                  label Conditions for the End of Preliminary Terms 
-                  .clearfix 
-                  = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
-                  <br>
-            h2.heading Base Terms 
-            .form-group
+              h2.heading Base Term
               label Rent Commencement Date
               .clearfix
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
             .form-group
-              label.mg-top-5 Pro Rated Rent?
-              =  f.check_box :lease_is_pro_rated, class: ''
+              .checkbox
+                label Pro Rated Rent?
+                = f.check_box :lease_is_pro_rated, class: ''
             .form-group
-              label.mg-top-5 Rent Commencement Date Details
+              label Rent Commencement Date Details
               .clearfix
               = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
             .form-group
-              label.mg-top-5 Duration of Base term
-              .clearfix
+              label Duration of Base Term
               =  f.text_field :lease_duration_in_years, class: 'form-control'
             .form-group
-              label Are there Rent Increases in the Base Terms
-              .clearfix    
-              = f.check_box :rent_increase_in_base_term_status
-                .form-group
-            .form-group
-              .clearfix
-              div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
-                label.mg-top-5 No of Years Before Rent Increase
-                .clearfix
-                 =  f.text_field :lease_rent_slab_in_years, class: 'form-control'
-                label.mg-top-5 Base Term Rent Increase Percentage
-                .clearfix
-                .input-group
+              .checkbox
+                label Are there Rent Increases in the Base Terms
+                = f.check_box :rent_increase_in_base_term_status
+            div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
+              .form-group
+                label No of Years Between Rent Increases
+                = f.text_field :lease_rent_slab_in_years, class: 'form-control'
+              .form-group
+                label Base Term Rent Increase Percentage
+                .input-group.width-field-sm
                   = f.text_field :base_rent_increase_percentage, class: 'form-control'
                   .input-group-addon %
-            .form-group
-              label 
-              .clearfix
-              div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
-                h2.heading Optional Extensions
-                .form-group
-                  label.mg-top-5 Number Of Option Period(s)
-                  .clearfix
-                  = f.text_field :number_of_option_period, class: 'form-control'
-                .form-group
-                  label.mg-top-5 Length of an Option Period in Years
-                  .clearfix
-                  = f.text_field :length_of_option_period, class: 'form-control'
-                .form-group
-                  label.mg-top-5 Lease Rent Increase Percentage
-                  .clearfix
-                  .input-group
-                    = f.text_field :lease_rent_increase_percentage, class: 'form-control'
-                    .input-group-addon %         
+            
+            div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
+              h2.heading Optional Extensions
+              .form-group
+                label Number Of Option Period(s)
+                = f.text_field :number_of_option_period, class: 'form-control'
+              .form-group
+                label Length of an Option Period in Years
+                = f.text_field :length_of_option_period, class: 'form-control'
+              .form-group
+                label Option Period Rent Increase Percentage
+                .input-group.width-field-sm
+                  = f.text_field :lease_rent_increase_percentage, class: 'form-control'
+                  .input-group-addon %         
             .form-group
               = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
       #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
@@ -240,38 +236,35 @@ div[role="tabpanel"]
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .clearfix
             .form-group
-              label.mg-top-5 Date Of Lease
+              label Date Of Lease
               .clearfix
               = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}", disabled: true
               = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}", disabled: true
             .form-group
-              label.mg-top-5 Starting Date Of Lease Amendment
+              label Starting Date Of Lease Amendment
               .clearfix
               = f.date_select :starting_date_of_lease_amendment, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease"
             .form-group
-              label.mg-top-5 Lease Base Rent
+              label Lease Base Rent
               .input-group
                 .input-group-addon $
                 = f.text_field :current_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
-              label.mg-top-5 Current Monthly Rent
+              label Current Monthly Rent
               .input-group
                 .input-group-addon $
                 = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
             .form-group
-              label.mg-top-5 Duration of Base term
-              .clearfix
-              =  f.text_field :lease_duration_in_years, class: 'form-control'
+              label Duration of Base term
+              = f.text_field :lease_duration_in_years, class: 'form-control'
             .form-group
-              label.mg-top-5 Lease Rent Increase Percentage
-              .clearfix
+              label Lease Rent Increase Percentage
               .input-group
                 = f.text_field :lease_rent_increase_percentage, class: 'form-control'
                 .input-group-addon %
             .form-group
-              label.mg-top-5 No of Years Before Rent Increase
-              .clearfix
-              =  f.text_field :lease_rent_slab_in_years, class: 'form-control'
+              label No of Years Before Rent Increase
+              = f.text_field :lease_rent_slab_in_years, class: 'form-control'
             .form-group
               label.mg-top-5 Date Of Lease Details
               .clearfix
@@ -281,34 +274,29 @@ div[role="tabpanel"]
               .clearfix
               = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: 'form-control select_auto'
             .form-group
-              label.mg-top-5 Option to Extend
-              .clearfix
-              =  f.text_field :lease_option_to_extend, class: 'form-control'
+              label Option to Extend
+              = f.text_field :lease_option_to_extend, class: 'form-control'
             .form-group
-              label.mg-top-5 Delivery of the Premises
-              .clearfix
-              =  f.text_field :lease_delivery_of_the_premises, class: 'form-control'
+              label Delivery of the Premises
+              = f.text_field :lease_delivery_of_the_premises, class: 'form-control'
             .form-group
-              label.mg-top-5 Primary Term
-              .clearfix
-              =  f.text_field :lease_primary_term, class: 'form-control'
+              label Primary Term
+              = f.text_field :lease_primary_term, class: 'form-control'
             .form-group
-              label.mg-top-5 Pro Rated Rent?
-              =  f.check_box :lease_is_pro_rated, class: ''
+              label Pro Rated Rent?
+              = f.check_box :lease_is_pro_rated, class: ''
             .form-group
-              label.mg-top-5 Rent Commencement Date Details
+              label Rent Commencement Date Details
               .clearfix
               = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
             .form-group
-              label.mg-top-5 Number Of Option Period(s)
-              .clearfix
+              label Number Of Option Period(s)
               = f.text_field :number_of_option_period, class: 'form-control'
             .form-group
-              label.mg-top-5 Length of an Option Period in Years
-              .clearfix
+              label Length of an Option Period in Years
               = f.text_field :length_of_option_period, class: 'form-control'
             .form-group
-              = f.submit 'Save', class: 'btn btn-sm btn-primary'           
+              = f.submit 'Save', class: 'btn btn-sm btn-primary'
           - if @property.rent_tables.present?
             .clearfix
             .col-sm-4
@@ -382,8 +370,7 @@ div[role="tabpanel"]
                         = number_to_currency row[12]
                       td
                         = number_to_currency row[13]
-          - else
-            p Rent Table is not available right now.
+          
       #lease_rent_details_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]

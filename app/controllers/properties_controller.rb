@@ -72,10 +72,12 @@ class PropertiesController < ApplicationController
     @property.lease_base_rent = @property.current_rent
     @property.user_id = current_user.id
     
-    if !@property.owner_person_is.nil?
+    if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
       if @property.owner_person_is == 1 && !@property.owner_entity_id_indv.nil?
-        @property.owner_entity_id = @property.owner_entity_id_indv 
+        @property.owner_entity_id = @property.owner_entity_id_indv
       end
+    else
+      @property.owner_entity_id = @property.owner_entity_id_indv = 0
     end
     
     respond_to do |format|
@@ -123,10 +125,12 @@ class PropertiesController < ApplicationController
       @property.assign_attributes(property_params)
       @property.lease_base_rent = @property.current_rent
 
-      if !@property.owner_person_is.nil?
+      if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
         if @property.owner_person_is == 1 && !@property.owner_entity_id_indv.nil?
-          @property.owner_entity_id = @property.owner_entity_id_indv 
+          @property.owner_entity_id = @property.owner_entity_id_indv
         end
+      else
+        @property.owner_entity_id = @property.owner_entity_id_indv = 0
       end
 
       if @property.rent_table_version.nil?

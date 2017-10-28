@@ -168,15 +168,28 @@ $ ->
       $('#person_owner').hide()
       $('#entity_owner').show()
 
-  $(document).on 'ifChecked', '#property_owner_person_is_true', ->
+  $(document).on 'ifChecked', '#property_owner_person_is_1', ->
     #alert "is person"
     $(document).find('div.sale-tr-pr-detail').show()
     $(document).find('div.sale-tr-et-detail').hide()
 
-  $(document).on 'ifChecked', '#property_owner_person_is_false', ->
-    #alert "is not a person"
+  $(document).on 'ifChecked', '#property_owner_person_is_2', ->
+    #alert "is a entity"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').show()
+  
+  $(document).on 'ifChecked', '#property_owner_person_is_0', ->
+    #alert "is not a person"
+    $(document).find('div.sale-tr-pr-detail').hide()
+    $(document).find('div.sale-tr-et-detail').hide()
+
+  $(document).on 'blur', '#property_location_city', ->
+    $("#property-readonly-city").val($(this).val())
+
+  $(document).on 'ifChecked', '#property_owner_person_is_0', ->
+    #alert "is not a person"
+    $(document).find('div.sale-tr-pr-detail').hide()
+    $(document).find('div.sale-tr-et-detail').hide()
 
   $(document).on "click", "a.ownership-form-new-entity", ->
     if $('#status_poperty')[0].value == "Purchased"
@@ -273,3 +286,7 @@ $ ->
           $("#new-tenant .error-message").show()
       error: (e) ->
         console.log e
+
+  $(document).on 'click', '#lease_rent_table', ->
+    if $(document).find('#rent-table-wrapper').length == 0
+      sweetAlert "", "You can't write the rent table because there's no rent", "info"
