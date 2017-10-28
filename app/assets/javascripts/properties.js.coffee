@@ -289,4 +289,4 @@ $ ->
 
   $(document).on 'click', '#lease_rent_table', ->
     if $(document).find('#rent-table-wrapper').length == 0
-      sweetAlert "", "You can't write the rent table because there's no rent", "info"
+      $.notify "You can't write the rent table because there's no rent", "info"
