@@ -1,72 +1,72 @@
 - rate_value = (star_rating.blank?) ? '0' : star_rating
 
 fieldset.rating.pull-right
-  - if rate_value = '5'
-    input type="radio" id="star5" name="#{attribute_name}" value="5" checked
+  - if rate_value == '5'
+    input type="radio" id="star5" name="#{attribute_name}" value="5" checked=true
   - else
     input type="radio" id="star5" name="#{attribute_name}" value="5"
 
   label.full for="star5" title="Awesome - 5 stars"
 
-  - if rate_value = '4 and a half'
-    input type="radio" id="star4half" name="#{attribute_name}" value="4 and a half" checked
-  -else
+  - if rate_value == '4 and a half'
+    input type="radio" id="star4half" name="#{attribute_name}" value="4 and a half" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="4 and a half"
 
   label.half for="star4half" title="Pretty good - 4.5 stars"
 
-  - if rate_value = '4'
-    input type="radio" id="star4half" name="#{attribute_name}" value="4" checked
-  -else
+  - if rate_value == '4'
+    input type="radio" id="star4half" name="#{attribute_name}" value="4" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="4"
 
-  label.half for="star4half" title="Pretty good - 4 stars"
+  label.full for="star4half" title="Pretty good - 4 stars"
 
-  - if rate_value = '3 and a half'
-    input type="radio" id="star4half" name="#{attribute_name}" value="3 and a half" checked
-  -else
+  - if rate_value == '3 and a half'
+    input type="radio" id="star4half" name="#{attribute_name}" value="3 and a half" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="3 and a half"
 
   label.half for="star4half" title="Meh - 3.5 stars"
 
-  - if rate_value = '3'
-    input type="radio" id="star4half" name="#{attribute_name}" value="3" checked
-  -else
+  - if rate_value == '3'
+    input type="radio" id="star4half" name="#{attribute_name}" value="3" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="3"
 
-  label.half for="star4half" title="Meh - 3 stars"
+  label.full for="star4half" title="Meh - 3 stars"
 
-  - if rate_value = '2 and a half'
-    input type="radio" id="star4half" name="#{attribute_name}" value="2 and a half" checked
-  -else
+  - if rate_value == '2 and a half'
+    input type="radio" id="star4half" name="#{attribute_name}" value="2 and a half" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="2 and a half"
 
   label.half for="star4half" title="Kinda bad - 2.5 stars"
 
-  - if rate_value = '2'
-    input type="radio" id="star4half" name="#{attribute_name}" value="2" checked
-  -else
+  - if rate_value == '2'
+    input type="radio" id="star4half" name="#{attribute_name}" value="2" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="2"
 
-  label.half for="star4half" title="Kinda bad - 2 stars"
+  label.full for="star4half" title="Kinda bad - 2 stars"
 
-  - if rate_value = '1 and a half'
-    input type="radio" id="star4half" name="#{attribute_name}" value="1 and a half" checked
-  -else
+  - if rate_value == '1 and a half'
+    input type="radio" id="star4half" name="#{attribute_name}" value="1 and a half" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="1 and a half"
 
   label.half for="star4half" title="Meh - 1.5 stars"
 
-  - if rate_value = '1'
-    input type="radio" id="star4half" name="#{attribute_name}" value="1" checked
-  -else
+  - if rate_value == '1'
+    input type="radio" id="star4half" name="#{attribute_name}" value="1" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="1"
 
-  label.half for="star4half" title="Sucks big time - 1 star"
+  label.full for="star4half" title="Sucks big time - 1 star"
 
-  - if rate_value = 'half'
-    input type="radio" id="star4half" name="#{attribute_name}" value="half" checked
-  -else
+  - if rate_value == 'half'
+    input type="radio" id="star4half" name="#{attribute_name}" value="half" checked=true
+  - else
     input type="radio" id="star4half" name="#{attribute_name}" value="half"
 
   label.half for="star4half" title="Sucks big time - 0.5 stars"

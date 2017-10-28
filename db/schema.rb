@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171028054000) do
+ActiveRecord::Schema.define(version: 20171028054353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -600,6 +600,7 @@ ActiveRecord::Schema.define(version: 20171028054000) do
     t.string   "misc_notices_rating"
     t.string   "misc_obligation_rating"
     t.string   "premises_waste_rating"
+    t.string   "premises_initial_opening_rating"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
