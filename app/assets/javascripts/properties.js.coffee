@@ -268,7 +268,7 @@ $ ->
     $("#new-tenant").modal()
 
   $(document).on 'click', '.rating label', ->
-    $selector = $(this).prev();
+    $selector = $(this).prev()
     $action = () -> $selector.click()
     setTimeout($action, 100)
 
@@ -292,3 +292,12 @@ $ ->
   $(document).on 'click', '#lease_rent_table', ->
     if $(document).find('#rent-table-wrapper').length == 0
       $.notify "You can't write the rent table because there's no rent", "info"
+
+  $(document).on 'ifChecked', '#property_create_rent_table_mode_true', ->
+    form = $(document).find('#lease_terms_section form')
+    form.find('#property_current_rent').attr('disabled', false)
+
+  $(document).on 'ifChecked', '#property_create_rent_table_mode_false', ->
+    form = $(document).find('#lease_terms_section form')
+    form.find('#property_current_rent').attr('disabled', true)
+

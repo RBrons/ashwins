@@ -65,66 +65,34 @@ div[role="tabpanel"]
             .form-group
               label Lease Analysis Perspective
               .clearfix
-              .form-group
-                .heading_blue.radio-inline
-                  span = f.radio_button :lease_analysis_perspective, true, checked: @property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
-                  span.margin-md-left Tenant's Perspective
-                .heading_blue.radio-inline
-                  span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
-                  span.margin-md-left Landlord's Perspective
+              .heading_blue.radio-inline
+                span = f.radio_button :lease_analysis_perspective, true, checked: @property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
+                span.margin-md-left Tenant's Perspective
+              .heading_blue.radio-inline
+                span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
+                span.margin-md-left Landlord's Perspective
+            
+            .clearfix.margin-lg-top
+
             .form-group
-              label.mg-top-5 Lease Analysis Date
+              label Lease Analysis Date
               .clearfix
               = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
-            h2.heading
-                | Original Parties
-            .clearfix
+            
+            .clearfix.margin-lg-top
+            
+            h2.heading Original Parties
+            .form-group.margin-lg-top
+              label Original Landlord
+              = f.text_field :lease_original_landlord, class: 'form-control'
             .form-group
-                label.mg-top-5 Original Landlord
-                .clearfix
-                = f.text_field :lease_original_landlord, class: 'form-control'
+              label Original Tenant
+              = f.text_field :lease_original_tenant, class: 'form-control'
             .form-group
-                label.mg-top-5 Original Tenant
-                .clearfix
-                = f.text_field :lease_original_tenant, class: 'form-control'
-            .form-group
-                label.mg-top-5 Original Guarantor
-                .clearfix
-                = f.text_field :lease_original_guarantor, class: 'form-control'
-            .form-group
-              label.mg-top-5 Lease Type
-              .clearfix
-              = f.select :lease_type_is, Property::LEASE_TYPES, {}, class: 'form-control '
-            .form-group
-              label.mg-top-5 Building Status
-              .clearfix
-              = f.select :building_status_is, Property::BUILDING_STATUS, {}, class: 'form-control'
-            .form-group
-              label.mg-top-5 Date Of Lease
-              .clearfix
-              .pull-left
-                = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
-                = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}"
-              .pull-right
-                .pull-left
-                  label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                .pull-right
-                  = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date'
-              .clearfix
-            .form-group
-                label.mg-top-5 Lease Base Rent
-                .clearfix
-                .input-group
-                  .input-group-addon $
-                  = f.text_field :current_rent, class: 'form-control input-mask-currency'
-            .form-group
-              label.mg-top-5 Current Monthly Rent
-              .clearfix
-              .input-group
-                .input-group-addon $
-                = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
-            .form-group
-              = f.submit 'Save', class: 'btn btn-sm btn-primary'
+              label Original Guarantor
+              = f.text_field :lease_original_guarantor, class: 'form-control'
+            
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
       #lease_terms_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
           = hidden_field_tag :type_is, params[:type_is]
@@ -137,7 +105,40 @@ div[role="tabpanel"]
                   li = message
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
-            .clearfix
+            .form-group
+              .heading_blue.radio-inline
+                = f.radio_button 'create_rent_table_mode', true, checked: false, class: 'form-control flat-icheck radiobuttons'
+                span.margin-md-left.pull-right
+                  | Display Current Rent
+                  br 
+                  | from User Input
+              .heading_blue.radio-inline
+                = f.radio_button 'create_rent_table_mode', false, checked: true, class: 'form-control flat-icheck radiobuttons'
+                span.margin-md-left.pull-right
+                  | Calculate Current Rent from 
+                  br
+                  | Base Rent and other Terms
+            .form-group
+                label Current Rent
+                .input-group.width-field-md
+                  .input-group-addon $
+                  = f.text_field :current_rent, class: 'form-control input-mask-currency', disabled: true
+            .form-group
+                label Lease Base Rent
+                .input-group.width-field-md
+                  .input-group-addon $
+                  = f.text_field :lease_base_rent, class: 'form-control input-mask-currency'
+            .form-group
+              label.mg-top-5 Current Monthly Rent
+              .input-group
+                .input-group-addon $
+                = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+            .form-group
+              label Lease Type
+              = f.select :lease_type_is, Property::LEASE_TYPES, {}, class: 'form-control '
+            .form-group
+              label Building Status
+              = f.select :building_status_is, Property::BUILDING_STATUS, {}, class: 'form-control'
             .form-group
               label.mg-top-5 Date Of Lease
               .clearfix
@@ -156,7 +157,7 @@ div[role="tabpanel"]
                   | Preliminary
               .checkbox
                 label
-                  <input type="checkbox" readonly>
+                  span.fa.fa-square.left-icon
                   | Base
               .checkbox
                 label
@@ -224,6 +225,24 @@ div[role="tabpanel"]
               = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
       #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
         - if @property.rent_tables.present?
+          .user-setup-wizard
+            ul.wizard_steps
+              li
+                a.selected[data-step=1]
+                  span.step_no 1
+                  span.step_descr Preliminary Term
+              li
+                a.disabled[data-step=2]
+                  span.step_no 2
+                  span.step_descr Base Term
+              li
+                a.disabled[data-step=3]
+                  span.step_no 3
+                  span.step_descr Option 1
+              li
+                a.disabled[data-step=4]
+                  span.step_no 4
+                  span.step_descr Option 2
           .clearfix
           .col-sm-4
             .form-group
