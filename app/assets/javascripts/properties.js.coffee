@@ -293,11 +293,25 @@ $ ->
     if $(document).find('#rent-table-wrapper').length == 0
       $.notify "You can't write the rent table because there's no rent", "info"
 
-  $(document).on 'ifChecked', '#property_create_rent_table_mode_true', ->
-    form = $(document).find('#lease_terms_section form')
-    form.find('#property_current_rent').attr('disabled', false)
+  $(document).on 'ifChecked', '#create_rent_table_mode_true', ->
+    console.log 'Display current rent from user input'
 
-  $(document).on 'ifChecked', '#property_create_rent_table_mode_false', ->
-    form = $(document).find('#lease_terms_section form')
-    form.find('#property_current_rent').attr('disabled', true)
+  $(document).on 'ifChecked', '#create_rent_table_mode_false', ->
+    console.log 'Calculate current rent from base rent and other terms'
 
+  $(document).on 'click', '#lease_submit', (e) ->
+    # validates if all fields for calculating current rent has proper value
+    fields_in_validation = [
+      '#property_lease_base_rent', '#property_lease_duration_in_years',
+      '#property_lease_rent_increase_percentage', '#property_lease_rent_slab_in_years'
+    ]
+    lease_form = $(document).find('#lease_terms_section form')
+    ret = true
+    if lease_form.find('#create_rent_table_mode_false').is(':checked')
+      for field in fields_in_validation
+        if !lease_form.find(field).val()
+          ret = false
+          break
+      if !ret
+        $.notify "Option Period cannot be calculated because all the fields were not inputted", "info"
+        e.preventDefault()
