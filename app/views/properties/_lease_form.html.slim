@@ -107,22 +107,17 @@ div[role="tabpanel"]
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
               .heading_blue.radio-inline
-                = f.radio_button 'create_rent_table_mode', true, checked: false, class: 'form-control flat-icheck radiobuttons'
+                = radio_button_tag 'create_rent_table_mode', true, false, class: 'form-control flat-icheck radiobuttons'
                 span.margin-md-left.pull-right
                   | Display Current Rent
                   br 
                   | from User Input
               .heading_blue.radio-inline
-                = f.radio_button 'create_rent_table_mode', false, checked: true, class: 'form-control flat-icheck radiobuttons'
+                = radio_button_tag 'create_rent_table_mode', false, true, class: 'form-control flat-icheck radiobuttons'
                 span.margin-md-left.pull-right
                   | Calculate Current Rent from 
                   br
                   | Base Rent and other Terms
-            .form-group
-                label Current Rent
-                .input-group.width-field-md
-                  .input-group-addon $
-                  = f.text_field :current_rent, class: 'form-control input-mask-currency', disabled: true
             .form-group
                 label Lease Base Rent
                 .input-group.width-field-md
