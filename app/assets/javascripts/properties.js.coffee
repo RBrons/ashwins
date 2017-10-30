@@ -151,6 +151,9 @@ $ ->
     titleHideShow()
 
   $(document).on 'keyup', '#property_location_city', ->
+    val = $('#property_location_city').val()
+    upperval = val.substr(0, 1).toUpperCase() + val.substr(1)
+    $('#property_location_city').val(upperval)
     titleHideShow()
 
   $(document).on 'change', '#property_tenant_id', ->

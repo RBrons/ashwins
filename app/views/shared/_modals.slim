@@ -66,3 +66,15 @@
           li
             = link_to '<i class="lnr lnr-cart"></i>'.html_safe, new_contact_path(contact_type: 'company'), class: "padding-lg"
             span Company
+
+
+/! Address Book Modal For Adding Entities
+#md-add-address-book.header-submenu-modal.modal.fade[tabindex="-1" role="dialog"]
+  .modal-dialog#address-book-modal'[role="document"]
+    .modal-content
+      .modal-header
+        button.close[type="button" data-dismiss="modal" aria-label="Close"]
+          span.lnr.lnr-cross
+        h4.modal-title Add Address Book
+      .modal-body
+        = 'Under Heavy Construction'
