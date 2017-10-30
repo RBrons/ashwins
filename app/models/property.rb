@@ -216,6 +216,7 @@ class Property < ApplicationRecord
   end
 
   def can_create_rent_table?
+    # check if mandatary fields have the value for creating rent table
     self.lease_base_rent.present? && self.lease_duration_in_years.present? &&
       self.lease_rent_increase_percentage.present? && self.lease_rent_slab_in_years.present? &&
       self.starting_date_of_lease_amendment.present? && self.rent_commencement_date.present?
