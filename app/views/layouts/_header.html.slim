@@ -11,6 +11,8 @@ input#google_api_app_id[type="hidden" value="#{ENV['GOOGLE_API_APP_ID']}"]
         = link_to 'Properties<span class="fa fa-plus-circle" id="add-property"></span>'.html_safe, properties_path, class: "#{@current_page == 'property' ? 'active' : ''} property-module"
       li
         = link_to 'Transactions<span class="fa fa-plus-circle" id="add-transaction"></span>'.html_safe, transactions_path, class: "#{@current_page == 'project' ? 'active' : ''} transaction-module"
+      li
+        = link_to 'Address Book<span class="fa fa-plus-circle" id="add-address-book"></span>'.html_safe, 'javascript:;', class: "#{@current_page == 'crucial personnel' ? 'active' : ''}"
       /li
         = link_to 'Reports', 'javascript:;', class: "#{@current_page == 'crucial personnel' ? 'active' : ''}", "data-toggle" => "dropdown" 
         ul.dropdown-menu
