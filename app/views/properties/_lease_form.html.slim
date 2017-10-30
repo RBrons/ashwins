@@ -223,11 +223,11 @@ div[role="tabpanel"]
           .user-setup-wizard
             ul.wizard_steps
               li
-                a.selected[data-step=1]
+                a[class=(@property.preliminary_term_status == true ? 'selected' : 'disabled') data-step=1]
                   span.step_no 1
                   span.step_descr Preliminary Term
               li
-                a.disabled[data-step=2]
+                a.selected[ data-step=2]
                   span.step_no 2
                   span.step_descr Base Term
               li
