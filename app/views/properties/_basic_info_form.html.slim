@@ -35,6 +35,9 @@
             = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
             span.margin-md-left.blue Select in Google Drive
     .form-group
+      = label_tag 'Square Feet'
+      = f.text_field :square_feet, class: 'form-control width-field-md'
+    .form-group
       = label_tag 'Description'
       = f.text_area :description, class: 'form-control width-field-lg'
     .form-group
