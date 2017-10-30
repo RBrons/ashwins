@@ -123,8 +123,10 @@ class PropertiesController < ApplicationController
       end
     else
       @property.assign_attributes(property_params)
-      @property.lease_base_rent = @property.current_rent
-
+      if params[:use_current_rent] == false
+        @property.lease_base_rent = @property.current_rent
+      end
+      
       if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
         if @property.owner_person_is == 1 && !@property.owner_entity_id_indv.nil?
           @property.owner_entity_id = @property.owner_entity_id_indv
