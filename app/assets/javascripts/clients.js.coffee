@@ -59,7 +59,7 @@ $ ->
     $(this).parent().addClass('selected')
     setTimeout(->
       $(document).find("div#ClientFormEntityPickFormList").modal("hide")
-    , 500)    
+    , 500)
 
   $(document).on 'ajax:beforeSend', 'form#new_entity', ->
     $.blockUI()
@@ -82,7 +82,7 @@ $ ->
     $("div#ClientFormNewEntity").find('.model-body').html(xhr.responseText)
     $.unblockUI()
 
-  $("#entity-groups-tree").jstree  
+  $("#entity-groups-tree").jstree
     'core':
       'animation': 0
       'check_callback': true
@@ -120,10 +120,10 @@ $ ->
         delete tmp.ccp
         tmp.rename.action = (data) ->
           inst = $.jstree.reference(data.reference)
-          obj = inst.get_node(data.reference)          
+          obj = inst.get_node(data.reference)
           text_ = obj.text
           text_ = text_.substr(0, text_.indexOf('<')-1)
-          inst.set_text(obj, text_)          
+          inst.set_text(obj, text_)
           inst.edit obj
         tmp
 
@@ -145,7 +145,7 @@ $ ->
     else
       url = "/clients/index?grp=" + p[0]
       #if p[0] == '0'
-        #url = "/clients/index"      
+        #url = "/clients/index"
       $.ajax
         type: "get"
         url: url
@@ -166,7 +166,7 @@ $ ->
     #alert(data.parent)
     #alert(data.nodes)
     if tree_nodes.length == 0
-      tree_nodes = data.nodes    
+      tree_nodes = data.nodes
     return
   )
 
@@ -192,7 +192,7 @@ $ ->
           #alert(sdata.id)
           #alert(sdata.name)
           $.jstree.reference('#entity-groups-tree').set_id(data.node, sdata.id)
-          $.jstree.reference('#entity-groups-tree').set_text(data.node, sdata.name + 
+          $.jstree.reference('#entity-groups-tree').set_text(data.node, sdata.name +
             '<a href="#" class="addtogroup" id="grp_' + sdata.id + '"><img  src="/assets/plusCyan.png" id="igrp_' +
             sdata.id + '"></img></a>')
     else
@@ -206,7 +206,7 @@ $ ->
           #alert(sdata.id)
           #alert(sdata.name)
           $.jstree.reference('#entity-groups-tree').set_id(data.node, sdata.id)
-          $.jstree.reference('#entity-groups-tree').set_text(data.node, sdata.name + 
+          $.jstree.reference('#entity-groups-tree').set_text(data.node, sdata.name +
             '<a href="#" class="addtogroup" id="grp_' + sdata.id + '"><img  src="/assets/plusCyan.png" id="igrp_' +
             sdata.id + '"></img></a>')
     return
@@ -236,7 +236,7 @@ $ ->
       data: $('#addform').serialize()
       success: (data) ->
         $("div#entities-list").html(data)
-        manage_jsGrid_UI()  
+        manage_jsGrid_UI()
 
   $(document).on 'click', "#remove_button" , (e) ->
     #prevent Default functionality
@@ -249,9 +249,9 @@ $ ->
       data: $('#removeform').serialize()
       success: (data) ->
         $("div#entities-list").html(data)
-        manage_jsGrid_UI()  
+        manage_jsGrid_UI()
 
- 
+
   $(document).on 'click', "#multi_add_entities" , (e) ->
     #prevent Default functionality
     #alert 'add multi...'
@@ -272,7 +272,7 @@ $ ->
           $('#entity-groups-tree').jstree('deselect_all')
           $('#entity-groups-tree').jstree('select_node', selgrp)
           $("div#entities-list").html(data)
-          manage_jsGrid_UI()  
+          manage_jsGrid_UI()
 
   $(document).on 'click', "#multi_remove_entities" , (e) ->
     #prevent Default functionality
@@ -290,13 +290,13 @@ $ ->
         data: $('#removemultiform').serialize()
         success: (data) ->
           $("div#entities-list").html(data)
-          manage_jsGrid_UI()  
+          manage_jsGrid_UI()
 
-             
+
   $(document).on 'click', "a.addtogroup" , (e) ->
     e.preventDefault()
     ents = $(document).find('input#multi_delete_objects').val()
-    #prevent Default functionality      
+    #prevent Default functionality
     ids = e.target.id.split('_')
     #ents = $(document).find('input#multi_delete_objects').val()
     #alert ents
@@ -314,5 +314,34 @@ $ ->
           $('#entity-groups-tree').jstree('deselect_all')
           $('#entity-groups-tree').jstree('select_node', selgrp)
           $("div#entities-list").html(data)
-          manage_jsGrid_UI()  
-  
+          manage_jsGrid_UI()
+
+  $(document).on "click", "a.delete-client", ->
+    key = $(this).attr 'data-key'
+
+    $.ajax
+      type: "POST"
+      url: "/xhr/clients_delete_warning"
+      data: {key: key}
+      dataType: "html"
+      success: (val) ->
+        $("#md-delete-client .modal-body").html(val)
+        $("#md-delete-client").modal 'show'
+        $("#md-delete-client .delete-client-yes").attr 'data-key', key
+      error: (e) ->
+        console.log e
+
+  $(document).on "click", "a.delete-client-yes", ->
+    key = $(this).attr 'data-key'
+    $(this).attr("disabled", "disabled")
+
+    $.ajax
+      type: "DELETE"
+      url: "/entities/" + key
+      dataType: "json"
+      success: (val) ->
+        if val.success == true
+          $("#md-delete-client").modal 'hide'
+          window.location.href = '/clients'
+      error: (e) ->
+        console.log e
