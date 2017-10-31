@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171028054353) do
+ActiveRecord::Schema.define(version: 20171030124420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -601,6 +601,18 @@ ActiveRecord::Schema.define(version: 20171028054353) do
     t.string   "misc_obligation_rating"
     t.string   "premises_waste_rating"
     t.string   "premises_initial_opening_rating"
+    t.decimal  "square_feet"
+    t.string   "tenant_name"
+    t.string   "facilities_contact_name"
+    t.string   "facilities_contact_company"
+    t.string   "facilities_contact_phone"
+    t.string   "facilities_contact_email"
+    t.string   "facilities_contact_fax"
+    t.string   "facilities_contact_street_address"
+    t.string   "facilities_contact_state"
+    t.string   "facilities_contact_city"
+    t.string   "facilities_contact_country"
+    t.string   "facilities_store_number"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
