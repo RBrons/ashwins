@@ -49,7 +49,7 @@ class XhrController < ApplicationController
   end
 
   def contacts_delete_warning
-    contact = Contact.find_by_key(params[:key])
+    contact = Contact.find(params[:id])
     @html = contacts_delete_warning_message(contact)
   end
 

@@ -1,4 +1,7 @@
 class ContactsController < ApplicationController
+
+  include ApplicationHelper
+
   before_action :current_page
 
   def new
@@ -21,7 +24,7 @@ class ContactsController < ApplicationController
     elsif @contact.contact_type == "Personnel"
       @contact.role = @contact.per_role
     end
-    
+
     respond_to do |format|
       if @contact.save
         if params[:from_relinquishing_offeror].present?
@@ -136,10 +139,11 @@ class ContactsController < ApplicationController
 
   def destroy
     @contact = Contact.find_by(id: params[:id])
+    contacts_delete(@contact)
     @contact.try(:destroy)
     respond_to do |format|
       format.html { redirect_to :back }
-      format.json { head :no_content }
+      format.json { render json: {success: true} }
     end
   end
 
