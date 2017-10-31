@@ -108,7 +108,7 @@ class EntitiesController < ApplicationController
 
     transactions.each do |t|
       if t.relinquishing_seller_entity_id == entity.id
-        t.destroy
+        t.main.destroy if t.main.present?
       end
     end
 
@@ -120,7 +120,7 @@ class EntitiesController < ApplicationController
 
     transactions.each do |t|
       if t.replacement_purchaser_entity_id == entity.id
-        t.destroy
+        t.destroy if t.main.present?
       end
     end
 
