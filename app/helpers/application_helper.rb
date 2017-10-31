@@ -1035,4 +1035,143 @@ module ApplicationHelper
     return result.html_safe
   end
 
+  def clients_delete(entity)
+    # TransactionSale
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.relinquishing_seller_entity_id == entity.id
+        t.main.destroy if t.main.present?
+      end
+    end
+
+    # TransactionPurchase
+    klazz         = 'TransactionPurchase'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.replacement_purchaser_entity_id == entity.id
+        t.destroy if t.main.present?
+      end
+    end
+
+    # ICPs
+    case entity.entity_type.try(:name)
+      when "LLC"
+        (entity.members + entity.managers).each do |e|
+          e.destroy
+        end
+      when "LLP"
+        entity.partners.each do |e|
+          e.destroy
+        end
+      when "Power of Attorney"
+        entity.agents.each do |e|
+          e.destroy
+        end
+      when "Trust"
+        (entity.beneficiaries + entity.trustees + entity.settlors).each do |e|
+          e.destroy
+        end
+      when "Joint Tenancy with Rights of Survivorship (JTWROS)"
+        entity.joint_tenants.each do |e|
+          e.destroy
+        end
+      when "Limited Partnership"
+        (entity.general_partners + entity.limited_partners).each do |e|
+          e.destroy
+        end
+      when "Tenancy in Common"
+        listA = entity.tenants_in_common.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Corporation"
+        (entity.stockholders + entity.directors + entity.officers).each do |e|
+          e.destroy
+        end
+      when "Partnership"
+        entity.partners.each do |e|
+          e.destroy
+        end
+      when "Tenancy by the Entirety"
+        entity.spouses.each do |e|
+          e.destroy
+        end
+      else
+        # No need to handle
+    end
+
+    if m = Member.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Manager.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = LimitedPartner.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Beneficiary.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Trustee.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Settlor.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = GeneralPartner.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = StockHolder.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Officer.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Director.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Partner.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Principal.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Agent.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = TenantInCommon.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = JointTenant.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Spouse.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    #Properties
+    Property.where(owner_entity_id: entity.id).each do |p|
+      p.update_attributes(:owner_entity_id => 0, :owner_person_is => 0)
+    end
+  end
+
 end

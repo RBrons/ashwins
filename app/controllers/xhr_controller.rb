@@ -48,6 +48,14 @@ class XhrController < ApplicationController
     @html = clients_delete_warning_message(entity)
   end
 
+  def contacts_delete_warning
+    contact = Contact.find_by_key(params[:key])
+    @html = contacts_delete_warning_message(contact)
+  end
+
+  def properties_delete_warning
+  end
+
   def add_property_comment
     @property = Property.find(params[:id])
     @user = User.find(params[:user_id])
