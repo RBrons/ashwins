@@ -9,7 +9,7 @@ class Admin::PropertiesController < Admin::AdminController
       p.update_attribute(:ownership_status, 'Purchased')
     end
 
-    flash[:success] = "All Sold Properties have been changed to Purchased."
+    # flash[:success] = "All Sold Properties have been changed to Purchased."
     return redirect_to admin_properties_path
   end
 

@@ -81,7 +81,7 @@ class Entities::TrustController < ApplicationController
         @settlor.use_temp_id
         @settlor.save
         @settlors = @settlor.super_entity.settlors
-        flash[:success] = "The Settlor Successfully Updated.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
+        # flash[:success] = "The Settlor Successfully Updated.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
         # return render layout: false, template: "entities/trust/settlors"
         return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       else
@@ -93,7 +93,7 @@ class Entities::TrustController < ApplicationController
       @entity = settlor.super_entity
       settlor.delete
       @settlors = settlor.super_entity.settlors
-      flash[:success] = "The Settlor Successfully Deleted."
+      # flash[:success] = "The Settlor Successfully Deleted."
       return redirect_to entities_trust_settlors_path(@entity.key)
     end
     @settlor.gen_temp_id
@@ -137,7 +137,7 @@ class Entities::TrustController < ApplicationController
         @trustee.use_temp_id
         @trustee.save
         # return render layout: false, template: "entities/trust/trustees"
-        flash[:success] = "The Trustee Successfully Updated.</br><a href='#{entities_trust_trustee_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
+        # flash[:success] = "The Trustee Successfully Updated.</br><a href='#{entities_trust_trustee_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
         return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       else
         # return render layout: false, template: "entities/trust/trustee"
@@ -193,7 +193,7 @@ class Entities::TrustController < ApplicationController
         @beneficiary.save
         @beneficiaries = @beneficiary.super_entity.beneficiaries
         # return render layout: false, template: "entities/trust/beneficiaries"
-        flash[:success] = "The Beneficiary Successfully Updated.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
+        # flash[:success] = "The Beneficiary Successfully Updated.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
         return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       else
         # return render layout: false, template: "entities/trust/beneficiary"
@@ -205,7 +205,7 @@ class Entities::TrustController < ApplicationController
       beneficiary.delete
       @beneficiaries = beneficiary.super_entity.beneficiaries
       # return render layout: false, template: "entities/trust/beneficiaries"
-      flash[:success] = "The Beneficiary Successfully Deleted."
+      # flash[:success] = "The Beneficiary Successfully Deleted."
       return redirect_to entities_trust_beneficiaries_path(@entity.key)
     end
     @beneficiary.gen_temp_id

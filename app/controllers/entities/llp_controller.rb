@@ -90,7 +90,7 @@ class Entities::LlpController < ApplicationController
         @partner.use_temp_id
         @partner.save
         @partners = @partner.super_entity.partners
-        flash[:success] = "The Partner Successfully Updated.</br><a href='#{entities_llp_partners_path( @entity.key, active_id: @partner.id )}'>Show in List</a>"
+        # flash[:success] = "The Partner Successfully Updated.</br><a href='#{entities_llp_partners_path( @entity.key, active_id: @partner.id )}'>Show in List</a>"
         return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
         # return render layout: false, template: "entities/llp/partners"
       else
@@ -103,7 +103,7 @@ class Entities::LlpController < ApplicationController
       partner.delete
       @partners = partner.super_entity.partners
       # return render layout: false, template: "entities/llp/partners"
-      flash[:success] = "The Partner Successfully Deleted."
+      # flash[:success] = "The Partner Successfully Deleted."
       return redirect_to entities_llp_partners_path( @entity.key )
     end
     @partner.gen_temp_id
