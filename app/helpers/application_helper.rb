@@ -1184,6 +1184,59 @@ module ApplicationHelper
     return result.html_safe
   end
 
+  def properties_delete_warning_message(property)
+    result = ""
+    listA = []
+
+    Entity.where(type_: [7, 8, 9], property_id: property.id).each do |e|
+      listA.push [e.display_name, edit_entity_path(e.key), MemberType.member_types[e.type_], e.id]
+    end
+
+    if property.ownership_status == 'Purchased'
+      e = Entity.find(property.owner_entity_id) if property.owner_entity_id.present? && property.owner_entity_id > 0
+      listA.push [e.display_name, edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] if e.present?
+    elsif property.ownership_status == 'Prospective Purchase'
+      c = Contact.find(property.owner_entity_id) if property.owner_entity_id.present? && property.owner_entity_id > 0
+      listA.push [c.name, edit_contact_path(c), "Contact", c.id] if c.present?
+    end
+
+    if listA.length > 0
+      result = "<p>One or more Clients or Contacts have an interest in <b>#{property.name}</b>.</p>"
+      result += "<ul>"
+
+      listA.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]} (#{l[2]})</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    listB = []
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.transaction_properties.where(is_selected: true, property_id: property.id).length > 0
+        listB.push ['transaction', edit_transaction_path(t, main_id: t.main.id, type: 'sale')]
+      end
+    end
+
+    if listB.length > 0
+      result += "<p><b>#{property.name}</b> has been involved in the following Transactions.</p>"
+      result += "<ul>"
+
+      listB.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]}</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    result += "<p>If you delete this property, the interests and relationships will be deleted and the Transactions will be affected.</p>"
+
+    return result.html_safe
+  end
+
   def clients_delete(entity)
     # TransactionSale
     klazz         = 'TransactionSale'
@@ -1324,7 +1377,6 @@ module ApplicationHelper
   end
 
   def contacts_delete(contact)
-
     # TransactionSale
     klazz         = 'TransactionSale'
     transactions = klazz.constantize.with_deleted.joins(:transaction_main)
@@ -1418,7 +1470,26 @@ module ApplicationHelper
     Property.where(:owner_entity_id => contact.id, :ownership_status => 'Prospective Purchase').each do |p|
       p.update_attributes(:owner_entity_id => 0, :owner_person_is => nil)
     end
+  end
 
+  def properties_delete(property)
+    #Transactions
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.transaction_properties.where(is_selected: true, property_id: property.id).length > 0
+        t.main.destroy if t.main.present?
+      end
+    end
+
+    #Clients & Contacts
+    Entity.where(type_: [7, 8, 9], property_id: property.id).each do |e|
+      clients_delete(e)
+      e.destroy
+    end
   end
 
 end

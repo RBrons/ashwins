@@ -180,7 +180,7 @@ $ ->
     #alert "is a entity"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').show()
-  
+
   $(document).on 'ifChecked', '#property_owner_person_is_0', ->
     #alert "is not a person"
     $(document).find('div.sale-tr-pr-detail').hide()
@@ -311,3 +311,33 @@ $ ->
          ! lease_form.find('#property_lease_duration_in_years').val()
         $.notify "Option Period cannot be calculated because all the fields were not inputted", "info"
         e.preventDefault()
+
+  $(document).on "click", "a.delete-property", ->
+    key = $(this).attr 'data-key'
+
+    $.ajax
+      type: "POST"
+      url: "/xhr/properties_delete_warning"
+      data: {key: key}
+      dataType: "html"
+      success: (val) ->
+        $("#md-delete-property .modal-body").html(val)
+        $("#md-delete-property").modal 'show'
+        $("#md-delete-property .delete-property-yes").attr 'data-key', key
+      error: (e) ->
+        console.log e
+
+  $(document).on "click", "a.delete-property-yes", ->
+    key = $(this).attr 'data-key'
+    $(this).attr("disabled", "disabled")
+
+    $.ajax
+      type: "DELETE"
+      url: "/properties/" + key
+      dataType: "json"
+      success: (val) ->
+        if val.success == true
+          $("#md-delete-property").modal 'hide'
+          window.location.href = '/properties'
+      error: (e) ->
+        console.log e

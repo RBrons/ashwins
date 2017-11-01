@@ -54,6 +54,8 @@ class XhrController < ApplicationController
   end
 
   def properties_delete_warning
+    property = Property.find_by_key(params[:key])
+    @html = properties_delete_warning_message(property)
   end
 
   def add_property_comment
