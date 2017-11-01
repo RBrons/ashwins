@@ -217,15 +217,13 @@ class Property < ApplicationRecord
 
   def can_create_rent_table?
     # check if mandatary fields have the value for creating rent table
-    self.lease_base_rent.present? && self.lease_duration_in_years.present? &&
-      self.lease_rent_increase_percentage.present? && self.lease_rent_slab_in_years.present? &&
-      self.starting_date_of_lease_amendment.present? && self.rent_commencement_date.present?
+    self.lease_base_rent.present? && self.lease_duration_in_years.present? && self.rent_commencement_date.present?
   end
 
   def current_monthly_rent
     return 0 if !self.can_create_rent_table?
     start_date = self.rent_commencement_date
-    end_date = self.starting_date_of_lease_amendment + self.lease_duration_in_years.years
+    end_date = self.rent_commencement_date + self.lease_duration_in_years.years
     today = Date.today
     return 0 if today.year < start_date.year || today.year > end_date.year
     return 0 if today.month < start_date.month && today.year == start_date.year
@@ -241,20 +239,20 @@ class Property < ApplicationRecord
     start_year = self.rent_commencement_date.year
     start_month = self.rent_commencement_date.month
 
-    free_year_start = self.starting_date_of_lease_amendment.try(:year) || start_year
+    # free_year_start = self.starting_date_of_lease_amendment.try(:year) || start_year
 
-    if free_year_start < start_year
-      for i in (free_year_start...start_year) do
-        ret << ([i] + Array.new(13, 0))
-      end
-    end
+    # if free_year_start < start_year
+    #   for i in (free_year_start...start_year) do
+    #     ret << ([i] + Array.new(13, 0))
+    #   end
+    # end
 
-    lease_end_date = self.starting_date_of_lease_amendment + self.lease_duration_in_years.years
+    lease_end_date = self.rent_commencement_date + self.lease_duration_in_years.years
     end_year = lease_end_date.year
     end_month = lease_end_date.month
 
     total_no_of_months = (end_year * 12 + end_month) - (start_year * 12 + start_month)
-    rent_slab = self.lease_rent_slab_in_years
+    rent_slab = self.lease_rent_slab_in_years || 1
     switch_years = []
 
     year_ = start_year

@@ -1,52 +1,107 @@
-= nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-  = hidden_field_tag :type_is, params[:type_is]
-  - if @property.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-      ul
-        - @property.errors.full_messages.each do |message|
-          li = message
+div[role="tabpanel"]
+  ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+    li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
+      a#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
+    li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
+      a#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
+  .tab-content
+      #tenant_company_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
 
-  .col-lg-4.col-md-4.col-sm-12.col-xs-12
-    .clearfix
-    .form-group
-      = label_tag 'Tenant'
-      = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control'
-      = link_to "New", "javascript:void(0)", class: "new-tenant-button"
-    .form-group
-      = label_tag 'Contact Name'
-      = f.text_field :tenant_contact_name, class: 'form-control'
-    .form-group
-      = label_tag 'Contact Company'
-      = f.text_field :tenant_contact_company, class: 'form-control'
-    .form-group
-      = label_tag 'Contact Phone'
-      = f.text_field :tenant_contact_phone, class: 'form-control'
-    .form-group
-      = label_tag 'Contact Email'
-      = f.text_field :tenant_contact_email, class: 'form-control'
-    .form-group
-      = label_tag 'Contact Fax'
-      = f.text_field :tenant_contact_fax, class: 'form-control'
-    .form-group
-      = label_tag 'Contact Street Address'
-      = f.text_area :tenant_contact_street_address, class: 'form-control'
-    .form-group
-      = label_tag 'State'
-      = f.text_area :tenant_state, class: 'form-control'
-    .form-group
-      = label_tag 'City'
-      = f.text_area :tenant_city, class: 'form-control'
-    .form-group
-      = label_tag 'County'
-      = f.text_area :tenant_county, class: 'form-control'
-    .form-group
-      = label_tag 'Store Number'
-      = f.text_field :tenants_store_number, class: 'form-control'
-  .clearfix
-  .form-group
-    = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .col-lg-4.col-md-4.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              = label_tag 'Tenant'
+              = f.text_field :tenant_name,class: 'form-control'
+            .form-group
+              = label_tag 'Contact Name'
+              = f.text_field :tenant_contact_name, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Company'
+              = f.text_field :tenant_contact_company, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Phone'
+              = f.text_field :tenant_contact_phone, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Email'
+              = f.text_field :tenant_contact_email, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Fax'
+              = f.text_field :tenant_contact_fax, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Street Address'
+              = f.text_area :tenant_contact_street_address, class: 'form-control'
+            .form-group
+              = label_tag 'State'
+              = f.text_area :tenant_state, class: 'form-control'
+            .form-group
+              = label_tag 'City'
+              = f.text_area :tenant_city, class: 'form-control'
+            .form-group
+              = label_tag 'Country'
+              = f.text_area :tenant_county, class: 'form-control'
+            .form-group
+              = label_tag 'Store Number'
+              = f.text_field :tenants_store_number, class: 'form-control'
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
+      #tenant_facilities_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_facilities_section'}")
+        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+          = hidden_field_tag :type_is, params[:type_is]
+          - if @property.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+              ul
+                - @property.errors.full_messages.each do |message|
+                  li = message
+
+          .col-lg-4.col-md-4.col-sm-12.col-xs-12
+            .clearfix
+            .form-group
+              = label_tag 'Tenant'
+              = f.text_field :tenant_name, class: 'form-control', readonly: true
+            .form-group
+              = label_tag 'Store Number'
+              = f.text_field :facilities_store_number, class: 'form-control'
+            .form-group
+              = label_tag 'Facilities Contact Name'
+              = f.text_field :facilities_contact_name, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Company'
+              = f.text_field :facilities_contact_company, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Phone'
+              = f.text_field :facilities_contact_phone, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Email'
+              = f.text_field :facilities_contact_email, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Fax'
+              = f.text_field :facilities_contact_fax, class: 'form-control'
+            .form-group
+              = label_tag 'Contact Street Address'
+              = f.text_area :facilities_contact_street_address, class: 'form-control'
+            .form-group
+              = label_tag 'State'
+              = f.text_area :facilities_contact_state, class: 'form-control'
+            .form-group
+              = label_tag 'City'
+              = f.text_area :facilities_contact_city, class: 'form-control'
+            .form-group
+              = label_tag 'Country'
+              = f.text_area :facilities_contact_country, class: 'form-control'            
+          .clearfix
+          .form-group
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
 /! Modal
 #new-tenant.modal.fade aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-5"
   .modal-dialog

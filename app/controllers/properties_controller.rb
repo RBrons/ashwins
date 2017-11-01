@@ -155,8 +155,8 @@ class PropertiesController < ApplicationController
 
             base_rent = @property.lease_base_rent
             duration = @property.lease_duration_in_years
-            percentage = @property.lease_rent_increase_percentage
-            slab = @property.lease_rent_slab_in_years
+            percentage = @property.lease_rent_increase_percentage || 0
+            slab = @property.lease_rent_slab_in_years || 1
 
             rent = base_rent
             @property.rent_tables.create(version: rent_table_version, rent: base_rent, description: 'Base Annual Rent')
@@ -200,7 +200,7 @@ class PropertiesController < ApplicationController
 
             while start_year <= rent_start.year + duration - 1
               if count == 0
-                slab = @property.lease_rent_slab_in_years
+                slab = @property.lease_rent_slab_in_years || 1
               else
                 count = 0
               end

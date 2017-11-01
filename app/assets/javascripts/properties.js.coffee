@@ -156,13 +156,6 @@ $ ->
     $('#property_location_city').val(upperval)
     titleHideShow()
 
-  $(document).on 'change', '#property_tenant_id', ->
-    if $(this).find('option:selected').text() == 'No Tenant'
-      $(document).find('#property_current_rent').prop('required', false)
-    else
-      $(document).find('#property_current_rent').prop('required', true)
-    setTitleValue()
-
   $(document).on 'click', '.entity_owner', ->
     if this.value == "true"
       $('#person_owner').show()
