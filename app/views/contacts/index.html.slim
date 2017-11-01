@@ -1,3 +1,15 @@
+#md-delete-contact.header-submenu-modal.delete-modal-with-footer.modal.fade[tabindex="-1" role="dialog"]
+  .modal-dialog.modal-lg[role="document"]
+    .modal-content
+      .modal-header
+        button.close[type="button" data-dismiss="modal" aria-label="Close"]
+          span.lnr.lnr-cross
+        h4.modal-title Delete Client Warning
+      .modal-body
+      .modal-footer
+        span Are you sure you want to continue?
+        = link_to 'Yes', 'javascript:void(0)', data: {:id => ''}, class: "#{delete_xs} delete-contact-yes"
+        = link_to 'No', 'javascript:void(0)', class: "#{show_xs} delete-contact-no", data: {dismiss: "modal"}, aria: {label: "Close"}
 h2.text-center Contacts List View
 table#data_table
   thead
@@ -32,7 +44,7 @@ table#data_table
         td.actions
           = link_to 'Edit', edit_contact_path(contact), class: edit_xs
           = link_to 'Show', contact_path(contact), class: show_xs
-          = link_to 'Delete', contact_path(contact), data: {:confirm => 'Are you sure?'}, :method => :delete, class: delete_xs
+          = link_to 'Delete', 'javascript:void(0)', data: {:id => contact.id}, class: "#{delete_xs} delete-contact"
         td
           - principals = get_principals(contact.id, current_user.id)
           - if principals[0].length > 0

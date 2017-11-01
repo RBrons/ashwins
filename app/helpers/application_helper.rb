@@ -183,9 +183,9 @@ module ApplicationHelper
       when "LLC"
         entity.members.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
       when "LLP"
-        entity.limited_partners.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
-      when "Sole Proprietorship"
-        [[entity.full_name, '#']]
+        entity.partners.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      # when "Sole Proprietorship"
+      #   [[entity.full_name, '#']]
       when "Power of Attorney"
         entity.agents.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
       when "Guardianship"
@@ -839,6 +839,657 @@ module ApplicationHelper
     end
 
     return result
+  end
+
+  def clients_delete_warning_message(entity)
+    result = ""
+    listA = []
+
+    case entity.entity_type.try(:name)
+      when "LLC"
+        listA = entity.members.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] } + entity.managers.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "LLP"
+        listA = entity.partners.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Power of Attorney"
+        listA = entity.agents.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      # when "Guardianship"
+      #   [[entity.full_name, '#']]
+      when "Trust"
+        listA = entity.beneficiaries.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] } + entity.trustees.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] } + entity.settlors.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Joint Tenancy with Rights of Survivorship (JTWROS)"
+        listA = entity.joint_tenants.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Limited Partnership"
+        listA = entity.general_partners.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] } +
+          entity.limited_partners.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Tenancy in Common"
+        listA = entity.tenants_in_common.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Corporation"
+        listA = entity.stockholders.map { |m| ["#{m.name} - #{m.my_percentage_stockholder}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] } + entity.directors.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] } + entity.officers.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Partnership"
+        listA = entity.partners.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Tenancy by the Entirety"
+        listA = entity.spouses.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      else
+        # No need to handle
+    end
+
+    if listA.length > 0
+      result = "<p>One or more Clients or Contacts have one or more interests or fiduciary or donor relationship(s) in or to <b>#{entity.display_name}</b>.</p>"
+      result += "<ul>"
+
+      listA.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]}</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    listB = []
+
+    if m = Member.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Manager.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = LimitedPartner.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Beneficiary.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Trustee.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Settlor.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = GeneralPartner.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = StockHolder.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage_stockholder}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Officer.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Director.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Partner.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Principal.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Agent.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = TenantInCommon.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = JointTenant.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Spouse.find_by_entity_id(entity.id)
+      e = m.super_entity
+      listB.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if listB.length > 0
+      result += "<p><b>#{entity.display_name}</b> has one or more ownership or beneficial interest(s) or fiduciary or donor relationship(s) in or to the following entitie(s).</p>"
+      result += "<ul>"
+
+      listB.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]} (#{l[2]})</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    listC = []
+    if [7, 8, 9].include? entity.type_
+      listC.push [ entity.property.street_address_with_suffix, edit_property_path(entity.property.key), "Property", 0] unless entity.property.nil?
+    else
+      Property.where(owner_entity_id: entity.id, :ownership_status => 'Purchased').each do |p|
+        listC.push [ p.title, edit_property_path(p.key), "Property", 0]
+      end
+    end
+
+    if listC.length > 0
+      result += "<p><b>#{entity.display_name}</b> has one or more ownership interest in the following Properties.</p>"
+      result += "<ul>"
+
+      listC.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]} (#{l[2]})</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    listD = []
+
+    # TransactionSale
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.relinquishing_seller_entity_id == entity.id
+        listD.push ['transaction(sale)', edit_transaction_path(t, type: 'sale', main_id: t.main.id)]
+      end
+    end
+
+    # TransactionPurchase
+    klazz         = 'TransactionPurchase'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.replacement_purchaser_entity_id == entity.id
+        listD.push ['transaction(purchase)', edit_transaction_path(t, type: 'purchase', main_id: t.main.id)]
+      end
+    end
+
+    if listD.length > 0
+      result += "<p><b>#{entity.display_name}</b> has been involved in the following Transactions.</p>"
+      result += "<ul>"
+
+      listD.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]}</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    result += "<p>If you delete this client, the interests and relationships will be deleted and the Transactions will be affected.</p>"
+
+    return result.html_safe
+  end
+
+  def contacts_delete_warning_message(contact)
+    result = ""
+    listA = []
+
+    if m = Member.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Manager.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = LimitedPartner.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Beneficiary.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Trustee.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Settlor.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = GeneralPartner.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = StockHolder.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage_stockholder}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Officer.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Director.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Partner.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Principal.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Agent.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = TenantInCommon.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = JointTenant.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name} - #{m.my_percentage}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if m = Spouse.find_by_contact_id(contact.id)
+      e = m.super_entity
+      listA.push ["#{e.name}", edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] unless e.nil?
+    end
+
+    if listA.length > 0
+      result += "<p><b>#{contact.name}</b> has one or more ownership or beneficial interest(s) or fiduciary or donor relationship(s) in or to the following entitie(s).</p>"
+      result += "<ul>"
+
+      listA.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]} (#{l[2]})</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    listB = []
+    Property.where(:owner_entity_id => contact.id, :ownership_status => 'Prospective Purchase').each do |p|
+      listB.push [ p.title, edit_property_path(p.key), "Property", 0]
+    end
+
+    if listB.length > 0
+      result += "<p><b>#{contact.name}</b> has one or more ownership interest in the following Properties.</p>"
+      result += "<ul>"
+
+      listB.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]} (#{l[2]})</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    listC = []
+    # TransactionSale
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.relinquishing_purchaser_contact_id == contact.id
+        listC.push ['transaction(sale)', edit_transaction_path(t, type: 'sale', main_id: t.main.id)]
+      end
+    end
+
+    # TransactionPurchase
+    klazz         = 'TransactionPurchase'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.replacement_seller_contact_id == contact.id
+        listC.push ['transaction(purchase)', edit_transaction_path(t, type: 'purchase', main_id: t.main.id)]
+      end
+    end
+
+    if listC.length > 0
+      result += "<p><b>#{entity.display_name}</b> has been involved in the following Transactions.</p>"
+      result += "<ul>"
+
+      listC.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]}</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    result += "<p>If you delete this contact, the interests and relationships will be deleted and the Transactions will be affected.</p>"
+
+    return result.html_safe
+  end
+
+  def properties_delete_warning_message(property)
+    result = ""
+    listA = []
+
+    Entity.where(type_: [7, 8, 9], property_id: property.id).each do |e|
+      listA.push [e.display_name, edit_entity_path(e.key), MemberType.member_types[e.type_], e.id]
+    end
+
+    if property.ownership_status == 'Purchased'
+      e = Entity.find(property.owner_entity_id) if property.owner_entity_id.present? && property.owner_entity_id > 0
+      listA.push [e.display_name, edit_entity_path(e.key), MemberType.member_types[e.type_], e.id] if e.present?
+    elsif property.ownership_status == 'Prospective Purchase'
+      c = Contact.find(property.owner_entity_id) if property.owner_entity_id.present? && property.owner_entity_id > 0
+      listA.push [c.name, edit_contact_path(c), "Contact", c.id] if c.present?
+    end
+
+    if listA.length > 0
+      result = "<p>One or more Clients or Contacts have an interest in <b>#{property.name}</b>.</p>"
+      result += "<ul>"
+
+      listA.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]} (#{l[2]})</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    listB = []
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.transaction_properties.where(is_selected: true, property_id: property.id).length > 0
+        listB.push ['transaction', edit_transaction_path(t, main_id: t.main.id, type: 'sale')]
+      end
+    end
+
+    if listB.length > 0
+      result += "<p><b>#{property.name}</b> has been involved in the following Transactions.</p>"
+      result += "<ul>"
+
+      listB.each do |l|
+        result += "<li><a href='#{l[1]}'>#{l[0]}</a></li>"
+      end
+      result += "</ul>"
+    end
+
+    result += "<p>If you delete this property, the interests and relationships will be deleted and the Transactions will be affected.</p>"
+
+    return result.html_safe
+  end
+
+  def clients_delete(entity)
+    # TransactionSale
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.relinquishing_seller_entity_id == entity.id
+        t.main.destroy if t.main.present?
+      end
+    end
+
+    # TransactionPurchase
+    klazz         = 'TransactionPurchase'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.replacement_purchaser_entity_id == entity.id
+        t.destroy if t.main.present?
+      end
+    end
+
+    # ICPs
+    case entity.entity_type.try(:name)
+      when "LLC"
+        (entity.members + entity.managers).each do |e|
+          e.destroy
+        end
+      when "LLP"
+        entity.partners.each do |e|
+          e.destroy
+        end
+      when "Power of Attorney"
+        entity.agents.each do |e|
+          e.destroy
+        end
+      when "Trust"
+        (entity.beneficiaries + entity.trustees + entity.settlors).each do |e|
+          e.destroy
+        end
+      when "Joint Tenancy with Rights of Survivorship (JTWROS)"
+        entity.joint_tenants.each do |e|
+          e.destroy
+        end
+      when "Limited Partnership"
+        (entity.general_partners + entity.limited_partners).each do |e|
+          e.destroy
+        end
+      when "Tenancy in Common"
+        listA = entity.tenants_in_common.map { |m| ["#{m.name} - #{m.my_percentage}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+      when "Corporation"
+        (entity.stockholders + entity.directors + entity.officers).each do |e|
+          e.destroy
+        end
+      when "Partnership"
+        entity.partners.each do |e|
+          e.destroy
+        end
+      when "Tenancy by the Entirety"
+        entity.spouses.each do |e|
+          e.destroy
+        end
+      else
+        # No need to handle
+    end
+
+    if m = Member.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Manager.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = LimitedPartner.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Beneficiary.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Trustee.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Settlor.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = GeneralPartner.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = StockHolder.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Officer.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Director.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Partner.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Principal.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Agent.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = TenantInCommon.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = JointTenant.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    if m = Spouse.find_by_entity_id(entity.id)
+      m.destroy
+    end
+
+    #Properties
+    Property.where(owner_entity_id: entity.id, :ownership_status => 'Purchased').each do |p|
+      p.update_attributes(:owner_entity_id => 0, :owner_person_is => 0)
+    end
+  end
+
+  def contacts_delete(contact)
+    # TransactionSale
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.relinquishing_purchaser_contact_id == contact.id
+        t.main.destroy if t.main.present?
+      end
+    end
+
+    # TransactionPurchase
+    klazz         = 'TransactionPurchase'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.replacement_seller_contact_id == contact.id
+        t.main.destroy if t.main.present?
+      end
+    end
+
+    #ICPs
+    if m = Member.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Manager.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = LimitedPartner.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Beneficiary.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Trustee.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Settlor.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = GeneralPartner.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = StockHolder.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Officer.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Director.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Partner.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Principal.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Agent.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = TenantInCommon.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = JointTenant.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    if m = Spouse.find_by_contact_id(contact.id)
+      m.destroy
+    end
+
+    #Properties
+    Property.where(:owner_entity_id => contact.id, :ownership_status => 'Prospective Purchase').each do |p|
+      p.update_attributes(:owner_entity_id => 0, :owner_person_is => nil)
+    end
+  end
+
+  def properties_delete(property)
+    #Transactions
+    klazz         = 'TransactionSale'
+    transactions = klazz.constantize.with_deleted.joins(:transaction_main)
+    transactions = transactions.where('transaction_mains.init' => false, 'transaction_mains.user_id' => current_user.id)
+    transactions = transactions.where('transactions.deleted_at' => nil)
+
+    transactions.each do |t|
+      if t.transaction_properties.where(is_selected: true, property_id: property.id).length > 0
+        t.main.destroy if t.main.present?
+      end
+    end
+
+    #Clients & Contacts
+    Entity.where(type_: [7, 8, 9], property_id: property.id).each do |e|
+      clients_delete(e)
+      e.destroy
+    end
   end
 
 end
