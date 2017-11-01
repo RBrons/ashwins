@@ -186,7 +186,7 @@ h2.text-center Transactions List View
                 br
                 = link_to 'Edit Buy'.html_safe, maint.purchase.present? ? properties_edit_transaction_path(maint.purchase, sub: 'property', type: 'purchase', main_id: transaction.main.id) : new_transaction_path(type: 'purchase', main_id: transaction.main.id), class: "#{switch_xs}"
               td
-                = link_to var.seller_name, entity_path(var.replacement_purchaser_entity_id)
+                = link_to var.seller_name, entity_path(var.relinquishing_seller_entity_id)
               td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
               td
