@@ -1,4 +1,7 @@
 class PropertiesController < ApplicationController
+
+  include ApplicationHelper
+
   before_action :set_property, only: [:show, :edit, :destroy]
   before_action :current_page
   before_action :add_breadcrum
@@ -71,7 +74,7 @@ class PropertiesController < ApplicationController
     @property.rent_table_version = 0
     @property.lease_base_rent = @property.current_rent
     @property.user_id = current_user.id
-    
+
     if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
       if @property.owner_person_is == 1 && !@property.owner_entity_id_indv.nil?
         @property.owner_entity_id = @property.owner_entity_id_indv
@@ -79,7 +82,7 @@ class PropertiesController < ApplicationController
     else
       @property.owner_entity_id = @property.owner_entity_id_indv = 0
     end
-    
+
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
@@ -126,7 +129,7 @@ class PropertiesController < ApplicationController
       if params[:use_current_rent] == false
         @property.lease_base_rent = @property.current_rent
       end
-      
+
       if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
         if @property.owner_person_is == 1 && !@property.owner_entity_id_indv.nil?
           @property.owner_entity_id = @property.owner_entity_id_indv
@@ -262,10 +265,11 @@ class PropertiesController < ApplicationController
   # DELETE /properties/1
   # DELETE /properties/1.json
   def destroy
+    properties_delete(@property)
     @property.destroy
     respond_to do |format|
       format.html { redirect_to :back }
-      format.json { head :no_content }
+      format.json { render json: {success: true} }
     end
   end
 

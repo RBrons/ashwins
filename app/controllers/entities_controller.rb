@@ -1,9 +1,11 @@
 class EntitiesController < ApplicationController
 
+  include ApplicationHelper
+
   before_action :set_entity, only: [:show, :edit, :update, :destroy]
   before_action :current_page
   before_action :add_breadcrum
-  
+
   # GET /entities
   # GET /entities.json
   def xhr_list
@@ -99,10 +101,11 @@ class EntitiesController < ApplicationController
   # DELETE /entities/1
   # DELETE /entities/1.json
   def destroy
+    clients_delete(@entity)
     @entity.destroy
     respond_to do |format|
       format.html { redirect_to clients_path }
-      format.json { head :no_content }
+      format.json { render json: {success: true} }
     end
   end
 
@@ -144,11 +147,11 @@ class EntitiesController < ApplicationController
   def current_page
     @current_page = 'entity'
   end
-  
+
   def add_breadcrum
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/clients\">Clients </a></h4></div>".html_safe
-    
+
     add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/clients\"> #{params[:action] == "new" ? "Add" : params[:action].titleize} #{"Estate" if params[:type] == "Estate" } </a></h4></div>".html_safe
-    
+
   end
 end

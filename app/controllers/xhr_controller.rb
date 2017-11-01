@@ -43,6 +43,21 @@ class XhrController < ApplicationController
     @html = (@comments.blank?) ? "<p>No Comments!</p>".html_safe : property_comments_html(@comments)
   end
 
+  def clients_delete_warning
+    entity = Entity.find_by_key(params[:key])
+    @html = clients_delete_warning_message(entity)
+  end
+
+  def contacts_delete_warning
+    contact = Contact.find(params[:id])
+    @html = contacts_delete_warning_message(contact)
+  end
+
+  def properties_delete_warning
+    property = Property.find_by_key(params[:key])
+    @html = properties_delete_warning_message(property)
+  end
+
   def add_property_comment
     @property = Property.find(params[:id])
     @user = User.find(params[:user_id])
@@ -77,11 +92,11 @@ class XhrController < ApplicationController
     # And further conversation on skype - change only new client modal, NOT other modal with entity type selection
 
     if params[:design_with_labels] == "1"
-      render "entity_type_list_with_groups"      
+      render "entity_type_list_with_groups"
     else
       render "entity_type_list"
     end
-    
+
   end
 
   def entity_groups
@@ -156,7 +171,7 @@ class XhrController < ApplicationController
       entity_params[:legal_ending] = nil
     else
       entity_params[:first_name] = nil
-      entity_params[:last_name] = nil    
+      entity_params[:last_name] = nil
     end
     if @entity.update(entity_params)
       render json: @entity

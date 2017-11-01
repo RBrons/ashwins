@@ -58,7 +58,7 @@ h2.text-center Transactions List View
                 = link_to 'Edit Sell'.html_safe, maint.sale.present? ? properties_edit_transaction_path(maint.sale, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'sale', main_id: transaction.main.id), class: "#{switch_xs}"
 
               td
-                = link_to var.purchaser_name, entity_path(var.replacement_purchaser_entity)
+                = link_to var.purchaser_name, entity_path(var.replacement_purchaser_entity) if var.replacement_purchaser_entity.present?
               td = var.seller_name
               / td
               /   - if !var.sale.try(:transaction_properties).nil?
@@ -129,7 +129,7 @@ h2.text-center Transactions List View
               = link_to 'Edit Sell'.html_safe, maint.sale.present? ? properties_edit_transaction_path(maint.sale, sub: 'property', type: 'sale', main_id: transaction.main.id) : new_transaction_path(type: 'sale', main_id: transaction.main.id), class: "#{switch_xs}"
 
             td
-              = link_to var.purchaser_name, entity_path(var.replacement_purchaser_entity)
+              = link_to var.purchaser_name, entity_path(var.replacement_purchaser_entity) if var.replacement_purchaser_entity.present?
             td = var.seller_name
             td
             td
@@ -190,14 +190,15 @@ h2.text-center Transactions List View
               td = p.transaction_property_offers.where(is_accepted: true).first.try(:offer_name) if p.transaction_property_offers.where(is_accepted: true).first.present?
               td[class="#{ 'details-control' if var.transaction_properties.where(is_selected: true).count > 1 && index == 0 }"]
               td
-                = link_to p.name, property_path(p.property.key)
-                br
-                - if p.closed?
-                  span.label.label-danger.pull-right closed
-                - elsif p.is_in_contract?
-                  span.label.label-warning.pull-right In contract
-                - else
-                    span.label.label-success.pull-right Not in contract
+                - if p.property.present?
+                  = link_to p.name, property_path(p.property.key)
+                  br
+                  - if p.closed?
+                    span.label.label-danger.pull-right closed
+                  - elsif p.is_in_contract?
+                    span.label.label-warning.pull-right In contract
+                  - else
+                      span.label.label-success.pull-right Not in contract
               td = p.try(:psa_date)
               td
                 - unless p.closed?

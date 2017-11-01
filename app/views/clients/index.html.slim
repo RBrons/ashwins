@@ -3,6 +3,18 @@
   div.pull-left style="width: 15%"
     /label Left Sidebar
     div#entity-groups-tree
+#md-delete-client.header-submenu-modal.delete-modal-with-footer.modal.fade[tabindex="-1" role="dialog"]
+  .modal-dialog.modal-lg[role="document"]
+    .modal-content
+      .modal-header
+        button.close[type="button" data-dismiss="modal" aria-label="Close"]
+          span.lnr.lnr-cross
+        h4.modal-title Delete Client Warning
+      .modal-body
+      .modal-footer
+        span Are you sure you want to continue?
+        = link_to 'Yes', 'javascript:void(0)', data: {:key => ''}, class: "#{delete_xs} delete-client-yes"
+        = link_to 'No', 'javascript:void(0)', class: "#{show_xs} delete-client-no", data: {dismiss: "modal"}, aria: {label: "Close"}
 div#entities-list.pull-right style=style_str
   = hidden_field_tag :current_group_id, @current_grp
   - if @current_grp == '0'
@@ -53,7 +65,7 @@ div#entities-list.pull-right style=style_str
           td.action
             = link_to 'Edit', edit_entity_path(entity.key), class: "#{edit_xs}"
             = link_to 'Show', entity_path(entity), class: "#{show_xs}"
-            = link_to 'Delete', entity_path(entity), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs}"
+            = link_to 'Delete', 'javascript:void(0)', data: {:key => entity.key}, class: "#{delete_xs} delete-client"
           td
             = client_entity(entity)
           td
