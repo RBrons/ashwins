@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
   def user_block_or_trash
     if current_user && (current_user.blocked || current_user.trash)
       sign_out current_user
-      flash[:alert] = "This account has been suspended for violation of...."
+      # flash[:alert] = "This account has been suspended for violation of...."
       render :layout => 'suspended_account', :template => 'home/account_suspended' and return
     elsif current_user && current_user.trash?
       sign_out current_user
@@ -93,7 +93,7 @@ class ApplicationController < ActionController::Base
   def user_enabled
     if current_user && !current_user.enabled
       sign_out current_user
-      flash[:alert] = 'Please be patient, the administrator will enable your account very soon.'
+      # flash[:alert] = 'Please be patient, the administrator will enable your account very soon.'
       redirect_to '/'
     end
   end
