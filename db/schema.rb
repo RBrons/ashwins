@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171030124420) do
+ActiveRecord::Schema.define(version: 20171101215138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -733,8 +733,6 @@ ActiveRecord::Schema.define(version: 20171030124420) do
     t.boolean  "purchase_inspection_lease_tasks_estoppel",                          default: false
     t.boolean  "purchase_inspection_lease_tasks_rofr",                              default: false
     t.string   "current_step_subtab"
-    t.integer  "broker_id"
-    t.integer  "attorney_id"
     t.string   "current_step_sub_subtab"
     t.index ["property_id", "transaction_id"], name: "index_transaction_properties_on_property_id_and_transaction_id", unique: true, using: :btree
     t.index ["property_id"], name: "index_transaction_properties_on_property_id", using: :btree
@@ -746,9 +744,11 @@ ActiveRecord::Schema.define(version: 20171030124420) do
     t.integer  "transaction_property_id"
     t.boolean  "is_accepted"
     t.integer  "accepted_counteroffer_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.integer  "relinquishing_purchaser_contact_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "client_contact_id"
+    t.integer  "broker_contact_id"
+    t.integer  "attorney_contact_id"
   end
 
   create_table "transaction_status", force: :cascade do |t|
@@ -865,9 +865,6 @@ ActiveRecord::Schema.define(version: 20171030124420) do
     t.string   "first_name"
     t.string   "last_name"
     t.boolean  "enabled",                                default: false
-    t.string   "business_name"
-    t.string   "business_contact_first_name"
-    t.string   "business_contact_last_name"
     t.string   "last_sign_out_page"
     t.string   "user_type"
     t.integer  "attorney_firm_id"

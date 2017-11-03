@@ -9,71 +9,83 @@
   input#negotiated_property[type="hidden" value="#{@property.title}"]
   input#cur_property_id[type="hidden" value="#{@transaction_property.id}"]
   input#sub_tab_val[type="hidden" value="#{@sub_tab}"]
+  input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.seller_name}"]
+  
   div[role="tabpanel"]
     ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-      li.active[role="presentation"]
-          a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchaser
-
-      li[role="presentation"]
+      li[class=(@sub_tab == 'relinquishing_purchaser' ? 'active' : '')]
+          a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] 
+            = @transaction_property.is_in_contract? ? "Purchaser" : "Offeror"
+      li[class=(@sub_tab == 'offer_and_acceptance' ? 'active' : '')]
           a#offer_and_acceptance[href="#offer_and_acceptance_section" role="tab" data-toggle="tab" aria-expanded="true"] Offer and Acceptance
-
-      li[role="presentation"]
+      li[class=(@sub_tab == 'letter_of_intent' ? 'active' : '')]
           a#letter_of_intent[href="#letter_of_intent_section" role="tab" data-toggle="tab" aria-expanded="false"] Letter of intent
-
-      li[role="presentation"]
+      li[class=(@sub_tab == 'purchase_sale_agreement' ? 'active' : '')]
           a#purchase_sale_agreement[href="#purchase_sale_agreement_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchase Sale Agreement
-
-      li[role="presentation"]
+      li[class=(@sub_tab == 'escrow_section' ? 'active' : '')]
           a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
 
     .tab-content
-      #relinquishing_purchaser_section.tab-pane.fade.active.in[role="tabpanel"]
-        .col-md-12
-          .clearfix.margin-sm-top
-            div[role="tabpanel"]
-              ul#negotions_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-                li.active[role="presentation"]
-                    a#basic_info[href="#basic_info_section" role="tab" data-toggle="tab" aria-expanded="true"] Basic info
-
-                li[role="presentation"]
-                    a#broker[href="#broker_section" role="tab" data-toggle="tab" aria-expanded="false"] Broker
-
-                li[role="presentation"]
-                    a#attorney[href="#attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Attorney
-
+      #relinquishing_purchaser_section.tab-pane.fade[class=(@sub_tab == 'relinquishing_purchaser' ? 'active in' : '')]
+        ul#multiple_offer.nav.nav-tabs.bar_tabs
+          - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
+            li[class=( transaction_property_offer.is_accepted ? 'done' : '' )]
+              a[href="#{ '#offer_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
+                = transaction_property_offer.offer_name
+                - if transaction_property_offer.is_accepted
+                  i.red.margin-md-left Accepted
+                - else
+                  span.delete_offer.fa.fa-times
+          li
+            a#new_offer[href="#" role="tab" data-toggle="tab" aria-expanded="false" data-tran-prop-id="#{@transaction_property.id}"]
+              i.fa.fa-plus
+        .tab-content
+          - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
+            .tab-pane.fade[id="#{'offer_' + transaction_property_offer.id.to_s}"]
+              ul.nav.nav-tabs.bar_tabs[role="tablist"]
+                li.active
+                  a[href="#basic_info_section_offer_#{transaction_property_offer.id}" role="tab" data-toggle="tab" aria-expanded="true"] 
+                    = transaction_property_offer.offer_name
+                li
+                  a[href="#broker_section_offer_#{transaction_property_offer.id}" role="tab" data-toggle="tab" aria-expanded="false"] 
+                    = "Broker of " + transaction_property_offer.offer_name
+                li
+                  a[href="#attorney_section_offer_#{transaction_property_offer.id}" role="tab" data-toggle="tab" aria-expanded="false"] 
+                    = "Attorney of " + transaction_property_offer.offer_name
               .tab-content
-                #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
-                  input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.seller_name}"]
-                  h2.heading_without_padding_large Purchaser
+                .basic_info_section.tab-pane.fade.active.in[id="basic_info_section_offer_#{transaction_property_offer.id}" role="tabpanel"]
                   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-                    = form_for(@transaction_property.transaction_property_offers.first, remote: true, :html => {:'data-type' => 'json'}) do |f_offer|
+                    = form_for(transaction_property_offer, url: update_with_contact_transaction_property_offer_path(transaction_property_offer)) do |f_offer|
                       = f_offer.hidden_field :transaction_property_id, value: @transaction_property.id
-                      .form-group
-                        = f_offer.select :relinquishing_purchaser_contact_id, options_for_select(['Add New'] + @purchaser_dropdown_list), {include_blank: 'Select one'}, class: 'form-control' if @purchaser_dropdown_list.length > 1
+                      = f_offer.hidden_field :offer_name
+                      .form-group[style="display: none"]
+                        = f_offer.select :client_contact_id, options_for_select(['Add New'] + @purchaser_dropdown_list), {include_blank: 'Select one'}, class: 'form-control' if @purchaser_dropdown_list.length > 1
                       
-                      .relinquishing-purchaser-form-wrapper[style=(@purchaser_dropdown_list.length > 1 ? 'display: none' : '')]
-                        = f_offer.fields_for @ipp_relp.present? ? @ipp_relp : Contact.new(is_company: false) do |f|
+                      .contact-form-wrapper
+                        = f_offer.fields_for f_offer.object.offeror.present? ? f_offer.object.offeror : Contact.new(is_company: false)  do |f|
+                          = f.hidden_field :id, value: f_offer.object.offeror.try(:id)
                           = f.hidden_field :contact_type, value: 'Counter-Party'
+                          = f.hidden_field :role, value: 'Counter-Party'
                           .form-group
                             .heading_blue.radio-inline
-                              span.margin-md-left = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                              span.margin-md-left = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_false'
                               span.margin-md-left Individual
                             .heading_blue.radio-inline
-                              span = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons'
+                              span = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                               span.margin-md-left Entity
                           
                           .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                             .form-group
                               label Company Name
-                              = f.text_field :company_name, class: 'form-control', disabled: !f.object.is_company
+                              = f.text_field :company_name, class: 'form-control'
                           
                           .individual-fields-wrapper[style=(f.object.is_company ? 'display: none' : '')]
                             .form-group
                               label First Name
-                              = f.text_field :first_name, class: 'form-control', disabled: f.object.is_company
-                            .form-group.personnel-individual-detail[style=(f.object.is_company ? 'display: none' : '')]
+                              = f.text_field :first_name, class: 'form-control'
+                            .form-group
                               label Last Name
-                              = f.text_field :last_name, class: 'form-control', disabled: f.object.is_company
+                              = f.text_field :last_name, class: 'form-control'
                           
                           .form-group
                             = f.label :phone1
@@ -118,212 +130,173 @@
                       .form-group
                         = f_offer.submit 'Save', class: 'btn btn-sm btn-primary'
 
-                #broker_section.tab-pane.fade[role="tabpanel"]
-                  .form-wrapper
-                    input.form_submit_mode[type="hidden" value="#{@broker_contact.persisted? ? 'edit' : 'create'}"]
-                    input.is_company[type="hidden" value="#{@broker_contact.is_company}"]
+                .broker_section.tab-pane.fade[id="broker_section_offer_#{transaction_property_offer.id}" role="tabpanel"]
+                  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+                    = form_for(transaction_property_offer, url: update_with_contact_transaction_property_offer_path(transaction_property_offer)) do |f_offer|
+                      
+                      .contact-form-wrapper
+                        = f_offer.fields_for f_offer.object.broker.present? ? f_offer.object.broker : Contact.new(is_company: false) do |f|
+                          = f.hidden_field :id, value: f_offer.object.broker.try(:id)
+                          = f.hidden_field :contact_type, value: 'Personnel', readonly: true
+                          = f.hidden_field :role, value: 'Counter-Party Broker or Agent', readonly: true
+                          .form-group
+                            .heading_blue.radio-inline
+                              span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_false'
+                              span.margin-md-left Individual
+                            .heading_blue.radio-inline
+                              span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
+                              span.margin-md-left Entity
+                          .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
+                            .form-group
+                              = f.label :company_name, "Company Name"
+                              .row
+                                .col-md-8
+                                  = f.text_field :company_name, class: "form-control"
+                                .col-md-4
+                                  = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
+                          
+                          .individual-fields-wrapper[style=(f.object.is_company ? 'display: none' : '')]
+                            .form-group
+                              = f.label :first_name, "#{f.object.cprefix}First Name"
+                              = f.text_field :first_name, class: "form-control"
+                            .form-group
+                              = f.label :last_name, "#{f.object.cprefix}Last Name"
+                              = f.text_field :last_name, class: "form-control"
 
-                    - url = @broker_contact.persisted? ? contact_path(@broker_contact.id) : contacts_path
-                    = form_for @broker_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
-                      .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
-                        = f.hidden_field :contact_type, value: 'Personnel', readonly: true
-                        = f.hidden_field :per_role, value: 'Counter-Party Broker or Agent', readonly: true
-                        = hidden_field_tag 'from_transaction_broker', 'true'
-                        = hidden_field_tag 'transaction_property_id', @transaction_property.id
-                        .form-group
-                          .heading_blue.radio-inline
-                            span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons'
-                            span.margin-md-left Individual
-                          .heading_blue.radio-inline
-                            span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons'
-                            span.margin-md-left Entity
-                        .form-group.company-detail style=(f.object.is_company ? '' : 'display: none')
-                          = f.label :company_name, "Company Name"
-                          .row
-                            .col-md-8
-                              = f.text_field :company_name, class: "form-control"
-                            .col-md-4
-                              = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
-                        .form-group
-                          = f.label :first_name, "#{f.object.cprefix}First Name"
-                          = f.text_field :first_name, class: "form-control"
+                          .form-group
+                            = f.label :phone1
+                            = f.text_field :phone1, class: "form-control"
 
-                        .form-group
-                          = f.label :last_name, "#{f.object.cprefix}Last Name"
-                          = f.text_field :last_name, class: "form-control"
+                          .form-group
+                            = f.label :phone2
+                            = f.text_field :phone2, class: "form-control"
 
-                        .form-group
-                          = f.label :phone1
-                          = f.text_field :phone1, class: "form-control"
+                          .form-group
+                            = f.label :fax
+                            = f.text_field :fax, class: "form-control"
 
-                        .form-group
-                          = f.label :phone2
-                          = f.text_field :phone2, class: "form-control"
+                          .form-group
+                            = f.label :email
+                            = f.text_field :email, class: "form-control"
 
-                        .form-group
-                          = f.label :fax
-                          = f.text_field :fax, class: "form-control"
+                          .form-group
+                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                            = f.text_field :ein_or_ssn, class: "form-control"
 
-                        .form-group
-                          = f.label :email
-                          = f.text_field :email, class: "form-control"
+                          .form-group
+                            = f.label :postal_address, "Postal Address"
+                            = f.text_field :postal_address, class: "form-control"
 
-                        .form-group
-                          = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                          = f.text_field :ein_or_ssn, class: "form-control"
+                          .form-group
+                            = label_tag 'City'
+                            = f.text_field :city, class: "form-control city"
 
-                        .form-group
-                          = f.label :postal_address, "Postal Address"
-                          = f.text_field :postal_address, class: "form-control"
+                          .form-group
+                            = label_tag 'State'
+                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                        .form-group
-                          = label_tag 'City'
-                          = f.text_field :city, class: "form-control city"
+                          .form-group
+                            = f.label "Zip"
+                            = f.text_field :zip, class: 'zip form-control'
 
-                        .form-group
-                          = label_tag 'State'
-                          = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                          .form-group
+                            = f.label :notes
+                            = f.text_area :notes, class: "form-control"
+                          
+                      .clearfix
+                      .form-group
+                        = f_offer.submit 'Save', class: 'btn btn-sm btn-primary'
 
-                        .form-group
-                          = f.label "Zip"
-                          = f.text_field :zip, class: 'zip form-control'
+                .attorney_section.tab-pane.fade[id="attorney_section_offer_#{transaction_property_offer.id}" role="tabpanel"]
+                  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+                    = form_for(transaction_property_offer, url: update_with_contact_transaction_property_offer_path(transaction_property_offer)) do |f_offer|
+                      
+                      .contact-form-wrapper
+                        = f_offer.fields_for f_offer.object.attorney.present? ? f_offer.object.attorney : Contact.new(is_company: false) do |f|
+                          = f.hidden_field :id, value: f_offer.object.attorney.try(:id)
+                          = f.hidden_field :contact_type, value: 'Personnel', readonly: true
+                          = f.hidden_field :role, value: 'Counter-Party Legal', readonly: true
+                          .form-group
+                            .heading_blue.radio-inline
+                              span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_false'
+                              span.margin-md-left Individual
+                            .heading_blue.radio-inline
+                              span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
+                              span.margin-md-left Entity
+                          .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
+                            .form-group
+                              = f.label :company_name, "Company Name"
+                              .row
+                                .col-md-8
+                                  = f.text_field :company_name, class: "form-control"
+                                .col-md-4
+                                  = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
+                          .individual-fields-wrapper[style=(f.object.is_company ? 'display: none' : '')]
+                            .form-group
+                              = f.label :first_name, "#{f.object.cprefix}First Name"
+                              = f.text_field :first_name, class: "form-control"
+                            .form-group
+                              = f.label :last_name, "#{f.object.cprefix}Last Name"
+                              = f.text_field :last_name, class: "form-control"
 
-                        .form-group
-                          = f.label :notes
-                          = f.text_area :notes, class: "form-control"
-                        .form-group
-                        .clearfix
-                        .form-group
-                          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+                          .form-group
+                            = f.label :phone1
+                            = f.text_field :phone1, class: "form-control"
 
-                #attorney_section.tab-pane.fade[role="tabpanel"]
-                  .form-wrapper
-                    input.form_submit_mode[type="hidden" value="#{@attorney_contact.persisted? ? 'edit' : 'create'}"]
-                    input.is_company[type="hidden" value="#{@attorney_contact.is_company}"]
+                          .form-group
+                            = f.label :phone2
+                            = f.text_field :phone2, class: "form-control"
 
-                    - url = @attorney_contact.persisted? ? contact_path(@attorney_contact.id) : contacts_path
-                    = form_for @attorney_contact, url: url,remote: true, :html => {:'data-type' => 'json'} do |f|
-                      .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
-                        = f.hidden_field :contact_type, value: 'Personnel', readonly: true
-                        = f.hidden_field :per_role, value: 'Counter-Party Legal', readonly: true
-                        = hidden_field_tag 'from_transaction_attorney', 'true'
-                        = hidden_field_tag 'transaction_property_id', @transaction_property.id
-                        .form-group
-                          .heading_blue.radio-inline
-                            span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons'
-                            span.margin-md-left Individual
-                          .heading_blue.radio-inline
-                            span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons'
-                            span.margin-md-left Entity
-                        .form-group.company-detail style=(f.object.is_company ? '' : 'display: none')
-                          = f.label :company_name, "Company Name"
-                          .row
-                            .col-md-8
-                              = f.text_field :company_name, class: "form-control"
-                            .col-md-4
-                              = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], f.object.legal_ending), {}, { :class => 'form-control select_auto' }
-                        .form-group
-                          = f.label :first_name, "#{f.object.cprefix}First Name"
-                          = f.text_field :first_name, class: "form-control"
+                          .form-group
+                            = f.label :fax
+                            = f.text_field :fax, class: "form-control"
 
-                        .form-group
-                          = f.label :last_name, "#{f.object.cprefix}Last Name"
-                          = f.text_field :last_name, class: "form-control"
+                          .form-group
+                            = f.label :email
+                            = f.text_field :email, class: "form-control"
 
-                        .form-group
-                          = f.label :phone1
-                          = f.text_field :phone1, class: "form-control"
+                          .form-group
+                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                            = f.text_field :ein_or_ssn, class: "form-control"
 
-                        .form-group
-                          = f.label :phone2
-                          = f.text_field :phone2, class: "form-control"
+                          .form-group
+                            = f.label :postal_address, "Postal Address"
+                            = f.text_field :postal_address, class: "form-control"
 
-                        .form-group
-                          = f.label :fax
-                          = f.text_field :fax, class: "form-control"
+                          .form-group
+                            = label_tag 'City'
+                            = f.text_field :city, class: "form-control city"
 
-                        .form-group
-                          = f.label :email
-                          = f.text_field :email, class: "form-control"
+                          .form-group
+                            = label_tag 'State'
+                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                        .form-group
-                          = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                          = f.text_field :ein_or_ssn, class: "form-control"
+                          .form-group
+                            = f.label "Zip"
+                            = f.text_field :zip, class: 'zip form-control'
 
-                        .form-group
-                          = f.label :postal_address, "Postal Address"
-                          = f.text_field :postal_address, class: "form-control"
-
-                        .form-group
-                          = label_tag 'City'
-                          = f.text_field :city, class: "form-control city"
-
-                        .form-group
-                          = label_tag 'State'
-                          = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
-
-                        .form-group
-                          = f.label "Zip"
-                          = f.text_field :zip, class: 'zip form-control'
-
-                        .form-group
-                          = f.label :notes
-                          = f.text_area :notes, class: "form-control"
-                        .form-group
-                        .clearfix
-                        .form-group
-                          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+                          .form-group
+                            = f.label :notes
+                            = f.text_area :notes, class: "form-control"
+                          
+                      .clearfix
+                      .form-group
+                        = f_offer.submit 'Save', class: 'btn btn-sm btn-primary'
       
-      #offer_and_acceptance_section.tab-pane.fade[role="tabpanel"]
+      #offer_and_acceptance_section.tab-pane.fade[class=(@sub_tab == 'offer_and_acceptance' ? 'active in' : '')]
         ul#offer_list.nav.nav-tabs.bar_tabs[role="tablist"]
           - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
-            li[role="presentation" class=( transaction_property_offer.is_accepted ? 'done' : '' )]
-              a[href="#{ '#offer_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
+            li[class=( transaction_property_offer.is_accepted ? 'done' : '' )]
+              a[href="#{ '#offer_acceptance_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
                 = transaction_property_offer.offer_name
-                span.delete_offer.fa.fa-times
-
-          li[role="presentation"]
-            a#new_offer[href="#" role="tab" data-toggle="tab" aria-expanded="false" data-tran-prop-id="#{@transaction_property.id}"]
-              i.fa.fa-plus
-
+                - if transaction_property_offer.is_accepted
+                  i.red.margin-md-left Accepted
+        
         .tab-content
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
-            .tab-pane.fade.active.in[role="tabpanel" id="#{'offer_' + transaction_property_offer.id.to_s}"]
+            .tab-pane.fade[role="tabpanel" id="#{'offer_acceptance_' + transaction_property_offer.id.to_s}"]
               .col-md-12.col-xs-12
                 input.cur_offer_id[type="hidden" value="#{transaction_property_offer.id}"]
-
-                .row
-                  - @purchaser = get_transaction_property_offeror(transaction_property_offer)
-                  - if !transaction_property_offer.is_accepted?
-                    form.relingquishing_offeror_form[remote="true" action="#{contact_path(@purchaser)}"]
-                      .col-md-4.form-group
-                        input[type="hidden" name="contact[role]" value="Counter-Party"]
-                        input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
-                        input[type="hidden" name="from_relinquishing_offeror" value="#{transaction_property_offer.id}"]
-
-                        h2.heading_without_padding_large Offeror
-                        .form-group
-                          .heading_blue.radio-inline
-                            span
-                              input.contact_is_company_false.form-control.flat-icheck.radiobuttons[type="radio" value="false" name="contact[is_company]" checked=( @purchaser.is_company ? false : 'checked' ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-                            span.margin-md-left Individual
-                          .heading_blue.radio-inline
-                            span.margin-md-left
-                              input.contact_is_company_true.form-control.flat-icheck.radiobuttons[type="radio" value="true" name="contact[is_company]" checked=( @purchaser.is_company ? 'checked' : false ) disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-                            span.margin-md-left Entity
-
-                        .company-fields-wrapper[style="#{'display: none' if !@purchaser.is_company}"]
-                          .form-group
-                            label Company Name
-                            input.form-control[type="text" name="contact[company_name]" value="#{@purchaser.try(:company_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-                        .individual-fields-wrapper[style="#{'display: none' if @purchaser.is_company}"]
-                          .form-group
-                            label First Name
-                            input.form-control[type="text" name="contact[first_name]" value="#{@purchaser.try(:first_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-                          .form-group
-                            label Last Name
-                            input.form-control[type="text" name="contact[last_name]" value="#{@purchaser.try(:last_name)}" disabled=( transaction_property_offer.is_accepted ? 'disabled' : false )]
-
                 .row
                   .col-md-12
                       .col-md-3
@@ -331,7 +304,7 @@
                             - if !transaction_property_offer.is_accepted?
                               = "#{@transaction.seller_name} is Asking".html_safe
                             - else
-                              = "#{@transaction.seller_name} and #{@purchaser.name.blank? ? 'Purchaser(No Name)' : @purchaser.name} have agreed to the price of ".html_safe
+                              = "#{@transaction.seller_name} and #{transaction_property_offer.offeror.name.blank? ? 'Purchaser(No Name)' : transaction_property_offer.offeror.name} have agreed to the price of ".html_safe
                           h1.property-price.green.margin-lg-top
                             = number_to_currency(@transaction_property.try(:sale_price))
                           - if @property.try(:title).present?
@@ -376,14 +349,14 @@
                         button.add_counteroffer.btn.btn-default.red.border-red #{ last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Client Counter' : 'Buyer Counter' }
                       - else
                         button.add_counteroffer.btn.btn-default.red.border-red[disabled] #{ last_counteroffer.present? ? (last_counteroffer.try(:offer_type) == 'Counter-Party' ? 'Buyer Counter' : 'Client Counter') : 'Buyer Counter' }
-                      = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Counter Accepted' : 'Accept Counter', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
+                      = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Counter Accepted' : 'Accept Counter', "#", class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true
                     - else
-                      -if transaction_property_offer.is_ask_accepted?
+                      -if transaction_property_offer.accepted_asking?
                         = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
                       - else
                         = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Client\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
 
-      #letter_of_intent_section.tab-pane.fade[role="tabpanel"]
+      #letter_of_intent_section.tab-pane.fade[class=(@sub_tab == 'letter_of_intent' ? 'active in' : '')]
         input.is_passed[type="hidden" value="#{@transaction_property.transaction_term.purchase_price.present? ? true : false}"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
           span = @relinquishing_purchaser.try(:name) || 'Offeror'
@@ -518,7 +491,7 @@
                   .right
                     span Document Property Filed?
 
-      #purchase_sale_agreement_section.tab-pane.fade[role="tabpanel"]
+      #purchase_sale_agreement_section.tab-pane.fade[class=(@sub_tab == 'purchase_sale_agreement' ? 'active in' : '')]
         .col-md-8.col-sm-12.col-xs-12
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
@@ -669,7 +642,7 @@
                   .right
                     span Document Property Filed?
 
-      #escrow_section.tab-pane.fade[role="tabpanel"]
+      #escrow_section.tab-pane.fade[class=(@sub_tab == 'escrow_section' ? 'active in' : '')]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .form-group
               label.control-label Qualified Intermediary
@@ -691,71 +664,3 @@
               button.btn.btn-default
                 span.fa.fa-plus.margin-sm-right
                 | Add Document
-.clearfix
-
-/! Offer and Acceptance Template
-#offer_and_acceptance_template[style="display: none"]
-  .col-md-12.col-xs-12
-    input.cur_offer_id[type="hidden" value=""]
-
-    .row
-      form.relingquishing_offeror_form[remote="true" action=""]
-        .col-md-4.form-group
-          input[type="hidden" name="contact[role]" value="Counter-Party"]
-          input[type="hidden" name="contact[contact_type]" value="Counter-Party"]
-          input.from_relinquishing_offeror[type="hidden" name="from_relinquishing_offeror" value=""]
-
-          h2.heading_without_padding_large Relinquishing Offeror
-          .form-group
-            .heading_blue.radio-inline
-              span
-                input.contact_is_company_false.form-control.radiobuttons[type="radio" value="false" name="contact[is_company]" checked]
-              span.margin-md-left Individual
-            .heading_blue.radio-inline
-              span.margin-md-left
-                input.contact_is_company_true.form-control.radiobuttons[type="radio" value="true" name="contact[is_company]"]
-              span.margin-md-left Entity
-
-          .company-fields-wrapper[style="display: none"]
-            .form-group
-              label Company Name
-              input.form-control[type="text" name="contact[company_name]" value=""]
-          .individual-fields-wrapper
-            .form-group
-              label First Name
-              input.form-control[type="text" name="contact[first_name]" value=""]
-            .form-group
-              label Last Name
-              input.form-control[type="text" name="contact[last_name]" value=""]
-      .row
-        .col-md-12
-            .col-md-3
-                h4.asking_description.red
-                  = "#{@transaction.seller_name} is Asking".html_safe
-                h1.property-price.green.margin-lg-top
-                  = number_to_currency(@transaction.transaction_properties.where(property_id: params[:cur_property]).first.sale_price)
-                - if @property.try(:title).present?
-                  h2.green.margin-lg-top = 'For ' + @property.try(:title)
-            .col-md-9
-              - if @property.property_images.count != 0
-                - @property.property_images.each do |property_image|
-                  = image_tag(property_image.try(:cl_image_url), :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
-              - else
-                = image_tag('sale_house.jpg', :width => '150px', :alt => "image", :class => "img-responsive pull-left margin-lg-left")
-      .row
-        .col-md-12.margin-lg-top.form-group
-            button.initial_log_counteroffer.btn.btn-default Log Initial Counter Offer
-            button.ask_accepted.btn.btn-default.border-red.red Ask Accepted
-            input.last_counteroffer_price[type="hidden" value=""]
-
-            table.counteroffer_history.table.margin-lg-top
-                tbody
-                    tr.last_row
-                        td
-                        td
-                        td
-      .row.counteroffer_action_buttons_wrapper[style="display: none"]
-        .col-md-4.col-xs-12.form-group
-          input.last_counteroffer[type="hidden" value=""]
-          button.add_counteroffer.btn.btn-default.red.border-red Buyer Counter
-          = link_to 'Accept Offer', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true

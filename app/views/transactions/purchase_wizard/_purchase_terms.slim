@@ -104,7 +104,7 @@
                         button.add_counteroffer.btn.btn-default.red.border-red Buyer Counter
                         = link_to 'Counter Accepted', new_contact_path(contact_type: 'individual', recommended_type: 'Counter-Party'), class: 'btn_accept_counteroffer btn btn-default green border-green', remote: true, disabled: true
                     - else
-                      -if transaction_property_offer.is_ask_accepted?
+                      -if transaction_property_offer.accepted_asking?
                         = link_to 'Ask Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
                       - else
                         = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Seller\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
