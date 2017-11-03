@@ -37,7 +37,7 @@ class Entities::SoleProprietorshipController < ApplicationController
         @entity.name = @entity.first_name + ' ' + @entity.last_name
       end
       if @entity.save(entity_params)
-        flash[:success] = "This Client Successfully Updated.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        # flash[:success] = "This Client Successfully Updated.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_sole_proprietorship_basic_info_path( @entity.key )
       end
     else

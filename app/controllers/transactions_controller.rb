@@ -73,7 +73,7 @@ class TransactionsController < ApplicationController
   # GET /project/new
   def new
     if params[:transaction_type] == '1031 Still Selling' || params[:type] == 'purchase'
-      
+
       @transaction_main = TransactionMain.find_by(id: params[:main_id]) || TransactionMain.create(user_id: current_user.id, init: true)
 
       @transaction = if params[:type] == 'purchase'
@@ -189,9 +189,9 @@ class TransactionsController < ApplicationController
         redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
         return
       end
-      
+
       @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
-     
+
       # broker and attorney for transaction property
       # In purchase transaction, offeror in transaction_property_offers would become a propery owner
       # Also broker and attorney would become the broker and attorney of property owner
@@ -252,7 +252,7 @@ class TransactionsController < ApplicationController
     begin
       TransactionSale.transaction do
         @transaction.save! if flag
-        
+
         if params[:type] == 'sale'
           # Update property when transaction properties' current rent would be changed
           transaction_property_params[:transaction_properties_attributes].each do |key, property_params|
@@ -265,7 +265,7 @@ class TransactionsController < ApplicationController
           @transaction.update!(transaction_property_params)
         else
           if params[:identification_rule] == '200_percent' || params[:identification_rule] == 'three_property'
-            
+
             if params[:identification_rule] == 'three_property'
               existing_basket_count = @transaction.transaction_baskets.count
               @three_property_basket = @transaction.transaction_baskets.where(identification_rule: 'three_property').first
@@ -291,7 +291,7 @@ class TransactionsController < ApplicationController
                 is_selected: true
               })
             end
-            
+
             @cur_transaction_property.transaction_property_offers.destroy_all
             if params[:initial_asking_price]["#{@cur_transaction_property.property_id}".to_sym] == "1"
               @cur_transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => true, :accepted_counteroffer_id => 0])
@@ -304,7 +304,7 @@ class TransactionsController < ApplicationController
             @transaction.update!(transaction_property_params)
             existing_basket_count = @transaction.transaction_baskets.count
             @percent_95_basket = @transaction.transaction_baskets.create(basket_name: "Basket #{existing_basket_count + 1}", identification_rule: "95%", is_identified_to_qi: true)
-            
+
             @transaction.transaction_properties.each do |transaction_property|
               if transaction_property.is_selected
                 @percent_95_basket.transaction_basket_properties.create(property_id: transaction_property.property_id)
@@ -519,13 +519,13 @@ class TransactionsController < ApplicationController
       end
       
       @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
-      
+
       # purchaser, broker and attorney for transaction property
       if params[:type] == 'sale'
         property_owners = Property.where('ownership_status = ? and title is not null and user_id = ?', 'Prospective Purchase', current_user.id).pluck(:owner_entity_id)
         prepopulated_purchasers = Contact.where.not(id: property_owners).where(user_id: current_user.id, contact_type: 'Counter-Party')
         @purchaser_dropdown_list = []
-        
+
         if prepopulated_purchasers.count == 1
           @ipp_relp = prepopulated_purchasers.first
         else
@@ -535,7 +535,7 @@ class TransactionsController < ApplicationController
             end
           end
         end
-        
+
         if ! @transaction_property.transaction_property_offers.present?
           if !@ipp_relp.present?
             @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
@@ -574,7 +574,7 @@ class TransactionsController < ApplicationController
     @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
     @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
     @sub_sub_tab = params[:sub_sub_tab] || @transaction_property.current_step_sub_subtab
-    
+
     # personnel form
     @show_other_personnel = DefaultValue.where(entity_name: 'ShowPersonnel').first.try(:value)
 
@@ -585,7 +585,7 @@ class TransactionsController < ApplicationController
       else
         transaction_personnel = @transaction.transaction_personnels.where(personnel_category: personnel_category).first
       end
-      
+
       prepopulated_list = Contact.where(object_title: personnel_category, contact_type: 'Personnel')
       prepopulated_list = prepopulated_list.where(user_id: current_user.id) if !@show_other_personnel
       dropdown_list = []
@@ -594,19 +594,19 @@ class TransactionsController < ApplicationController
           dropdown_list << [pre_personnel.name, pre_personnel.id]
         end
       end
-      
+
       case personnel_category
         when 'Title'
           @personnel_on_tab[:title] = [transaction_personnel, dropdown_list]
         when 'Survey'
           @personnel_on_tab[:survey] = [transaction_personnel, dropdown_list]
         when 'Environmental'
-          @personnel_on_tab[:environmental] = [transaction_personnel, dropdown_list]        
+          @personnel_on_tab[:environmental] = [transaction_personnel, dropdown_list]
         when 'Zoning'
           @personnel_on_tab[:zoning] = [transaction_personnel, dropdown_list]
       end
     end
-    
+
   end
 
   def inspection_update
@@ -698,7 +698,7 @@ class TransactionsController < ApplicationController
       end
       #return redirect_to edit_transaction_path(@transaction, type: 'sale', main_id: @transaction.transaction_main_id)
       unless params[:type] == "purchase" || @transaction_property.nil?
-        flash[:success] = "Congratulations on your sale of <b>#{Property.find(@transaction_property.property_id).name}</b> to <b>#{@transaction.relinquishing_seller_entity.display_name}</b>. <b>#{ActionController::Base.helpers.number_to_currency(@transaction_property.closing_proceeds)}</b> is being transferred to your Qualified Intermediary. <b>#{Property.find(@transaction_property.property_id).name}</b> is now being reclassified from a Purchased Property to a Sold Property. Please proceed to the Purchase Module as you only have 45 days to identify one or more Replacement Properties to Buy. It might be a good idea to go to your Account Settings so that you can receive warning alerts by email, SMS message or both."
+        # flash[:success] = "Congratulations on your sale of <b>#{Property.find(@transaction_property.property_id).name}</b> to <b>#{@transaction.relinquishing_seller_entity.display_name}</b>. <b>#{ActionController::Base.helpers.number_to_currency(@transaction_property.closing_proceeds)}</b> is being transferred to your Qualified Intermediary. <b>#{Property.find(@transaction_property.property_id).name}</b> is now being reclassified from a Purchased Property to a Sold Property. Please proceed to the Purchase Module as you only have 45 days to identify one or more Replacement Properties to Buy. It might be a good idea to go to your Account Settings so that you can receive warning alerts by email, SMS message or both."
         @transaction_property.property.update_attribute("ownership_status", "Sold")
       else
         @transaction_property.property.update_attribute("ownership_status", "Purchased") unless @transaction_property.nil?
@@ -784,10 +784,10 @@ class TransactionsController < ApplicationController
       # Get Contact related to Tenant
 
       # Get Contact related to Purchaser
-      
+
 
     end
-    
+
   end
 
   def personnel_update
@@ -796,7 +796,7 @@ class TransactionsController < ApplicationController
     else
       @transaction_personnel = @transaction.transaction_personnels.where(personnel_category: params[:sub_sub]).first
     end
-    
+
     contact_id = @transaction_personnel.contact_id
     if contact_id.to_i == 0
       @contact = Contact.create(transaction_personnel_contact_params)

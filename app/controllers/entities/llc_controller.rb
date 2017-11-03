@@ -91,7 +91,7 @@ class Entities::LlcController < ApplicationController
         @manager.save
         @managers = @manager.super_entity.managers + @manager.super_entity.members.where(is_manager: true)
         # return render layout: false, template: "entities/llc/managers"
-        flash[:success] = "The Manager Successfully updated.</br><a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
+        # flash[:success] = "The Manager Successfully updated.</br><a href='#{entities_llc_managers_path( @entity.key )}'>Show in List</a>"
         return redirect_to entities_llc_manager_path( @entity.key, @manager.id )
       else
         # return render layout: false, template: "entities/llc/manager"
@@ -103,7 +103,7 @@ class Entities::LlcController < ApplicationController
       @managers = @entity.managers + @entity.members.where(is_manager: true)
       manager.delete
       # return render layout: false, template: "entities/llc/managers"
-      flash[:success] = "The Manager Successfully Deleted."
+      # flash[:success] = "The Manager Successfully Deleted."
       return redirect_to entities_llc_managers_path( @entity.key )
     end
     @manager.gen_temp_id
@@ -156,7 +156,7 @@ class Entities::LlcController < ApplicationController
         @member.save
         @members = @entity.members #.where(is_manager: false)
         # return render layout: false, template: "entities/llc/members"
-        flash[:success] = "The Member Successfully updated.</br><a href='#{entities_llc_members_path( @entity.key, active_id: @member.id )}'>Show in List</a>"
+        # flash[:success] = "The Member Successfully updated.</br><a href='#{entities_llc_members_path( @entity.key, active_id: @member.id )}'>Show in List</a>"
         return redirect_to entities_llc_member_path( @entity.key, @member.id )
       else
         # return render layout: false, template: "entities/llc/member"
@@ -169,7 +169,7 @@ class Entities::LlcController < ApplicationController
       member.delete
       @members = @entity.members #.where(is_manager: false)
       # return render layout: false, template: "entities/llc/members"
-      flash[:success] = "The Member Successfully Deleted."
+      # flash[:success] = "The Member Successfully Deleted."
       return redirect_to entities_llc_members_path( @entity.key )
     end
     @member.gen_temp_id

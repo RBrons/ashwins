@@ -90,7 +90,7 @@ class Entities::CorporatesController < ApplicationController
         @directors = @director.entity.directors
         @director.save
         # return render layout: false, template: "entities/corporates/directors"
-        flash[:success] = "The Director Successfully Updated.</br><a href='#{entities_corporates_directors_path( @entity.key, active_id: @director.id )}'>Show in List</a>"
+        # flash[:success] = "The Director Successfully Updated.</br><a href='#{entities_corporates_directors_path( @entity.key, active_id: @director.id )}'>Show in List</a>"
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
       else
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
@@ -101,7 +101,7 @@ class Entities::CorporatesController < ApplicationController
       @entity = Entity.find_by(key: director.super_entity.key)
       raise ActiveRecord::RecordNotFound if @entity.blank?
       @directors = @entity.directors
-      flash[:success] = "The Director Successfully Deleted."
+      # flash[:success] = "The Director Successfully Deleted."
       return redirect_to entities_corporates_directors_path( @entity.key )
       # return render layout: false, template: "entities/corporates/directors"
     end
@@ -158,7 +158,7 @@ class Entities::CorporatesController < ApplicationController
         @officer.use_temp_id
         @officer.save
         @officers = @officer.entity.officers
-        flash[:success] = "The Officer Successfully Updated.</br><a href='#{entities_corporates_officers_path( @entity.key, @officer.id )}'>Show in List</a>"
+        # flash[:success] = "The Officer Successfully Updated.</br><a href='#{entities_corporates_officers_path( @entity.key, @officer.id )}'>Show in List</a>"
         return redirect_to entities_corporates_officer_path( @entity.key, @officer.id )
         # return render layout: false, template: "entities/corporates/officers"
       else
@@ -171,7 +171,7 @@ class Entities::CorporatesController < ApplicationController
       @entity = Entity.find_by(key: officer.super_entity.key)
       raise ActiveRecord::RecordNotFound if @entity.blank?
       @officers = @entity.officers
-      flash[:success] = "The Officer Successfully Deleted."
+      # flash[:success] = "The Officer Successfully Deleted."
       return redirect_to entities_corporates_officers_path( @entity.key )
       # return render layout: false, template: "entities/corporates/officers"
     end
@@ -190,7 +190,7 @@ class Entities::CorporatesController < ApplicationController
 
   def stockholder
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
-    
+
     @referrer = request.referrer
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
@@ -236,7 +236,7 @@ class Entities::CorporatesController < ApplicationController
       if (@stockholder.entity.present? || @stockholder.contact.present?) && @stockholder.save
         @stockholders = @entity.stockholders
         # return render layout: false, template: "entities/corporates/stockholders"
-        flash[:success] = "The Stockholder Successfully Updated.</br><a href='#{entities_corporates_stockholders_path( @entity.key, active_id: @stockholder.id )}'>Show in List</a>"
+        # flash[:success] = "The Stockholder Successfully Updated.</br><a href='#{entities_corporates_stockholders_path( @entity.key, active_id: @stockholder.id )}'>Show in List</a>"
         return redirect_to entities_corporates_stockholder_path( @entity.key, @stockholder.id )
       else
         @stockholder.errors.add(:stockholder, "problem updating. Check data and try again.")
@@ -250,7 +250,7 @@ class Entities::CorporatesController < ApplicationController
       raise ActiveRecord::RecordNotFound if @entity.blank?
       @stockholders = @entity.stockholders
       # return render layout: false, template: "entities/corporates/stockholders"
-      flash[:success] = "The Stockholder Successfully Deleted"
+      # flash[:success] = "The Stockholder Successfully Deleted"
       return redirect_to entities_corporates_stockholders_path( @entity.key )
     end
     @stockholder.gen_temp_id

@@ -21,7 +21,7 @@ class Property::SettingController < ApplicationController
         UserMailer.work_group_access_notify_with_signup(options).deliver
         ######### Send Email Notification #########
       else
-        flash[:notice] = 'Invalid Email'
+        # flash[:notice] = 'Invalid Email'
       end
     end
     render layout: false
@@ -38,7 +38,7 @@ class Property::SettingController < ApplicationController
         access_resource = AccessResource.find_or_create_by(resource_id: property.id, resource_klass: property.class.to_s, user_id: user.id)
         access_resource.delete
       else
-        flash[:notice] = 'Invalid Email'
+        # flash[:notice] = 'Invalid Email'
       end
       return redirect_to :back
     end

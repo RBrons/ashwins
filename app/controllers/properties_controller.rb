@@ -86,13 +86,13 @@ class PropertiesController < ApplicationController
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
-        flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>" if !request.xhr?
+        # flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>" if !request.xhr?
         format.html { redirect_to edit_property_path(@property.key, type_is: 'basic_info') }
         # format.html { redirect_to properties_path }
         format.js { render json: @property.to_json, status: :ok }
         format.json { render action: 'show', status: :created, location: @property }
       else
-        flash[:error] = "Failed to create new property."
+        # flash[:error] = "Failed to create new property."
         format.html { render action: 'new' }
         format.js { render action: 'new', status: :unprocessable_entity, layout: false }
         format.json { render json: @property.errors, status: :unprocessable_entity }
@@ -120,7 +120,7 @@ class PropertiesController < ApplicationController
       end
 
       respond_to do |format|
-        flash[:success] = "New Images Successfully Uploaded.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
+        # flash[:success] = "New Images Successfully Uploaded.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
         format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }
         format.json { render action: 'show', status: :created, location: @property }
       end
@@ -245,7 +245,7 @@ class PropertiesController < ApplicationController
 
           end
 
-          flash[:success] = "The Property Successfully Updated.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
+          # flash[:success] = "The Property Successfully Updated.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
 
           if params[:lease_sub].blank?
             format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }
@@ -298,7 +298,7 @@ class PropertiesController < ApplicationController
         # UserMailer.work_group_access_notify_with_signup(options).deliver
         ######### Send Email Notification #########
       else
-        flash[:notice] = 'Invalid Email'
+        # flash[:notice] = 'Invalid Email'
       end
     end
     render layout: false
