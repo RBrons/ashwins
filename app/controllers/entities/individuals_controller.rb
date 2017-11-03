@@ -29,7 +29,7 @@ class Entities::IndividualsController < ApplicationController
       @entity.assign_attributes(individuals_params)
       @entity.name = @entity.first_name + ' ' + @entity.last_name
       if @entity.save
-        flash[:success] = "This Client Successfully Updated.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        # flash[:success] = "This Client Successfully Updated.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_individuals_basic_info_path(@entity.key)
       end
     else

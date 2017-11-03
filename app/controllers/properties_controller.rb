@@ -113,7 +113,7 @@ class PropertiesController < ApplicationController
         format.js { render json: @property.to_json, status: :ok }
         format.json { render action: 'show', status: :created, location: @property }
       else
-        #flash[:error] = "Failed to create new property."
+        # flash[:error] = "Failed to create new property."
         format.html { render action: 'new' }
         format.js { render action: 'new', status: :unprocessable_entity, layout: false }
         format.json { render json: @property.errors, status: :unprocessable_entity }
@@ -319,7 +319,7 @@ class PropertiesController < ApplicationController
         # UserMailer.work_group_access_notify_with_signup(options).deliver
         ######### Send Email Notification #########
       else
-        flash[:notice] = 'Invalid Email'
+        # flash[:notice] = 'Invalid Email'
       end
     end
     render layout: false

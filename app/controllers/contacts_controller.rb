@@ -44,7 +44,7 @@ class ContactsController < ApplicationController
           transaction_property.update(attorney_id: @contact.id)
         end
 
-        #flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>" if !request.xhr?
+        # flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>" if !request.xhr?
         format.html { redirect_to edit_contact_path(@contact) }
         # format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
@@ -60,7 +60,7 @@ class ContactsController < ApplicationController
   def update
     @contact = Contact.find_by(id: params[:id])
     if @contact.nil?
-      flash[:error] = "Specified contact not found."
+      # flash[:error] = "Specified contact not found."
       return redirect_to contacts_path
     end
     params[:contact_type] = "company" if !@contact.company_name.nil?
@@ -109,7 +109,7 @@ class ContactsController < ApplicationController
     @contact = Contact.find_by(id: params[:id])
 
     if @contact.nil?
-      flash[:error] = "Specified contact not found."
+      # flash[:error] = "Specified contact not found."
       return redirect_to contacts_path
     else
       @ctype_ = "Individual"
@@ -124,7 +124,7 @@ class ContactsController < ApplicationController
     params[:contact_type] = "company" if !@contact.company_name.nil?
     @contact.cprefix =  (params[:contact_type] == "company") ? "Contact " : ""
     if @contact.nil?
-      flash[:error] = "Specified contact not found."
+      # flash[:error] = "Specified contact not found."
       return redirect_to contacts_path
     end
     if @contact.contact_type == "Client Participant"

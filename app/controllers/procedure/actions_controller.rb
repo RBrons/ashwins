@@ -106,7 +106,7 @@ class Procedure::ActionsController < ApplicationController
     checklist = Procedure::Action::Checklist.find(id)
     checklist.update(title: params[:value])
     render text: params[:value]
-  end  
+  end
 
   def member
     @action = Procedure::Action.find_by(key: params[:id])
@@ -133,7 +133,7 @@ class Procedure::ActionsController < ApplicationController
         # UserMailer.work_group_access_notify_with_signup(options).deliver
         ######### Send Email Notification #########
       else
-        flash[:notice] = 'Invalid Email'
+        # flash[:notice] = 'Invalid Email'
       end
     end
     render layout: false
