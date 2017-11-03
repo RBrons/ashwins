@@ -1,9 +1,21 @@
+.container.breadcrum.bredcum_container
+  p
+    .margin-md-left.list_show
+      = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+  <br><br>
+    = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
+  .clearfix.margin-lg-left.header-tab
+    = render 'properties/form_header_link'
+      
 - if @latLng.nil?
-  p Map is not available for this property
+  .col-md-6.lease-analy
+    p Map is not available for this property
+  .col-md-6.lease-analy
 - else
-  .col-md-6
+  .col-md-6.lease-analy
     #map_canvas_1.map_canvas
-  .col-md-6
+  .col-md-6.lease-analy
     #map_canvas_2.map_canvas
 
 - if !@latLng.nil?

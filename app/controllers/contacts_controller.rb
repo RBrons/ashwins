@@ -7,8 +7,10 @@ class ContactsController < ApplicationController
   def new
     @contact = Contact.new
     @contact.cprefix =  (params[:contact_type] == "company") ? "Contact " : ""
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\">Add #{(params[:contact_type] || "contact").titleize} </a></h4></div>".html_safe
+    # add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + new_contact_path() +
+    #   "\'>Create Contact " + "</a></div>").html_safe
+    add_breadcrumb "<div class=\"pull-left\"><h4><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/ </a></h4></div>".html_safe
+    add_breadcrumb "<div class=\"pull-left\"><h4><a class=\"breadcrum_text\" href=\"/contacts/new\">Add Contact #{(params[:contact_type] || "contact").titleize} </a></h4></div>".html_safe
     render layout: false, template: "contacts/new" if request.xhr?
   end
 
@@ -42,7 +44,7 @@ class ContactsController < ApplicationController
           transaction_property.update(attorney_id: @contact.id)
         end
 
-        flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>" if !request.xhr?
+        #flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>" if !request.xhr?
         format.html { redirect_to edit_contact_path(@contact) }
         # format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
@@ -132,9 +134,8 @@ class ContactsController < ApplicationController
     end
     ctype_ = "Individual"
     ctype_ = "Company" if @contact.is_company
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\">Edit #{ctype_} Contact: #{@contact.name} </a></h4></div>".html_safe
-
+    add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/ </a><a class=\"breadcrum_text\" href=\'" + edit_contact_path(@contact.id) +
+      "\'> " + ctype_  + "/" + '&nbsp;&nbsp;' + "Edit" + ":" + @contact.name + "/" + "</a></div>").html_safe
   end
 
   def destroy

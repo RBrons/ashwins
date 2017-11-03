@@ -1,13 +1,28 @@
 - url = @contact.persisted? ? contact_path(@contact.id) : contacts_path
 - heading = @contact.persisted? ? "Edit Client" : "New Client"
 = form_for @contact, url: url,remote: (request.xhr?) do |f|
-  - if @contact.errors.any?
+  /- if @contact.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@contact.errors.count, "error")} prohibited this client from being saved:"
-      ul
-        - @contact.errors.full_messages.each do |message|
+      /h2 = "#{pluralize(@contact.errors.count, "error")} prohibited this client from being saved:"
+      /ul
+       / - @contact.errors.full_messages.each do |message|
           li = message
-
+  .container.breadcrum.bredcum_container.breadcrum_contact
+    p
+      .margin-md-left.breadcrum_line
+        = render_breadcrumbs :separator => "<div class=\"pull-left \"></div>".html_safe
+    <br><br>
+      
+        
+    div.save_property
+      - if @contact.id.present?
+        = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+      - else
+        = f.submit 'Save', class: 'btn btn-sm submit-edit property_save breadcrum_save_contact'
+    - if @contact.id.present?
+      = link_to "Show in List", contacts_path, class: "breadcrum_list l1ist_show_contact"
+  br
+  br
   .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
     .clearfix
       h4 = ""
@@ -87,5 +102,5 @@
       = f.text_area :notes, class: "form-control"
     .form-group
     .clearfix
-    .form-group
-      = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    /.form-group
+      /= f.submit 'Save', class: 'btn btn-sm btn-primary'

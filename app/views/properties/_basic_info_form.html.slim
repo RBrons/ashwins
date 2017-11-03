@@ -8,14 +8,27 @@
   = f.hidden_field :number_of_option_period, value: @property.number_of_option_period
   = f.hidden_field :length_of_option_period, value: @property.length_of_option_period
 
-  - if @property.errors.any?
+  /- if @property.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-      ul
-        - @property.errors.full_messages.each do |message|
-          li = message
+      /h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+      /ul
+        /- @property.errors.full_messages.each do |message|
+          /li = message
+  .container.breadcrum.bredcum_container
+    p
+      .margin-md-left.breadcrum_line
+        = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+    <br><br>
+      - if @property.id.present?
+        = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+      div.save_property
+        = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+  div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
+    .clearfix.margin-lg-left.header-tab
+      = render 'properties/form_header_link'
+
   .clearfix
-  .col-lg-6.col-md-6.col-sm-12.col-xs-12
+  .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
     .form-group
       = label_tag 'Tenant'
       / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
@@ -214,8 +227,8 @@
         = label_tag "Cover Image"
         = cl_image_tag(@property.property_cover_image.cl_image_url, :height => 200, :crop => :scale)
     .clearfix
-    .form-group
-      = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    /.form-group
+     / = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 /! Modal
 #new-tenant.modal.fade aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-5"
