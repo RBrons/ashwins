@@ -193,18 +193,12 @@ class TransactionsController < ApplicationController
       @transaction_property = @transaction.transaction_properties.where(property_id: @property.id).first
      
       # broker and attorney for transaction property
-      if @transaction_property.broker_id.present?
-        @broker_contact = @transaction_property.broker_contact
-      else
-        @broker_contact = Contact.new
+      # In purchase transaction, offeror in transaction_property_offers would become a propery owner
+      # Also broker and attorney would become the broker and attorney of property owner
+      @offeror_as_seller = @transaction_property.transaction_property_offers.first
+      if !@offeror_as_seller.present?
+        return redirect_to terms_transaction_path(@transaction, sub: 'terms', type: 'purchase', main_id: @transaction_main.id)
       end
-
-      if @transaction_property.attorney_id.present?
-        @attorney_contact = @transaction_property.attorney_contact
-      else
-        @attorney_contact = Contact.new
-      end
-
       @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
     end
 
@@ -523,7 +517,7 @@ class TransactionsController < ApplicationController
         # set default values for transaction term
         defaultize @transaction_property.transaction_term
       end
-
+      
       @sub_tab = params[:sub_tab] || @transaction_property.current_step_subtab
       
       # purchaser, broker and attorney for transaction property
@@ -546,26 +540,16 @@ class TransactionsController < ApplicationController
           if !@ipp_relp.present?
             @transaction_property.transaction_property_offers.create([:offer_name => "Offeror 1", :is_accepted => false, :transaction_property_id => @transaction_property.id])
           else
-            @transaction_property.transaction_property_offers.create([:offer_name => @ipp_relp.name, :is_accepted => false, :transaction_property_id => @transaction_property.id, :relinquishing_purchaser_contact_id => @ipp_relp.id])
+            @transaction_property.transaction_property_offers.create([:offer_name => @ipp_relp.name, :is_accepted => false, :transaction_property_id => @transaction_property.id, :client_contact_id => @ipp_relp.id])
           end
         end
+        
       else
         if ! @transaction_property.transaction_property_offers.present?
-          @transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => false, :transaction_property_id => @transaction_property.id])
+          @transaction_property.transaction_property_offers.create([:offer_name => "Seller", :is_accepted => false, :transaction_property_id => @transaction_property.id, :client_contact_id => @property.owner.try(:id)])
         end
       end
 
-      if @transaction_property.broker_id.present?
-        @broker_contact = @transaction_property.broker_contact
-      else
-        @broker_contact = Contact.new
-      end
-
-      if @transaction_property.attorney_id.present?
-        @attorney_contact = @transaction_property.attorney_contact
-      else
-        @attorney_contact = Contact.new
-      end
     else
       redirect_to properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id])
     end
@@ -769,7 +753,7 @@ class TransactionsController < ApplicationController
         }
         format.json { render json: @transaction_property.transaction_term }
       else
-        format.html {render action: :terms}
+        format.html { render action: :terms }
         format.json { render json: @transaction_property.errors.full_messages }
       end
     end
@@ -891,23 +875,29 @@ class TransactionsController < ApplicationController
   def save_current_step_state
     if params[:cur_property]
       if params[:type] == 'sale'
-        TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step: params[:sub])
+        sale_transaction_property = TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).first
+        sale_transaction_property.update(current_step: params[:sub])
         # For sub tabs
         if params[:sub] == "terms"
-          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'relinquishing_purchaser')
+          if sale_transaction_property.current_step_subtab.nil?
+            sale_transaction_property.update(current_step_subtab: 'relinquishing_purchaser')
+          end
         elsif params[:sub] == "inspection"
-          if !TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).first.try(:current_step_subtab)
-            TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).update(current_step_subtab: 'seller_documentation')
+          if sale_transaction_property.current_step_subtab.nil?
+            sale_transaction_property.update(current_step_subtab: 'seller_documentation')
           end
         end
       else
-        TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step: params[:sub])
+        purchase_transaction_property = TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).first
+        purchase_transaction_property.update(current_step: params[:sub])
         #For sub tabs
         if params[:sub] == "terms"
-          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'relinquishing_purchaser')
+          if purchase_transaction_property.current_step_subtab.nil?
+            purchase_transaction_property.update(current_step_subtab: 'relinquishing_purchaser')
+          end
         elsif params[:sub] == "inspection"
-          if !TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).first.try(:current_step_subtab)
-            TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'seller_documentation')
+          if purchase_transaction_property.current_step_subtab.nil?
+            purchase_transaction_property.update(current_step_subtab: 'seller_documentation')
           end
         elsif params[:sub] == "parties"
           TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'basic_info')

@@ -27,21 +27,6 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.save
-        if params[:from_relinquishing_offeror].present?
-          if @contact.is_company
-            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.company_name}")
-          else
-            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.first_name} #{@contact.last_name}")
-          end
-        end
-        if params[:from_transaction_broker]
-          transaction_property = TransactionProperty.find(params[:transaction_property_id])
-          transaction_property.update(broker_id: @contact.id)
-        elsif params[:from_transaction_attorney]
-          transaction_property = TransactionProperty.find(params[:transaction_property_id])
-          transaction_property.update(attorney_id: @contact.id)
-        end
-
         flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>" if !request.xhr?
         format.html { redirect_to edit_contact_path(@contact) }
         # format.html { redirect_to contacts_path }
@@ -74,13 +59,6 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.save
-        if params[:from_relinquishing_offeror].present?
-          if @contact.is_company
-            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.company_name}")
-          else
-            TransactionPropertyOffer.find(params[:from_relinquishing_offeror]).update(offer_name: "#{@contact.first_name} #{@contact.last_name}")
-          end
-        end
         format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
         format.json { render json: @contact }

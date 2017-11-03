@@ -29,17 +29,6 @@ module TransactionsHelper
         end
     end
 
-    def get_transaction_property_offeror(transaction_property_offer)
-        @purchaser = Contact.where(id: transaction_property_offer.relinquishing_purchaser_contact_id).first
-        if @purchaser.present?
-            return Contact.where(id: transaction_property_offer.relinquishing_purchaser_contact_id).first
-        else
-            @purchaser = Contact.create(is_company: false)
-            transaction_property_offer.update(relinquishing_purchaser_contact_id: @purchaser.id)
-            return @purchaser
-        end
-    end
-
     def get_property_purchaser_or_seller(property_id, transaction_id, type="sale")
         if type == 'sale'
             is_sale = true
@@ -51,7 +40,7 @@ module TransactionsHelper
             accepted_offer = transaction_property.transaction_property_offers.where(is_accepted: true).first
             if accepted_offer.present?
                 if transaction_property.is_sale
-                    return Contact.find(accepted_offer.relinquishing_purchaser_contact_id)
+                    return Contact.find(accepted_offer.client_contact_id)
                 else
                     return transaction_property.owner
                 end
