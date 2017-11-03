@@ -278,9 +278,32 @@ $(document).ready(function(){
   });
 });
 
+$(document).ready(function(){
+  var unsaved = false;
+  $(":input").change(function(){ //trigers change in all input fields including text type
+      unsaved = true;
+  });
+  $(window).on('beforeunload', function(){
+    if(unsaved){
+      return "Any changes will be lost";
+    }
+  });
+  // Form Submit
+  $(document).on("submit", "form", function(event){
+    // disable unload warning
+    $(window).off('beforeunload');
+  });
+});
 
-
-
+$(document).ready(function(){
+    $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+        localStorage.setItem('activeTab', $(e.target).attr('href'));
+    });
+    var activeTab = localStorage.getItem('activeTab');
+    if(activeTab){
+        $('#lease_tab a[href="' + activeTab + '"]').tab('show');
+    }
+});
 
 
 // Bootstrap tree view

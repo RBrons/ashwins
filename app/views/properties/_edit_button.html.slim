@@ -1,0 +1,26 @@
+
+  ul#lease_tab.nav.nav-tabs[role="tablist"]
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
+      a.nav-tanant#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Parties
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_terms_section'}")
+      a.nav-tanant#lease_terms[href="#lease_terms_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease Terms
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
+      a.nav-tanant#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
+      a.nav-tanant#lease_rent_details[href="#lease_rent_details_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
+      a.nav-tanant#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
+      a.nav-tanant#lease_taxes_and_fees[href="#lease_site_preparation_section" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_construction_section'}")
+      a.nav-tanant#lease_construction[href="#lease_construction_section" role="tab" data-toggle="tab" aria-expanded="false"] Construction
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_use_section'}")
+      a.nav-tanant#lease_use[href="#lease_use_section" role="tab" data-toggle="tab" aria-expanded="false"] Use
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_premises_section'}")
+      a.nav-tanant#lease_premises[href="#lease_premises_section" role="tab" data-toggle="tab" aria-expanded="false"] Premises
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_transfer_section'}")
+      a.nav-tanant#lease_transfer[href="#lease_transfer_section" role="tab" data-toggle="tab" aria-expanded="false"] Transfer
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_remedies_section'}")
+      a.nav-tanant#lease_remedies[href="#lease_remedies_section" role="tab" data-toggle="tab" aria-expanded="false"] Remedies
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_misc_section'}")
+      a.nav-tanant#lease_misc[href="#lease_misc_section" role="tab" data-toggle="tab" aria-expanded="false"] Misc
