@@ -1,3 +1,8 @@
+.bread_crumb_area
+  .bread_crumb_show
+    = render_breadcrumbs :separator => ' '
+  button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
+    = "Save"
 = form_for @entity, url: entities_sole_proprietorship_contact_info_path( @entity.key ), remote: true, html: { class: "entity-page-xhr" } do |f|
   = hidden_field_tag :int_action, 'Contact Info'
   - if @entity.errors.any?
@@ -7,11 +12,16 @@
         - @entity.errors.full_messages.each do |message|
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group.honorific
-      = f.label :honorific
-      = f.check_box :is_honorific
-    .form-group style="display: #{(@entity.is_honorific ? 'inline' : 'none')}"
-      = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state"}
+    / .form-group.honorific
+    /   = f.label :honorific
+    /   / = f.check_box :is_honorific
+    / .form-group style="display: #{(@entity.is_honorific ? 'inline' : 'block')}"
+    /   = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state"}
+    .form-group style="display: inline "
+      label Honorific
+      = f.hidden_field :is_honorific, value: true
+      = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
+    .clearfix
     .form-group
       = f.label :first_name
       = f.text_field :first_name, class: "form-control"
@@ -45,3 +55,10 @@
     .clearfix
       .form-group
         = f.submit 'Save', class: 'btn btn-sm btn-primary form-control'
+
+javascript:
+  $(document).ready(function() {
+    $('#save_btn').on('click', function() {
+          $('.corporate-contact-form form').submit();   
+    });
+  });
