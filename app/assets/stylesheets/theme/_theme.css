@@ -5364,6 +5364,7 @@ ol.number_with_parentheses > li:before {
     height: 30px;
     font-size: 14px;
     font-family: inherit;
+    padding:0px;
 }
 
 #save_btn:hover {
