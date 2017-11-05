@@ -399,7 +399,8 @@ $ ->
 
   $(document).on 'click', '.initial_log_counteroffer', (e) ->
     e.preventDefault()
-    add_counteroffer_row(selected_offer_tab.find('input.cur_offer_id').val(), "", "Counter-Party", "")
+    counter_party = selected_offer_tab.find('.cur_offer_name').val()
+    add_counteroffer_row(selected_offer_tab.find('input.cur_offer_id').val(), "", counter_party, "")
     last_counteroffer = "Counter-Party"
     $(this).hide()
     selected_offer_tab.find('.ask_accepted').hide()
@@ -413,9 +414,10 @@ $ ->
 
   $(document).on "click", ".add_counteroffer", (e) ->
     e.preventDefault()
+    counter_party = selected_offer_tab.find('.cur_offer_name').val()
     last_counteroffer = if last_counteroffer == "" then selected_offer_tab.find('.last_counteroffer').val() else last_counteroffer
     if last_counteroffer == "Client"
-      add_counteroffer_row(selected_offer_tab.find('input.cur_offer_id').val(), "", "Counter-Party", "")
+      add_counteroffer_row(selected_offer_tab.find('input.cur_offer_id').val(), "", counter_party, "")
       last_counteroffer = "Counter-Party"
     else
       add_counteroffer_row(selected_offer_tab.find('input.cur_offer_id').val(), "", "Client", "")
