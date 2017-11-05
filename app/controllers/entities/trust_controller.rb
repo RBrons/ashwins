@@ -3,7 +3,7 @@ class Entities::TrustController < ApplicationController
   before_action :current_page
   # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -11,13 +11,22 @@ class Entities::TrustController < ApplicationController
       #@entity = Entity.find_by(key: key)
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
-      @just_created = params[:just_created].to_b
+      @just_created = params[:just_created].to_b    
+      if @entity.name == ""
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust/", '',  :title => "Trust"
+        add_breadcrumb " Create", '',  :title => "Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust/", '',  :title => "Trust"
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+        add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getTrustId
       @entity.basic_info_only = true
       @entity.user_id         = current_user.id
-
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
         # return render json: {redirect: view_context.entities_trust_basic_info_path( @entity.key ), just_created: true}
@@ -30,7 +39,7 @@ class Entities::TrustController < ApplicationController
       @entity.type_           = MemberType.getTrustId
       @entity.basic_info_only = true
       if @entity.update(entity_params)
-        #return redirect_to edit_entity_path(@entity.key)
+        return redirect_to edit_entity_path(@entity.key)
       end
     else
       raise UnknownRequestFormat
@@ -43,9 +52,19 @@ class Entities::TrustController < ApplicationController
     raise ActiveRecord::RecordNotFound if @entity.blank?
     if request.get?
       #TODO
+      add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+      add_breadcrumb " Trust/", '',  :title => "Trust"
+      add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+      add_breadcrumb " Contact info", '', :title => "Contact info"
+      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list" 
     elsif request.patch?
       @entity.basic_info_only = false
       @entity.update(entity_params)
+      add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+      add_breadcrumb " Trust/", '',  :title => "Trust"
+      add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+      add_breadcrumb " Contact info", '', :title => "Contact info"
+      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list" 
       return render layout: false, template: "entities/trust/contact_info"
     else
       raise UnknownRequestFormat
@@ -62,11 +81,27 @@ class Entities::TrustController < ApplicationController
       @settlor                 ||= Settlor.new
       @settlor.super_entity_id = @entity.id
     end
-    if request.post?
+    if request.get?
+      if @settlor.new_record?
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust: #{@entity.name}/", '',  :title => "Trust" 
+        add_breadcrumb " Settlor Create", '',  :title => "Settlor Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust/", '',  :title => "Trust" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
+        add_breadcrumb " Settlor", '',  :title => "Settlor"
+        # add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      end
+    elsif request.post?
       @settlor                 = Settlor.new(settlor_params)
       @settlor.use_temp_id
       @settlor.super_entity_id = @entity.id
       @settlor.class_name      = "Settlor"
+      # add_breadcrumb "/Clients", clients_path, :title => "Clients" 
+      # add_breadcrumb "/ Trust", '',  :title => "Trust"
+      # add_breadcrumb "/ Trustee", '',  :title => "Trustee"
+      # add_breadcrumb "/ Create", '',  :title => "Create"
       if @settlor.save
         @settlors = @settlor.super_entity.settlors
         # return render layout: false, template: "entities/trust/settlors"
@@ -77,11 +112,15 @@ class Entities::TrustController < ApplicationController
         return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       end
     elsif request.patch?
+      # add_breadcrumb "/Clients", clients_path, :title => "Clients" 
+      # add_breadcrumb "/ Trust", '',  :title => "Trust"
+      # add_breadcrumb "/ Edit: #{@entity.name}", '',  :title => "Editt"
+      # add_breadcrumb "/ Trustee", '',  :title => "Trustee"
       if @settlor.update(settlor_params)
         @settlor.use_temp_id
         @settlor.save
         @settlors = @settlor.super_entity.settlors
-        # flash[:success] = "The Settlor Successfully Updated.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
+        flash[:success] = "The Settlor Successfully Updated.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
         # return render layout: false, template: "entities/trust/settlors"
         return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       else
@@ -93,7 +132,7 @@ class Entities::TrustController < ApplicationController
       @entity = settlor.super_entity
       settlor.delete
       @settlors = settlor.super_entity.settlors
-      # flash[:success] = "The Settlor Successfully Deleted."
+      flash[:success] = "The Settlor Successfully Deleted."
       return redirect_to entities_trust_settlors_path(@entity.key)
     end
     @settlor.gen_temp_id
@@ -118,7 +157,20 @@ class Entities::TrustController < ApplicationController
       @trustee.super_entity_id = @entity.id
       @trustee.class_name      = "Trustee"
     end
-    if request.post?
+    if request.get?
+      if @trustee.new_record?
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust: #{@entity.name}/", '',  :title => "Trust" 
+        add_breadcrumb " Trustee Create", '',  :title => "Trustee Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust/", '',  :title => "Trust" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
+        add_breadcrumb " Trustee", '',  :title => "Trustee"
+        # add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      end
+
+    elsif request.post?
       @trustee                 = Trustee.new(trustee_params)
       @trustee.use_temp_id
       @trustee.super_entity_id = @entity.id
@@ -137,7 +189,7 @@ class Entities::TrustController < ApplicationController
         @trustee.use_temp_id
         @trustee.save
         # return render layout: false, template: "entities/trust/trustees"
-        # flash[:success] = "The Trustee Successfully Updated.</br><a href='#{entities_trust_trustee_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
+        flash[:success] = "The Trustee Successfully Updated.</br><a href='#{entities_trust_trustee_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
         return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       else
         # return render layout: false, template: "entities/trust/trustee"
@@ -174,7 +226,19 @@ class Entities::TrustController < ApplicationController
       @beneficiary.super_entity_id = @entity.id
       @beneficiary.class_name      = "Beneficiary"
     end
-    if request.post?
+    if request.get?
+      if @beneficiary.new_record?
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust: #{@entity.name}/", '',  :title => "Trust" 
+        add_breadcrumb " Beneficiary Create", '',  :title => "Beneficiary Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Trust/", '',  :title => "Trust" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
+        add_breadcrumb " Beneficiary", '',  :title => "Beneficiary"
+        # add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      end
+    elsif request.post?
       @beneficiary                 = Beneficiary.new(beneficiary_params)
       @beneficiary.use_temp_id
       @beneficiary.super_entity_id = @entity.id
@@ -193,7 +257,7 @@ class Entities::TrustController < ApplicationController
         @beneficiary.save
         @beneficiaries = @beneficiary.super_entity.beneficiaries
         # return render layout: false, template: "entities/trust/beneficiaries"
-        # flash[:success] = "The Beneficiary Successfully Updated.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
+        flash[:success] = "The Beneficiary Successfully Updated.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
         return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       else
         # return render layout: false, template: "entities/trust/beneficiary"
@@ -205,7 +269,7 @@ class Entities::TrustController < ApplicationController
       beneficiary.delete
       @beneficiaries = beneficiary.super_entity.beneficiaries
       # return render layout: false, template: "entities/trust/beneficiaries"
-      # flash[:success] = "The Beneficiary Successfully Deleted."
+      flash[:success] = "The Beneficiary Successfully Deleted."
       return redirect_to entities_trust_beneficiaries_path(@entity.key)
     end
     @beneficiary.gen_temp_id
@@ -225,6 +289,10 @@ class Entities::TrustController < ApplicationController
     @ownership_ = @entity.build_ownership_tree_json
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Owns", '',  :title => "Owns"
+    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end

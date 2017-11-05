@@ -1,3 +1,8 @@
+.bread_crumb_area
+  .bread_crumb_show
+    = render_breadcrumbs :separator => ' '
+  button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
+    = "Save"
 = form_for @principal, url: entities_power_of_attorney_principal_path( @entity.key, @principal.id ), remote: true, html: { class: "entity-page-xhr" } do |f|
   = hidden_field_tag :int_action, 'Add Principal'
   - if @principal.errors.any?
@@ -34,6 +39,12 @@
     .form-group
       = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
+javascript:
+  $(document).ready(function() {
+    $('#save_btn').on('click', function() {
+          $('.corporate-contact-form form').submit();
+    });
+  });
 /! Modal
 #ResourceFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ResourceFormNewEntity" role="dialog" tabindex="-5"
   .modal-dialog

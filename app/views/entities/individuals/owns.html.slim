@@ -1,5 +1,8 @@
+.bread_crumb_area
+  .bread_crumb_show_not_save_btn
+    = render_breadcrumbs :separator => ' '
 = hidden_field_tag :int_action, 'Ownerships'
-.heading
+.heading#own_heading_content
   = "List of #{@entity.display_name}'s Ownerships"
 .clearfix
 - if @owns_available
@@ -15,5 +18,5 @@
 
     $('#owner-treeview').treeview(options);
 - else
-  p
+  p#own_content
     = "#{@entity.display_name} does not own anything yet."

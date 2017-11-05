@@ -2,7 +2,7 @@ class Entities::IndividualsController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     key = params[:entity_key]
@@ -11,6 +11,16 @@ class Entities::IndividualsController < ApplicationController
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      if @entity.new_record?
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Individual/", '',  :title => "Individual"
+        add_breadcrumb " Create", '',  :title => "Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Individual/", '',  :title => "Individual"
+        add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      end
     elsif request.post?
       @entity                 = Entity.new(individuals_params)
       @entity.type_           = MemberType.getIndividualId
@@ -43,6 +53,10 @@ class Entities::IndividualsController < ApplicationController
     @ownership_ = @entity.build_ownership_tree_json
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Individual #{@entity.name}/", '',  :title => "Individual"
+    add_breadcrumb " Owns", '',  :title => "Owns"
+    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end
