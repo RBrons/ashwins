@@ -5395,3 +5395,18 @@ ol.number_with_parentheses > li:before {
     font-size: 12px;
     left: -2px;
 }
+
+#entity_honorific {
+    width: 90px;
+}
+
+#own_heading_content{
+  left: 11px
+}
+#own_content {
+  margin-left: 11px
+}
+
+#owner-treeview {
+    margin-left: 11px;
+}

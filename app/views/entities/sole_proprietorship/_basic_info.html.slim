@@ -34,6 +34,18 @@
     .form-group
       = f.label "Fictitious Business Name"
       = f.text_field :name2, class: "partnership form-control"
+    .form-group.required
+      label.control-label Date of Registration
+      .clearfix
+      .pull-left
+        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
+        = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
+      .pull-right
+        .pull-left
+          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+        .pull-right
+          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
+    .clearfix
     .form-group
       = f.label "Postal Address"
       = f.text_field :postal_address2, class: "partnership form-control"
@@ -49,18 +61,6 @@
     .form-group
       = f.label "Ein"
       = f.text_field :ein_or_ssn, class: "form-control"
-    .clearfix
-    .form-group.required
-      label.control-label Date of Registration
-      .clearfix
-      .pull-left
-        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
-        = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
-      .pull-right
-        .pull-left
-          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-        .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
     .clearfix
     .form-group.margin-sm-top
       = f.hidden_field :number_of_assets, value: "100"

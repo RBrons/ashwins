@@ -12,11 +12,16 @@
         - @entity.errors.full_messages.each do |message|
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group.honorific
-      = f.label :honorific
-      = f.check_box :is_honorific
-    .form-group style="display: #{(@entity.is_honorific ? 'inline' : 'none')}"
-      = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state"}
+    / .form-group.honorific
+    /   = f.label :honorific
+    /   / = f.check_box :is_honorific
+    / .form-group style="display: #{(@entity.is_honorific ? 'inline' : 'block')}"
+    /   = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state"}
+    .form-group style="display: inline "
+      label Honorific
+      = f.hidden_field :is_honorific, value: true
+      = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
+    .clearfix
     .form-group
       = f.label :first_name
       = f.text_field :first_name, class: "form-control"
