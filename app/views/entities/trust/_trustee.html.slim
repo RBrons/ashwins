@@ -1,3 +1,8 @@
+.bread_crumb_area
+  .bread_crumb_show
+    = render_breadcrumbs :separator => ' '
+  button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
+    = "Save"
 = form_for @trustee, url: entities_trust_trustee_path(@entity.key, @trustee.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Trustee'
   - if @trustee.errors.any?
@@ -49,3 +54,10 @@
         = hidden_field_tag :cid, @trustee.temp_id
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
+
+javascript:
+  $(document).ready(function() {
+    $('#save_btn').on('click', function() {
+          $('.corporate-contact-form form').submit();   
+    });
+  });

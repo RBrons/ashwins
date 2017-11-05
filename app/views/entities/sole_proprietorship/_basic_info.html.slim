@@ -11,6 +11,11 @@
         .modal-footer
           button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Close
 
+.bread_crumb_area
+  .bread_crumb_show
+    = render_breadcrumbs :separator => ' '
+  button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
+    = "Save"
 = form_for @entity, url: entities_sole_proprietorship_basic_info_path( @entity.key ), html: { class: "entity-page-xhr" } do |f|
   - if @entity.errors.any?
     #error_explanation
@@ -108,7 +113,24 @@
         .modal-footer
           button.btn.btn-default.should-not-change-date-of-formation-yes type="button"  Yes
           button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Cancel
-
+javascript:
+  $(document).ready(function() {
+    $('#save_btn').on('click', function() {
+      var persisted = #{@entity.persisted?}
+      if (persisted === true) {
+        var answer = confirm ("Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? " )
+        if (!answer) {
+          return false;
+        }
+        else {
+          $('.corporate-contact-form form').submit();   
+        }
+      }
+      else {
+        $('.corporate-contact-form form').submit(); 
+      }
+    });
+  });
 
 /#required_field
 /  | All (*) fields are mandatory

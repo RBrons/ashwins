@@ -5267,22 +5267,22 @@ ul.notifications {
 /*
 
 /*
-.checkbox 																										{ display: block;position:relative;cursor:pointer; }
-.checkbox input 																								{ position:absolute;z-index:-1;opacity:0;left:0;top:0; }
-.checkbox div 																									{ position:absolute;top:2px;left:0;height:20px;width:20px;background:#e6e6e6;border-radius:3px; }
-.checkbox input:checked ~ div 																			{ background: #1ABC9C; }
+.checkbox                                                                                                       { display: block;position:relative;cursor:pointer; }
+.checkbox input                                                                                                 { position:absolute;z-index:-1;opacity:0;left:0;top:0; }
+.checkbox div                                                                                                   { position:absolute;top:2px;left:0;height:20px;width:20px;background:#e6e6e6;border-radius:3px; }
+.checkbox input:checked ~ div                                                                           { background: #1ABC9C; }
 .checkbox:hover input:not([disabled]):checked ~ div,
-.checkbox input:checked:focus ~ div 																	{ background: #1ABC9C; }
-.checkbox input:disabled ~ div 																			{ background: #1ABC9C;opacity: 0.6;pointer-events: none; }
-.checkbox div:after 																							{ content: '';position: absolute;display: none; }
-.checkbox input:checked ~ div:after 																	{ display: block; }
-.checkbox-wp div:after 																					{ left: 7px;top: 3px;width: 7px;height: 11px;border: solid #fff;border-width: 0 2px 2px 0;transform: rotate(40deg); }
-.checkbox-wp input:disabled ~ div:after 																{ border-color: #F2F2F2; }
+.checkbox input:checked:focus ~ div                                                                     { background: #1ABC9C; }
+.checkbox input:disabled ~ div                                                                          { background: #1ABC9C;opacity: 0.6;pointer-events: none; }
+.checkbox div:after                                                                                             { content: '';position: absolute;display: none; }
+.checkbox input:checked ~ div:after                                                                     { display: block; }
+.checkbox-wp div:after                                                                                  { left: 7px;top: 3px;width: 7px;height: 11px;border: solid #fff;border-width: 0 2px 2px 0;transform: rotate(40deg); }
+.checkbox-wp input:disabled ~ div:after                                                                 { border-color: #F2F2F2; }
 
 
-.checkbox-radio div 																							{ border-radius: 50%; }
-.checkbox-radio div:after 																					{ left: 7px;top: 7px;height: 6px;width: 6px;border-radius: 50%;background: #fff; }
-.checkbox-radio input:disabled ~ div:after 															{ background: #F2F2F2; }
+.checkbox-radio div                                                                                             { border-radius: 50%; }
+.checkbox-radio div:after                                                                                   { left: 7px;top: 7px;height: 6px;width: 6px;border-radius: 50%;background: #fff; }
+.checkbox-radio input:disabled ~ div:after                                                          { background: #F2F2F2; }
 
 
 .checkbox, .radio { margin-top:-3px; }
@@ -5316,4 +5316,81 @@ ol.number_with_parentheses > li:before {
 
 .text-cancel{
     text-decoration: line-through
+}
+
+.bread_crumb_show {
+    color: #fff;
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-size: 16px;
+    width: 100%;
+    margin-left: 128px;
+    
+}
+
+.bread_crumb_show a {
+    color: #fff;
+    font-size: 17px;
+}
+
+.bread_crumb_area {
+    background: #005826;
+    width: 100%;
+    height: 60px;
+    position: absolute;
+    top: 90px;
+    left: 0;
+}
+.corporate-contact-form input[type=submit] {
+    display: none;
+}
+
+#show_in_list {
+    margin-top: 31px;
+    position: absolute;
+    font-size: 12px;
+    left: -80px;
+}
+
+#save_btn {
+    margin-left: 60px;
+    margin-top: 6px;
+    border-width: 2px;
+    border-color: #fff;
+    border-radius: 0px;
+    background: #005826;
+    width: 64px;
+    height: 30px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+#save_btn:hover {
+    background: #5eb14a;
+}
+
+.corporate-forms {
+    margin-top: 60px;
+}
+.bread_crumb_show_not_save_btn {
+    color: #fff;
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-size: 16px;
+    width: 100%;
+    margin-left: 50px;
+}
+
+.bread_crumb_show_not_save_btn a {
+    color: #fff;
+    font-size: 17px;
+}
+
+#show_in_list_own {
+    margin-top: 31px;
+    position: absolute;
+    font-size: 12px;
+    left: -2px;
 }

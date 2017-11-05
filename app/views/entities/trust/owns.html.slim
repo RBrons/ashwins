@@ -1,3 +1,6 @@
+.bread_crumb_area
+  .bread_crumb_show_not_save_btn
+    = render_breadcrumbs :separator => ' '
 = hidden_field_tag :int_action, 'Ownerships'
 .heading
   = "List of #{@entity.display_name}'s Ownerships"
