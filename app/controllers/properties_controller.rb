@@ -66,7 +66,7 @@ class PropertiesController < ApplicationController
       @property.owner_entity_id = @property.owner_entity_id_indv = 0
     end
     add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + edit_property_path(@property.key) +
-      "\'> " + @property.ownership_status  + "/" + '&nbsp;&nbsp;' + "Edit" + ":" + @property.title + "/" + "</a></div>").html_safe
+      "\'> " + @property.ownership_status + "Edit" + ":" + @property.title + "/" + "</a></div>").html_safe
     if params[:action] == "edit"
       if params[:type_is] == 'basic_info' || params[:type_is] == nil
         add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Basic Info</a></div>".html_safe
@@ -361,7 +361,7 @@ class PropertiesController < ApplicationController
   end
 
   def add_breadcrum
-    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">/Properties/ </a></div>".html_safe
+    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">/Properties/</a></div>".html_safe
   end
 
   def validate_ipp

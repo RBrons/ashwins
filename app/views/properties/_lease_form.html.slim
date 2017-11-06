@@ -23,7 +23,32 @@
       button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
         | Close
 input#property_id[type="hidden" value=(@property.id)]
-div[role="tabpanel"]
+div.lease-subtabs[role="tabpanel"]
+  ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
+        a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Parties
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_terms_section'}")
+        a#lease_terms[href="#lease_terms_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease Term
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
+        a#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
+        a#lease_rent_details[href="#lease_rent_details_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
+        a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
+        a#lease_taxes_and_fees[href="#lease_site_preparation_section" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_construction_section'}")
+        a#lease_construction[href="#lease_construction_section" role="tab" data-toggle="tab" aria-expanded="false"] Construction
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_use_section'}")
+        a#lease_use[href="#lease_use_section" role="tab" data-toggle="tab" aria-expanded="false"] Use
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_premises_section'}")
+        a#lease_premises[href="#lease_premises_section" role="tab" data-toggle="tab" aria-expanded="false"] Premises
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_transfer_section'}")
+        a#lease_transfer[href="#lease_transfer_section" role="tab" data-toggle="tab" aria-expanded="false"] Transfer
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_remedies_section'}")
+        a#lease_remedies[href="#lease_remedies_section" role="tab" data-toggle="tab" aria-expanded="false"] Remedies
+    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_misc_section'}")
+        a#lease_misc[href="#lease_misc_section" role="tab" data-toggle="tab" aria-expanded="false"] Misc
     
       
     .tab-content
@@ -37,7 +62,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -46,11 +71,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
             .form-group
               label Lease Analysis Perspective
@@ -93,7 +115,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -102,12 +124,9 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
-
+          
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
             .form-group
               .heading_blue.radio-inline
@@ -223,18 +242,15 @@ div[role="tabpanel"]
             /.form-group
             /  = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
       #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
-        .container.breadcrum.bredcum_container
+        .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_no_save
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
         div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-          .clearfix.margin-lg-left.header-tab
+          .clearfix.margin-lg-left.lease-header-tab
             = render 'properties/form_header_link'
-        div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
 
         - if @property.rent_tables.present?
           .user-setup-wizard
@@ -338,7 +354,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -347,11 +363,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
 
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
@@ -404,7 +417,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -413,11 +426,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
 
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
@@ -517,7 +527,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -526,12 +536,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
-
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
             .form-group
@@ -591,7 +597,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -600,11 +606,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
             .form-group
@@ -663,7 +666,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -672,12 +675,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
-
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
             .clearfix
@@ -715,7 +714,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -724,11 +723,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
 
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
@@ -931,7 +927,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -940,11 +936,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
 
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
@@ -1004,7 +997,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -1013,12 +1006,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
-
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
             .form-group
@@ -1099,7 +1088,7 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.lease-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -1108,12 +1097,8 @@ div[role="tabpanel"]
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'  
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
-              = render 'properties/edit_button'
-
 
           .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
             .clearfix

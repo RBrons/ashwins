@@ -1,3 +1,9 @@
+  div.lease-subtabs[role="tabpanel"]
+    ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+      li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
+        a.nav-tanant#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
+      li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
+        a.nav-tanant#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
 
   .tab-content
       #tenant_company_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
@@ -9,7 +15,7 @@
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.tenant-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -18,15 +24,9 @@
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.tenant-header-tab
               = render 'properties/form_header_link'
-          div[role="tabpanel"]
-            ul#lease_tab.nav.nav-tabs[role="tablist"]
-              li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
-                a.nav-tanant#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
-              li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
-                a.nav-tanant#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
-
+          
           .col-lg-4.col-md-4.form-content
             .clearfix
             .form-group
@@ -75,7 +75,7 @@
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum.bredcum_container
+          .container.tenant-breadcrum.bredcum_container
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -84,15 +84,9 @@
               div.save_property
                 = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
-            .clearfix.margin-lg-left.header-tab
+            .clearfix.margin-lg-left.tenant-header-tab
               = render 'properties/form_header_link'
-          div[role="tabpanel"]
-            ul#lease_tab.nav.nav-tabs[role="tablist"]
-              li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
-                a.nav-tanant#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
-              li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
-                a.nav-tanant#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
-
+        
           .col-lg-4.col-md-4.form-content
             .clearfix
             .form-group
