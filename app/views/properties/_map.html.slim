@@ -1,9 +1,9 @@
 .container.breadcrum.bredcum_container
   p
-    .margin-md-left.list_show
+    .margin-md-left.breadcrum_no_save
       = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
   <br><br>
-    = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+    = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
 div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
   .clearfix.margin-lg-left.header-tab
     = render 'properties/form_header_link'

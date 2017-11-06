@@ -52,7 +52,7 @@ table#data_table tbody tr.child-row.active-item{
 
 .breadcrum {
   width: 691px !important;
-  height:65px;
+  height: 60px;
   background-color:#005826;
   margin-top: -30px;
   margin-left: 10px !important;  
@@ -65,17 +65,21 @@ table#data_table tbody tr.child-row.active-item{
 .breadcrum_text {
 	margin-left: 10px;  
   color: #fff;
-  font-size: 16px;
+  font-size: 17px;
 }
 .breadcrum_list {
   margin-left: 15px;  
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   margin-top: -10px !important;
   position: absolute;    
 }
 .breadcrum_line{
   margin-left: 117px !important;
+}
+
+.breadcrum_no_save{
+  margin-left: 39px !important;
 }
 .bredcum_container{
   position: relative;
@@ -84,9 +88,9 @@ table#data_table tbody tr.child-row.active-item{
   right: 46px;
 }
 .list_show{
-  margin-left: 45px !important;
+  margin-left: 44px !important;
   display: block !important;
-  margin-top: 2px !important;
+  margin-top: -8px !important;
 }
 .l1ist_show_contact{
   margin-left: 45px !important;
@@ -127,16 +131,17 @@ table#data_table tbody tr.child-row.active-item{
 }
 
 .submit-edit{
-  width: 72px;
-  height: 37px;
+  width: 64px;
+  height: 30px;
   margin-top: -47px;
   border-color: #fff !important;
   border-radius: 0px !important;
   background-color: #005826;
-  border-width: 3px !important;
-  font-size: 17px !important;
+  border-width: 2px !important;
+  font-size: 14px !important;
   margin-right: 10px !important;
 }
+
 .lease-analy{
 	margin-top: 30px;
 }
@@ -147,7 +152,7 @@ table#data_table tbody tr.child-row.active-item{
 
 .header-tab{
   margin-left: -10px !important;
-  margin-top: 15px;
+  margin-top: 30px;
 }
 .nav-tanant {
   height: 35px;
@@ -179,7 +184,7 @@ table#data_table tbody tr.child-row.active-item{
 
 .submit-edit:focus, .submit-edit:hover{
   color: white !important;
-  background: #08ab4e !important;
+  background: #5eb14a !important;
 }
 
 .nav-tabs{
