@@ -93,14 +93,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -223,12 +223,12 @@ div[role="tabpanel"]
             /.form-group
             /  = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
       #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
-        .container.breadcrum
+        .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
         div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
           .clearfix.margin-lg-left.header-tab
             = render 'properties/form_header_link'
@@ -338,14 +338,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -404,14 +404,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -517,14 +517,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -591,14 +591,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -663,14 +663,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -715,14 +715,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -931,14 +931,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -1004,14 +1004,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
@@ -1099,14 +1099,14 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.breadcrum
+          .container.breadcrum.bredcum_container
             p
-              .margin-md-left
+              .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in List", properties_path, class: "breadcrum_list"
-              div.submit-button
-                = f.submit 'Save', class: 'btn btn-sm submit-edit'
+              = link_to "Show in List", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'  
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.header-tab
               = render 'properties/form_header_link'
