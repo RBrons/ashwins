@@ -5,7 +5,7 @@ class Contact < ApplicationRecord
   has_many :groups, :through => :group_members, :as => :gmember
   has_many :group_members, :as => :gmember
 
-  has_one :transaction_property_offer, foreign_key: :relinquishing_purchaser_contact_id, dependent: :destroy
+  has_one :transaction_property_offer, foreign_key: :client_contact_id, dependent: :destroy
   
   has_many :transaction_personnels, dependent: :destroy
 

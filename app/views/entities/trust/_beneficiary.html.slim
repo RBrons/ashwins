@@ -1,3 +1,8 @@
+.bread_crumb_area
+  .bread_crumb_show
+    = render_breadcrumbs :separator => ' '
+  button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
+    = "Save"
 = form_for @beneficiary, url: entities_trust_beneficiary_path(@entity.key, @beneficiary.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Beneficiary'
   - if @beneficiary.errors.any?
@@ -64,3 +69,9 @@
           = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
       .form-group
         .actions = f.submit "Save", class: "btn btn-primary"
+javascript:
+  $(document).ready(function() {
+    $('#save_btn').on('click', function() {
+          $('.corporate-contact-form form').submit();   
+    });
+  });

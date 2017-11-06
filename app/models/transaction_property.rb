@@ -28,14 +28,6 @@ class TransactionProperty < ApplicationRecord
   after_update :update_transaction
   after_save :update_transaction
   
-  def broker_contact
-    return Contact.find(self.broker_id)
-  end
-
-  def attorney_contact
-    return Contact.find(self.attorney_id)
-  end
-
   def update_transaction
     if self.is_sale
       TransactionSale.find(self.transaction_id).touch
@@ -52,12 +44,4 @@ class TransactionProperty < ApplicationRecord
     return !self.closing_date.nil?
   end
 
-  def asking_accepted?
-    accepted_offer = self.transaction_property_offers.where(:is_accepted => true).first
-    if accepted_offer.present?
-      return accepted_offer.is_ask_accepted?
-    else
-      return false
-    end
-  end
 end

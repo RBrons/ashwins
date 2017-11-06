@@ -56,7 +56,10 @@ class PropertiesController < ApplicationController
       @latitude = @latLng[0]
       @longitude = @latLng[1]
     end
-
+    @last_sub_tab = @property.last_sub_tab
+    if params[:type_is] == 'lease'
+      params[:lease_sub] = @last_sub_tab
+    end
     if !(@property.owner_person_is.nil? || @property.owner_person_is==0)
       @property.owner_entity_id_indv = @property.owner_entity_id if @property.owner_person_is == 1
     else

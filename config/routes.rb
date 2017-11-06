@@ -260,7 +260,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :transaction_property_offers
+  resources :transaction_property_offers do
+    member do
+      patch :update_with_contact
+    end
+  end
   resources :counteroffers
 
   resources :transaction_baskets do
