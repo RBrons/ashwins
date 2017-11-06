@@ -333,4 +333,19 @@ $ ->
           $("#md-delete-property").modal 'hide'
           window.location.href = '/properties'
       error: (e) ->
-        console.log e
+        console.log 
+        
+  $(document).on 'click', '#lease_tab li a', ->
+    curPropertyId = $("#property_id").val()
+    selectedLeaseTabId = $(this).attr("href").substring(1)
+    
+    if parseInt(curPropertyId) > 0
+      $.ajax
+        type: "POST"
+        url: "/xhr/save_property_lease_tab"
+        data: { id: curPropertyId, last_sub_tab: selectedLeaseTabId }
+        dataType: "json"
+        success: (val) ->
+          console.log val
+        error: (e) ->
+          console.log e

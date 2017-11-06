@@ -184,4 +184,15 @@ class XhrController < ApplicationController
     user = current_user
     user.update(:skipped_user_setup => true)
   end
+
+  # Save lease tab that user was on last
+  def save_property_lease_tab
+    property = Property.find(params[:id])
+    if property.update(last_sub_tab: params[:last_sub_tab])
+      render json: {status: 'success'}
+    else
+      render json: {status: 'failed'}
+    end
+  end
+
 end
