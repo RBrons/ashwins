@@ -13,7 +13,7 @@
   
   div[role="tabpanel"]
     ul#sale_buy_step_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-      li[class=(@sub_tab == 'relinquishing_purchaser' ? 'active' : '')]
+      li[class=(@sub_tab == 'relinquishing_purchaser' || @sub_tab.blank? ? 'active' : '')]
           a#relinquishing_purchaser[href="#relinquishing_purchaser_section" role="tab" data-toggle="tab" aria-expanded="false"] 
             = @transaction_property.is_in_contract? ? "Purchaser" : "Offeror"
       li[class=(@sub_tab == 'offer_and_acceptance' ? 'active' : '')]
@@ -26,7 +26,7 @@
           a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
 
     .tab-content
-      #relinquishing_purchaser_section.tab-pane.fade[class=(@sub_tab == 'relinquishing_purchaser' ? 'active in' : '')]
+      #relinquishing_purchaser_section.tab-pane.fade[class=(@sub_tab == 'relinquishing_purchaser' || @sub_tab.blank? ? 'active in' : '')]
         ul#multiple_offer.nav.nav-tabs.bar_tabs
           - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
             li[class=( transaction_property_offer.is_accepted ? 'done' : '' )]

@@ -873,37 +873,35 @@ class TransactionsController < ApplicationController
   end
 
   def save_current_step_state
-    if !params[:cur_property]
-      params[:cur_property] = get_transaction_properties(@transaction).first.id
-    end
-      
-    if params[:type] == 'sale'
-      sale_transaction_property = TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).first
-      sale_transaction_property.update(current_step: params[:sub])
-      # For sub tabs
-      if params[:sub] == "terms"
-        if sale_transaction_property.current_step_subtab.nil?
-          sale_transaction_property.update(current_step_subtab: 'relinquishing_purchaser')
+    if params[:cur_property]
+      if params[:type] == 'sale'
+        sale_transaction_property = TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: true).first
+        sale_transaction_property.update(current_step: params[:sub])
+        # For sub tabs
+        if params[:sub] == "terms"
+          if sale_transaction_property.current_step_subtab.nil?
+            sale_transaction_property.update(current_step_subtab: 'relinquishing_purchaser')
+          end
+        elsif params[:sub] == "inspection"
+          if sale_transaction_property.current_step_subtab.nil?
+            sale_transaction_property.update(current_step_subtab: 'seller_documentation')
+          end
         end
-      elsif params[:sub] == "inspection"
-        if sale_transaction_property.current_step_subtab.nil?
-          sale_transaction_property.update(current_step_subtab: 'seller_documentation')
+      else
+        purchase_transaction_property = TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).first
+        purchase_transaction_property.update(current_step: params[:sub])
+        #For sub tabs
+        if params[:sub] == "terms"
+          if purchase_transaction_property.current_step_subtab.nil?
+            purchase_transaction_property.update(current_step_subtab: 'relinquishing_purchaser')
+          end
+        elsif params[:sub] == "inspection"
+          if purchase_transaction_property.current_step_subtab.nil?
+            purchase_transaction_property.update(current_step_subtab: 'seller_documentation')
+          end
+        elsif params[:sub] == "parties"
+          TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'basic_info')
         end
-      end
-    else
-      purchase_transaction_property = TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).first
-      purchase_transaction_property.update(current_step: params[:sub])
-      #For sub tabs
-      if params[:sub] == "terms"
-        if purchase_transaction_property.current_step_subtab.nil?
-          purchase_transaction_property.update(current_step_subtab: 'relinquishing_purchaser')
-        end
-      elsif params[:sub] == "inspection"
-        if purchase_transaction_property.current_step_subtab.nil?
-          purchase_transaction_property.update(current_step_subtab: 'seller_documentation')
-        end
-      elsif params[:sub] == "parties"
-        TransactionProperty.where(property_id: params[:cur_property]).where(transaction_main_id: params[:main_id]).where(is_sale: false).update(current_step_subtab: 'basic_info')
       end
     end
   end
