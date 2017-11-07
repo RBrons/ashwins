@@ -935,7 +935,7 @@ $ ->
   $(document).on 'click', '.save_this_basket', ->
     console.log 'click Save this basket button'
     if selected_basket_tab.find('.basket_property_table tbody tr').length == 0
-      sweetAlert '', 'Please select one property at lease', 'warning'
+      sweetAlert '', 'Please select one property at least', 'warning'
       return
     index = $('#basket_list').children().length
     if $(this).data('with_identify') == true
