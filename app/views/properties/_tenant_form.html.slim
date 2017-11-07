@@ -1,9 +1,10 @@
-div[role="tabpanel"]
-  ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-    li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
-      a#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
-    li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
-      a#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
+  div.lease-subtabs[role="tabpanel"]
+    ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+      li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
+        a.nav-tanant#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
+      li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
+        a.nav-tanant#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
+
   .tab-content
       #tenant_company_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
@@ -14,12 +15,26 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-
-          .col-lg-4.col-md-4.col-sm-12.col-xs-12
+          .container.tenant-breadcrum.bredcum_container
+            p
+              .margin-md-left.breadcrum_line
+                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+            <br><br>
+              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
+            .clearfix.margin-lg-left.tenant-header-tab
+              = render 'properties/form_header_link'
+          
+          .col-lg-4.col-md-4.form-content
             .clearfix
             .form-group
               = label_tag 'Tenant'
               = f.text_field :tenant_name,class: 'form-control'
+            .form-group
+              = label_tag 'Store Number'
+              = f.text_field :tenants_store_number, class: 'form-control'
             .form-group
               = label_tag 'Contact Name'
               = f.text_field :tenant_contact_name, class: 'form-control'
@@ -46,13 +61,10 @@ div[role="tabpanel"]
               = f.text_area :tenant_city, class: 'form-control'
             .form-group
               = label_tag 'Country'
-              = f.text_area :tenant_county, class: 'form-control'
-            .form-group
-              = label_tag 'Store Number'
-              = f.text_field :tenants_store_number, class: 'form-control'
-          .clearfix
-          .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+              = f.text_area :tenant_county, class: 'form-control'            
+          /.clearfix
+          /.form-group
+           / = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
       #tenant_facilities_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_facilities_section'}")
         = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
@@ -63,8 +75,19 @@ div[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-
-          .col-lg-4.col-md-4.col-sm-12.col-xs-12
+          .container.tenant-breadcrum.bredcum_container
+            p
+              .margin-md-left.breadcrum_line
+                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+            <br><br>
+              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              div.save_property
+                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+          div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
+            .clearfix.margin-lg-left.tenant-header-tab
+              = render 'properties/form_header_link'
+        
+          .col-lg-4.col-md-4.form-content
             .clearfix
             .form-group
               = label_tag 'Tenant'
@@ -99,24 +122,24 @@ div[role="tabpanel"]
             .form-group
               = label_tag 'Country'
               = f.text_area :facilities_contact_country, class: 'form-control'            
-          .clearfix
+          /.clearfix
+          /.form-group
+           / = f.submit 'Save', class: 'btn btn-sm btn-primary'
+  /! Modal
+  #new-tenant.modal.fade aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-5"
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button type="button" class="close" data-dismiss="modal" aria-label="Close"
+            span aria-hidden="true" &times;
+          h4.modal-title New Tenant
+        .model-body style="padding: 20px"
+          .error-message style='display: none'
+            | Please input valid tenant name.
+          .form-group.margin-sm-top
+            label New Tenant Name
+            input type="text" id="new-tenant-name" class="form-control"
           .form-group
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
-/! Modal
-#new-tenant.modal.fade aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-5"
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button type="button" class="close" data-dismiss="modal" aria-label="Close"
-          span aria-hidden="true" &times;
-        h4.modal-title New Tenant
-      .model-body style="padding: 20px"
-        .error-message style='display: none'
-          | Please input valid tenant name.
-        .form-group.margin-sm-top
-          label New Tenant Name
-          input type="text" id="new-tenant-name" class="form-control"
-        .form-group
-          input type="button" id="save-new-tenant" class="btn btn-sm btn-primary" value="Save"
-          button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close"
-            | Close
+            input type="button" id="save-new-tenant" class="btn btn-sm btn-primary" value="Save"
+            button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close"
+              | Close

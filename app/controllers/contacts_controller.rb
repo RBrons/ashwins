@@ -7,8 +7,10 @@ class ContactsController < ApplicationController
   def new
     @contact = Contact.new
     @contact.cprefix =  (params[:contact_type] == "company") ? "Contact " : ""
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\">Add #{(params[:contact_type] || "contact").titleize} </a></h4></div>".html_safe
+    # add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + new_contact_path() +
+    #   "\'>Create Contact " + "</a></div>").html_safe
+    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/ </a></div>".html_safe
+    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts/new\">Add Contact #{(params[:contact_type] || "contact").titleize} </a></div>".html_safe
     render layout: false, template: "contacts/new" if request.xhr?
   end
 
@@ -77,8 +79,8 @@ class ContactsController < ApplicationController
     @contacts = @contacts.where(user_id: current_user.id)
     @contacts = @contacts.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
     @activeId = params[:active_id]
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\"> List </a></h4></div>".html_safe
+    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">Contacts </a></div>".html_safe
+    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts/new\"> List </a></div>".html_safe
   end
 
   def show
@@ -90,8 +92,8 @@ class ContactsController < ApplicationController
     else
       @ctype_ = "Individual"
       @ctype_ = "Company" if @contact.is_company
-      add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
-      add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#{contact_path(@contact.id)}\">Show #{@ctype_} Contact: #{@contact.name} </a></h4></div>".html_safe
+      add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">Contacts </a></div>".html_safe
+      add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"#{contact_path(@contact.id)}\">Show #{@ctype_} Contact: #{@contact.name} </a></div>".html_safe
     end
   end
 
@@ -110,9 +112,8 @@ class ContactsController < ApplicationController
     end
     ctype_ = "Individual"
     ctype_ = "Company" if @contact.is_company
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts\">Contacts </a></h4></div>".html_safe
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/contacts/new\">Edit #{ctype_} Contact: #{@contact.name} </a></h4></div>".html_safe
-
+    add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/ </a><a class=\"breadcrum_text\" href=\'" + edit_contact_path(@contact.id) +
+      "\'> " + ctype_  + '&nbsp;' + "Edit" + ":" + @contact.name + "/" + "</a></div>").html_safe
   end
 
   def destroy

@@ -6,8 +6,18 @@
       ul
         - @property.errors.full_messages.each do |message|
           li = message
-
-  .col-lg-4.col-md-4.col-sm-12.col-xs-12 style="padding: 0px"
+  .container.breadcrum.bredcum_container
+    p
+      .margin-md-left.breadcrum_line
+        = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+    <br><br>
+      = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+      div.save_property
+        = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+  div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
+    .clearfix.margin-lg-left.header-tab
+      = render 'properties/form_header_link'
+  .col-lg-4.col-md-4.form-content style="padding: 0px"
     .clearfix
     .form-group
       label.control-label Survey Doc
@@ -25,6 +35,6 @@
     .form-group
       label.control-label Survey Described
       = f.text_field :survey_described, class: 'form-control'
-  .clearfix
-  .form-group
-    = f.submit 'Save', class: 'btn btn-sm btn-primary'
+  /.clearfix
+  /.form-group
+   / = f.submit 'Save', class: 'btn btn-sm btn-primary'
