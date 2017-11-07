@@ -28,7 +28,7 @@
     .tab-content
       #relinquishing_purchaser_section.tab-pane.fade[class=(@sub_tab == 'relinquishing_purchaser' || @sub_tab.blank? ? 'active in' : '')]
         ul#multiple_offer.nav.nav-tabs.bar_tabs
-          - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
+          - @transaction_property.transaction_property_offers.order("is_accepted DESC, updated_at DESC").each do |transaction_property_offer|
             li[class=( transaction_property_offer.is_accepted ? 'done' : '' )]
               a[href="#{ '#offer_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
                 = transaction_property_offer.offer_name
@@ -285,7 +285,7 @@
       
       #offer_and_acceptance_section.tab-pane.fade[class=(@sub_tab == 'offer_and_acceptance' ? 'active in' : '')]
         ul#offer_list.nav.nav-tabs.bar_tabs[role="tablist"]
-          - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
+          - @transaction_property.transaction_property_offers.order("is_accepted DESC, updated_at DESC").each do |transaction_property_offer|
             li[class=( transaction_property_offer.is_accepted ? 'done' : '' )]
               a[href="#{ '#offer_acceptance_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
                 = transaction_property_offer.offer_name
