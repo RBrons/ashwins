@@ -63,7 +63,7 @@ table#data_table tbody tr.child-row.active-item{
   border-radius: 0;
 }
 .breadcrum_text {
-	margin-left: 5px;  
+  margin-left: 5px;  
   color: #fff;
   font-size: 17px;
 }
@@ -75,26 +75,34 @@ table#data_table tbody tr.child-row.active-item{
   margin-top: -10px !important;
   position: absolute;    
 }
-.breadcrum_line{
+.breadcrum_line {
   margin-left: 117px !important;
 }
 
-.breadcrum_no_save{
+.breadcrum_no_save {
   margin-left: 39px !important;
 }
 
-.bredcum_container{
+.bredcum_container {
   position: relative;
   width: 200% !important;
   min-height: 100%;
   right: 46px;
 }
-.list_show{
-  margin-left: 44px !important;
+
+.list_show {
+  margin-left: 48px !important;
   display: block !important;
   margin-top: -8px !important;
 }
-.l1ist_show_contact{
+
+.list_show_basic {
+  margin-left: 49px !important;
+  display: block !important;
+  margin-top: -8px !important;
+}
+
+.l1ist_show_contact {
   margin-left: 45px !important;
   display: block !important;
   margin-top: -25px !important;
@@ -104,13 +112,13 @@ table#data_table tbody tr.child-row.active-item{
   position: relative;
   top: -11px;
 }*/
-.breadcrum_contact{
+.breadcrum_contact {
   position: relative !important;
   top: 15px !important;
 }
-.breadcrum_save_contact{
+
+.breadcrum_save_contact {
   position: relative !important;
-  margin-left: -325px !important;
   top: 2px !important;
 }
 
@@ -135,28 +143,47 @@ table#data_table tbody tr.child-row.active-item{
 .submit-edit{
   width: 64px;
   height: 30px;
-  margin-top: -65px;
+  margin-top: -72px;
   border-color: #fff !important;
   border-radius: 0px !important;
   background-color: #005826;
   border-width: 2px !important;
   font-size: 14px !important;
-  margin-left: 45px !important;
+  margin-left: 46px !important;
+  padding-top: 2px !important;
+}
+
+.submit-edit-basic{
+  width: 64px;
+  height: 30px;
+  margin-top: -72px;
+  border-color: #fff !important;
+  border-radius: 0px !important;
+  background-color: #005826;
+  border-width: 2px !important;
+  font-size: 14px !important;
+  margin-left: 48px !important;
+  padding-top: 2px !important;
 }
 
 .lease-analy{
-	margin-top: 30px;
+  margin-top: 10px;
+}
+
+.lease-form{
+  margin-top: 30px;
+  margin-left: -5px;
 }
 
 .cover-pic{
-	margin-top: 26px;
+  margin-top: 26px;
 }
 
 .header-tab{
   margin-left: -10px !important;
-  margin-top: 30px;
+  margin-top: 15px;
 }
-.nav-tanant {
+/*.nav-tanant {
   height: 35px;
   border: 1px solid #ccc !important;
   padding: 15px !important;
@@ -164,7 +191,7 @@ table#data_table tbody tr.child-row.active-item{
   margin-top: 19px;
   margin-left: 11px;
   padding-top: 4px !important;
-}
+}*/
 .form-content {
     margin-top: 25px;
 }
@@ -189,14 +216,19 @@ table#data_table tbody tr.child-row.active-item{
   background: #5eb14a !important;
 }
 
-.nav-tabs{
-  border-bottom: none !important;
+.submit-edit-basic:focus, .submit-edit-basic:hover{
+  color: white !important;
+  background: #5eb14a !important;
 }
 
+/*.nav-tabs{
+  border-bottom: none !important;
+}
+*/
 .lease-breadcrum {
   height: 60px;
   background-color:#005826;
-  margin-top: -16%;
+  margin-top: -14%;
   color: white;
   float: left;
   border-width: 3px;  
@@ -204,10 +236,10 @@ table#data_table tbody tr.child-row.active-item{
   border-radius: 0;
 }
 
-.tenant-breadcrum  {
+.tenant-breadcrum {
   height: 60px;
   background-color:#005826;
-  margin-top: -15.5%;
+  margin-top: -13.5%;
   margin-left: 10px !important;  
   color: white;
   float: left;
@@ -217,15 +249,15 @@ table#data_table tbody tr.child-row.active-item{
 }
 
 .lease-header-tab {
-    margin-left: -10px !important;
-    margin-top: -10%;
+    margin-left: -21px !important;
+    margin-top: -8.5%;
 }
 
 .tenant-header-tab {
     margin-left: -10px !important;
-    margin-top: -9%;
+    margin-top: -8%;
 }
 
 .lease-subtabs {
-  margin-top: 10%;
+  margin-top: 8%;
 }
