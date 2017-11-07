@@ -112,8 +112,8 @@ class ContactsController < ApplicationController
     end
     ctype_ = "Individual"
     ctype_ = "Company" if @contact.is_company
-    add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/ </a><a class=\"breadcrum_text\" href=\'" + edit_contact_path(@contact.id) +
-      "\'> " + ctype_  + '&nbsp;' + "Edit" + ":" + @contact.name + "/" + "</a></div>").html_safe
+    add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/</a><a class=\"breadcrum_text\" href=\'" + edit_contact_path(@contact.id) +
+      "\'>" + ctype_  + '&nbsp;' + "Edit" + ":" + '&nbsp;' + @contact.name + "</a></div>").html_safe
   end
 
   def destroy

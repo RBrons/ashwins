@@ -259,7 +259,7 @@ $( document ).ready(function() {
   // });
 });
 
-$(document).ready(function(){
+$(document).ready(function(){  
   $('.product-list').on('change', function() {
     $('.product-list').not(this).prop('checked', false);  
   });
@@ -268,17 +268,15 @@ $(document).ready(function(){
     var strdt = $("#property_rent_commencement_date_1i").val().trim() + "-" + $("#property_rent_commencement_date_2i").val().trim() + "-" + $("#property_rent_commencement_date_3i").val().trim();
     var rent_commencement_date = new Date(strdt).getTime();
     if(new Date(lease_date).getTime() >= rent_commencement_date){        
-      alert("Rent Commencement date should be greater than the Lease Date");
+      sweetAlert("Rent Commencement date should be greater than the Lease Date");
       e.preventDefault();
     }
     if ($('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == "" && $('#property_length_of_option_period').val() == "" && $('#property_lease_rent_increase_percentage').val() == "") {
-      alert('Optional Extension fields are need to be filled.');
+      sweetAlert('Optional Extension fields are need to be filled.');
       e.preventDefault(); 
     }    
   });
-});
 
-$(document).ready(function(){
   var unsaved = false;
   $(":input").change(function(){ //trigers change in all input fields including text type
       unsaved = true;
@@ -293,18 +291,19 @@ $(document).ready(function(){
     // disable unload warning
     $(window).off('beforeunload');
   });
-});
+     
+  $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+      localStorage.setItem('activeTab', $(e.target).attr('href'));
+  });
+  var activeTab = localStorage.getItem('activeTab');
+  if(activeTab){
+      $('#lease_tab a[href="' + activeTab + '"]').tab('show');
+  }
 
-$(document).ready(function(){
-    $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-        localStorage.setItem('activeTab', $(e.target).attr('href'));
-    });
-    var activeTab = localStorage.getItem('activeTab');
-    if(activeTab){
-        $('#lease_tab a[href="' + activeTab + '"]').tab('show');
-    }
+  $('.comming-soon').click(function(e){
+    e.preventDefault(); 
+  });
 });
-
 
 // Bootstrap tree view
 

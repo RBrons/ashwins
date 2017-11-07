@@ -1,9 +1,9 @@
   div.lease-subtabs[role="tabpanel"]
     ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
-        a.nav-tanant#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
+        a#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
       li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
-        a.nav-tanant#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
+        a#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
 
   .tab-content
       #tenant_company_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
