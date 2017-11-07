@@ -73,7 +73,7 @@
                             .heading_blue.radio-inline
                               span = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                               span.margin-md-left Entity
-                          
+                          .margin-ex-lg-top
                           .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                             .form-group
                               label Company Name
@@ -83,49 +83,49 @@
                             .form-group
                               label First Name
                               = f.text_field :first_name, class: 'form-control'
-                            .form-group
+                            .form-group.margin-lg-top
                               label Last Name
                               = f.text_field :last_name, class: 'form-control'
                           
-                          .form-group
+                          .form-group.margin-lg-top
                             = f.label :phone1
                             = f.text_field :phone1, class: "form-control"
 
-                          .form-group
+                          .form-group.margin-lg-top
                             = f.label :phone2
                             = f.text_field :phone2, class: "form-control"
+                          .secondary-fields.margin-sm-left
+                            .form-group
+                              = f.label :fax
+                              = f.text_field :fax, class: "form-control"
 
-                          .form-group
-                            = f.label :fax
-                            = f.text_field :fax, class: "form-control"
+                            .form-group
+                              = f.label :email
+                              = f.text_field :email, class: "form-control"
 
-                          .form-group
-                            = f.label :email
-                            = f.text_field :email, class: "form-control"
+                            .form-group
+                              = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                              = f.text_field :ein_or_ssn, class: "form-control"
 
-                          .form-group
-                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                            = f.text_field :ein_or_ssn, class: "form-control"
+                            .form-group
+                              = f.label :postal_address, "Postal Address"
+                              = f.text_field :postal_address, class: "form-control"
 
-                          .form-group
-                            = f.label :postal_address, "Postal Address"
-                            = f.text_field :postal_address, class: "form-control"
+                            .form-group
+                              = label_tag 'City'
+                              = f.text_field :city, class: "form-control city"
 
-                          .form-group
-                            = label_tag 'City'
-                            = f.text_field :city, class: "form-control city"
+                            .form-group
+                              = label_tag 'State'
+                              = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                          .form-group
-                            = label_tag 'State'
-                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                            .form-group
+                              = f.label "Zip"
+                              = f.text_field :zip, class: 'zip form-control'
 
-                          .form-group
-                            = f.label "Zip"
-                            = f.text_field :zip, class: 'zip form-control'
-
-                          .form-group
-                            = f.label :notes
-                            = f.text_area :notes, class: "form-control"
+                            .form-group
+                              = f.label :notes
+                              = f.text_area :notes, class: "form-control"
                       .clearfix
                       .form-group
                         = f_offer.submit 'Save', class: 'btn btn-sm btn-primary'
@@ -146,6 +146,7 @@
                             .heading_blue.radio-inline
                               span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                               span.margin-md-left Entity
+                          .margin-ex-lg-top
                           .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                             .form-group
                               = f.label :company_name, "Company Name"
@@ -159,49 +160,49 @@
                             .form-group
                               = f.label :first_name, "#{f.object.cprefix}First Name"
                               = f.text_field :first_name, class: "form-control"
-                            .form-group
+                            .form-group.margin-lg-top
                               = f.label :last_name, "#{f.object.cprefix}Last Name"
                               = f.text_field :last_name, class: "form-control"
 
-                          .form-group
+                          .form-group.margin-lg-top
                             = f.label :phone1
                             = f.text_field :phone1, class: "form-control"
 
-                          .form-group
+                          .form-group.margin-lg-top
                             = f.label :phone2
                             = f.text_field :phone2, class: "form-control"
+                          .secondary-fields.margin-sm-left
+                            .form-group
+                              = f.label :fax
+                              = f.text_field :fax, class: "form-control"
 
-                          .form-group
-                            = f.label :fax
-                            = f.text_field :fax, class: "form-control"
+                            .form-group
+                              = f.label :email
+                              = f.text_field :email, class: "form-control"
 
-                          .form-group
-                            = f.label :email
-                            = f.text_field :email, class: "form-control"
+                            .form-group
+                              = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                              = f.text_field :ein_or_ssn, class: "form-control"
 
-                          .form-group
-                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                            = f.text_field :ein_or_ssn, class: "form-control"
+                            .form-group
+                              = f.label :postal_address, "Postal Address"
+                              = f.text_field :postal_address, class: "form-control"
 
-                          .form-group
-                            = f.label :postal_address, "Postal Address"
-                            = f.text_field :postal_address, class: "form-control"
+                            .form-group
+                              = label_tag 'City'
+                              = f.text_field :city, class: "form-control city"
 
-                          .form-group
-                            = label_tag 'City'
-                            = f.text_field :city, class: "form-control city"
+                            .form-group
+                              = label_tag 'State'
+                              = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                          .form-group
-                            = label_tag 'State'
-                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                            .form-group
+                              = f.label "Zip"
+                              = f.text_field :zip, class: 'zip form-control'
 
-                          .form-group
-                            = f.label "Zip"
-                            = f.text_field :zip, class: 'zip form-control'
-
-                          .form-group
-                            = f.label :notes
-                            = f.text_area :notes, class: "form-control"
+                            .form-group
+                              = f.label :notes
+                              = f.text_area :notes, class: "form-control"
                           
                       .clearfix
                       .form-group
@@ -223,6 +224,7 @@
                             .heading_blue.radio-inline
                               span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                               span.margin-md-left Entity
+                          .margin-ex-lg-top
                           .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                             .form-group
                               = f.label :company_name, "Company Name"
@@ -235,49 +237,49 @@
                             .form-group
                               = f.label :first_name, "#{f.object.cprefix}First Name"
                               = f.text_field :first_name, class: "form-control"
-                            .form-group
+                            .form-group.margin-lg-top
                               = f.label :last_name, "#{f.object.cprefix}Last Name"
                               = f.text_field :last_name, class: "form-control"
 
-                          .form-group
+                          .form-group.margin-lg-top
                             = f.label :phone1
                             = f.text_field :phone1, class: "form-control"
 
-                          .form-group
+                          .form-group.margin-lg-top
                             = f.label :phone2
                             = f.text_field :phone2, class: "form-control"
+                          .secondary-fields.margin-sm-left
+                            .form-group
+                              = f.label :fax
+                              = f.text_field :fax, class: "form-control"
 
-                          .form-group
-                            = f.label :fax
-                            = f.text_field :fax, class: "form-control"
+                            .form-group
+                              = f.label :email
+                              = f.text_field :email, class: "form-control"
 
-                          .form-group
-                            = f.label :email
-                            = f.text_field :email, class: "form-control"
+                            .form-group
+                              = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                              = f.text_field :ein_or_ssn, class: "form-control"
 
-                          .form-group
-                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                            = f.text_field :ein_or_ssn, class: "form-control"
+                            .form-group
+                              = f.label :postal_address, "Postal Address"
+                              = f.text_field :postal_address, class: "form-control"
 
-                          .form-group
-                            = f.label :postal_address, "Postal Address"
-                            = f.text_field :postal_address, class: "form-control"
+                            .form-group
+                              = label_tag 'City'
+                              = f.text_field :city, class: "form-control city"
 
-                          .form-group
-                            = label_tag 'City'
-                            = f.text_field :city, class: "form-control city"
+                            .form-group
+                              = label_tag 'State'
+                              = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                          .form-group
-                            = label_tag 'State'
-                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                            .form-group
+                              = f.label "Zip"
+                              = f.text_field :zip, class: 'zip form-control'
 
-                          .form-group
-                            = f.label "Zip"
-                            = f.text_field :zip, class: 'zip form-control'
-
-                          .form-group
-                            = f.label :notes
-                            = f.text_area :notes, class: "form-control"
+                            .form-group
+                              = f.label :notes
+                              = f.text_area :notes, class: "form-control"
                           
                       .clearfix
                       .form-group
@@ -285,7 +287,7 @@
       
       #offer_and_acceptance_section.tab-pane.fade[class=(@sub_tab == 'offer_and_acceptance' ? 'active in' : '')]
         ul#offer_list.nav.nav-tabs.bar_tabs[role="tablist"]
-          - @transaction_property.transaction_property_offers.order("is_accepted DESC, updated_at ASC").each do |transaction_property_offer|
+          - @transaction_property.transaction_property_offers.where.not(client_contact_id: nil).order("is_accepted DESC, updated_at ASC").each do |transaction_property_offer|
             li[class=( transaction_property_offer.is_accepted ? 'done' : '' )]
               a[href="#{ '#offer_acceptance_' + transaction_property_offer.id.to_s }" role="tab" data-toggle="tab" aria-expanded="true" data-offer-id="#{transaction_property_offer.id}"]
                 = transaction_property_offer.offer_name
