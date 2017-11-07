@@ -43,7 +43,7 @@ class PropertiesController < ApplicationController
     # @property.ostatus = params["ostatus"]
     @property.check_price_current_rent_cap_rate
     add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + new_property_path(ostatus: params["ostatus"]) +
-      "\'>Create Property " + params["ostatus"] + "</a></div>").html_safe
+      "\'>Create " + params["ostatus"] + "&nbsp;Property" + "</a></div>").html_safe
     render layout: false if request.xhr?
   end
 
@@ -66,7 +66,7 @@ class PropertiesController < ApplicationController
       @property.owner_entity_id = @property.owner_entity_id_indv = 0
     end
     add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + edit_property_path(@property.key) +
-      "\'> " + @property.ownership_status + "Edit" + ":" + @property.title + "/" + "</a></div>").html_safe
+      "\'> " + @property.ownership_status + "&nbsp;Edit" + ":" + "&nbsp;" + @property.title + "/" + "</a></div>").html_safe
     if params[:action] == "edit"
       if params[:type_is] == 'basic_info' || params[:type_is] == nil
         add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Basic Info</a></div>".html_safe
