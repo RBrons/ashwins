@@ -601,7 +601,7 @@ ActiveRecord::Schema.define(version: 20171106000940) do
     t.string   "misc_obligation_rating"
     t.string   "premises_waste_rating"
     t.string   "premises_initial_opening_rating"
-    t.decimal  "square_feet"
+    t.integer  "square_feet"
     t.string   "tenant_name"
     t.string   "facilities_contact_name"
     t.string   "facilities_contact_company"
