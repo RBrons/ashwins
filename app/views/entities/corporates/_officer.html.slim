@@ -1,3 +1,8 @@
+.bread_crumb_area
+  .bread_crumb_show
+    = render_breadcrumbs :separator => ' '
+  button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
+    = "Save"
 = form_for @officer, url: entities_corporates_officer_path(@entity.key, @officer.id), html: {class: "entity-page-xhr"} do |f|
   = hidden_field_tag :int_action, 'Add Officer'
   - if @officer.errors.any?
@@ -26,3 +31,9 @@
         = f.text_field :office, class: "form-control"
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
+javascript:
+  $(document).ready(function() {
+    $('#save_btn').on('click', function() {
+          $('.corporate-contact-form form').submit();
+    });
+  });
