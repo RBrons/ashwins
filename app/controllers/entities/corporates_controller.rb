@@ -137,6 +137,11 @@ class Entities::CorporatesController < ApplicationController
   def directors
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Directors </a></h4></div>".html_safe
     @entity = Entity.find_by(key: params[:entity_key])
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+    add_breadcrumb " Corporation/", '',  :title => "Corporation"
+    add_breadcrumb " Director List View/", '',  :title => "Director List View"
+    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "Show", :id => "show_in_list_own"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @directors = @entity.directors
     @activeId = params[:active_id]
@@ -211,6 +216,11 @@ class Entities::CorporatesController < ApplicationController
   def officers
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officers </a></h4></div>".html_safe
     @entity = Entity.find_by(key: params[:entity_key])
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+    add_breadcrumb " Corporation/", '',  :title => "Corporation"
+    add_breadcrumb " Officer List View/", '',  :title => "Officer List View"
+    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "Show", :id => "show_in_list_own"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @officers = @entity.officers
     @activeId = params[:active_id]
@@ -291,6 +301,11 @@ class Entities::CorporatesController < ApplicationController
   def stockholders(entity_key = params[:entity_key])
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholders </a></h4></div>".html_safe
     @entity = Entity.find_by(key: entity_key)
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+    add_breadcrumb " Corporation/", '',  :title => "Corporation"
+    add_breadcrumb " Stockholder List View/", '',  :title => "Stockholder List View"
+    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "Show", :id => "show_in_list_own"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @stockholders = @entity.stockholders
     @activeId = params[:active_id]
