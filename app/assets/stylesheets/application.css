@@ -144,7 +144,7 @@ table#data_table tbody tr.child-row.active-item{
   width: 64px;
   height: 30px;
   margin-top: -72px;
-  border-color: #fff !important;
+  border-color: #fff;
   border-radius: 0px !important;
   background-color: #005826;
   border-width: 2px !important;
@@ -157,7 +157,7 @@ table#data_table tbody tr.child-row.active-item{
   width: 64px;
   height: 30px;
   margin-top: -72px !important;
-  border-color: #fff !important;
+  border-color: #fff;
   border-radius: 0px !important;
   background-color: #005826;
   border-width: 2px !important;
@@ -205,11 +205,13 @@ table#data_table tbody tr.child-row.active-item{
 
 .submit-edit:focus, .submit-edit:hover{
   color: white !important;
+  border-color: white !important;
   background: #5eb14a !important;
 }
 
 .submit-edit-basic:focus, .submit-edit-basic:hover{
   color: white !important;
+  border-color: white !important;
   background: #5eb14a !important;
 }
 
