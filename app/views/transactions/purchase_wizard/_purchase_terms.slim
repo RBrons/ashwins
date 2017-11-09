@@ -23,7 +23,7 @@
       li[role="presentation"]
         a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
 
-    .tab-content
+    .tab-content.clearfix
       #offer_and_acceptance_section.tab-pane.fade.active.in[role="tabpanel"]
         ul#offer_list.nav.nav-tabs.bar_tabs[role="tablist"]
           - @transaction_property.transaction_property_offers.order(updated_at: :asc).each do |transaction_property_offer|
@@ -34,7 +34,7 @@
                 - else  
                   = transaction_property_offer.offer_name
 
-        .tab-content
+        .tab-content.clearfix
           input#relinquishing_seller_name.form-control[type="hidden" value="#{@transaction.purchaser_name}"]
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
             .tab-pane.fade.active.in[role="tabpanel" id="#{'seller_' + transaction_property_offer.id.to_s}"]
