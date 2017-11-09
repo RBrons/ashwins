@@ -25,7 +25,7 @@
       li[class=(@sub_tab == 'escrow_section' ? 'active' : '')]
           a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
 
-    .tab-content
+    .tab-content.clearfix
       #relinquishing_purchaser_section.tab-pane.fade[class=(@sub_tab == 'relinquishing_purchaser' || @sub_tab.blank? ? 'active in' : '')]
         ul#multiple_offer.nav.nav-tabs.bar_tabs
           - @transaction_property.transaction_property_offers.order("is_accepted DESC, updated_at ASC").each do |transaction_property_offer|
@@ -39,7 +39,7 @@
           li
             a#new_offer[href="#" role="tab" data-toggle="tab" aria-expanded="false" data-tran-prop-id="#{@transaction_property.id}"]
               i.fa.fa-plus
-        .tab-content
+        .tab-content.clearfix
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
             .tab-pane.fade[id="#{'offer_' + transaction_property_offer.id.to_s}"]
               ul.nav.nav-tabs.bar_tabs[role="tablist"]
@@ -52,7 +52,7 @@
                 li
                   a[href="#attorney_section_offer_#{transaction_property_offer.id}" role="tab" data-toggle="tab" aria-expanded="false"] 
                     = transaction_property_offer.offer_name + " - Attorney"
-              .tab-content
+              .tab-content.clearfix
                 .basic_info_section.tab-pane.fade.active.in[id="basic_info_section_offer_#{transaction_property_offer.id}" role="tabpanel"]
                   .col-lg-4.close-md-4.col-sm-12.col-xs-12
                     = form_for(transaction_property_offer, url: update_with_contact_transaction_property_offer_path(transaction_property_offer)) do |f_offer|
@@ -73,7 +73,7 @@
                             .heading_blue.radio-inline
                               span = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                               span.margin-md-left Entity
-                          .margin-ex-lg-top
+                          .margin-lg-top
                           .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                             .form-group
                               label Company Name
@@ -83,52 +83,52 @@
                             .form-group
                               label First Name
                               = f.text_field :first_name, class: 'form-control'
-                            .form-group.margin-sm-top
+                            .form-group
                               label Last Name
                               = f.text_field :last_name, class: 'form-control'
                           
-                          .form-group.margin-sm-top
+                          .form-group
                             = f.label :phone1
                             = f.text_field :phone1, class: "form-control"
 
-                          .form-group.margin-sm-top
+                          .form-group
                             = f.label :phone2
                             = f.text_field :phone2, class: "form-control"
-                          .secondary-fields.margin-sm-left
-                            .form-group
-                              = f.label :fax
-                              = f.text_field :fax, class: "form-control"
+                          
+                          .form-group
+                            = f.label :fax
+                            = f.text_field :fax, class: "form-control"
 
-                            .form-group
-                              = f.label :email
-                              = f.text_field :email, class: "form-control"
+                          .form-group
+                            = f.label :email
+                            = f.text_field :email, class: "form-control"
 
-                            .form-group
-                              = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                              = f.text_field :ein_or_ssn, class: "form-control"
+                          .form-group
+                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                            = f.text_field :ein_or_ssn, class: "form-control"
 
-                            .form-group
-                              = f.label :postal_address, "Postal Address"
-                              = f.text_field :postal_address, class: "form-control"
+                          .form-group
+                            = f.label :postal_address, "Postal Address"
+                            = f.text_field :postal_address, class: "form-control"
 
-                            .form-group
-                              = label_tag 'City'
-                              = f.text_field :city, class: "form-control city"
+                          .form-group
+                            = label_tag 'City'
+                            = f.text_field :city, class: "form-control city"
 
-                            .form-group
-                              = label_tag 'State'
-                              = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                          .form-group
+                            = label_tag 'State'
+                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                            .form-group
-                              = f.label "Zip"
-                              = f.text_field :zip, class: 'zip form-control'
+                          .form-group
+                            = f.label "Zip"
+                            = f.text_field :zip, class: 'zip form-control'
 
-                            .form-group
-                              = f.label :notes
-                              = f.text_area :notes, class: "form-control"
-                      .clearfix
-                      .form-group
-                        = f_offer.submit 'Save', class: 'btn btn-sm btn-primary'
+                          .form-group
+                            = f.label :notes
+                            = f.text_area :notes, class: "form-control"
+                        .clearfix
+                        .form-group
+                          = f_offer.submit 'Save', class: 'btn btn-sm btn-primary'
 
                 .broker_section.tab-pane.fade[id="broker_section_offer_#{transaction_property_offer.id}" role="tabpanel"]
                   .col-lg-4.close-md-4.col-sm-12.col-xs-12
@@ -146,7 +146,7 @@
                             .heading_blue.radio-inline
                               span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                               span.margin-md-left Entity
-                          .margin-ex-lg-top
+                          .margin-lg-top
                           .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                             .form-group
                               = f.label :company_name, "Company Name"
@@ -160,49 +160,49 @@
                             .form-group
                               = f.label :first_name, "#{f.object.cprefix}First Name"
                               = f.text_field :first_name, class: "form-control"
-                            .form-group.margin-sm-top
+                            .form-group
                               = f.label :last_name, "#{f.object.cprefix}Last Name"
                               = f.text_field :last_name, class: "form-control"
 
-                          .form-group.margin-sm-top
+                          .form-group
                             = f.label :phone1
                             = f.text_field :phone1, class: "form-control"
 
-                          .form-group.margin-sm-top
+                          .form-group
                             = f.label :phone2
                             = f.text_field :phone2, class: "form-control"
-                          .secondary-fields.margin-sm-left
-                            .form-group
-                              = f.label :fax
-                              = f.text_field :fax, class: "form-control"
+                          
+                          .form-group
+                            = f.label :fax
+                            = f.text_field :fax, class: "form-control"
 
-                            .form-group
-                              = f.label :email
-                              = f.text_field :email, class: "form-control"
+                          .form-group
+                            = f.label :email
+                            = f.text_field :email, class: "form-control"
 
-                            .form-group
-                              = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                              = f.text_field :ein_or_ssn, class: "form-control"
+                          .form-group
+                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                            = f.text_field :ein_or_ssn, class: "form-control"
 
-                            .form-group
-                              = f.label :postal_address, "Postal Address"
-                              = f.text_field :postal_address, class: "form-control"
+                          .form-group
+                            = f.label :postal_address, "Postal Address"
+                            = f.text_field :postal_address, class: "form-control"
 
-                            .form-group
-                              = label_tag 'City'
-                              = f.text_field :city, class: "form-control city"
+                          .form-group
+                            = label_tag 'City'
+                            = f.text_field :city, class: "form-control city"
 
-                            .form-group
-                              = label_tag 'State'
-                              = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                          .form-group
+                            = label_tag 'State'
+                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                            .form-group
-                              = f.label "Zip"
-                              = f.text_field :zip, class: 'zip form-control'
+                          .form-group
+                            = f.label "Zip"
+                            = f.text_field :zip, class: 'zip form-control'
 
-                            .form-group
-                              = f.label :notes
-                              = f.text_area :notes, class: "form-control"
+                          .form-group
+                            = f.label :notes
+                            = f.text_area :notes, class: "form-control"
                           
                       .clearfix
                       .form-group
@@ -224,7 +224,7 @@
                             .heading_blue.radio-inline
                               span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                               span.margin-md-left Entity
-                          .margin-ex-lg-top
+                          .margin-lg-top
                           .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                             .form-group
                               = f.label :company_name, "Company Name"
@@ -237,49 +237,49 @@
                             .form-group
                               = f.label :first_name, "#{f.object.cprefix}First Name"
                               = f.text_field :first_name, class: "form-control"
-                            .form-group.margin-sm-top
+                            .form-group
                               = f.label :last_name, "#{f.object.cprefix}Last Name"
                               = f.text_field :last_name, class: "form-control"
 
-                          .form-group.margin-sm-top
+                          .form-group
                             = f.label :phone1
                             = f.text_field :phone1, class: "form-control"
 
-                          .form-group.margin-sm-top
+                          .form-group
                             = f.label :phone2
                             = f.text_field :phone2, class: "form-control"
-                          .secondary-fields.margin-sm-left
-                            .form-group
-                              = f.label :fax
-                              = f.text_field :fax, class: "form-control"
+                        
+                          .form-group
+                            = f.label :fax
+                            = f.text_field :fax, class: "form-control"
 
-                            .form-group
-                              = f.label :email
-                              = f.text_field :email, class: "form-control"
+                          .form-group
+                            = f.label :email
+                            = f.text_field :email, class: "form-control"
 
-                            .form-group
-                              = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
-                              = f.text_field :ein_or_ssn, class: "form-control"
+                          .form-group
+                            = f.label :ein_or_ssn, "#{(f.object.is_company) ? 'EIN' : "SSN"}"
+                            = f.text_field :ein_or_ssn, class: "form-control"
 
-                            .form-group
-                              = f.label :postal_address, "Postal Address"
-                              = f.text_field :postal_address, class: "form-control"
+                          .form-group
+                            = f.label :postal_address, "Postal Address"
+                            = f.text_field :postal_address, class: "form-control"
 
-                            .form-group
-                              = label_tag 'City'
-                              = f.text_field :city, class: "form-control city"
+                          .form-group
+                            = label_tag 'City'
+                            = f.text_field :city, class: "form-control city"
 
-                            .form-group
-                              = label_tag 'State'
-                              = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                          .form-group
+                            = label_tag 'State'
+                            = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                            .form-group
-                              = f.label "Zip"
-                              = f.text_field :zip, class: 'zip form-control'
+                          .form-group
+                            = f.label "Zip"
+                            = f.text_field :zip, class: 'zip form-control'
 
-                            .form-group
-                              = f.label :notes
-                              = f.text_area :notes, class: "form-control"
+                          .form-group
+                            = f.label :notes
+                            = f.text_area :notes, class: "form-control"
                           
                       .clearfix
                       .form-group
@@ -294,7 +294,7 @@
                 - if transaction_property_offer.is_accepted
                   i.red.margin-md-left Accepted
         
-        .tab-content
+        .tab-content.clearfix
           input#has_accepted_offer[type="hidden" value=(@transaction_property.transaction_property_offers.where(is_accepted: true).count > 0 ? 'true' : 'false')]
           input#accepted_offer[type="hidden" value=(@transaction_property.accepted_offer.try(:offer_name))]
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
@@ -370,7 +370,7 @@
           span &nbsp;is purchasing&nbsp;
           span = @property.title + " for "
           span = number_to_currency(get_sale_price(@transaction_property))
-        .col-md-8.col-sm-12.col-xs-12
+        .col-md-8.col-xs-12.margin-sm-top
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
               .form-group
@@ -499,10 +499,9 @@
                     span Document Property Filed?
 
       #purchase_sale_agreement_section.tab-pane.fade[class=(@sub_tab == 'purchase_sale_agreement' ? 'active in' : '')]
-        .col-md-8.col-sm-12.col-xs-12
+        .col-md-8.col-xs-12.margin-lg-top
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
-
               .form-group
                   .field_list
                     label.control-label Purchase Sales Agreement
@@ -527,12 +526,11 @@
                     .checkbox-inline
                         input.flat-icheck[type="checkbox" name=""]
                             span.margin-sm-left Merged
-                    .clearfix.margin-sm-top
-                    button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
-
-                  button#add_purchase_sale_agreement.btn.btn-default
-                    i.fa.fa-plus
-                    | &nbsp;Add Document
+                    / button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
+                  .margin-lg-top
+                    button#add_purchase_sale_agreement.btn.btn-default
+                      i.fa.fa-plus
+                      | &nbsp;Add Document
 
                   #purchase_sales_agreement_template[style="display: none"]
                     .field_list
@@ -558,52 +556,48 @@
                       .clearfix.margin-sm-top
                       button#delete_purchase_sale_agreement.pull-right.btn.btn-danger Delete
 
-              .clearfix
-              .form-group
+              .form-group.margin-ex-lg-top
                 label.control-label Date of Purchase Sale Agreement
                 .clearfix
                 = transaction_term_form.date_select :psa_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2 }, class: "form-control select_auto transaction_transaction_term_attributes_psa_date"
 
-              .clearfix
               .form-group
                 .pull-right
                   .pull-left
-                    label Input Data Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                    label Input Data Manually&nbsp;&nbsp;
                   .pull-right
                     input[type="checkbox" data-class="editable-date-field-on-psa" class="manually_date_on_psa"]
-
-              .clearfix
-              .form-group
+              
+              .form-group.margin-ex-lg-top
                   label.control-lable First Deposit To Be Received By
                   .clearfix
                   = transaction_term_form.hidden_field :first_deposit_days_after_psa, disabled: true
                   = transaction_term_form.date_select :first_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, selected: (transaction_term_form.object.first_deposit_date_due.present? ? transaction_term_form.object.first_deposit_date_due : Time.zone.now), class: "form-control select_auto editable-date-field-on-psa", disabled: true
-              .clearfix
+              
               .form-group
                   label.control-lable Inspection Period Ends/Last Day For Buyer To Retrieve Deposit
                   .clearfix
                   = transaction_term_form.hidden_field :inspection_period_days, disabled: true
                   = transaction_term_form.date_select 'inspection_period_end', { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2, selected: (transaction_term_form.object.psa_date.present? ? transaction_term_form.object.psa_date + transaction_term_form.object.inspection_period_days.to_i.day : Time.zone.now + transaction_term_form.object.inspection_period_days.to_i.day) }, class: "form-control select_auto", disabled: true
 
-              .clearfix
+              
               .form-group.transaction_transaction_term_attributes_second_deposit_wrapper[style="#{transaction_term_form.object.second_deposit ? '' : 'display: none'}"]
                   label.control-lable Second Deposit To Be Received By
                   .clearfix
                   = transaction_term_form.hidden_field :second_deposit_days_after_inspection_period, disabled: !transaction_term_form.object.second_deposit
                   = transaction_term_form.date_select :second_deposit_date_due, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: !transaction_term_form.object.second_deposit, disabled: true
-              .clearfix
+              
               .form-group
                   label.control-lable Definition Of Holidays
                   .clearfix
                   textarea.form-control[rows="2" disabled="disabled"]
 
-              .clearfix
               .form-group
                   label.control-lable Approximate Date Of Closing
                   .clearfix
                   = transaction_term_form.hidden_field :closing_days_after_inspection_period, disabled: true
                   = transaction_term_form.date_select :closing_date, { start_year: 50.years.ago.year, end_year: Time.zone.now.year + 2}, class: "form-control select_auto editable-date-field-on-psa", disabled: true
-            .clearfix
+            
             .divider.margin-lg-top
             button.back_prev_step.btn.btn-default Back
             = f.submit 'Save & Next', class: 'btn btn-primary prev-next save_next_in_step'
