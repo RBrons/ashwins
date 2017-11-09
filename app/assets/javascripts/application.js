@@ -263,16 +263,30 @@ $(document).ready(function(){
   $('.product-list').on('change', function() {
     $('.product-list').not(this).prop('checked', false);  
   });
-  $('#lease_submit').click(function(e){
-    var lease_date = $('#property_date_of_lease').val();
-    var strdt = $("#property_rent_commencement_date_1i").val().trim() + "-" + $("#property_rent_commencement_date_2i").val().trim() + "-" + $("#property_rent_commencement_date_3i").val().trim();
-    var rent_commencement_date = new Date(strdt).getTime();
-    if(new Date(lease_date).getTime() >= rent_commencement_date){        
-      sweetAlert("Rent Commencement date should be greater than the Lease Date");
+
+  $('#lease_submit').click(function(e){  
+    var CurrentDate = new Date();
+    var LeaseDate = new Date(
+        $('#property_date_of_lease_1i').val(),
+        $('#property_date_of_lease_3i').val(),
+        $('#property_date_of_lease_2i').val()
+    );
+    var RentCommenacementDate = new Date(
+      $('#property_rent_commencement_date_1i').val(),
+      $('#property_rent_commencement_date_2i').val(),
+      $('#property_rent_commencement_date_3i').val()
+    );
+    if (LeaseDate >= CurrentDate) {        
+      alert("Date of Lease should be prior to Today's date.");
       e.preventDefault();
     }
+    if (LeaseDate >= RentCommenacementDate) {        
+      alert("Rent Commencement date should be greater than the Lease Date.");
+      e.preventDefault();
+    } 
+
     if ($('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == "" && $('#property_length_of_option_period').val() == "" && $('#property_lease_rent_increase_percentage').val() == "") {
-      sweetAlert('Optional Extension fields are need to be filled.');
+      alert('Optional Extension fields are need to be filled.');
       e.preventDefault(); 
     }    
   });
@@ -302,7 +316,7 @@ $(document).ready(function(){
 
   $('.comming-soon').click(function(e){
     e.preventDefault(); 
-  });
+  }); 
 });
 
 // Bootstrap tree view

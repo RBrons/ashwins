@@ -50,18 +50,25 @@ table#data_table tbody tr.child-row.active-item{
    color:red;
 }
 
-.breadcrum {
-  width: 691px !important;
+
+.breadcrum-breadcrum {
+  width: 200% !important;
   height: 60px;
   background-color:#005826;
   margin-top: -30px;
-  margin-left: 10px !important;  
+  margin-left: -30px !important;  
   color: white;
   float: left;
   border-width: 3px;  
   border-color: #fff;
   border-radius: 0;
 }
+
+.bredcrum-fixed{
+  position: fixed;
+  z-index: 300;
+}
+
 .breadcrum_text {
   margin-left: 5px;  
   color: #fff;
@@ -83,11 +90,8 @@ table#data_table tbody tr.child-row.active-item{
   margin-left: 39px !important;
 }
 
-.bredcum_container {
-  position: relative;
-  width: 200% !important;
-  min-height: 100%;
-  right: 46px;
+.bredcum-content { 
+  margin-top: 30px;
 }
 
 .list_show {
@@ -107,11 +111,7 @@ table#data_table tbody tr.child-row.active-item{
   display: block !important;
   margin-top: -25px !important;
 }
-/*.save_property{
-  margin-left: 45px !important;
-  position: relative;
-  top: -11px;
-}*/
+
 .breadcrum_contact {
   position: relative !important;
   top: 15px !important;
@@ -125,10 +125,7 @@ table#data_table tbody tr.child-row.active-item{
 .submit-button{
 	float: right;
 }
-/*.property_save{
-  padding: 0px !important;
-  height: 29px !important;
-}*/
+
 .sub-class{
   width: 72px;
   height: 37px;
@@ -138,6 +135,9 @@ table#data_table tbody tr.child-row.active-item{
   background-color: #005826;
   border-width: 3px !important;
   font-size: 17px !important;
+}
+.property-owner {
+  margin-left: 10px;
 }
 
 .submit-edit{
@@ -156,7 +156,7 @@ table#data_table tbody tr.child-row.active-item{
 .submit-edit-basic{
   width: 64px;
   height: 30px;
-  margin-top: -72px;
+  margin-top: -72px !important;
   border-color: #fff !important;
   border-radius: 0px !important;
   background-color: #005826;
@@ -181,17 +181,9 @@ table#data_table tbody tr.child-row.active-item{
 
 .header-tab{
   margin-left: -10px !important;
-  margin-top: 15px;
+  margin-top: -19px;
 }
-/*.nav-tanant {
-  height: 35px;
-  border: 1px solid #ccc !important;
-  padding: 15px !important;
-  border-radius: 3px !important;
-  margin-top: 19px;
-  margin-left: 11px;
-  padding-top: 4px !important;
-}*/
+
 .form-content {
     margin-top: 25px;
 }
@@ -225,10 +217,25 @@ table#data_table tbody tr.child-row.active-item{
   border-bottom: none !important;
 }
 */
-.lease-breadcrum {
+.lease_breadcrum {
+  width: 200% !important;
+  height: 60px;
+  background-color: #005826;
+  margin-top: -138px;
+  margin-left: -44px !important;
+  color: white;
+  float: left;
+  border-width: 3px;
+  border-color: #fff;
+  border-radius: 0;
+}
+
+.tenant_breadcrum {
+  width: 200% !important;
   height: 60px;
   background-color:#005826;
-  margin-top: -14%;
+  margin-top: -179px;
+  margin-left: -30px !important;  
   color: white;
   float: left;
   border-width: 3px;  
@@ -236,28 +243,34 @@ table#data_table tbody tr.child-row.active-item{
   border-radius: 0;
 }
 
-.tenant-breadcrum {
+.gallery_breadcrum {
+  width: 200% !important;
   height: 60px;
-  background-color:#005826;
-  margin-top: -13.5%;
-  margin-left: 10px !important;  
+  background-color: #005826;
+  margin-top: -60px;
+  margin-left: -30px !important;
   color: white;
   float: left;
-  border-width: 3px;  
+  border-width: 3px;
   border-color: #fff;
   border-radius: 0;
 }
+
 
 .lease-header-tab {
     margin-left: -21px !important;
-    margin-top: -8.5%;
+    margin-top: -85.5px !important;
 }
 
 .tenant-header-tab {
     margin-left: -10px !important;
-    margin-top: -8%;
+    margin-top: -101.5px !important;
 }
 
 .lease-subtabs {
-  margin-top: 8%;
+  margin-top: 108px !important;
+}
+
+.tenant-form-content {
+  margin-top: 73px !important;
 }
