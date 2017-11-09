@@ -1194,7 +1194,7 @@ $ ->
     #   next_step = $(document).find('ul.wizard_steps li.selected').next()
     #   window.location.href = next_step.find('a').attr("href")
   
-  $(document).on 'click', '.sale_buy_step_tab_sub li a', (e)->
+  $(document).on 'click', '.sale_buy_step_tab_sub li a', (e) ->
     curPropertyId = $("#cur_property_id").val()
     selectedSubSubTabId = $(this).attr("id")
     

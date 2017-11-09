@@ -5409,3 +5409,9 @@ ol.number_with_parentheses > li:before {
 #owner-treeview {
     margin-left: 11px;
 }
+
+.mask_content{
+    position: absolute;
+    width: 100%;
+    overflow-y: scroll;
+}
