@@ -4,5 +4,11 @@
 $ ->
 
   $(document).ready ->
-    #alert("all is well")
+    $('#bc_t_color').colorpicker()
+      .on 'changeColor', (event) ->
+        $('.preview_color').css 'color', event.color.toHex()
+    
+    $('#bc_bg_color').colorpicker()
+      .on 'changeColor', (event) ->
+        $('.preview_color').css 'background-color', event.color.toHex()
 
