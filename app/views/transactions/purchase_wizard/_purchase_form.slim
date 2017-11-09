@@ -32,7 +32,7 @@
           li[role="presentation"]
               a#attorney[href="#attorney_section" role="tab" data-toggle="tab" aria-expanded="false"] Attorney
 
-        .tab-content
+        .tab-content.clearfix
           #basic_info_section.tab-pane.fade.active.in[role="tabpanel"]
             .col-lg-6.col-md-6.col-sm-12.col-xs-12
               h2.heading_without_padding_large
@@ -47,16 +47,26 @@
               .form-wrapper
                 - if @property.owner.present?
                   = form_for @property.owner, remote: true, :html => {:'data-type' => 'json'} do |f|
-                    .col-lg-4.close-md-4.col-sm-12.col-xs-12[style="min-width: 450px"]
-                      .form-group style=(f.object.is_company ? '' : 'display: none')
-                        = f.label :company_name
-                        = f.text_field :company_name, class: 'form-control', readonly: true
+                    .col-lg-4.close-md-4.col-sm-12.col-xs-12
                       .form-group
-                        = f.label :first_name, "#{f.object.cprefix}First Name"
-                        = f.text_field :first_name, class: "form-control", readonly: true
-                      .form-group
-                        = f.label :last_name, "#{f.object.cprefix}Last Name"
-                        = f.text_field :last_name, class: "form-control", readonly: true
+                        .heading_blue.radio-inline
+                          span = f.radio_button :is_company, false, checked: !f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_false'
+                          span.margin-md-left Individual
+                        .heading_blue.radio-inline
+                          span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
+                          span.margin-md-left Entity
+                      .margin-lg-top
+                      .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
+                        .form-group
+                          = f.label :company_name
+                          = f.text_field :company_name, class: 'form-control', readonly: true
+                      .individual-fields-wrapper[style=(f.object.is_company ? 'display: none' : '')]
+                        .form-group
+                          = f.label :first_name, "#{f.object.cprefix}First Name"
+                          = f.text_field :first_name, class: "form-control", readonly: true
+                        .form-group
+                          = f.label :last_name, "#{f.object.cprefix}Last Name"
+                          = f.text_field :last_name, class: "form-control", readonly: true
                       .form-group
                         = f.label :phone1
                         = f.text_field :phone1, class: "form-control"
@@ -64,7 +74,7 @@
                       .form-group
                         = f.label :phone2
                         = f.text_field :phone2, class: "form-control"
-
+                      
                       .form-group
                         = f.label :fax
                         = f.text_field :fax, class: "form-control"
@@ -79,27 +89,27 @@
 
                       .form-group
                         = f.label :postal_address, "Postal Address"
-                          = f.text_field :postal_address, class: "form-control"
+                        = f.text_field :postal_address, class: "form-control"
 
-                        .form-group
-                          = label_tag 'City'
-                          = f.text_field :city, class: "form-control city"
+                      .form-group
+                        = label_tag 'City'
+                        = f.text_field :city, class: "form-control city"
 
-                        .form-group
-                          = label_tag 'State'
-                          = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
+                      .form-group
+                        = label_tag 'State'
+                        = f.select :state, Property::US_STATES, {}, class: 'form-control selectize-single'
 
-                        .form-group
-                          = f.label "Zip"
-                          = f.text_field :zip, class: 'zip form-control'
+                      .form-group
+                        = f.label "Zip"
+                        = f.text_field :zip, class: 'zip form-control'
 
-                        .form-group
-                          = f.label :notes
-                          = f.text_area :notes, class: "form-control"
-                        .form-group
-                        .clearfix
-                        .form-group
-                          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+                      .form-group
+                        = f.label :notes
+                        = f.text_area :notes, class: "form-control"
+                      .form-group
+                  .clearfix
+                  .form-group
+                    = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
                 - else
                   p.text-danger No owner to edit
@@ -124,6 +134,7 @@
                       .heading_blue.radio-inline
                         span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                         span.margin-md-left Entity
+                    .margin-lg-top
                     .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                       .form-group.company-detail
                         = f.label :company_name, "Company Name"
@@ -140,7 +151,7 @@
                       .form-group
                         = f.label :last_name, "#{f.object.cprefix}Last Name"
                         = f.text_field :last_name, class: "form-control"
-
+                    
                     .form-group
                       = f.label :phone1
                       = f.text_field :phone1, class: "form-control"
@@ -148,7 +159,7 @@
                     .form-group
                       = f.label :phone2
                       = f.text_field :phone2, class: "form-control"
-
+                    
                     .form-group
                       = f.label :fax
                       = f.text_field :fax, class: "form-control"
@@ -203,6 +214,7 @@
                       .heading_blue.radio-inline
                         span.margin-md-left = f.radio_button :is_company, true, checked: f.object.is_company, class: 'form-control flat-icheck radiobuttons contact_is_company_true'
                         span.margin-md-left Entity
+                    .margin-lg-top
                     .company-fields-wrapper[style=(f.object.is_company ? '' : 'display: none')]
                       .form-group
                         = f.label :company_name, "Company Name"
@@ -227,7 +239,8 @@
                     .form-group
                       = f.label :phone2
                       = f.text_field :phone2, class: "form-control"
-
+                    
+                    
                     .form-group
                       = f.label :fax
                       = f.text_field :fax, class: "form-control"

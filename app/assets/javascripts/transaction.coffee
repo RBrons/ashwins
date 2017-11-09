@@ -473,57 +473,52 @@ $ ->
     accept_counteroffer(tab_element.data('offer-id'), accepted_counteroffer_id )
 
   accept_counteroffer = (offer_id, accepted_counteroffer_id = 0) ->
-    transaction_property_offer_params = {}
-    transaction_property_offer_params["transaction_property_offer[is_accepted]"] = true
-    transaction_property_offer_params["transaction_property_offer[accepted_counteroffer_id]"] = accepted_counteroffer_id
-    $.ajax
-      url: '/transaction_property_offers/' + offer_id
-      type: 'PUT'
-      dataType: 'json'
-      data: transaction_property_offer_params
-      success: (data) ->
-        if data.status
-          $.notify "Counter Accepted", "success"
-
-          last_counteroffer = last_counteroffer || selected_offer_tab.find('.last_counteroffer').val()
-          if last_counteroffer == 'Client'
-            selected_offer_tab.find('.btn_accept_counteroffer').text('Client\'s Counter Accepted')
-          else if last_counteroffer == 'Counter-Party'
-            selected_offer_tab.find('.btn_accept_counteroffer').text('Buyer\'s Counter Accepted')
-          else
-            selected_offer_tab.find('.btn_accept_counteroffer').text('Ask Accepted')
-            selected_offer_tab.find('.counteroffer_action_buttons_wrapper').show()
-
-          selected_offer_tab.find('.asking_description').text($(document).find('#relinquishing_seller_name').val() + ' and ' + data.offer_name + ' have agreed to the price of')
-          selected_offer_tab.find('.relingquishing_offeror_form').hide()
-
-          selected_offer_tab.find('.btn_accept_counteroffer').attr('disabled', 'disabled')
-          selected_offer_tab.find('.add_counteroffer').attr('disabled', 'disabled')
-                                                      .hide()
-          selected_offer_tab.find('.initial_log_counteroffer').attr('disabled', 'disabled')
-                                                              .hide()
-          selected_offer_tab.find('.ask_accepted').attr('disabled', 'disabled')
-                                                  .hide()
-          if $(document).find('#negotiations_wrapper').data('transaction-type') == 'purchase'
-            $(document).find('#offer_list li.active a').html('<i class="red">Accepted</i>')
-
-          $(document).find('#relinquishing_property_sale_price').val(selected_offer_tab.find('.last_counteroffer_price').val())
-
-          loi_description = data.offer_name + ' is purchasing ' + $(document).find('#negotiated_property').val() + ' for ' + selected_offer_tab.find('.last_counteroffer_price').val()
-          $(document).find('#loi_description').text(loi_description)
-          $(document).find('#loi_description').show()
-
-          accepted_price = Number(selected_offer_tab.find('.last_counteroffer_price').val().replace(/[^0-9\.]+/g,""))
-          current_rent = Number($(document).find('#relinquishing_property_current_rent').val().replace(/[^0-9\.]+/g,""))
-          if accepted_price != 0
-            $(document).find('#relinquishing_property_rat_race').val((current_rent * 100 / accepted_price).toFixed(2))
-          else
-            $(document).find('#relinquishing_property_rat_race').val('')
-
-          # $('#sale_buy_step_tab a#letter_of_intent').click()
-          window.location.reload()
+    if $(document).find('#has_accepted_offer').val() == 'true'
+      warning_text = $(document).find('#relinquishing_seller_name').val() +
+                  ' already has an Accepted Offer from ' + $(document).find('#accepted_offer').val() +
+                  ' if you wish to negotiate with ' + selected_offer_tab.find('.cur_offer_name').val() +
+                  ' then offer will no longer be considered Accepted'
+        
+      return swal {
+        title: 'Are you sure?'
+        text: warning_text
+        type: 'warning'
+        showCancelButton: true
+        cancelButtonText: "No"
+        confirmButtonColor: '#DD6B55'
+        confirmButtonText: 'Yes'
+        closeOnConfirm: false
+      }, (isConfirm) ->
+        if isConfirm
+          transaction_property_offer_params = {}
+          transaction_property_offer_params["transaction_property_offer[is_accepted]"] = true
+          transaction_property_offer_params["transaction_property_offer[accepted_counteroffer_id]"] = accepted_counteroffer_id
+          $.ajax
+            url: '/transaction_property_offers/' + offer_id
+            type: 'PUT'
+            dataType: 'json'
+            data: transaction_property_offer_params
+            success: (data) ->
+              if data.status
+                window.location.reload()
+              else
+                $.notify "Failed", "error"
         else
-          $.notify "Failed", "error"
+          return false
+    else
+      transaction_property_offer_params = {}
+      transaction_property_offer_params["transaction_property_offer[is_accepted]"] = true
+      transaction_property_offer_params["transaction_property_offer[accepted_counteroffer_id]"] = accepted_counteroffer_id
+      $.ajax
+        url: '/transaction_property_offers/' + offer_id
+        type: 'PUT'
+        dataType: 'json'
+        data: transaction_property_offer_params
+        success: (data) ->
+          if data.status
+            window.location.reload()
+          else
+            $.notify "Failed", "error"
 
   #- LOI(Letter of Intent)  -#
 
@@ -940,7 +935,7 @@ $ ->
   $(document).on 'click', '.save_this_basket', ->
     console.log 'click Save this basket button'
     if selected_basket_tab.find('.basket_property_table tbody tr').length == 0
-      sweetAlert '', 'Please select one property at lease', 'warning'
+      sweetAlert '', 'Please select one property at least', 'warning'
       return
     index = $('#basket_list').children().length
     if $(this).data('with_identify') == true

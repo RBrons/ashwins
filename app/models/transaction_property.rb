@@ -44,4 +44,8 @@ class TransactionProperty < ApplicationRecord
     return !self.closing_date.nil?
   end
 
+  def accepted_offer
+    return self.transaction_property_offers.where(is_accepted: true).first
+  end
+
 end

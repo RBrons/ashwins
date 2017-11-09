@@ -35,6 +35,9 @@ class TransactionPropertyOffersController < ApplicationController
   def update
     @property_offer = TransactionPropertyOffer.find(params[:id])
     @property_offer.update(transaction_property_offer_params)
+    if transaction_property_offer_params[:is_accepted]
+      TransactionPropertyOffer.where(transaction_property_id: @property_offer.transaction_property_id).where.not(id: @property_offer.id).update_all({is_accepted: false, accepted_counteroffer_id: nil})
+    end
     respond_to do |format|
       format.html { redirect_to :back } 
       format.json { render json: {status: true, offer_name: @property_offer.offer_name} }

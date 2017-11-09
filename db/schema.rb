@@ -601,7 +601,7 @@ ActiveRecord::Schema.define(version: 20171106000940) do
     t.string   "misc_obligation_rating"
     t.string   "premises_waste_rating"
     t.string   "premises_initial_opening_rating"
-    t.decimal  "square_feet"
+    t.integer  "square_feet"
     t.string   "tenant_name"
     t.string   "facilities_contact_name"
     t.string   "facilities_contact_company"
@@ -866,6 +866,9 @@ ActiveRecord::Schema.define(version: 20171106000940) do
     t.string   "first_name"
     t.string   "last_name"
     t.boolean  "enabled",                                default: false
+    t.string   "business_name"
+    t.string   "business_contact_first_name"
+    t.string   "business_contact_last_name"
     t.string   "last_sign_out_page"
     t.string   "user_type"
     t.integer  "attorney_firm_id"

@@ -11,7 +11,7 @@
             li[role="presentation"]
                 a[href="#properties_identification" role="tab" data-toggle="tab" aria-expanded="false"] Identification
         
-        .tab-content
+        .tab-content.clearfix
             #properties_for_sale.active.tab-pane.fade.in[role="tabpanel"]
                 - if @transaction.errors.any?
                     #error_explanation
@@ -146,7 +146,7 @@
                                     - else
                                         i[class=(basket.id.present? ? 'red' : '')] = "Basket #{index + 1}"
                                     
-                    .tab-content
+                    .tab-content.clearfix
                         - @transaction.transaction_baskets.each do |basket|
                             .tab-pane.fade[role="tabpanel" id="basket_#{basket.id}_section" data-basket_id="#{basket.id}" data-transaction_id="#{@transaction.id}"]
                                 .col-md-4.col-xs-12
