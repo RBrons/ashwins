@@ -62,14 +62,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -115,14 +119,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -160,8 +168,15 @@ div.lease-subtabs[role="tabpanel"]
             .form-group
               label.mg-top-5 Date Of Lease
               .clearfix
-              = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}", disabled: true
-              = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}", disabled: true
+              /.pull-left
+              = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
+              = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}"
+              .pull-right
+                /.pull-left
+                 /label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+                .pull-right
+                  = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date', style: "display: none;"
+              
             .form-group
               label.mg-top-5 Date Of Lease Details
               .clearfix
@@ -242,7 +257,7 @@ div.lease-subtabs[role="tabpanel"]
             /.form-group
             /  = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
       #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
-        .container.lease-breadcrum.bredcum_container
+        .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_no_save
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
@@ -354,14 +369,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -417,14 +436,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -527,14 +550,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -597,14 +624,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -666,14 +697,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -714,14 +749,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -927,14 +966,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -997,14 +1040,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'
@@ -1088,14 +1135,18 @@ div.lease-subtabs[role="tabpanel"]
               ul
                 - @property.errors.full_messages.each do |message|
                   li = message
-          .container.lease-breadcrum.bredcum_container
+          .container.lease_breadcrum.bredcrum-fixed
             p
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
               = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
               div.save_property
-                = f.submit 'Save', class: 'btn btn-sm submit-edit property_save'  
+                - if @property.persisted?
+                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+                - else
+                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'  
           div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
             .clearfix.margin-lg-left.lease-header-tab
               = render 'properties/form_header_link'

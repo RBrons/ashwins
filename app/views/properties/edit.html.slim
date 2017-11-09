@@ -1,6 +1,7 @@
 .col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-lg-top
   - if params[:type_is] == 'county_tax'
-    == render 'properties/county_tax_form'
+    .tax-property-form
+      == render 'properties/county_tax_form'
   - elsif params[:type_is] == 'tenant'
     == render 'properties/tenant_form'
   - elsif params[:type_is] == 'lease'
@@ -8,10 +9,13 @@
   - elsif params[:type_is] == 'ownership'
     == render 'properties/ownership_form'
   - elsif params[:type_is] == 'photo_gallery'
-    == render 'properties/photo_gallery'
+    .gallery-property-form
+      == render 'properties/photo_gallery'
   - elsif params[:type_is] == 'survey'
-    == render 'properties/survey'
+    .survey-property-form
+      == render 'properties/survey'
   - elsif params[:type_is] == 'map'
     == render 'properties/map'
   - else
-    == render 'properties/basic_info_form'
+    .basic-info-property-form
+      == render 'properties/basic_info_form'
