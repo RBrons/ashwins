@@ -1492,4 +1492,12 @@ module ApplicationHelper
     end
   end
 
+  def breadcrumb_text_color
+    return DefaultValue.where(entity_name: 'BreadcrumbTextColor').first.try(:value) || '#ffffff'
+  end
+
+  def breadcrumb_bg_color
+    return DefaultValue.where(entity_name: 'BreadcrumbBGColor').first.try(:value) || '#005826'
+  end
+
 end

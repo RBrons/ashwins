@@ -3,7 +3,7 @@ class Entities::PartnershipController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -12,6 +12,16 @@ class Entities::PartnershipController < ApplicationController
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      if @entity.name == ""
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+        add_breadcrumb " Partnership/", '',  :title => "Partnership"
+        add_breadcrumb " Create", '',  :title => "Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+        add_breadcrumb " Partnership/", '',  :title => "Partnership"
+        add_breadcrumb " Edit: #{@entity.display_name}", '',  :title => "Edit"
+        add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
       @entity.type_           = MemberType.getPartnershipId
@@ -41,9 +51,19 @@ class Entities::PartnershipController < ApplicationController
     raise ActiveRecord::RecordNotFound if @entity.blank?
     if request.get?
       #TODO
+      add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+      add_breadcrumb " Partnership/", '',  :title => "Partnership"
+      add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
+      add_breadcrumb " Contact info", '', :title => "Contact info"
+      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
     elsif request.patch?
       @entity.basic_info_only = false
       @entity.update(entity_params)
+      add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+      add_breadcrumb " Partnership/", '',  :title => "Partnership"
+      add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
+      add_breadcrumb " Contact info", '', :title => "Contact info"
+      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
       return render layout: false, template: "entities/partnership/contact_info"
     else
       raise UnknownRequestFormat
@@ -60,6 +80,20 @@ class Entities::PartnershipController < ApplicationController
       @partner                 ||= Partner.new
       @partner.super_entity_id = @entity.id
       @partner.class_name      = "Partner"
+
+      if request.get?
+        if @partner.new_record?
+          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+          add_breadcrumb " Partnership/", '',  :title => "Partnership"
+          add_breadcrumb " Partner Create", '',  :title => "Partner Create"
+        else
+          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+          add_breadcrumb " Partnership/", '',  :title => "Partnership"
+          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+          add_breadcrumb " Partner", '',  :title => "Partner"
+          add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+        end
+      end
     end
     if request.post?
       @partner                 = Partner.new(partner_params)
@@ -94,6 +128,11 @@ class Entities::PartnershipController < ApplicationController
 
   def partners
     @entity = Entity.find_by(key: params[:entity_key])
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+    add_breadcrumb " Partnership/", '',  :title => "Partnership"
+    add_breadcrumb " Partners List View/", '',  :title => "Partners List View"
+    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "Show", :id => "show_in_list_own"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @partners = @entity.partners
     render layout: false if request.xhr?
@@ -104,6 +143,10 @@ class Entities::PartnershipController < ApplicationController
     @ownership_ = @entity.build_ownership_tree_json
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+    add_breadcrumb " Partnership/", '',  :title => "Partnership"
+    add_breadcrumb " Owns", '',  :title => "Owns"
+    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end

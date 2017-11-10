@@ -319,6 +319,31 @@ $(document).ready(function(){
   }); 
 });
 
+
+/**
+ * Set Breadcrumb text and backround color based on admin setting
+ */
+$(document).ready(function(){
+    set_breadcrumb_colors();
+})
+
+var set_breadcrumb_colors = function(){
+    text_color = $(document).find('#bc_text_color').val();
+    bg_color = $(document).find('#bc_bg_color').val();
+
+    $(document).find('.breadcrum_text').css('color', text_color);
+    $(document).find('.breadcrum_list').css('color', text_color);
+
+    $(document).find('.breadcrum, .breadcrum-breadcrum, .lease_breadcrum, .tenant_breadcrum')
+                                            .css('background-color', bg_color);
+    
+    $(document).find('.submit-edit-basic, .submit-edit')
+                                                    .css('background-color', bg_color)
+                                                    .css('border-color', text_color)
+                                                    .css('color', text_color);
+};
+
+
 // Bootstrap tree view
 
 // function buildDomTree() {

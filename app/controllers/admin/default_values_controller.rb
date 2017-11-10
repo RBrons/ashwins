@@ -21,6 +21,9 @@ class Admin::DefaultValuesController < ApplicationController
     end
 
     @greeting = DefaultValue.where(entity_name: 'Greeting').first.try(:value)
+
+    @bc_t_color = DefaultValue.where(entity_name: 'BreadcrumbTextColor').first.try(:value) || '#ffffff'
+    @bc_bg_color = DefaultValue.where(entity_name: 'BreadcrumbBGColor').first.try(:value) || '#005826'
   end
 
   # GET /default_values/1
@@ -170,6 +173,26 @@ class Admin::DefaultValuesController < ApplicationController
     else
       DefaultValue.create(entity_name: 'Greeting', value: params[:greeting])
     end
+    redirect_to admin_default_values_url
+  end
+
+  def set_breadcrumb_color
+    # update or create breadcrumb text color 
+    bc_t_color = DefaultValue.where(entity_name: 'BreadcrumbTextColor').first
+    if bc_t_color.present?
+      bc_t_color.update(value: params[:bc_t_color])
+    else
+      DefaultValue.create(entity_name: 'BreadcrumbTextColor', value: params[:bc_t_color])
+    end
+    
+    # update or create breadcrumb background color 
+    bc_bg_color = DefaultValue.where(entity_name: 'BreadcrumbBGColor').first
+    if bc_bg_color.present?
+      bc_bg_color.update(value: params[:bc_bg_color])
+    else
+      DefaultValue.create(entity_name: 'BreadcrumbBGColor', value: params[:bc_bg_color])
+    end
+    
     redirect_to admin_default_values_url
   end
 

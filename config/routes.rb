@@ -339,6 +339,7 @@ Rails.application.routes.draw do
         post :toggle_initial_sign_in_modal
         post :set_greeting
         post :toggle_personnel_to_user
+        post :set_breadcrumb_color
       end
     end
 

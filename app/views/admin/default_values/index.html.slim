@@ -58,7 +58,22 @@ hr
           = text_area_tag 'greeting', @greeting, class: 'form-control', rows: 5
       .clearfix
       = submit_tag 'Save', class: 'btn btn-sm btn-warning'
-      
+  .col-md-4.col-xs-12
+    h4.preview_color.padding-md[style="background-color: #{@bc_bg_color};color: #{@bc_t_color}"] Breadcrumb Text and Background colors
+    = form_tag(({controller: 'admin/default_values', action: 'set_breadcrumb_color'}), method: :post) do
+      .form-group
+        label.control-label Text Color
+        #bc_t_color.input-group
+          = text_field_tag 'bc_t_color', @bc_t_color, class: 'form-control'
+          <span class="input-group-addon"><i></i></span>
+      .form-group
+        label.control-label Background Color
+        #bc_bg_color.input-group
+          = text_field_tag 'bc_bg_color', @bc_bg_color, class: 'form-control'
+          <span class="input-group-addon"><i></i></span>
+
+      = submit_tag 'Save', class: 'btn btn-sm btn-warning'
+
 table#data_table
   thead
     tr

@@ -9,6 +9,8 @@ html
     = javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=AIzaSyC7BNzgnI5wRMNiHw-x-4My62bqY5MOAWw"
     = csrf_meta_tags
   body.nav-md
+    input#bc_text_color[type="hidden" value=(breadcrumb_text_color())]
+    input#bc_bg_color[type="hidden" value=(breadcrumb_bg_color())]
     = render partial: 'shared/modals'
     .container.body
       .main_container
