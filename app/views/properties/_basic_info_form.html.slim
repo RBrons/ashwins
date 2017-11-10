@@ -98,7 +98,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
           - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
             - owner_entity = Entity.find(@property.owner_entity_id)
-            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank'
+            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "property-owner"
 
         .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 1)}")
           - if individual_clients.length > 1
@@ -109,7 +109,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
           - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
             - owner_entity = Entity.find(@property.owner_entity_id)
-            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank'
+            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "property-owner"
 
       - else
         - entity_owners = Contact.TransactionContacts("company", current_user.id)
