@@ -19,7 +19,7 @@ class Entities::CorporatesController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " Corporation/", '',  :title => "Corporation"
-        add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb " Edit: #{@entity.display_name}", '',  :title => "edit"
         add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
       end
     elsif request.post?
@@ -52,7 +52,7 @@ class Entities::CorporatesController < ApplicationController
       #TODO
       add_breadcrumb "/Clients/", clients_path, :title => "Clients"
       add_breadcrumb " Corporation/", '',  :title => "Corporation"
-      add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+      add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
       add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
     elsif request.patch?
@@ -60,7 +60,7 @@ class Entities::CorporatesController < ApplicationController
       @entity.update(entity_params)
       add_breadcrumb "/Clients/", clients_path, :title => "Clients"
       add_breadcrumb " Corporation/", '',  :title => "Corporation"
-      add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+      add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
       add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
       return render layout: false, template: "entities/corporates/contact_info"
