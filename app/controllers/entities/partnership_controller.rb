@@ -20,7 +20,8 @@ class Entities::PartnershipController < ApplicationController
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " Partnership/", '',  :title => "Partnership"
         add_breadcrumb " Edit: #{@entity.display_name}", '',  :title => "Edit"
-        add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
+        add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
       end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
@@ -55,7 +56,8 @@ class Entities::PartnershipController < ApplicationController
       add_breadcrumb " Partnership/", '',  :title => "Partnership"
       add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
+      add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
     elsif request.patch?
       @entity.basic_info_only = false
       @entity.update(entity_params)
@@ -63,7 +65,8 @@ class Entities::PartnershipController < ApplicationController
       add_breadcrumb " Partnership/", '',  :title => "Partnership"
       add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
+      add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
       return render layout: false, template: "entities/partnership/contact_info"
     else
       raise UnknownRequestFormat
@@ -91,7 +94,8 @@ class Entities::PartnershipController < ApplicationController
           add_breadcrumb " Partnership/", '',  :title => "Partnership"
           add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
           add_breadcrumb " Partner", '',  :title => "Partner"
-          add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
+          add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
         end
       end
     end
@@ -132,7 +136,8 @@ class Entities::PartnershipController < ApplicationController
     add_breadcrumb " Partnership/", '',  :title => "Partnership"
     add_breadcrumb " Partners List View/", '',  :title => "Partners List View"
     add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
-    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "Show", :id => "show_in_list_own"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @partners = @entity.partners
     render layout: false if request.xhr?
@@ -146,7 +151,8 @@ class Entities::PartnershipController < ApplicationController
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
     add_breadcrumb " Partnership/", '',  :title => "Partnership"
     add_breadcrumb " Owns", '',  :title => "Owns"
-    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end

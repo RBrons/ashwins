@@ -5325,7 +5325,7 @@ ol.number_with_parentheses > li:before {
     font-size: 16px;
     width: 100%;
     margin-left: 128px;
-    
+
 }
 
 .bread_crumb_show a {
@@ -5350,6 +5350,28 @@ ol.number_with_parentheses > li:before {
     position: absolute;
     font-size: 12px;
     left: -80px;
+}
+
+.show_and_list {
+    margin-top: 31px;
+    position: absolute;
+    font-size: 12px !important;
+    left: -80px;
+}
+
+.show_and_list_own {
+    margin-top: 31px;
+    position: absolute;
+    font-size: 12px !important;
+    left: -2px;
+}
+
+.show_and_list_own.list_btn {
+    margin-left: 33px;
+}
+
+.show_and_list.list_btn {
+    margin-left: 33px;
 }
 
 #save_btn {
