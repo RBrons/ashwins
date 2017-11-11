@@ -5413,5 +5413,4 @@ ol.number_with_parentheses > li:before {
 .mask_content{
     position: absolute;
     width: 100%;
-    overflow-y: scroll;
 }

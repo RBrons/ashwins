@@ -19,8 +19,9 @@ div[role="tabpanel"]
       li[role="presentation"]
           a#inspection_zoning[href="#inspection_zoning_section" role="tab" data-toggle="tab" aria-expanded="false"] Zoning
   
-  .tab-content.clearfix
-      #seller_documentation_section.active.tab-pane.fade.in[role="tabpanel"]
+  .clearfix
+  .tab-content
+      #seller_documentation_section.mask_content.active.tab-pane.fade.in[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
@@ -50,7 +51,8 @@ div[role="tabpanel"]
           li
             a#environmental_tasks[href="#environmental_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #environmental_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:environmental][0], prepopulated_list: @personnel_on_tab[:environmental][1], personnel_category: 'Environmental'}
@@ -100,7 +102,8 @@ div[role="tabpanel"]
             li
               a#lease_tasks[href="#lease_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
           
-          .tab-content.clearfix
+          .clearfix
+          .tab-content.mask_content
             #lease_tenant_contact_section.tab-pane.fade.in[role="tabpanel"]
             
             #lease_facilities_manager_section.tab-pane.fade.in[role="tabpanel"]
@@ -181,7 +184,8 @@ div[role="tabpanel"]
           li
             a#title_tasks[href="#title_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #title_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:title][0], prepopulated_list: @personnel_on_tab[:title][1], personnel_category: 'Title'}
@@ -255,7 +259,8 @@ div[role="tabpanel"]
           li
             a#survey_tasks[href="#survey_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #survey_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:survey][0], prepopulated_list: @personnel_on_tab[:survey][1], personnel_category: 'Survey'}
@@ -329,7 +334,8 @@ div[role="tabpanel"]
           li
             a#zoning_tasks[href="#zoning_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #zoning_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:zoning][0], prepopulated_list: @personnel_on_tab[:zoning][1], personnel_category: 'Zoning'}
