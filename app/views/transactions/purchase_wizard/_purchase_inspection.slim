@@ -148,8 +148,79 @@ div[role="tabpanel"]
           .clearfix
           .tab-content.mask_content
             #lease_tenant_contact_section.tab-pane.fade.in[role="tabpanel"]
-            
+              = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+                .col-lg-4.col-md-4.form-content
+                  .form-group
+                    = label_tag 'Tenant'
+                    = f.text_field :tenant_name,class: 'form-control'
+                  .form-group
+                    = label_tag 'Store Number'
+                    = f.text_field :tenants_store_number, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Name'
+                    = f.text_field :tenant_contact_name, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Company'
+                    = f.text_field :tenant_contact_company, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Phone'
+                    = f.text_field :tenant_contact_phone, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Email'
+                    = f.text_field :tenant_contact_email, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Fax'
+                    = f.text_field :tenant_contact_fax, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Street Address'
+                    = f.text_area :tenant_contact_street_address, class: 'form-control'
+                  .form-group
+                    = label_tag 'State'
+                    = f.text_area :tenant_state, class: 'form-control'
+                  .form-group
+                    = label_tag 'City'
+                    = f.text_area :tenant_city, class: 'form-control'
+                  .form-group
+                    = label_tag 'Country'
+                    = f.text_area :tenant_county, class: 'form-control'
+                    
             #lease_facilities_manager_section.tab-pane.fade.in[role="tabpanel"]
+              = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+                input[type="hidden" name="type_is" value="tenant"]
+                .col-lg-4.col-md-4.form-content
+                  .form-group
+                    = label_tag 'Tenant'
+                    = f.text_field :tenant_name, class: 'form-control', readonly: true
+                  .form-group
+                    = label_tag 'Store Number'
+                    = f.text_field :facilities_store_number, class: 'form-control'
+                  .form-group
+                    = label_tag 'Facilities Contact Name'
+                    = f.text_field :facilities_contact_name, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Company'
+                    = f.text_field :facilities_contact_company, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Phone'
+                    = f.text_field :facilities_contact_phone, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Email'
+                    = f.text_field :facilities_contact_email, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Fax'
+                    = f.text_field :facilities_contact_fax, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Street Address'
+                    = f.text_area :facilities_contact_street_address, class: 'form-control'
+                  .form-group
+                    = label_tag 'State'
+                    = f.text_area :facilities_contact_state, class: 'form-control'
+                  .form-group
+                    = label_tag 'City'
+                    = f.text_area :facilities_contact_city, class: 'form-control'
+                  .form-group
+                    = label_tag 'Country'
+                    = f.text_area :facilities_contact_country, class: 'form-control'
 
             #lease_files_section.tab-pane.fade.in[role="tabpanel"]
               = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|

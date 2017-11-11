@@ -140,6 +140,7 @@ div[role="tabpanel"]
                   .form-group
                     = label_tag 'Country'
                     = f.text_area :tenant_county, class: 'form-control'
+                    
             #lease_facilities_manager_section.tab-pane.fade[role="tabpanel"]
               = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
                 input[type="hidden" name="type_is" value="tenant"]
@@ -177,6 +178,7 @@ div[role="tabpanel"]
                   .form-group
                     = label_tag 'Country'
                     = f.text_area :facilities_contact_country, class: 'form-control'
+
             #lease_files_section.tab-pane.fade[role="tabpanel"]
               = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
                 input[type="hidden" name="type_is" value="tenant"]
