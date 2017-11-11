@@ -1216,4 +1216,8 @@ $ ->
         if height > 50
           $(this).css('overflow-y', 'scroll')
           $(this).height(height)
-    
+  
+  # Action of clicking 'Save' on transaction breadcrumb
+  $(document).on 'click', 'ul.m__breadcrumb li.action_links button', ->
+    $(document).find('form:visible').find('input[type="submit"]').click()
+  
