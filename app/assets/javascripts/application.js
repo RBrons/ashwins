@@ -343,6 +343,33 @@ var set_breadcrumb_colors = function(){
                                                     .css('color', text_color);
 };
 
+/**
+ * When user scrolls down, Wizard and Tabs should stay stationary 
+ */
+$(window).load(function(){
+    $('.mask_content').each(function(){
+        if($(this).is(':visible')){
+            height = $(window).height() - $(this).offset().top - 5;
+            if(height > 50){
+                $(this).css('overflow-y', 'scroll');
+                $(this).height(height);
+            }
+        }
+    });
+});
+
+$(window).resize(function(){
+    $('.mask_content').each(function(){
+        if($(this).is(':visible')){
+            height = $(window).height() - $(this).offset().top - 5;
+            if(height > 50){
+                $(this).css('overflow-y', 'scroll');
+                $(this).height(height);
+            }
+        }
+    });
+});
+
 
 // Bootstrap tree view
 
