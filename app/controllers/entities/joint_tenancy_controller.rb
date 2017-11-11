@@ -3,7 +3,7 @@ class Entities::JointTenancyController < ApplicationController
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  before_action :add_breadcrum
+  # before_action :add_breadcrum
 
   def basic_info
     #key = params[:entity_key]
@@ -15,6 +15,17 @@ class Entities::JointTenancyController < ApplicationController
       #end
       @entity       ||= EntityJointTenancy.new(type_: params[:type])
       @just_created = params[:just_created].to_b
+      if @entity.name == ""
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+        add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
+        add_breadcrumb " Create", '',  :title => "Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+        add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
+        add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
+        add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+      end
     elsif request.post?
       @entity                 = EntityJointTenancy.new(entity_joint_tenancy_params)
       @entity.type_           = MemberType.getJointTenancyId
@@ -47,6 +58,20 @@ class Entities::JointTenancyController < ApplicationController
       @joint_tenant                 = JointTenant.find(id) if id.present?
       @joint_tenant                 ||= JointTenant.new
       @joint_tenant.super_entity_id = @entity.id
+      if request.get?
+        if @joint_tenant.new_record?
+          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+          add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
+          add_breadcrumb " Joint Tenant Create", '',  :title => "Joint Tenant Create"
+        else
+          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+          add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
+          add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
+          add_breadcrumb " Joint Tenant", '',  :title => "Joint Tenant"
+          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
+          add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+        end
+      end
     end
     if request.post?
       @joint_tenant                 = JointTenant.new(joint_tenant_params)
@@ -81,6 +106,13 @@ class Entities::JointTenancyController < ApplicationController
 
   def joint_tenants
     @entity = Entity.find_by(key: params[:entity_key])
+    @entity = Entity.find_by(key: params[:entity_key])
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
+    add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
+    add_breadcrumb " Joint Tenants List View/", '',  :title => "Joint Tenants List View"
+    add_breadcrumb " #{@entity.name}", '',  :title => "Name"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @joint_tenants = @entity.joint_tenants
     render layout: false if request.xhr?
