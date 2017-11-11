@@ -5410,6 +5410,58 @@ ol.number_with_parentheses > li:before {
     margin-left: 11px;
 }
 
+/* Breadcrumb style kit. Please follow this style */
+ul.m__breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #005826;
+  }
+  ul.m__breadcrumb li {
+    display: inline-block;
+    font-size: 17px;
+    vertical-align: top;
+  }
+  ul.m__breadcrumb li+li:before {
+    padding: 3px;
+    color: #ffffff;
+    content: "/\00a0";
+    font-size: 21px;
+    vertical-align: middle;
+  }
+  
+  ul.m__breadcrumb li.no-separator:before{
+    content: "";
+  }
+  
+  ul.m__breadcrumb li a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  ul.m__breadcrumb li.action_links button{
+    width: 64px;
+    height: 30px;
+    border-color: #fff;
+    color: #fff;
+    border-radius: 0px;
+    background-color: #005826;
+    border-width: 2px;
+  }
+  ul.m__breadcrumb li.action_links button:hover{
+    color: white;
+    border-color: white;
+    background: #5eb14a;
+  }
+  
+  ul.m__breadcrumb li.action_links a{
+    font-size: 12px;
+  }
+  
+  ul.m__breadcrumb li a:hover {
+    color: #eee;
+    text-decoration: underline;
+  }
+
 .mask_content{
     position: absolute;
     width: 100%;
