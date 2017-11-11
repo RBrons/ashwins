@@ -1208,3 +1208,16 @@ $ ->
           console.log val
         error: (e) ->
           console.log e
+  
+  $(document).on 'shown.bs.tab', 'body.transaction a[data-toggle="tab"]', ->
+    $('.mask_content').each ->
+      if $(this).is(':visible')
+        height = $(window).height() - $(this).offset().top - 5
+        if height > 50
+          $(this).css('overflow-y', 'scroll')
+          $(this).height(height)
+  
+  # Action of clicking 'Save' on transaction breadcrumb
+  $(document).on 'click', 'ul.m__breadcrumb li.action_links button', ->
+    $(document).find('form:visible').find('input[type="submit"]').click()
+  

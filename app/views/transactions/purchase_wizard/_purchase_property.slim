@@ -11,8 +11,9 @@
             li[role="presentation"]
                 a[href="#properties_identification" role="tab" data-toggle="tab" aria-expanded="false"] Identification
         
-        .tab-content.clearfix
-            #properties_for_sale.active.tab-pane.fade.in[role="tabpanel"]
+        .clearfix
+        .tab-content
+            #properties_for_sale.mask_content.active.tab-pane.fade.in[role="tabpanel"]
                 - if @transaction.errors.any?
                     #error_explanation
                     h2 = "#{pluralize(@transaction.errors.count, 'error')} prohibited this transaction from being saved:"
@@ -145,8 +146,8 @@
                                         i.red = "Identified"
                                     - else
                                         i[class=(basket.id.present? ? 'red' : '')] = "Basket #{index + 1}"
-                                    
-                    .tab-content.clearfix
+                    .clearfix
+                    .tab-content.mask_content
                         - @transaction.transaction_baskets.each do |basket|
                             .tab-pane.fade[role="tabpanel" id="basket_#{basket.id}_section" data-basket_id="#{basket.id}" data-transaction_id="#{@transaction.id}"]
                                 .col-md-4.col-xs-12
@@ -308,11 +309,11 @@
                                                             span.green = "#{number_to_currency(est_bugdets[2] - purchase_costs[1])}"
                                     
                                                                     
-                    .clearfix
-                    .divider
-                    
-                    = link_to 'Back', '#', class: 'back_prev_step btn btn-default'
-                    = f.submit 'Save & Next', class: 'btn btn-primary next-prev margin-sm-right save_next_in_step hidden', disabled: true
+                        .clearfix
+                        .divider
+                        
+                        = link_to 'Back', '#', class: 'back_prev_step btn btn-default'
+                        = f.submit 'Save & Next', class: 'btn btn-primary next-prev margin-sm-right save_next_in_step hidden', disabled: true
 
 /! Basket Template
 #basket_template[style="display: none"]

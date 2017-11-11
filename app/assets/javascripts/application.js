@@ -341,7 +341,38 @@ var set_breadcrumb_colors = function(){
                                                     .css('background-color', bg_color)
                                                     .css('border-color', text_color)
                                                     .css('color', text_color);
+    
+    $(document).find('ul.m__breadcrumb').css('background-color', bg_color);
+    $(document).find('ul.m__breadcrumb li').css('color', text_color);
+    $(document).find('ul.m__breadcrumb li.action_links button').css({'color': text_color, 'background-color': bg_color, 'border-color': text_color});
 };
+
+/**
+ * When user scrolls down, Wizard and Tabs should stay stationary 
+ */
+$(window).load(function(){
+    $('.mask_content').each(function(){
+        if($(this).is(':visible')){
+            height = $(window).height() - $(this).offset().top - 5;
+            if(height > 50){
+                $(this).css('overflow-y', 'scroll');
+                $(this).height(height);
+            }
+        }
+    });
+});
+
+$(window).resize(function(){
+    $('.mask_content').each(function(){
+        if($(this).is(':visible')){
+            height = $(window).height() - $(this).offset().top - 5;
+            if(height > 50){
+                $(this).css('overflow-y', 'scroll');
+                $(this).height(height);
+            }
+        }
+    });
+});
 
 
 // Bootstrap tree view
