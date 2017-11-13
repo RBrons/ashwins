@@ -5336,12 +5336,13 @@ ol.number_with_parentheses>li:before {
 }
 
 .bread_crumb_area {
-    background: #005826;
+    /*background: #005826;*/
     width: 100%;
     height: 60px;
-    position: absolute;
+    position: fixed;
     top: 90px;
     left: 0;
+    z-index: 299;
 }
 
 .corporate-contact-form input[type=submit] {
@@ -5360,6 +5361,10 @@ ol.number_with_parentheses>li:before {
     position: absolute;
     font-size: 12px !important;
     left: -80px;
+}
+
+.show_and_list:hover {
+    cursor: pointer;
 }
 
 .show_and_list_own {
@@ -5383,7 +5388,8 @@ ol.number_with_parentheses>li:before {
     border-width: 2px;
     border-color: #fff;
     border-radius: 0px;
-    background: #005826;
+    /*background: #005826;*/
+    background: #fff;
     width: 64px;
     height: 30px;
     font-size: 14px;
@@ -5497,4 +5503,16 @@ ul.m__breadcrumb li a:hover {
 .mask_content {
     position: absolute;
     width: 100%;
+}
+
+/*Scrolling issue*/
+.top_nav.entities:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 117%;
+    left: -230px;
+    height: 15px;
+    background: #fff;
+    bottom: -4px;
 }

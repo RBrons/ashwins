@@ -259,12 +259,12 @@ $( document ).ready(function() {
   // });
 });
 
-$(document).ready(function(){  
+$(document).ready(function(){
   $('.product-list').on('change', function() {
-    $('.product-list').not(this).prop('checked', false);  
+    $('.product-list').not(this).prop('checked', false);
   });
 
-  $('#lease_submit').click(function(e){  
+  $('#lease_submit').click(function(e){
     var CurrentDate = new Date();
     var LeaseDate = new Date(
         $('#property_date_of_lease_1i').val(),
@@ -276,19 +276,19 @@ $(document).ready(function(){
       $('#property_rent_commencement_date_2i').val(),
       $('#property_rent_commencement_date_3i').val()
     );
-    if (LeaseDate >= CurrentDate) {        
+    if (LeaseDate >= CurrentDate) {
       alert("Date of Lease should be prior to Today's date.");
       e.preventDefault();
     }
-    if (LeaseDate >= RentCommenacementDate) {        
+    if (LeaseDate >= RentCommenacementDate) {
       alert("Rent Commencement date should be greater than the Lease Date.");
       e.preventDefault();
-    } 
+    }
 
     if ($('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == "" && $('#property_length_of_option_period').val() == "" && $('#property_lease_rent_increase_percentage').val() == "") {
       alert('Optional Extension fields are need to be filled.');
-      e.preventDefault(); 
-    }    
+      e.preventDefault();
+    }
   });
 
   var unsaved = false;
@@ -305,7 +305,7 @@ $(document).ready(function(){
     // disable unload warning
     $(window).off('beforeunload');
   });
-     
+
   $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
       localStorage.setItem('activeTab', $(e.target).attr('href'));
   });
@@ -315,8 +315,8 @@ $(document).ready(function(){
   }
 
   $('.comming-soon').click(function(e){
-    e.preventDefault(); 
-  }); 
+    e.preventDefault();
+  });
 });
 
 
@@ -336,19 +336,30 @@ var set_breadcrumb_colors = function(){
 
     $(document).find('.breadcrum, .breadcrum-breadcrum, .lease_breadcrum, .tenant_breadcrum')
                                             .css('background-color', bg_color);
-    
+
     $(document).find('.submit-edit-basic, .submit-edit')
                                                     .css('background-color', bg_color)
                                                     .css('border-color', text_color)
                                                     .css('color', text_color);
-    
+
     $(document).find('ul.m__breadcrumb').css('background-color', bg_color);
     $(document).find('ul.m__breadcrumb li').css('color', text_color);
     $(document).find('ul.m__breadcrumb li.action_links button').css({'color': text_color, 'background-color': bg_color, 'border-color': text_color});
+
+    /*Breadcrumb colors for clients module*/
+    $(document).find('.corporate-contact-form .bread_crumb_area').css('background-color', bg_color);
+    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show').css('color', text_color);
+    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show a').css('color', text_color);
+    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show_not_save_btn').css('color', text_color);
+    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show_not_save_btn a').css('color', text_color);
+    $(document).find('.corporate-contact-form .bread_crumb_area #save_btn')
+                                                    .css('background-color', bg_color)
+                                                    .css('border-color', text_color)
+                                                    .css('color', text_color);
 };
 
 /**
- * When user scrolls down, Wizard and Tabs should stay stationary 
+ * When user scrolls down, Wizard and Tabs should stay stationary
  */
 $(window).load(function(){
     $('.mask_content').each(function(){

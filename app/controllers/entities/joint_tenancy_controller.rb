@@ -1,5 +1,7 @@
 class Entities::JointTenancyController < ApplicationController
 
+  layout "entities"
+
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
@@ -15,7 +17,7 @@ class Entities::JointTenancyController < ApplicationController
       #end
       @entity       ||= EntityJointTenancy.new(type_: params[:type])
       @just_created = params[:just_created].to_b
-      if @entity.name == ""
+      if @entity.new_record?
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
         add_breadcrumb " Create", '',  :title => "Create"
