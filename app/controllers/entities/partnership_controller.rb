@@ -1,5 +1,7 @@
 class Entities::PartnershipController < ApplicationController
 
+  layout "entities"
+
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
