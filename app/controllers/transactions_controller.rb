@@ -562,7 +562,7 @@ class TransactionsController < ApplicationController
     else
       @property = Property.find(params[:cur_property])
     end
-
+    
     if @property.present?
       params[:cur_property] = @property.id.to_s
     else

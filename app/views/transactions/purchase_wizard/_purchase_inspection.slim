@@ -18,8 +18,9 @@ div[role="tabpanel"]
           a#survey[href="#survey_section" role="tab" data-toggle="tab" aria-expanded="false"] Survey
       li[role="presentation"]
           a#inspection_zoning[href="#inspection_zoning_section" role="tab" data-toggle="tab" aria-expanded="false"] Zoning
-  .tab-content.clearfix
-      #seller_documentation_section.active.tab-pane.fade.in[role="tabpanel"]
+  .clearfix
+  .tab-content
+      #seller_documentation_section.mask_content.active.tab-pane.fade.in[role="tabpanel"]
         = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
           .col-lg-6.col-md-6.col-sm-12.col-xs-12
             .form-group
@@ -49,7 +50,8 @@ div[role="tabpanel"]
           li
             a#environmental_tasks[href="#environmental_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #environmental_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:environmental][0], prepopulated_list: @personnel_on_tab[:environmental][1], personnel_category: 'Environmental'}
@@ -143,10 +145,82 @@ div[role="tabpanel"]
             li
               a#lease_tasks[href="#lease_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
 
-          .tab-content.clearfix
+          .clearfix
+          .tab-content.mask_content
             #lease_tenant_contact_section.tab-pane.fade.in[role="tabpanel"]
-            
+              = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+                .col-lg-4.col-md-4.form-content
+                  .form-group
+                    = label_tag 'Tenant'
+                    = f.text_field :tenant_name,class: 'form-control'
+                  .form-group
+                    = label_tag 'Store Number'
+                    = f.text_field :tenants_store_number, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Name'
+                    = f.text_field :tenant_contact_name, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Company'
+                    = f.text_field :tenant_contact_company, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Phone'
+                    = f.text_field :tenant_contact_phone, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Email'
+                    = f.text_field :tenant_contact_email, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Fax'
+                    = f.text_field :tenant_contact_fax, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Street Address'
+                    = f.text_area :tenant_contact_street_address, class: 'form-control'
+                  .form-group
+                    = label_tag 'State'
+                    = f.text_area :tenant_state, class: 'form-control'
+                  .form-group
+                    = label_tag 'City'
+                    = f.text_area :tenant_city, class: 'form-control'
+                  .form-group
+                    = label_tag 'Country'
+                    = f.text_area :tenant_county, class: 'form-control'
+                    
             #lease_facilities_manager_section.tab-pane.fade.in[role="tabpanel"]
+              = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+                input[type="hidden" name="type_is" value="tenant"]
+                .col-lg-4.col-md-4.form-content
+                  .form-group
+                    = label_tag 'Tenant'
+                    = f.text_field :tenant_name, class: 'form-control', readonly: true
+                  .form-group
+                    = label_tag 'Store Number'
+                    = f.text_field :facilities_store_number, class: 'form-control'
+                  .form-group
+                    = label_tag 'Facilities Contact Name'
+                    = f.text_field :facilities_contact_name, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Company'
+                    = f.text_field :facilities_contact_company, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Phone'
+                    = f.text_field :facilities_contact_phone, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Email'
+                    = f.text_field :facilities_contact_email, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Fax'
+                    = f.text_field :facilities_contact_fax, class: 'form-control'
+                  .form-group
+                    = label_tag 'Contact Street Address'
+                    = f.text_area :facilities_contact_street_address, class: 'form-control'
+                  .form-group
+                    = label_tag 'State'
+                    = f.text_area :facilities_contact_state, class: 'form-control'
+                  .form-group
+                    = label_tag 'City'
+                    = f.text_area :facilities_contact_city, class: 'form-control'
+                  .form-group
+                    = label_tag 'Country'
+                    = f.text_area :facilities_contact_country, class: 'form-control'
 
             #lease_files_section.tab-pane.fade.in[role="tabpanel"]
               = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_inspection_form'}, url: inspection_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
@@ -235,7 +309,8 @@ div[role="tabpanel"]
           li
             a#title_tasks[href="#title_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #title_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:title][0], prepopulated_list: @personnel_on_tab[:title][1], personnel_category: 'Title'}
@@ -356,7 +431,8 @@ div[role="tabpanel"]
           li
             a#survey_tasks[href="#survey_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #survey_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:survey][0], prepopulated_list: @personnel_on_tab[:survey][1], personnel_category: 'Survey'}
@@ -466,7 +542,8 @@ div[role="tabpanel"]
           li
             a#zoning_tasks[href="#zoning_tasks_section" role="tab" data-toggle="tab" aria-expanded="false"] Tasks
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           #zoning_personnel_section.active.tab-pane.fade.in[role="tabpanel"]
             .col-md-6.col-xs-12
               = render partial: 'transactions/personnel_form', locals: {transaction_personnel: @personnel_on_tab[:zoning][0], prepopulated_list: @personnel_on_tab[:zoning][1], personnel_category: 'Zoning'}

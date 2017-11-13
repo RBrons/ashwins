@@ -24,8 +24,9 @@
           a#purchase_sale_agreement[href="#purchase_sale_agreement_section" role="tab" data-toggle="tab" aria-expanded="false"] Purchase Sale Agreement
       li[class=(@sub_tab == 'escrow_section' ? 'active' : '')]
           a#escrow[href="#escrow_section" role="tab" data-toggle="tab" aria-expanded="false"] Escrow
-
-    .tab-content.clearfix
+    
+    .clearfix
+    .tab-content
       #relinquishing_purchaser_section.tab-pane.fade[class=(@sub_tab == 'relinquishing_purchaser' || @sub_tab.blank? ? 'active in' : '')]
         ul#multiple_offer.nav.nav-tabs.bar_tabs
           - @transaction_property.transaction_property_offers.order("is_accepted DESC, updated_at ASC").each do |transaction_property_offer|
@@ -39,7 +40,9 @@
           li
             a#new_offer[href="#" role="tab" data-toggle="tab" aria-expanded="false" data-tran-prop-id="#{@transaction_property.id}"]
               i.fa.fa-plus
-        .tab-content.clearfix
+        
+        .clearfix
+        .tab-content
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
             .tab-pane.fade[id="#{'offer_' + transaction_property_offer.id.to_s}"]
               ul.nav.nav-tabs.bar_tabs[role="tablist"]
@@ -52,7 +55,9 @@
                 li
                   a[href="#attorney_section_offer_#{transaction_property_offer.id}" role="tab" data-toggle="tab" aria-expanded="false"] 
                     = transaction_property_offer.offer_name + " - Attorney"
-              .tab-content.clearfix
+              
+              .clearfix
+              .tab-content.mask_content
                 .basic_info_section.tab-pane.fade.active.in[id="basic_info_section_offer_#{transaction_property_offer.id}" role="tabpanel"]
                   .col-lg-4.close-md-4.col-sm-12.col-xs-12
                     = form_for(transaction_property_offer, url: update_with_contact_transaction_property_offer_path(transaction_property_offer)) do |f_offer|
@@ -294,7 +299,8 @@
                 - if transaction_property_offer.is_accepted
                   i.red.margin-md-left Accepted
         
-        .tab-content.clearfix
+        .clearfix
+        .tab-content.mask_content
           input#has_accepted_offer[type="hidden" value=(@transaction_property.transaction_property_offers.where(is_accepted: true).count > 0 ? 'true' : 'false')]
           input#accepted_offer[type="hidden" value=(@transaction_property.accepted_offer.try(:offer_name))]
           - @transaction_property.transaction_property_offers.each do |transaction_property_offer|
@@ -363,7 +369,7 @@
                       - else
                         = link_to last_counteroffer.try(:offer_type) == 'Client' ? 'Client\'s Counter Accepted' : 'Buyer\'s Counter Accepted', '#', class: 'btn btn-default green border-green', disabled: transaction_property_offer.is_accepted
 
-      #letter_of_intent_section.tab-pane.fade[class=(@sub_tab == 'letter_of_intent' ? 'active in' : '')]
+      #letter_of_intent_section.mask_content.tab-pane.fade[class=(@sub_tab == 'letter_of_intent' ? 'active in' : '')]
         input.is_passed[type="hidden" value="#{@transaction_property.transaction_term.purchase_price.present? ? true : false}"]
         h2#loi_description.heading_without_padding_large[style=(@transaction_property.transaction_property_offers.where(:is_accepted => true).count == 0 ? 'display: none' : '')]
           span = @relinquishing_purchaser.try(:name) || 'Offeror'
@@ -498,7 +504,7 @@
                   .right
                     span Document Property Filed?
 
-      #purchase_sale_agreement_section.tab-pane.fade[class=(@sub_tab == 'purchase_sale_agreement' ? 'active in' : '')]
+      #purchase_sale_agreement_section.mask_content.tab-pane.fade[class=(@sub_tab == 'purchase_sale_agreement' ? 'active in' : '')]
         .col-md-8.col-xs-12.margin-lg-top
           = nested_form_for(@transaction_property, as: :transaction, remote: true, :html => {:'data-type' => 'json', :class => 'transaction_property_term_form'}, url: terms_update_transaction_path(@transaction, main_id: params[:main_id], sub: params[:sub], type: params[:type], cur_property: params[:cur_property])) do |f|
             = f.fields_for :transaction_term do |transaction_term_form|
@@ -643,7 +649,7 @@
                   .right
                     span Document Property Filed?
 
-      #escrow_section.tab-pane.fade[class=(@sub_tab == 'escrow_section' ? 'active in' : '')]
+      #escrow_section.mask_content.tab-pane.fade[class=(@sub_tab == 'escrow_section' ? 'active in' : '')]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12
           .form-group
               label.control-label Qualified Intermediary
