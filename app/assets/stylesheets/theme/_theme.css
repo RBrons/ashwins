@@ -5336,7 +5336,7 @@ ol.number_with_parentheses>li:before {
 }
 
 .bread_crumb_area {
-    background: #005826;
+    /*background: #005826;*/
     width: 100%;
     height: 60px;
     position: fixed;
@@ -5363,6 +5363,10 @@ ol.number_with_parentheses>li:before {
     left: -80px;
 }
 
+.show_and_list:hover {
+    cursor: pointer;
+}
+
 .show_and_list_own {
     margin-top: 31px;
     position: absolute;
@@ -5384,7 +5388,8 @@ ol.number_with_parentheses>li:before {
     border-width: 2px;
     border-color: #fff;
     border-radius: 0px;
-    background: #005826;
+    /*background: #005826;*/
+    background: #fff;
     width: 64px;
     height: 30px;
     font-size: 14px;

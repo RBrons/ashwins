@@ -17,7 +17,7 @@ class Entities::TenancyInCommonController < ApplicationController
       #end
       @entity       ||= EntityTenancyInCommon.new(type_: params[:type])
       @just_created = params[:just_created].to_b
-      if @entity.name == ""
+      if @entity.new_record?
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"
         add_breadcrumb " Create", '',  :title => "Create"
