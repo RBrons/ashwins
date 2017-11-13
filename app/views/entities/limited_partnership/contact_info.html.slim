@@ -21,17 +21,16 @@
       = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
     .clearfix
     .form-group
-      = f.label :first_name, class: "control-label"
+      = f.label :first_name, "First Name", class: "control-label"
       = f.text_field :first_name, class: "form-control"
     .form-group
-      = f.label :last_name, class: "control-label"
-      = f.text_field :last_name, class: "form-control"
+      = f.label :last_name, "Last Name", class: "control-label"
       = f.text_field :last_name, class: "form-control"
     .form-group
-      = f.label :phone1
+      = f.label :phone1, "Phone 1"
       = f.text_field :phone1, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
     .form-group
-      = f.label :phone2
+      = f.label :phone2, "Phone 2"
       = f.text_field :phone2, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
     .form-group
       = f.label :fax
