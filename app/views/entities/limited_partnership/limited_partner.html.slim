@@ -35,10 +35,10 @@
       .form-group style=("#{('display: none;' if entity_partners.length == 0 || individual_partners.length == 0)}")
         .option-1
           = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @partner.is_person
+          = f.radio_button :is_person, true, checked: @partner.is_person, class: "zoom-in-ele"
         .option-2
           = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@partner.is_person
+          = f.radio_button :is_person, false, checked: !@partner.is_person, class: "zoom-in-ele"
 
       .form-group#limited_partner_entity
         label.is-person-hide style=("#{('display: none;' if @partner.is_person)}") Owning Entity
@@ -64,7 +64,8 @@
         = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
       .form-group
         label Tax Matters Member
-        = f.check_box :tax_member
+        .clearfix
+        = f.check_box :tax_member, class: "zoom-in-ele"
       .form-group
         = f.submit "Save", class: "btn btn-primary"
 

@@ -253,12 +253,12 @@ class Entities::CorporatesController < ApplicationController
         if @stockholder.new_record?
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " Corporation/", '',  :title => "Corporation"
-          add_breadcrumb " StockHolder Create", '',  :title => "StockHolder Create"
+          add_breadcrumb " Stockholder Create", '',  :title => "Stockholder Create"
         else
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " Corporation/", '',  :title => "Corporation"
           add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-          add_breadcrumb " StockHolder", '',  :title => "StockHolder"
+          add_breadcrumb " Stockholder", '',  :title => "Stockholder"
           add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
           add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
         end

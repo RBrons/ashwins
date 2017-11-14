@@ -42,7 +42,7 @@
       = f.text_field :ein_or_ssn, class: "form-control"
 
     .clearfix
-    .form-group.required
+    .form-group.required.date_of_formation
       label.control-label Date of Formation
       .clearfix
       .pull-left
@@ -52,11 +52,11 @@
         .pull-left
           label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
         .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
+          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date zoom-in-ele'
 
     .clearfix
-    .form-group.margin-sm-top
-      = f.label "State of Formation"
+    .form-group
+      label.control-label State of Formation
       = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction), {}, class: "form-control selectize-single width-field-md"
     - if @entity.persisted?
       .form-group
