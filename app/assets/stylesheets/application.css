@@ -23,7 +23,7 @@
 
 
  table#data_table tbody tr td {
- 	    font-size: 14px !important;
+      font-size: 14px !important;
  }
 
 table#data_table tbody tr td.details-control {
@@ -80,7 +80,7 @@ table#data_table tbody tr.child-row.active-item{
   color: #fff;
   font-size: 12px;
   margin-top: -10px !important;
-  position: absolute;    
+  position: absolute;
 }
 .breadcrum_line {
   margin-left: 117px !important;
@@ -105,8 +105,24 @@ table#data_table tbody tr.child-row.active-item{
   display: block !important;
   margin-top: -8px !important;
 }
+.show_property{
+  left: 32px;
+  text-decoration: underline;
+}
+.list_property{
+  text-decoration: underline;
+  font-size: 12px !important;  
+} 
+.list_client{
+  text-decoration: underline;
+  font-size: 12px !important;
+}
+.show_client{
+  text-decoration: underline;
+  left: -45px !important;
+}
 
-.l1ist_show_contact {
+.list_contact {
   margin-left: 45px !important;
   display: block !important;
   margin-top: -25px !important;
@@ -123,7 +139,7 @@ table#data_table tbody tr.child-row.active-item{
 }
 
 .submit-button{
-	float: right;
+  float: right;
 }
 
 .sub-class{
@@ -275,4 +291,50 @@ table#data_table tbody tr.child-row.active-item{
 
 .tenant-form-content {
   margin-top: 73px !important;
+}
+.check_box_label{
+  position: relative !important;
+  left: 12px !important;
+}
+#entity_jurisdiction,#entity_state{
+  position: relative !important;
+  left: 12px !important;
+}
+.white_line{
+  position: fixed;
+  width: 131% !important;
+  height: 16px !important;
+  background-color: white !important;
+  margin-top: -46px !important;
+  margin-left: -67px !important;
+}
+
+.gallery_fixed{
+  position: fixed;
+  width: 131% !important;
+  height: 16px !important;
+  background-color: white !important;
+  margin-top: -76px !important;
+  margin-left: -67px !important;
+}
+.client_bredcrumb{
+  margin-top: -151px;
+  margin-left: -50px !important;
+}
+.contact_show_se{
+  text-decoration: underline;
+  left:31px !important;
+}
+.list_contacts{
+  text-decoration: underline;
+}
+.contact_bredcumb_fixed{
+  position: fixed !important;
+  top: 115px!important;
+}
+.contact_form{
+  top: 25px;
+}
+.contact_breadcrumb_fixed{
+  top: 120px;
 }

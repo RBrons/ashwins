@@ -32,7 +32,7 @@
       label.control-label Owner Last Name
       = f.text_field :last_name, class: "partnership form-control"
     .form-group
-      = f.label "Fictitious Business Name"
+      label Fictitious Business Name
       = f.text_field :name2, class: "partnership form-control"
     .form-group.required
       label.control-label Date of Registration
@@ -47,7 +47,7 @@
           = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
     .clearfix
     .form-group
-      = f.label "Postal Address"
+      label Postal Address
       = f.text_field :postal_address2, class: "partnership form-control"
     .form-group
       = f.label "City"

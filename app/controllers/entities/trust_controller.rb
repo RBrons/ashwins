@@ -20,7 +20,8 @@ class Entities::TrustController < ApplicationController
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Trust/", '',  :title => "Trust"
         add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
-        add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
+        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
       end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
@@ -56,7 +57,8 @@ class Entities::TrustController < ApplicationController
       add_breadcrumb " Trust/", '',  :title => "Trust"
       add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list" 
+      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
+      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client" 
     elsif request.patch?
       @entity.basic_info_only = false
       @entity.update(entity_params)
@@ -64,7 +66,8 @@ class Entities::TrustController < ApplicationController
       add_breadcrumb " Trust/", '',  :title => "Trust"
       add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list" 
+      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
+      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client" 
       return render layout: false, template: "entities/trust/contact_info"
     else
       raise UnknownRequestFormat
@@ -141,6 +144,11 @@ class Entities::TrustController < ApplicationController
 
   def settlors
     @entity = Entity.find_by(key: params[:entity_key])
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Settlors", '',  :title => "Settlors"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @settlors = @entity.settlors
     @activeId = params[:active_id]
@@ -210,6 +218,11 @@ class Entities::TrustController < ApplicationController
 
   def trustees
     @entity = Entity.find_by(key: params[:entity_key])
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Trustees", '',  :title => "Trustees"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @trustees = @entity.trustees
     @activeId = params[:active_id]
@@ -278,6 +291,11 @@ class Entities::TrustController < ApplicationController
 
   def beneficiaries
     @entity = Entity.find_by(key: params[:entity_key])
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Beneficiaries", '',  :title => "Beneficiaries"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @beneficiaries = @entity.beneficiaries
     @activeId = params[:active_id]
@@ -292,7 +310,8 @@ class Entities::TrustController < ApplicationController
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
     add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
     add_breadcrumb " Owns", '',  :title => "Owns"
-    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end

@@ -1,10 +1,12 @@
+.white_line.container.breadcrum-breadcrum.bredcrum-fixed  
 .container.breadcrum-breadcrum.bredcrum-fixed
   p
     .margin-md-left.breadcrum_no_save
       = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
   <br><br>
     - if @property.id.present?
-      = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+      = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+      = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
 div.bredcum-content 
   div.col-lg-12.col-md-12.col-sm-12.col-xs-12
     .clearfix.margin-lg-left.header-tab

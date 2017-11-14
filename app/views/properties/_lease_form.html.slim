@@ -1,3 +1,4 @@
+.white_line.container.breadcrum-breadcrum.bredcrum-fixed
 #comments-modal.modal.fade[data-keyboard="false" data-backdrop="static"]
   .modal-dialog.modal-md
     .modal-header
@@ -67,7 +68,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -124,7 +126,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -262,7 +265,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_no_save
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
         div.col-lg-12.col-md-12.col-sm-12.col-xs-12 
           .clearfix.margin-lg-left.lease-header-tab
             = render 'properties/form_header_link'
@@ -374,7 +378,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -441,7 +446,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -555,7 +561,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -629,7 +636,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -702,7 +710,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -754,7 +763,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -971,7 +981,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -1045,7 +1056,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -1140,7 +1152,8 @@ div.lease-subtabs[role="tabpanel"]
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 

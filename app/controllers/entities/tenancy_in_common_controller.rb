@@ -1,7 +1,5 @@
 class Entities::TenancyInCommonController < ApplicationController
 
-  layout "entities"
-
   before_action :current_page
   before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
@@ -25,8 +23,10 @@ class Entities::TenancyInCommonController < ApplicationController
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"
         add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
-        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-        add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+        # if @entity.id.present?
+          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
+          add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
+        # end
       end
     elsif request.post?
       @entity                 = EntityTenancyInCommon.new(entity_tenancy_in_common_params)
@@ -70,8 +70,8 @@ class Entities::TenancyInCommonController < ApplicationController
           add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"
           add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
           add_breadcrumb " Tenant in Common", '',  :title => "Tenant in Common"
-          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-          add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
+          add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
         end
       end
     end

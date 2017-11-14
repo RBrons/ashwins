@@ -20,7 +20,8 @@ class Entities::SoleProprietorshipController < ApplicationController
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
         add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
-        add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
+        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
       end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
@@ -65,7 +66,8 @@ class Entities::SoleProprietorshipController < ApplicationController
       add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
       add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list" 
+      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
+      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
     elsif request.patch?
       @entity.basic_info_only = false
       @entity.update(entity_params)
@@ -73,7 +75,8 @@ class Entities::SoleProprietorshipController < ApplicationController
       add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
       add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
       add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
+      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
       return render layout: false, template: "entities/sole_proprietorship/contact_info"
     else
       raise UnknownRequestFormat
@@ -89,7 +92,8 @@ class Entities::SoleProprietorshipController < ApplicationController
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
     add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
     add_breadcrumb " Owns", '',  :title => "Owns"
-    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end
