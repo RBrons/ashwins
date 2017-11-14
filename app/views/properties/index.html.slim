@@ -10,7 +10,12 @@
         span Are you sure you want to continue?
         = link_to 'Yes', 'javascript:void(0)', data: {:key => ''}, class: "#{delete_xs} delete-property-yes"
         = link_to 'No', 'javascript:void(0)', class: "#{show_xs} delete-property-no", data: {dismiss: "modal"}, aria: {label: "Close"}
-h2.text-center Properties List View
+ul.m__breadcrumb
+  li
+    | Properties
+  li
+    | List View
+
 table#data_table
   thead
     tr
