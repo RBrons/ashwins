@@ -35,10 +35,10 @@
       .form-group style=("#{('display: none;' if entity_managers.length == 0 || individual_managers.length == 0)}")
         .option-1
           = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @manager.is_person
+          = f.radio_button :is_person, true, checked: @manager.is_person, class: "zoom-in-ele"
         .option-2
           = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@manager.is_person
+          = f.radio_button :is_person, false, checked: !@manager.is_person, class: "zoom-in-ele"
 
       .form-group#manager_entity
         label.is-person-hide style=("#{('display: none;' if @manager.is_person)}") Owning Entity

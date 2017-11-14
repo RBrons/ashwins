@@ -35,10 +35,10 @@
       .form-group style=("#{('display: none;' if entity_members.length == 0 || individual_members.length == 0)}")
         .option-1
           = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @member.is_person
+          = f.radio_button :is_person, true, checked: @member.is_person, class: "zoom-in-ele"
         .option-2
           = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@member.is_person
+          = f.radio_button :is_person, false, checked: !@member.is_person, class: "zoom-in-ele"
 
       .form-group#member_entity
         label.is-person-hide style=("#{('display: none;' if @member.is_person)}") Owning Entity
@@ -54,20 +54,22 @@
         = hidden_field_tag :cid, @member.temp_id
       .form-group
           label Manager?
-          = f.check_box :is_manager
+          .clearfix
+          = f.check_box :is_manager, class: "zoom-in-ele"
       .form-group
         label Member Interest for this Member
         = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
       .form-group
         label Remaining Member Interest to be Assigned
         = text_field_tag "remaining_number_of_assets", @member.remaining_share_or_interest,
-                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share",
+                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control",
                 "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
         = hidden_field_tag "remaining_number_of_assets", @member.remaining_share_or_interest
         = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
       .form-group
         label Tax Matters Member
-        = f.check_box :tax_member
+        .clearfix
+        = f.check_box :tax_member, class: "zoom-in-ele"
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
 
