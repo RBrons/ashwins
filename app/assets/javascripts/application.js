@@ -344,8 +344,7 @@ var set_breadcrumb_colors = function(){
 
     $(document).find('ul.m__breadcrumb').css('background-color', bg_color);
     $(document).find('ul.m__breadcrumb li').css('color', text_color);
-    $(document).find('ul.m__breadcrumb li.action_links button').css({'color': text_color, 'background-color': bg_color, 'border-color': text_color});
-
+    
     /*Breadcrumb colors for clients module*/
     $(document).find('.corporate-contact-form .bread_crumb_area').css('background-color', bg_color);
     $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show').css('color', text_color);

@@ -5449,7 +5449,7 @@ ol.number_with_parentheses>li:before {
 ul.m__breadcrumb {
     padding: 10px 16px;
     list-style: none;
-    background-color: #005826;
+    background-color: inherit;
 }
 
 ul.m__breadcrumb li {
@@ -5478,10 +5478,10 @@ ul.m__breadcrumb li a {
 ul.m__breadcrumb li.action_links button {
     width: 64px;
     height: 30px;
-    border-color: #fff;
-    color: #fff;
+    border-color: inherit;
+    color: inherit;
     border-radius: 0px;
-    background-color: #005826;
+    background-color: inherit;
     border-width: 2px;
 }
 
