@@ -5407,6 +5407,15 @@ ol.number_with_parentheses>li:before {
     margin-top: 60px;
 }
 
+.corporate-forms-margin {
+    margin-top: 45px !important;
+}
+
+.internal-list {
+  margin-top: -35px !important;
+}
+
+
 .bread_crumb_show_not_save_btn {
     color: #fff;
     position: absolute;

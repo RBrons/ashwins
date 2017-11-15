@@ -320,6 +320,32 @@ $(document).ready(function(){
 });
 
 
+$(document).ready(function(){
+  $('#contact_info_new').click(function(){
+    var count=0;
+    localStorage.firstname=$('#entity_first_name').val();
+    localStorage.lastname=$('#entity_last_name').val();
+    if (localStorage.firstname!="undefined") {
+      sessionStorage.name = localStorage.firstname
+    };
+    if (localStorage.lastname!="undefined") {
+      sessionStorage.last = localStorage.lastname
+    };
+    setInterval(function(){ 
+      var first_name=$('#entity_first_name2').val();
+      var last_name=$('#entity_last_name2').val();
+      count ++;
+      if (last_name=="" && count<5) {
+        document.getElementById("entity_last_name2").value = sessionStorage.last
+      };
+      if (first_name=="" && count<5) {
+        document.getElementById("entity_first_name2").value = sessionStorage.name
+      };
+    }, 500);
+  });
+});
+
+
 /**
  * Set Breadcrumb text and backround color based on admin setting
  */

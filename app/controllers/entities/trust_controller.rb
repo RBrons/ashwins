@@ -94,6 +94,8 @@ class Entities::TrustController < ApplicationController
         add_breadcrumb " Trust/", '',  :title => "Trust" 
         add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
         add_breadcrumb " Settlor", '',  :title => "Settlor"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
+      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client" 
         # add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
       end
     elsif request.post?
@@ -175,6 +177,8 @@ class Entities::TrustController < ApplicationController
         add_breadcrumb " Trust/", '',  :title => "Trust" 
         add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
         add_breadcrumb " Trustee", '',  :title => "Trustee"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
+      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client" 
         # add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
       end
 
@@ -249,6 +253,8 @@ class Entities::TrustController < ApplicationController
         add_breadcrumb " Trust/", '',  :title => "Trust" 
         add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
         add_breadcrumb " Beneficiary", '',  :title => "Beneficiary"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
+      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client" 
         # add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
       end
     elsif request.post?
