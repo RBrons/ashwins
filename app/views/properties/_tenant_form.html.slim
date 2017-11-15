@@ -1,3 +1,4 @@
+  .white_line.container.breadcrum-breadcrum.bredcrum-fixed  
   div.lease-subtabs[role="tabpanel"]
     ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
       li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
@@ -20,7 +21,8 @@
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path, class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -37,25 +39,25 @@
               = label_tag 'Tenant'
               = f.text_field :tenant_name,class: 'form-control'
             .form-group
-              = label_tag 'Store Number'
+              label Store Number
               = f.text_field :tenants_store_number, class: 'form-control'
             .form-group
-              = label_tag 'Contact Name'
+              label Contact Name
               = f.text_field :tenant_contact_name, class: 'form-control'
             .form-group
-              = label_tag 'Contact Company'
+              label Contact Company
               = f.text_field :tenant_contact_company, class: 'form-control'
             .form-group
-              = label_tag 'Contact Phone'
+              label Contact Phone
               = f.text_field :tenant_contact_phone, class: 'form-control'
             .form-group
-              = label_tag 'Contact Email'
+              label Contact Email
               = f.text_field :tenant_contact_email, class: 'form-control'
             .form-group
-              = label_tag 'Contact Fax'
+              label Contact Fax
               = f.text_field :tenant_contact_fax, class: 'form-control'
             .form-group
-              = label_tag 'Contact Street Address'
+              label Contact Street Address
               = f.text_area :tenant_contact_street_address, class: 'form-control'
             .form-group
               = label_tag 'State'
@@ -84,7 +86,8 @@
               .margin-md-left.breadcrum_line
                 = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
             <br><br>
-              = link_to "Show in list", properties_path, class: "breadcrum_list list_show"
+              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+              = link_to "Show", property_path, class: "breadcrum_list list_show show_property"
               div.save_property
                 - if @property.persisted?
                   - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
@@ -101,25 +104,25 @@
               = label_tag 'Tenant'
               = f.text_field :tenant_name, class: 'form-control', readonly: true
             .form-group
-              = label_tag 'Store Number'
+              label Store Number
               = f.text_field :facilities_store_number, class: 'form-control'
             .form-group
-              = label_tag 'Facilities Contact Name'
+              label Facilities Contact Name
               = f.text_field :facilities_contact_name, class: 'form-control'
             .form-group
-              = label_tag 'Contact Company'
+              label Contact Company
               = f.text_field :facilities_contact_company, class: 'form-control'
             .form-group
-              = label_tag 'Contact Phone'
+              label Contact Phone
               = f.text_field :facilities_contact_phone, class: 'form-control'
             .form-group
-              = label_tag 'Contact Email'
+              label Contact Email
               = f.text_field :facilities_contact_email, class: 'form-control'
             .form-group
-              = label_tag 'Contact Fax'
+              label Contact Fax
               = f.text_field :facilities_contact_fax, class: 'form-control'
             .form-group
-              = label_tag 'Contact Street Address'
+              label Contact Street Address
               = f.text_area :facilities_contact_street_address, class: 'form-control'
             .form-group
               = label_tag 'State'

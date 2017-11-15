@@ -19,7 +19,8 @@ class Entities::IndividualsController < ApplicationController
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Individual/", '',  :title => "Individual"
         add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
-        add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
+        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
       end
     elsif request.post?
       @entity                 = Entity.new(individuals_params)
@@ -56,7 +57,8 @@ class Entities::IndividualsController < ApplicationController
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
     add_breadcrumb " Individual #{@entity.name}/", '',  :title => "Individual"
     add_breadcrumb " Owns", '',  :title => "Owns"
-    add_breadcrumb "Show in list", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own"
+    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
+    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end

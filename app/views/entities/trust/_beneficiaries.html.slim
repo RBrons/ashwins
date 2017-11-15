@@ -1,3 +1,6 @@
+.bread_crumb_area
+  .bread_crumb_show_not_save_btn
+    = render_breadcrumbs :separator => ' '
 = hidden_field_tag :int_action, 'Beneficiaries List'
 .clearfix
 table#data_table
@@ -42,7 +45,7 @@ table#data_table
           - if entity_flag
             = MemberType.member_types[beneficiary.member_type_id]
           - else
-            = beneficiary.contact.role
+            = beneficiary.contact.role rescue nil
         td
           - if person_flag
             - if beneficiary.entity.present?
