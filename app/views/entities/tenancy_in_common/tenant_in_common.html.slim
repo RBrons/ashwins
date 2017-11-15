@@ -35,10 +35,10 @@
       .form-group style=("#{('display: none;' if entity_tenants.length == 0 || individual_tenants.length == 0)}")
         .option-1
           = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @tenant_in_common.is_person
+          = f.radio_button :is_person, true, checked: @tenant_in_common.is_person, class: "zoom-in-ele"
         .option-2
           = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@tenant_in_common.is_person
+          = f.radio_button :is_person, false, checked: !@tenant_in_common.is_person, class: "zoom-in-ele"
 
       .form-group#tenant_in_common_entity
         label.is-person-hide style=("#{('display: none;' if @tenant_in_common.is_person)}") Owning Entity
@@ -68,6 +68,7 @@
 
 javascript:
   $(document).ready(function() {
+    set_breadcrumb_colors();
     $('#save_btn').on('click', function() {
       $('.corporate-contact-form form').submit();
     });

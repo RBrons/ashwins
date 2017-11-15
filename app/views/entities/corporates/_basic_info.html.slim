@@ -40,7 +40,7 @@
       = f.text_field :ein_or_ssn, class: "form-control"
 
     .clearfix
-    .form-group.required
+    .form-group.required.date_of_formation
       label.control-label Date of Formation
       .clearfix
       .pull-left
@@ -50,11 +50,11 @@
         .pull-left
           label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
         .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
+          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date zoom-in-ele'
 
     .clearfix
     .form-group
-      = f.label "State of Formation"
+      label.control-label State of Formation
       = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction), {}, class: "form-control width-field-md"
     .form-group
       = f.label "Calculate Shares to How Many Decimal Places?"
@@ -62,26 +62,25 @@
     span#corporate_decimal_count style="display: none"
       = @entity.shares_decimal_count
     .form-group
-      .half
-        = f.label "Total Stock Shares"
-        = f.text_field :number_of_assets, "autocomplete" => "off", class: "form-control input-mask-integer"
-      .half
-        = f.label "Remaining Stock Shares"
-        .instant-remaining-stock-share
-          = text_field_tag "instant_remaining_number_of_assets", @entity.corporate_remaining_share, "disabled" => "disabled", class: " input-mask-integer"
-        = hidden_field_tag "instant_remaining_number_of_assets", @entity.corporate_distributed_share
+      label.control-label Total Stock Shares
+      = f.text_field :number_of_assets, "autocomplete" => "off", class: "form-control input-mask-integer"
+    .form-group
+      label.confirm Remaining Stock Shares
+      .instant-remaining-stock-share
+        = text_field_tag "instant_remaining_number_of_assets", @entity.corporate_remaining_share, "disabled" => "disabled", class: " input-mask-integer form-control"
+      = hidden_field_tag "instant_remaining_number_of_assets", @entity.corporate_distributed_share
     .form-group
       .part23
         .half
           .part1
             label S Corp Status
           .part2
-            = f.check_box :s_corp_status
+            = f.check_box :s_corp_status, class: "zoom-in-ele"
         .half
           .part1
             label Not For Profit
           .part2
-            = f.check_box :not_for_profit_status
+            = f.check_box :not_for_profit_status, class: "zoom-in-ele"
     .clearfix
       .form-group
         - if @entity.persisted?

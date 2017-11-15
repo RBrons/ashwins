@@ -41,6 +41,7 @@
         = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
       .form-group
         label Tax Matters Member
+        .clearfix
         = f.check_box :tax_member
       .form-group
         = f.submit "Save", class: "btn btn-primary"

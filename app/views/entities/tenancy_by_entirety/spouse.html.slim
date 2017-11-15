@@ -30,17 +30,19 @@
         = hidden_field_tag :cid, @spouse.temp_id
       .form-group
         = f.label "Gender"
+        .clearfix
         .option-1
           = f.label "Male"
-          = f.radio_button :gender, 'Male', checked: @spouse.gender == 'Male'
+          = f.radio_button :gender, 'Male', checked: @spouse.gender == 'Male', class: "zoom-in-ele"
         .option-2
           = f.label "Female"
-          = f.radio_button :gender, 'Female', checked: @spouse.gender == 'Female'
+          = f.radio_button :gender, 'Female', checked: @spouse.gender == 'Female', class: "zoom-in-ele"
       .form-group
         = f.submit "Save", class: "btn btn-primary"
 
 javascript:
   $(document).ready(function() {
+    set_breadcrumb_colors();
     $('#save_btn').on('click', function() {
       $('.corporate-contact-form form').submit();
     });
