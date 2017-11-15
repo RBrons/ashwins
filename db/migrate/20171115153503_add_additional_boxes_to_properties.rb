@@ -33,7 +33,7 @@ class AddAdditionalBoxesToProperties < ActiveRecord::Migration[5.0]
     add_column :properties, :use_exclusive_clause_section, :string
     add_column :properties, :premises_tenant_rights_section, :string
     add_column :properties, :premises_waste_section, :string
-    add_column :premises_initial_opening_section, :string
+    add_column :properties, :premises_initial_opening_section, :string
     add_column :properties, :premises_recapture_clause_section, :string
     add_column :properties, :premises_demolition_section, :string
     add_column :properties, :premises_tenants_equipment_defined_section, :string
