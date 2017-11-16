@@ -333,7 +333,7 @@ var set_breadcrumb_colors = function(){
     $(document).find('.breadcrum_text').css('color', text_color);
     $(document).find('.breadcrum_list').css('color', text_color);
 
-    $(document).find('.breadcrum, .breadcrum-breadcrum, .lease_breadcrum, .tenant_breadcrum')
+    $(document).find('.breadcrum, .breadcrum-breadcrum, .lease_breadcrum, .tenant_breadcrum, .gallery_breadcrum')
                                             .css('background-color', bg_color);
 
     $(document).find('.submit-edit-basic, .submit-edit')
