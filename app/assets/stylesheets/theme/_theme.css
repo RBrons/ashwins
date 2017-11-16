@@ -5458,7 +5458,8 @@ ol.number_with_parentheses>li:before {
 /* Breadcrumb style kit. Please follow this style */
 .breadcrumb-wrapper{
     background-color: inherit;
-    padding: 7px 15px;
+    padding: 8px 15px;
+    margin: 10px 0;
 }
 
 .breadcrumb-wrapper .action-links a{
