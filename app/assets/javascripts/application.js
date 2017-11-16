@@ -264,33 +264,6 @@ $(document).ready(function(){
     $('.product-list').not(this).prop('checked', false);
   });
 
-  $('#lease_submit').click(function(e){
-    var CurrentDate = new Date();
-    var LeaseDate = new Date(
-        $('#property_date_of_lease_1i').val(),
-        $('#property_date_of_lease_3i').val(),
-        $('#property_date_of_lease_2i').val()
-    );
-    var RentCommenacementDate = new Date(
-      $('#property_rent_commencement_date_1i').val(),
-      $('#property_rent_commencement_date_2i').val(),
-      $('#property_rent_commencement_date_3i').val()
-    );
-    if (LeaseDate >= CurrentDate) {
-      alert("Date of Lease should be prior to Today's date.");
-      e.preventDefault();
-    }
-    if (LeaseDate >= RentCommenacementDate) {
-      alert("Rent Commencement date should be greater than the Lease Date.");
-      e.preventDefault();
-    }
-
-    if ($('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == "" && $('#property_length_of_option_period').val() == "" && $('#property_lease_rent_increase_percentage').val() == "") {
-      alert('Optional Extension fields are need to be filled.');
-      e.preventDefault();
-    }
-  });
-
   var unsaved = false;
   $(":input").change(function(){ //trigers change in all input fields including text type
       unsaved = true;
