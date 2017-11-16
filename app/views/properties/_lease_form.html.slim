@@ -24,6 +24,11 @@
       button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
         | Close
 input#property_id[type="hidden" value=(@property.id)]
+
+div.col-lg-12.col-md-12.col-sm-12.col-xs-12
+  .clearfix.margin-lg-left.lease-header-tab
+    = render 'properties/form_header_link'
+
 div.lease-subtabs[role="tabpanel"]
   ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
     li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
@@ -52,1374 +57,1326 @@ div.lease-subtabs[role="tabpanel"]
         a#lease_misc[href="#lease_misc_section" role="tab" data-toggle="tab" aria-expanded="false"] Misc
 
 
-    .tab-content
-      #lease_basics_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_basics_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              label Lease Analysis Perspective
-              .clearfix
-              .heading_blue.radio-inline
-                span = f.radio_button :lease_analysis_perspective, true, checked: @property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
-                span.margin-md-left Tenant's Perspective
-              .heading_blue.radio-inline
-                span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
-                span.margin-md-left Landlord's Perspective
+  .tab-content.mask_content
+    #lease_basics_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_basics_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            label Lease Analysis Perspective
+            .clearfix
+            .heading_blue.radio-inline
+              span = f.radio_button :lease_analysis_perspective, true, checked: @property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
+              span.margin-md-left Tenant's Perspective
+            .heading_blue.radio-inline
+              span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
+              span.margin-md-left Landlord's Perspective
 
-            .clearfix.margin-lg-top
+          .clearfix.margin-lg-top
 
-            .form-group
-              label Lease Analysis Date
-              .clearfix
-              = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
+          .form-group
+            label Lease Analysis Date
+            .clearfix
+            = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
 
-            .clearfix.margin-lg-top
+          .clearfix.margin-lg-top
 
-            h2.heading Original Parties
-            .form-group.margin-lg-top
-              label Original Landlord
-              = f.text_field :lease_original_landlord, class: 'form-control'
-            .form-group
-              label Original Tenant
-              = f.text_field :lease_original_tenant, class: 'form-control'
-            .form-group
-              label Original Guarantor
-              = f.text_field :lease_original_guarantor, class: 'form-control'
-            /.form-group
-              /= f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_terms_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_terms_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
+          h2.heading Original Parties
+          .form-group.margin-lg-top
+            label Original Landlord
+            = f.text_field :lease_original_landlord, class: 'form-control'
+          .form-group
+            label Original Tenant
+            = f.text_field :lease_original_tenant, class: 'form-control'
+          .form-group
+            label Original Guarantor
+            = f.text_field :lease_original_guarantor, class: 'form-control'
+          /.form-group
+            /= f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_terms_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_terms_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save'
+        
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .heading_blue.radio-inline
+              = radio_button_tag 'use_current_rent', true, false, class: 'form-control flat-icheck radiobuttons'
+              span.margin-md-left.pull-right
+                | Display Current Rent
+                br
+                | from User Input
+            .heading_blue.radio-inline
+              = radio_button_tag 'use_current_rent', false, true, class: 'form-control flat-icheck radiobuttons'
+              span.margin-md-left.pull-right
+                | Calculate Current Rent from
+                br
+                | Base Rent and other Terms
+          .form-group
+              label Lease Base Rent
+              .input-group.width-field-md
+                .input-group-addon $
+                = f.text_field :lease_base_rent, class: 'form-control input-mask-currency'
+          .form-group
+            label.mg-top-5 Current Monthly Rent
+            .input-group
+              .input-group-addon $
+              = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+          .form-group
+            label Lease Type
+            = f.select :lease_type_is, Property::LEASE_TYPES, {}, class: 'form-control '
+          .form-group
+            label Building Status
+            = f.select :building_status_is, Property::BUILDING_STATUS, {}, class: 'form-control'
+          .form-group
+            label.mg-top-5 Date Of Lease
+            .clearfix
+            /.pull-left
+            = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
+            = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}"
+            .pull-right
+              /.pull-left
+                /label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+              .pull-right
+                = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date', style: "display: none;"
 
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            label.mg-top-5 Date Of Lease Details
+            .clearfix
+            = f.select :date_of_lease_details, Property::DATE_OF_LEASE_DETAILS, {}, class: 'form-control'
+
+          .form-group
+            h2.heading Lease Terms
+            .checkbox
+              label
+                = f.check_box :preliminary_term_status
+                | Preliminary
+            .checkbox
+              label
+                span.fa.fa-square.left-icon
+                | Base
+            .checkbox
+              label
+                = f.check_box :optional_extensions_status
+                | Optional Extensions
+          div#preliminary_term style="#{ 'display: none;' unless f.object.preliminary_term_status?}"
             .form-group
-              .heading_blue.radio-inline
-                = radio_button_tag 'use_current_rent', true, false, class: 'form-control flat-icheck radiobuttons'
-                span.margin-md-left.pull-right
-                  | Display Current Rent
-                  br
-                  | from User Input
-              .heading_blue.radio-inline
-                = radio_button_tag 'use_current_rent', false, true, class: 'form-control flat-icheck radiobuttons'
-                span.margin-md-left.pull-right
-                  | Calculate Current Rent from
-                  br
-                  | Base Rent and other Terms
+              h2.heading Preliminary Term
+              .checkbox
+                label
+                  = f.check_box :rent_commencement_depend_on_expiration, class: 'product-list'
+                  | Is the Rent Commencement Date dependent on the Expiration of the Preliminary Terms? <br>
+              .checkbox
+                label
+                  = f.check_box :preliminary_term_expired, class: 'product-list'
+                  | Has the Preliminary Term Expired?
             .form-group
-                label Lease Base Rent
-                .input-group.width-field-md
-                  .input-group-addon $
-                  = f.text_field :lease_base_rent, class: 'form-control input-mask-currency'
+              label Conditions for the End of Preliminary Term
+              = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
+
+          .form-group
+            h2.heading Base Term
+            label Rent Commencement Date
+            .clearfix
+            = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
+          .form-group
+            .checkbox
+              label Pro Rated Rent?
+              = f.check_box :lease_is_pro_rated, class: ''
+          .form-group
+            label Rent Commencement Date Details
+            .clearfix
+            = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
+          .form-group
+            label Duration of Base Term
+            =  f.text_field :lease_duration_in_years, class: 'form-control'
+          .form-group
+            .checkbox
+              label Are there Rent Increases in the Base Terms
+              = f.check_box :rent_increase_in_base_term_status
+          div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
             .form-group
-              label.mg-top-5 Current Monthly Rent
+              label No of Years Between Rent Increases
+              = f.text_field :lease_rent_slab_in_years, class: 'form-control'
+            .form-group
+              label Base Term Rent Increase Percentage
+              .input-group.width-field-sm
+                = f.text_field :base_rent_increase_percentage, class: 'form-control'
+                .input-group-addon %
+
+          div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
+            h2.heading Optional Extensions
+            .form-group
+              label Number Of Option Period(s)
+              = f.text_field :number_of_option_period, class: 'form-control'
+            .form-group
+              label Length of an Option Period in Years
+              = f.text_field :length_of_option_period, class: 'form-control'
+            .form-group
+              label Option Period Rent Increase Percentage
+              .input-group.width-field-sm
+                = f.text_field :lease_rent_increase_percentage, class: 'form-control'
+                .input-group-addon %
+          /.form-group
+          /  = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
+    #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
+      .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_no_save
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+      - if @property.rent_tables.present?
+        .user-setup-wizard
+          ul.wizard_steps
+            li
+              a[class=(@property.preliminary_term_status == true ? 'selected' : 'disabled') data-step=1]
+                span.step_no 1
+                span.step_descr Preliminary Term
+            li
+              a.selected[ data-step=2]
+                span.step_no 2
+                span.step_descr Base Term
+            li
+              a.disabled[data-step=3]
+                span.step_no 3
+                span.step_descr Option 1
+            li
+              a.disabled[data-step=4]
+                span.step_no 4
+                span.step_descr Option 2
+        .clearfix
+        .col-sm-4
+          .form-group
+            = label_tag "Rent Table Version"
+            = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control', data: {id: @property.id}, style: "width: 200px"
+
+        .clearfix
+        div#rent-table-wrapper
+          table.table.table-striped.table-bordered#rent-table
+            thead
+              tr
+                th Particulars
+                th Amount
+            tbody
+              - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
+                tr
+                  td
+                    = rent_row.display_info
+                  td
+                    = number_to_currency rent_row.rent
+
+        .clearfix
+        .clearfix
+        div#monthly-rent-table-wrapper
+          table.table.table-striped.table-bordered
+            thead
+              tr
+                th Year
+                th Jan
+                th Feb
+                th Mar
+                th Apr
+                th May
+                th Jun
+                th Jul
+                th Aug
+                th Sep
+                th Oct
+                th Nov
+                th Dec
+                th Annual
+            tbody
+              - @property.monthly_rent_table.each do |row|
+                tr
+                  td
+                    = row[0]
+                  td
+                    = number_to_currency row[1]
+                  td
+                    = number_to_currency row[2]
+                  td
+                    = number_to_currency row[3]
+                  td
+                    = number_to_currency row[4]
+                  td
+                    = number_to_currency row[5]
+                  td
+                    = number_to_currency row[6]
+                  td
+                    = number_to_currency row[7]
+                  td
+                    = number_to_currency row[8]
+                  td
+                    = number_to_currency row[9]
+                  td
+                    = number_to_currency row[10]
+                  td
+                    = number_to_currency row[11]
+                  td
+                    = number_to_currency row[12]
+                  td
+                    = number_to_currency row[13]
+
+    #lease_rent_details_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_rent_details_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .property-action-fields
+              h2.heading Rent Abatement
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :lease_rent_abatement_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[lease_rent_abatement_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_rent_abatement_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'abatement').count})", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :lease_rent_abatement, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :lease_rent_abatement_keywords, class: 'form-control'
+          .form-group
+            label
+              | Percentage Rent Exist?
+            = f.check_box :lease_percentage_rent_exist, class: ''
+          .rent-percentage-wrapper[style="#{'display: none;' unless f.object.lease_percentage_rent_exist?}"]
+            .form-group
+              h2.heading Percentage Rent
+              .input-group
+                = f.text_field :lease_percentage_rent, class: 'form-control'
+                .input-group-addon %
+            .form-group
+              h2.heading Breakpoint
               .input-group
                 .input-group-addon $
-                = text_field_tag :current_monthly_rent, @property.current_monthly_rent, class: 'form-control input-mask-currency', :readonly => true
+                = f.text_field :lease_breakpoint, class: 'form-control'
             .form-group
-              label Lease Type
-              = f.select :lease_type_is, Property::LEASE_TYPES, {}, class: 'form-control '
-            .form-group
-              label Building Status
-              = f.select :building_status_is, Property::BUILDING_STATUS, {}, class: 'form-control'
-            .form-group
-              label.mg-top-5 Date Of Lease
-              .clearfix
-              /.pull-left
-              = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
-              = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}"
-              .pull-right
-                /.pull-left
-                 /label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-                .pull-right
-                  = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date', style: "display: none;"
-
-            .form-group
-              label.mg-top-5 Date Of Lease Details
-              .clearfix
-              = f.select :date_of_lease_details, Property::DATE_OF_LEASE_DETAILS, {}, class: 'form-control'
-
-            .form-group
-              h2.heading Lease Terms
-              .checkbox
-                label
-                  = f.check_box :preliminary_term_status
-                  | Preliminary
-              .checkbox
-                label
-                  span.fa.fa-square.left-icon
-                  | Base
-              .checkbox
-                label
-                  = f.check_box :optional_extensions_status
-                  | Optional Extensions
-            div#preliminary_term style="#{ 'display: none;' unless f.object.preliminary_term_status?}"
-              .form-group
-                h2.heading Preliminary Term
-                .checkbox
-                  label
-                    = f.check_box :rent_commencement_depend_on_expiration, class: 'product-list'
-                    | Is the Rent Commencement Date dependent on the Expiration of the Preliminary Terms? <br>
-                .checkbox
-                  label
-                    = f.check_box :preliminary_term_expired, class: 'product-list'
-                    | Has the Preliminary Term Expired?
-              .form-group
-                label Conditions for the End of Preliminary Term
-                = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
-
-            .form-group
-              h2.heading Base Term
-              label Rent Commencement Date
-              .clearfix
-              = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
-            .form-group
-              .checkbox
-                label Pro Rated Rent?
-                = f.check_box :lease_is_pro_rated, class: ''
-            .form-group
-              label Rent Commencement Date Details
-              .clearfix
-              = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
-            .form-group
-              label Duration of Base Term
-              =  f.text_field :lease_duration_in_years, class: 'form-control'
-            .form-group
-              .checkbox
-                label Are there Rent Increases in the Base Terms
-                = f.check_box :rent_increase_in_base_term_status
-            div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
-              .form-group
-                label No of Years Between Rent Increases
-                = f.text_field :lease_rent_slab_in_years, class: 'form-control'
-              .form-group
-                label Base Term Rent Increase Percentage
-                .input-group.width-field-sm
-                  = f.text_field :base_rent_increase_percentage, class: 'form-control'
-                  .input-group-addon %
-
-            div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
-              h2.heading Optional Extensions
-              .form-group
-                label Number Of Option Period(s)
-                = f.text_field :number_of_option_period, class: 'form-control'
-              .form-group
-                label Length of an Option Period in Years
-                = f.text_field :length_of_option_period, class: 'form-control'
-              .form-group
-                label Option Period Rent Increase Percentage
-                .input-group.width-field-sm
-                  = f.text_field :lease_rent_increase_percentage, class: 'form-control'
-                  .input-group-addon %
-            /.form-group
-            /  = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
-      #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
+              .property-action-fields
+                h2.heading Percentage Rent Exclusions
+                .section-star-wrapper
+                  .pull-left
+                    label Section
+                    = f.text_field :lease_percentage_rent_exclusions_section, class: 'form-control width-field-md'
+                  - $attribute_name = 'property[lease_percentage_rent_exclusions_rating]'
+                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_percentage_rent_exclusions_rating}
+                .property-comments-box
+                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_exclusions').count})", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-comments"
+                  = link_to "+", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-add-comment"
+                = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
+                h2.heading.mg-top-5 Keywords (separate by commas)
+                = f.text_field :lease_percentage_rent_exclusions_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_taxes_and_fees_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_taxes_and_fees_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
         .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_no_save
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-        div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-          .clearfix.margin-lg-left.lease-header-tab
-            = render 'properties/form_header_link'
-
-        - if @property.rent_tables.present?
-          .user-setup-wizard
-            ul.wizard_steps
-              li
-                a[class=(@property.preliminary_term_status == true ? 'selected' : 'disabled') data-step=1]
-                  span.step_no 1
-                  span.step_descr Preliminary Term
-              li
-                a.selected[ data-step=2]
-                  span.step_no 2
-                  span.step_descr Base Term
-              li
-                a.disabled[data-step=3]
-                  span.step_no 3
-                  span.step_descr Option 1
-              li
-                a.disabled[data-step=4]
-                  span.step_no 4
-                  span.step_descr Option 2
-          .clearfix
-          .col-sm-4
-            .form-group
-              = label_tag "Rent Table Version"
-              = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control', data: {id: @property.id}, style: "width: 200px"
-
-          .clearfix
-          div#rent-table-wrapper
-            table.table.table-striped.table-bordered#rent-table
-              thead
-                tr
-                  th Particulars
-                  th Amount
-              tbody
-                - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
-                  tr
-                    td
-                      = rent_row.display_info
-                    td
-                      = number_to_currency rent_row.rent
-
-          .clearfix
-          .clearfix
-          div#monthly-rent-table-wrapper
-            table.table.table-striped.table-bordered
-              thead
-                tr
-                  th Year
-                  th Jan
-                  th Feb
-                  th Mar
-                  th Apr
-                  th May
-                  th Jun
-                  th Jul
-                  th Aug
-                  th Sep
-                  th Oct
-                  th Nov
-                  th Dec
-                  th Annual
-              tbody
-                - @property.monthly_rent_table.each do |row|
-                  tr
-                    td
-                      = row[0]
-                    td
-                      = number_to_currency row[1]
-                    td
-                      = number_to_currency row[2]
-                    td
-                      = number_to_currency row[3]
-                    td
-                      = number_to_currency row[4]
-                    td
-                      = number_to_currency row[5]
-                    td
-                      = number_to_currency row[6]
-                    td
-                      = number_to_currency row[7]
-                    td
-                      = number_to_currency row[8]
-                    td
-                      = number_to_currency row[9]
-                    td
-                      = number_to_currency row[10]
-                    td
-                      = number_to_currency row[11]
-                    td
-                      = number_to_currency row[12]
-                    td
-                      = number_to_currency row[13]
-
-      #lease_rent_details_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_rent_details_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              .property-action-fields
-                h2.heading Rent Abatement
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :lease_rent_abatement_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[lease_rent_abatement_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_rent_abatement_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'abatement').count})", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "abatement", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :lease_rent_abatement, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :lease_rent_abatement_keywords, class: 'form-control'
-            .form-group
-              label
-                | Percentage Rent Exist?
-              = f.check_box :lease_percentage_rent_exist, class: ''
-            .rent-percentage-wrapper[style="#{'display: none;' unless f.object.lease_percentage_rent_exist?}"]
-              .form-group
-                h2.heading Percentage Rent
-                .input-group
-                  = f.text_field :lease_percentage_rent, class: 'form-control'
-                  .input-group-addon %
-              .form-group
-                h2.heading Breakpoint
-                .input-group
-                  .input-group-addon $
-                  = f.text_field :lease_breakpoint, class: 'form-control'
-              .form-group
-                .property-action-fields
-                  h2.heading Percentage Rent Exclusions
-                  .section-star-wrapper
-                    .pull-left
-                      label Section
-                      = f.text_field :lease_percentage_rent_exclusions_section, class: 'form-control width-field-md'
-                    - $attribute_name = 'property[lease_percentage_rent_exclusions_rating]'
-                    = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_percentage_rent_exclusions_rating}
-                  .property-comments-box
-                    = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_exclusions').count})", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-comments"
-                    = link_to "+", "javascript:void(0)", data: {type: "rent_exclusions", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                  = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
-                  h2.heading.mg-top-5 Keywords (separate by commas)
-                  = f.text_field :lease_percentage_rent_exclusions_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_taxes_and_fees_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_taxes_and_fees_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              .property-action-fields
-                h2.heading Net Nature
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_net_nature_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_net_nature_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_net_nature_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'net_nature').count})", "javascript:void(0)", data: {type: "net_nature", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "net_nature", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_net_nature, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_net_nature_keywords, class: 'form-control'
-            h2.heading
-              | Net Nature Of Lease
-            .form-group
-              label
-                = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays for Real Estate Taxes'
-                | Tenant pays for Real Estate Taxes
-              .clearfix
-              label
-                = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays for Sales Tax on Real Estate Taxes', style: "margin-right: 5px"
-                | Tenant pays for Sales Tax on Real Estate Taxes
-              .clearfix
-              label
-                = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays Insurance'
-                | Tenant pays Insurance
-              .clearfix
-              label
-                = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays Common Area Maintenance'
-                | Tenant pays Common Area Maintenance
-            .form-group
-              .property-action-fields
-                h2.heading Additional Rent
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_additional_rent_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_additional_rent_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_additional_rent_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'add_rent').count})", "javascript:void(0)", data: {type: "add_rent", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "add_rent", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_additional_rent, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_additional_rent_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Real Estate Taxes
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_restate_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_restate_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_restate_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'restate').count})", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_restate, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_restate_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Assessments
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_assessments_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_assessments_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_assessments_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'assessments').count})", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_assessments, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_assessments_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Separate Tax Parcel
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_separate_tax_parcel_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_separate_tax_parcel_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_separate_tax_parcel_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'sep_tax').count})", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_separate_tax_parcel, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_separate_tax_parcel_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Landlord Contesting Taxes
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_landlord_contesting_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_landlord_contesting_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_landlord_contesting_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_contesting').count})", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_landlord_contesting, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_landlord_contesting_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Tenant Contesting Taxes
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_tenant_contesting_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_tenant_contesting_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_tenant_contesting_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_contesting').count})", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_tenant_contesting, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_tenant_contesting_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Easements
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :taxes_and_fees_easements_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[taxes_and_fees_easements_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_easements_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'easements').count})", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :taxes_and_fees_easements_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_site_preparation_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_site_preparation_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              .property-action-fields
-                h2.heading Environmental Obligations for Site Preparation
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :site_preparation_env_obligations_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[site_preparation_env_obligations_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_obligations_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'env_obligations').count})", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :site_preparation_env_obligations, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :site_preparation_env_obligations_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Environmental Termination Rights Preparation
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :site_preparation_env_termination_rights_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[site_preparation_env_termination_rights_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_termination_rights_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'env_termination').count})", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :site_preparation_env_termination_rights, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :site_preparation_env_termination_rights_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Environmental Remediation Preparation
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :site_preparation_env_remediation_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[site_preparation_env_remediation_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_remediation_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'env_remediation').count})", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :site_preparation_env_remediation, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :site_preparation_env_remediation_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Environmental Permits and Licenses
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :site_preparation_env_permits_and_licenses_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[site_preparation_env_permits_and_licenses_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_permits_and_licenses_rating}
-                .property-comments-box
-                  = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_permits').count})", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :site_preparation_env_permits_and_licenses, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :site_preparation_env_permits_and_licenses_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-
-      #lease_construction_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_construction_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              .property-action-fields
-                h2.heading Construction
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :construction_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[construction_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'construction').count})", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :construction, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :construction_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Construction Deadline
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :construction_deadline_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[construction_deadline_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_deadline_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'const_deadline').count})", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :construction_deadline, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :construction_deadline_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Liens
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :construction_liens_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[construction_liens_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_liens_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'liens').count})", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :construction_liens, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :construction_liens_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Approval of Plans and Specifications
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :construction_approval_of_plans_and_specs_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[construction_approval_of_plans_and_specs_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_approval_of_plans_and_specs_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'cons_approval').count})", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :construction_approval_of_plans_and_specs_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_use_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_use_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .property-action-fields
+              h2.heading Net Nature
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_net_nature_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_net_nature_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_net_nature_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'net_nature').count})", "javascript:void(0)", data: {type: "net_nature", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "net_nature", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_net_nature, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_net_nature_keywords, class: 'form-control'
+          h2.heading
+            | Net Nature Of Lease
+          .form-group
+            label
+              = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays for Real Estate Taxes'
+              | Tenant pays for Real Estate Taxes
             .clearfix
-            .form-group
-              .property-action-fields
-                h2.heading Use Clause
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :use_clause_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[use_clause_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_clause_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'use_clause').count})", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :use_clause, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :use_clause_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Exclusive Clause
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :use_exclusive_clause_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[use_exclusive_clause_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_exclusive_clause_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'ex_clause').count})", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :use_exclusive_clause_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_premises_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_premises_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              .property-action-fields
-                h2.heading Quiet Enjoyment
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_quiet_enjoyment_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_quiet_enjoyment_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_quiet_enjoyment_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'quiet_enjoy').count})", "javascript:void(0)", data: {type: "quiet_enjoy", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "quiet_enjoy", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_quiet_enjoyment, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_quiet_enjoyment_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Tenant Rights Under the Declaration
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_tenant_rights_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_tenant_rights_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenant_rights_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_rights').count})", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_tenant_rights, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_tenant_rights_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Waste
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_waste_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_waste_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_waste_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'waste').count})", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_waste, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_waste_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Initial Opening
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_initial_opening_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_initial_opening_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_initial_opening_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'initial_opening').count})", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_initial_opening, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_initial_opening_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Recapture Clause
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_recapture_clause_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_recapture_clause_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_recapture_clause_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'recapture_clause').count})", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_recapture_clause, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_recapture_clause_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Demolition
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_demolition_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_demolition_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_demolition_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'demolition').count})", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_demolition, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_demolition_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Tenant's Equipment Defined
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_tenants_equipment_defined_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_tenants_equipment_defined_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenants_equipment_defined_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_equip').count})", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_tenants_equipment_defined, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_tenants_equipment_defined_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Ownership and Removal of Tenant's Equipment
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_ownership_and_removal_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_ownership_and_removal_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_ownership_and_removal_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'own_removal').count})", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_ownership_and_removal, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_ownership_and_removal_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Repairs
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_repairs_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_repairs_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_repairs_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'repairs').count})", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_repairs, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_repairs_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Compliance with Laws
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_compliance_with_laws_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_compliance_with_laws_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_compliance_with_laws_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'compliance').count})", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_compliance_with_laws, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_compliance_with_laws_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Surrender
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_surrender_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_surrender_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_surrender_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_surrender').count})", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_surrender, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_surrender_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Inspection
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_inspection_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_inspection_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_inspection_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_inspection').count})", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_inspection, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_inspection_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Insurance
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_insurance_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_insurance_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_insurance_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_insurance').count})", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_insurance, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_insurance_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Destruction
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_destruction_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_destruction_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_destruction_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_destruction').count})", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_destruction, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_destruction_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Total Taking
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_total_taking_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_total_taking_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_total_taking_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'total_taking').count})", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_total_taking, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_total_taking_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Partial Taking
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_partial_taking_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_partial_taking_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_partial_taking_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'partial_taking').count})", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_partial_taking, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_partial_taking_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Signs
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_signs_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_signs_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_signs_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'signs').count})", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_signs, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_signs_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Utilities
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :premises_utilities_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[premises_utilities_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_utilities_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'utilities').count})", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :premises_utilities, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :premises_utilities_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_transfer_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_transfer_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              .property-action-fields
-                h2.heading Assignment and Subletting
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :transfer_assignment_and_subletting_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[transfer_assignment_and_subletting_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_assignment_and_subletting_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'ass_subletting').count})", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :transfer_assignment_and_subletting, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :transfer_assignment_and_subletting_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Leasehold Mortgage
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :transfer_leasehold_mortgage_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[transfer_leasehold_mortgage_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_leasehold_mortgage_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'leasehold').count})", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :transfer_leasehold_mortgage, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :transfer_leasehold_mortgage_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Subordination
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :transfer_subordination_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[transfer_subordination_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_subordination_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'subordination').count})", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :transfer_subordination, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :transfer_subordination_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Estoppel Certificate
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :transfer_estoppel_certificate_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[transfer_estoppel_certificate_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_estoppel_certificate_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'estoppel').count})", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :transfer_estoppel_certificate_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_remedies_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_remedies_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
-            .form-group
-              .property-action-fields
-                h2.heading Rent Defaults by Tenant
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :remedies_rent_defaults_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[remedies_rent_defaults_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_rent_defaults_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_defaults').count})", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :remedies_rent_defaults, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :remedies_rent_defaults_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Landlord Remedies for Tenant Defaults
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :remedies_landlord_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[remedies_landlord_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_remedies').count})", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :remedies_landlord, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :remedies_landlord_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Mitigation
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :remedies_mitigation_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[remedies_mitigation_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_mitigation_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'remedies_mitigation').count})", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :remedies_mitigation, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :remedies_mitigation_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Dispute Resolution
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :remedies_dispute_resolution_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[remedies_dispute_resolution_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_dispute_resolution_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'dispute_resol').count})", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :remedies_dispute_resolution, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :remedies_dispute_resolution_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Landlord Exoneration after Sale
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :remedies_landlord_exoneration_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[remedies_landlord_exoneration_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_exoneration_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'exoneration').count})", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :remedies_landlord_exoneration, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :remedies_landlord_exoneration_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Exculpation
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :remedies_exculpation_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[remedies_exculpation_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_exculpation_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'exculpation').count})", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :remedies_exculpation_keywords, class: 'form-control'
-            /.form-group
-              /= f.submit 'Save', class: 'btn btn-sm btn-primary'
-      #lease_misc_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          = hidden_field_tag :lease_sub, 'lease_misc_section'
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.lease_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-            .clearfix.margin-lg-left.lease-header-tab
-              = render 'properties/form_header_link'
-
-          .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+            label
+              = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays for Sales Tax on Real Estate Taxes', style: "margin-right: 5px"
+              | Tenant pays for Sales Tax on Real Estate Taxes
             .clearfix
-            .form-group
-              .property-action-fields
-                h2.heading Notices
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :misc_notices_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[misc_notices_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_notices_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'notices').count})", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :misc_notices, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :misc_notices_keywords, class: 'form-control'
-            .form-group
-              .property-action-fields
-                h2.heading Obligation to be reasonable
-                .section-star-wrapper
-                  .pull-left
-                    label Section
-                    = f.text_field :misc_obligation_section, class: 'form-control width-field-md'
-                  - $attribute_name = 'property[misc_obligation_rating]'
-                  = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_obligation_rating}
-                .property-comments-box
-                  = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'misc_obligation').count})", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-comments"
-                  = link_to "+", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-add-comment"
-                = f.text_area :misc_obligation, rows: 7, class: 'form-control'
-                h2.heading.mg-top-5 Keywords (separate by commas)
-                = f.text_field :misc_obligation_keywords, class: 'form-control'
-            /.form-group
-            /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+            label
+              = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays Insurance'
+              | Tenant pays Insurance
+            .clearfix
+            label
+              = f.check_box :net_nature_of_lease, {multiple: true, style: "margin-right: 5px"}, 'Tenant pays Common Area Maintenance'
+              | Tenant pays Common Area Maintenance
+          .form-group
+            .property-action-fields
+              h2.heading Additional Rent
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_additional_rent_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_additional_rent_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_additional_rent_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'add_rent').count})", "javascript:void(0)", data: {type: "add_rent", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "add_rent", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_additional_rent, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_additional_rent_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Real Estate Taxes
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_restate_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_restate_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_restate_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'restate').count})", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "restate", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_restate, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_restate_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Assessments
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_assessments_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_assessments_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_assessments_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'assessments').count})", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "assessments", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_assessments, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_assessments_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Separate Tax Parcel
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_separate_tax_parcel_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_separate_tax_parcel_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_separate_tax_parcel_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'sep_tax').count})", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "sep_tax", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_separate_tax_parcel, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_separate_tax_parcel_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Landlord Contesting Taxes
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_landlord_contesting_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_landlord_contesting_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_landlord_contesting_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_contesting').count})", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "landlord_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_landlord_contesting, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_landlord_contesting_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Tenant Contesting Taxes
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_tenant_contesting_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_tenant_contesting_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_tenant_contesting_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_contesting').count})", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "tenant_contesting", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_tenant_contesting, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_tenant_contesting_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Easements
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :taxes_and_fees_easements_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[taxes_and_fees_easements_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_easements_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'easements').count})", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "easements", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :taxes_and_fees_easements_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_site_preparation_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_site_preparation_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .property-action-fields
+              h2.heading Environmental Obligations for Site Preparation
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :site_preparation_env_obligations_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[site_preparation_env_obligations_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_obligations_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'env_obligations').count})", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "env_obligations", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :site_preparation_env_obligations, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :site_preparation_env_obligations_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Environmental Termination Rights Preparation
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :site_preparation_env_termination_rights_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[site_preparation_env_termination_rights_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_termination_rights_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'env_termination').count})", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "env_termination", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :site_preparation_env_termination_rights, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :site_preparation_env_termination_rights_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Environmental Remediation Preparation
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :site_preparation_env_remediation_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[site_preparation_env_remediation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_remediation_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'env_remediation').count})", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "env_remediation", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :site_preparation_env_remediation, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :site_preparation_env_remediation_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Environmental Permits and Licenses
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :site_preparation_env_permits_and_licenses_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[site_preparation_env_permits_and_licenses_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_permits_and_licenses_rating}
+              .property-comments-box
+                = link_to "Comments(#{@property.comments.where(user_id: current_user.id, comment_type: 'env_permits').count})", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "env_permits", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :site_preparation_env_permits_and_licenses, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :site_preparation_env_permits_and_licenses_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+
+    #lease_construction_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_construction_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .property-action-fields
+              h2.heading Construction
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :construction_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[construction_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'construction').count})", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "construction", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :construction, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :construction_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Construction Deadline
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :construction_deadline_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[construction_deadline_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_deadline_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'const_deadline').count})", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "const_deadline", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :construction_deadline, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :construction_deadline_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Liens
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :construction_liens_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[construction_liens_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_liens_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'liens').count})", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "liens", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :construction_liens, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :construction_liens_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Approval of Plans and Specifications
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :construction_approval_of_plans_and_specs_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[construction_approval_of_plans_and_specs_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_approval_of_plans_and_specs_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'cons_approval').count})", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "cons_approval", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :construction_approval_of_plans_and_specs_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_use_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_use_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .clearfix
+          .form-group
+            .property-action-fields
+              h2.heading Use Clause
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :use_clause_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[use_clause_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_clause_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'use_clause').count})", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "use_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :use_clause, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :use_clause_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Exclusive Clause
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :use_exclusive_clause_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[use_exclusive_clause_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_exclusive_clause_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'ex_clause').count})", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "ex_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :use_exclusive_clause_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_premises_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_premises_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .property-action-fields
+              h2.heading Quiet Enjoyment
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_quiet_enjoyment_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_quiet_enjoyment_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_quiet_enjoyment_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'quiet_enjoy').count})", "javascript:void(0)", data: {type: "quiet_enjoy", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "quiet_enjoy", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_quiet_enjoyment, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_quiet_enjoyment_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Tenant Rights Under the Declaration
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_tenant_rights_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_tenant_rights_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenant_rights_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'tenant_rights').count})", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "tenant_rights", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_tenant_rights, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_tenant_rights_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Waste
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_waste_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_waste_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_waste_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'waste').count})", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "waste", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_waste, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_waste_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Initial Opening
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_initial_opening_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_initial_opening_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_initial_opening_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'initial_opening').count})", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "initial_opening", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_initial_opening, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_initial_opening_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Recapture Clause
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_recapture_clause_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_recapture_clause_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_recapture_clause_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'recapture_clause').count})", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "recapture_clause", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_recapture_clause, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_recapture_clause_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Demolition
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_demolition_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_demolition_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_demolition_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'demolition').count})", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "demolition", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_demolition, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_demolition_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Tenant's Equipment Defined
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_tenants_equipment_defined_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_tenants_equipment_defined_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenants_equipment_defined_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_equip').count})", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "premises_equip", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_tenants_equipment_defined, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_tenants_equipment_defined_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Ownership and Removal of Tenant's Equipment
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_ownership_and_removal_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_ownership_and_removal_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_ownership_and_removal_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'own_removal').count})", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "own_removal", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_ownership_and_removal, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_ownership_and_removal_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Repairs
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_repairs_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_repairs_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_repairs_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'repairs').count})", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "repairs", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_repairs, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_repairs_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Compliance with Laws
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_compliance_with_laws_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_compliance_with_laws_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_compliance_with_laws_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'compliance').count})", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "compliance", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_compliance_with_laws, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_compliance_with_laws_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Surrender
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_surrender_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_surrender_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_surrender_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_surrender').count})", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "premises_surrender", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_surrender, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_surrender_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Inspection
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_inspection_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_inspection_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_inspection_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_inspection').count})", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "premises_inspection", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_inspection, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_inspection_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Insurance
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_insurance_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_insurance_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_insurance_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_insurance').count})", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "premises_insurance", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_insurance, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_insurance_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Destruction
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_destruction_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_destruction_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_destruction_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'premises_destruction').count})", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "premises_destruction", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_destruction, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_destruction_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Total Taking
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_total_taking_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_total_taking_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_total_taking_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'total_taking').count})", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "total_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_total_taking, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_total_taking_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Partial Taking
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_partial_taking_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_partial_taking_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_partial_taking_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'partial_taking').count})", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "partial_taking", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_partial_taking, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_partial_taking_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Signs
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_signs_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_signs_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_signs_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'signs').count})", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "signs", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_signs, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_signs_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Utilities
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :premises_utilities_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[premises_utilities_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_utilities_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'utilities').count})", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "utilities", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :premises_utilities, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :premises_utilities_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_transfer_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_transfer_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .property-action-fields
+              h2.heading Assignment and Subletting
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :transfer_assignment_and_subletting_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[transfer_assignment_and_subletting_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_assignment_and_subletting_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'ass_subletting').count})", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "ass_subletting", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :transfer_assignment_and_subletting, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :transfer_assignment_and_subletting_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Leasehold Mortgage
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :transfer_leasehold_mortgage_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[transfer_leasehold_mortgage_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_leasehold_mortgage_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'leasehold').count})", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "leasehold", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :transfer_leasehold_mortgage, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :transfer_leasehold_mortgage_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Subordination
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :transfer_subordination_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[transfer_subordination_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_subordination_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'subordination').count})", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "subordination", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :transfer_subordination, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :transfer_subordination_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Estoppel Certificate
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :transfer_estoppel_certificate_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[transfer_estoppel_certificate_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_estoppel_certificate_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'estoppel').count})", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "estoppel", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :transfer_estoppel_certificate_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_remedies_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_remedies_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .form-group
+            .property-action-fields
+              h2.heading Rent Defaults by Tenant
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :remedies_rent_defaults_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[remedies_rent_defaults_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_rent_defaults_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'rent_defaults').count})", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "rent_defaults", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :remedies_rent_defaults, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :remedies_rent_defaults_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Landlord Remedies for Tenant Defaults
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :remedies_landlord_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[remedies_landlord_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'landlord_remedies').count})", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "landlord_remedies", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :remedies_landlord, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :remedies_landlord_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Mitigation
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :remedies_mitigation_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[remedies_mitigation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_mitigation_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'remedies_mitigation').count})", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "remedies_mitigation", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :remedies_mitigation, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :remedies_mitigation_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Dispute Resolution
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :remedies_dispute_resolution_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[remedies_dispute_resolution_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_dispute_resolution_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'dispute_resol').count})", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "dispute_resol", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :remedies_dispute_resolution, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :remedies_dispute_resolution_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Landlord Exoneration after Sale
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :remedies_landlord_exoneration_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[remedies_landlord_exoneration_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_exoneration_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'exoneration').count})", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "exoneration", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :remedies_landlord_exoneration, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :remedies_landlord_exoneration_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Exculpation
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :remedies_exculpation_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[remedies_exculpation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_exculpation_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'exculpation').count})", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "exculpation", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :remedies_exculpation_keywords, class: 'form-control'
+          /.form-group
+            /= f.submit 'Save', class: 'btn btn-sm btn-primary'
+    #lease_misc_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        = hidden_field_tag :lease_sub, 'lease_misc_section'
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message
+        .container.lease_breadcrum.bredcrum-fixed
+          p
+            .margin-md-left.breadcrum_line
+              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+          <br><br>
+            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+            div.save_property
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
+              - else
+                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+        
+        .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
+          .clearfix
+          .form-group
+            .property-action-fields
+              h2.heading Notices
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :misc_notices_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[misc_notices_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_notices_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'notices').count})", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :misc_notices, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :misc_notices_keywords, class: 'form-control'
+          .form-group
+            .property-action-fields
+              h2.heading Obligation to be reasonable
+              .section-star-wrapper
+                .pull-left
+                  label Section
+                  = f.text_field :misc_obligation_section, class: 'form-control width-field-md'
+                - $attribute_name = 'property[misc_obligation_rating]'
+                = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_obligation_rating}
+              .property-comments-box
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'misc_obligation').count})", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "+", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-add-comment"
+              = f.text_area :misc_obligation, rows: 7, class: 'form-control'
+              h2.heading.mg-top-5 Keywords (separate by commas)
+              = f.text_field :misc_obligation_keywords, class: 'form-control'
+          /.form-group
+          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'

@@ -239,7 +239,7 @@ table#data_table tbody tr.child-row.active-item{
   width: 200% !important;
   height: 60px;
   background-color: #005826;
-  margin-top: -138px;
+  margin-top: -175px;
   margin-left: -44px !important;
   color: white;
   float: left;
@@ -277,7 +277,7 @@ table#data_table tbody tr.child-row.active-item{
 
 .lease-header-tab {
     margin-left: -21px !important;
-    margin-top: -85.5px !important;
+    margin-top: 45px !important;
 }
 
 .tenant-header-tab {
