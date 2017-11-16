@@ -5473,8 +5473,7 @@ ul.m__breadcrumb li {
 ul.m__breadcrumb li+li:before {
     color: inherit;
     content: "/ ";
-    font-size: 20px;
-    vertical-align: middle;
+    font-size: 17px;
 }
 
 ul.m__breadcrumb li.no-separator:before {
