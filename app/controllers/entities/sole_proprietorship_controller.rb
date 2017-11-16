@@ -103,7 +103,7 @@ class Entities::SoleProprietorshipController < ApplicationController
   def entity_params
     params.require(:entity).permit(:name, :name2, :address, :type_, :jurisdiction, :number_of_assets,
                                    :first_name, :last_name,:first_name2, :last_name2, :phone1, :phone2, :fax, :email,
-                                   :postal_address, :postal_address2, :city, :city2, :state, :state2, :zip, :zip2, :date_of_formation, :m_date_of_formation,
+                                   :postal_address,:basichonorific, :is_basichonorific, :postal_address2, :city, :city2, :state, :state2, :zip, :zip2, :date_of_formation, :m_date_of_formation,
                                    :ein_or_ssn, :s_corp_status, :not_for_profit_status, :legal_ending, :honorific, :is_honorific)
   end
 

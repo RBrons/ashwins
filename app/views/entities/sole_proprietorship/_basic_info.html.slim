@@ -25,6 +25,10 @@
           li = message
 
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    .form-group style="display: inline "
+      label Honorific
+      = f.hidden_field :is_basichonorific, value: true
+      = f.select :basichonorific, options_for_select(GeneralMethods.basichonorific, @entity.basichonorific), {}, {class: "state form-control"}
     .form-group.required
       label.control-label Owner First Name
       = f.text_field :first_name, class: "partnership form-control"

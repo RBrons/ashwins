@@ -260,27 +260,23 @@ $( document ).ready(function() {
 });
 
 $(document).ready(function(){
+  
   $('.product-list').on('change', function() {
     $('.product-list').not(this).prop('checked', false);
   });
 
   $('#lease_submit').click(function(e){
-    var CurrentDate = new Date();
-    var LeaseDate = new Date(
-        $('#property_date_of_lease_1i').val(),
-        $('#property_date_of_lease_3i').val(),
-        $('#property_date_of_lease_2i').val()
-    );
-    var RentCommenacementDate = new Date(
-      $('#property_rent_commencement_date_1i').val(),
-      $('#property_rent_commencement_date_2i').val(),
-      $('#property_rent_commencement_date_3i').val()
-    );
-    if (LeaseDate >= CurrentDate) {
+    var CurrentDate = new Date().getTime();
+    var strdt = $("#property_rent_commencement_date_1i").val().trim() + "-" + $("#property_rent_commencement_date_2i").val().trim() + "-" + $("#property_rent_commencement_date_3i").val().trim();
+    var rent_commencement_date = new Date(strdt).getTime();
+    var LeaseDate = $("#property_date_of_lease_1i").val()+"-"+$("#property_date_of_lease_2i").val()+"-"+$("#property_date_of_lease_3i").val();
+    var lease = new Date(LeaseDate).getTime();
+
+    if (lease >= CurrentDate) {
       alert("Date of Lease should be prior to Today's date.");
       e.preventDefault();
     }
-    if (LeaseDate >= RentCommenacementDate) {
+    if (lease >= rent_commencement_date) {
       alert("Rent Commencement date should be greater than the Lease Date.");
       e.preventDefault();
     }

@@ -98,8 +98,22 @@ div#entities-list.pull-right style=style_str
           td
             = entity.ein_or_ssn
           td
+            - arr = owned_by_power(entity)
+            - if arr
+              - arr.each do |name|
+                - if (name.try(:length) || 0) > 1
+                  a href = name[1] style="display: block"
+                    span.badge
+                      = name[0]
             = first_name_of_entity entity
           td
+            - arr = owned_by_power_last(entity)
+            - if arr
+              - arr.each do |name|
+                - if (name.try(:length) || 0) > 1
+                  a href = name[1] style="display: block"
+                    span.badge
+                      = name[0]
             = last_name_of_entity entity
           td
             = entity.phone1

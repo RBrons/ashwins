@@ -135,32 +135,30 @@ class Entities::PowerOfAttorneyController < ApplicationController
   #   render layout: false if request.xhr?
   # end
 
-  def agent
+ def agent
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Agent </a></h4></div>".html_safe
     unless request.delete?
-      @entity = Entity.find_by(key: params[:entity_key] || params[:key])
+      @entity = Entity.find_by(key: params[:entity_key])
       id      = params[:id]
       raise ActiveRecord::RecordNotFound if @entity.blank?
-
-      @agent                 = @entity.agents.first if @entity.agents.present?
+      @agent                 = Agent.find(id) if id.present?
       @agent                 ||= Agent.new
       @agent.super_entity_id = @entity.id
-      if request.get?
-        if @agent.new_record?
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-          add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
-          add_breadcrumb " Agent Create", '',  :title => "Agent Create"
-        else
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-          add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
-          add_breadcrumb " Edit: #{@entity.first_name} #{@entity.last_name}/", '',  :title => "Edit" 
-          add_breadcrumb " Agent", '',  :title => "Agent"
-           add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
-        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
-        end
-      end
     end
-    if request.post?
+    if request.get?
+      if @agent.new_record?
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
+        add_breadcrumb " Agent Create", '',  :title => "Agent Create"
+      else
+        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+        add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
+        add_breadcrumb " Edit: #{@entity.first_name} #{@entity.last_name}/", '',  :title => "Edit" 
+        add_breadcrumb " Agent", '',  :title => "Agent"
+        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
+        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
+      end
+    elsif request.post?
       @agent                 = Agent.new(agent_params)
       @agent.use_temp_id
       @agent.super_entity_id = @entity.id
