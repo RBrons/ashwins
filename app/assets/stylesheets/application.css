@@ -45,7 +45,7 @@ table#data_table tbody tr.child-row.active-item{
     background-color: #facce4
 }
 
-.form-group.required .control-label:after { 
+.form-group.required .control-label:after {
    content:"*";
    color:red;
 }
@@ -56,10 +56,10 @@ table#data_table tbody tr.child-row.active-item{
   height: 60px;
   background-color:#005826;
   margin-top: -30px;
-  margin-left: -30px !important;  
+  margin-left: -30px !important;
   color: white;
   float: left;
-  border-width: 3px;  
+  border-width: 3px;
   border-color: #fff;
   border-radius: 0;
 }
@@ -70,13 +70,13 @@ table#data_table tbody tr.child-row.active-item{
 }
 
 .breadcrum_text {
-  margin-left: 5px;  
+  margin-left: 5px;
   color: #fff;
   font-size: 17px;
 }
 
 .breadcrum_list {
-  margin-left: 15px;  
+  margin-left: 15px;
   color: #fff;
   font-size: 12px;
   margin-top: -10px !important;
@@ -90,7 +90,7 @@ table#data_table tbody tr.child-row.active-item{
   margin-left: 39px !important;
 }
 
-.bredcum-content { 
+.bredcum-content {
   margin-top: 30px;
 }
 
@@ -111,8 +111,8 @@ table#data_table tbody tr.child-row.active-item{
 }
 .list_property{
   text-decoration: underline;
-  font-size: 12px !important;  
-} 
+  font-size: 12px !important;
+}
 .list_client{
   text-decoration: underline;
   font-size: 12px !important;
@@ -187,7 +187,7 @@ table#data_table tbody tr.child-row.active-item{
 }
 
 .lease-form{
-  margin-top: 30px;
+  margin-top: 20px;
   margin-left: -5px;
 }
 
@@ -253,10 +253,10 @@ table#data_table tbody tr.child-row.active-item{
   height: 60px;
   background-color:#005826;
   margin-top: -179px;
-  margin-left: -30px !important;  
+  margin-left: -30px !important;
   color: white;
   float: left;
-  border-width: 3px;  
+  border-width: 3px;
   border-color: #fff;
   border-radius: 0;
 }
