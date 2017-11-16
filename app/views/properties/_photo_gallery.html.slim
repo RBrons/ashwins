@@ -13,49 +13,50 @@ div.bredcum-content
   div.col-lg-12.col-md-12.col-sm-12.col-xs-12
     .clearfix.margin-lg-left.header-tab
       = render 'properties/form_header_link'  
-
-
-  = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-    
-    .col-lg-3.col-md-3.col-sm-6.col-xs-12.upload-image
-        = hidden_field_tag :type_is, params[:type_is]     
-        .form-group
-          = label_tag "Cover Image"
-          = f.file_field :prop_cover_img, class: 'form-control width-field-md'
-        .clearfix
-        .form-group
-          = label_tag "Other Images"
-          = f.file_field :prop_imgs, multiple: true, class: 'form-control width-field-md'
-
-        .clearfix
+  
+  .clearfix
+  .mask_content
+    = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+      
+      .col-lg-3.col-md-3.col-sm-6.col-xs-12.upload-image
+          = hidden_field_tag :type_is, params[:type_is]     
           .form-group
-            - if @property.persisted?
-              - c_str = "Warning, you just made changes to #{@property.survey} Are you sure you want to proceed to do this? " 
-              = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
-            - else
-              = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
+            = label_tag "Cover Image"
+            = f.file_field :prop_cover_img, class: 'form-control width-field-md'
+          .clearfix
+          .form-group
+            = label_tag "Other Images"
+            = f.file_field :prop_imgs, multiple: true, class: 'form-control width-field-md'
 
-    .col-lg-9.col-md-9.col-sm-6.col-xs-12.cover-pic
-      h2.center style='font-size: 23px'
-        | Cover Image
-      - if @property.property_cover_image.present? && @property.property_cover_image.cl_image_url
-        .col-md-12
-          .prop-img-wrapper.center
-            = cl_image_tag(@property.property_cover_image.cl_image_url, :crop => :scale)
-      - else
-        p.margin-sm-top Cover image is not available.
-      .clearfix
-      .margin-lg-top
-      h2.center style='font-size: 23px'
-        | Other Images
-      - if @property.property_images.length  == 0
-        p.margin-sm-top Other images are not availble.
-      - else
-        - @property.property_images.each do |img|
-          - if img.cl_image_url
-            .col-md-4.col-sm-12
-              .prop-img-wrapper
-                = cl_image_tag(img.cl_image_url, :crop => :scale)
+          .clearfix
+            .form-group
+              - if @property.persisted?
+                - c_str = "Warning, you just made changes to #{@property.survey} Are you sure you want to proceed to do this? " 
+                = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
+              - else
+                = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
+
+      .col-lg-9.col-md-9.col-sm-6.col-xs-12.cover-pic
+        h2.center style='font-size: 23px'
+          | Cover Image
+        - if @property.property_cover_image.present? && @property.property_cover_image.cl_image_url
+          .col-md-12
+            .prop-img-wrapper.center
+              = cl_image_tag(@property.property_cover_image.cl_image_url, :crop => :scale)
+        - else
+          p.margin-sm-top Cover image is not available.
+        .clearfix
+        .margin-lg-top
+        h2.center style='font-size: 23px'
+          | Other Images
+        - if @property.property_images.length  == 0
+          p.margin-sm-top Other images are not availble.
+        - else
+          - @property.property_images.each do |img|
+            - if img.cl_image_url
+              .col-md-4.col-sm-12
+                .prop-img-wrapper
+                  = cl_image_tag(img.cl_image_url, :crop => :scale)
 
 javascript:
   $(document).ready(function() {
