@@ -81,7 +81,7 @@ div.lease-subtabs[role="tabpanel"]
                 = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
               - else
                 = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-        
+
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             label Lease Analysis Perspective
@@ -137,7 +137,7 @@ div.lease-subtabs[role="tabpanel"]
                 = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
               - else
                 = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save'
-        
+
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .heading_blue.radio-inline
@@ -384,11 +384,11 @@ div.lease-subtabs[role="tabpanel"]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
-              h2.heading Rent Abatement
+              h2.heading.lease-box.first Rent Abatement
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :lease_rent_abatement_section, class: 'form-control width-field-md'
+                  = f.text_field :lease_rent_abatement_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[lease_rent_abatement_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_rent_abatement_rating}
               .property-comments-box
@@ -414,11 +414,11 @@ div.lease-subtabs[role="tabpanel"]
                 = f.text_field :lease_breakpoint, class: 'form-control'
             .form-group
               .property-action-fields
-                h2.heading Percentage Rent Exclusions
+                h2.heading.lease-box Percentage Rent Exclusions
                 .section-star-wrapper
                   .pull-left
                     label Section
-                    = f.text_field :lease_percentage_rent_exclusions_section, class: 'form-control width-field-md'
+                    = f.text_field :lease_percentage_rent_exclusions_section, class: 'form-control width-field-sm'
                   - $attribute_name = 'property[lease_percentage_rent_exclusions_rating]'
                   = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.lease_percentage_rent_exclusions_rating}
                 .property-comments-box
@@ -455,11 +455,11 @@ div.lease-subtabs[role="tabpanel"]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
-              h2.heading Net Nature
+              h2.heading.lease-box.first Net Nature
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_net_nature_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_net_nature_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_net_nature_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_net_nature_rating}
               .property-comments-box
@@ -488,11 +488,11 @@ div.lease-subtabs[role="tabpanel"]
               | Tenant pays Common Area Maintenance
           .form-group
             .property-action-fields
-              h2.heading Additional Rent
+              h2.heading.lease-box Additional Rent
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_additional_rent_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_additional_rent_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_additional_rent_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_additional_rent_rating}
               .property-comments-box
@@ -503,11 +503,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :taxes_and_fees_additional_rent_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Real Estate Taxes
+              h2.heading.lease-box Real Estate Taxes
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_restate_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_restate_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_restate_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_restate_rating}
               .property-comments-box
@@ -518,11 +518,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :taxes_and_fees_restate_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Assessments
+              h2.heading.lease-box Assessments
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_assessments_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_assessments_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_assessments_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_assessments_rating}
               .property-comments-box
@@ -533,11 +533,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :taxes_and_fees_assessments_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Separate Tax Parcel
+              h2.heading.lease-box Separate Tax Parcel
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_separate_tax_parcel_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_separate_tax_parcel_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_separate_tax_parcel_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_separate_tax_parcel_rating}
               .property-comments-box
@@ -548,11 +548,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :taxes_and_fees_separate_tax_parcel_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Landlord Contesting Taxes
+              h2.heading.lease-box Landlord Contesting Taxes
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_landlord_contesting_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_landlord_contesting_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_landlord_contesting_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_landlord_contesting_rating}
               .property-comments-box
@@ -563,11 +563,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :taxes_and_fees_landlord_contesting_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Tenant Contesting Taxes
+              h2.heading.lease-box Tenant Contesting Taxes
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_tenant_contesting_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_tenant_contesting_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_tenant_contesting_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_tenant_contesting_rating}
               .property-comments-box
@@ -578,11 +578,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :taxes_and_fees_tenant_contesting_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Easements
+              h2.heading.lease-box Easements
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :taxes_and_fees_easements_section, class: 'form-control width-field-md'
+                  = f.text_field :taxes_and_fees_easements_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[taxes_and_fees_easements_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.taxes_and_fees_easements_rating}
               .property-comments-box
@@ -619,11 +619,11 @@ div.lease-subtabs[role="tabpanel"]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
-              h2.heading Environmental Obligations for Site Preparation
+              h2.heading.lease-box.first Environmental Obligations for Site Preparation
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :site_preparation_env_obligations_section, class: 'form-control width-field-md'
+                  = f.text_field :site_preparation_env_obligations_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[site_preparation_env_obligations_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_obligations_rating}
               .property-comments-box
@@ -634,11 +634,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :site_preparation_env_obligations_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Environmental Termination Rights Preparation
+              h2.heading.lease-box Environmental Termination Rights Preparation
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :site_preparation_env_termination_rights_section, class: 'form-control width-field-md'
+                  = f.text_field :site_preparation_env_termination_rights_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[site_preparation_env_termination_rights_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_termination_rights_rating}
               .property-comments-box
@@ -649,11 +649,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :site_preparation_env_termination_rights_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Environmental Remediation Preparation
+              h2.heading.lease-box Environmental Remediation Preparation
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :site_preparation_env_remediation_section, class: 'form-control width-field-md'
+                  = f.text_field :site_preparation_env_remediation_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[site_preparation_env_remediation_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_remediation_rating}
               .property-comments-box
@@ -664,11 +664,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :site_preparation_env_remediation_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Environmental Permits and Licenses
+              h2.heading.lease-box Environmental Permits and Licenses
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :site_preparation_env_permits_and_licenses_section, class: 'form-control width-field-md'
+                  = f.text_field :site_preparation_env_permits_and_licenses_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[site_preparation_env_permits_and_licenses_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.site_preparation_env_permits_and_licenses_rating}
               .property-comments-box
@@ -706,11 +706,11 @@ div.lease-subtabs[role="tabpanel"]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
-              h2.heading Construction
+              h2.heading.lease-box.first Construction
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :construction_section, class: 'form-control width-field-md'
+                  = f.text_field :construction_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[construction_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_rating}
               .property-comments-box
@@ -721,11 +721,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :construction_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Construction Deadline
+              h2.heading.lease-box Construction Deadline
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :construction_deadline_section, class: 'form-control width-field-md'
+                  = f.text_field :construction_deadline_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[construction_deadline_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_deadline_rating}
               .property-comments-box
@@ -736,11 +736,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :construction_deadline_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Liens
+              h2.heading.lease-box Liens
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :construction_liens_section, class: 'form-control width-field-md'
+                  = f.text_field :construction_liens_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[construction_liens_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_liens_rating}
               .property-comments-box
@@ -751,11 +751,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :construction_liens_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Approval of Plans and Specifications
+              h2.heading.lease-box Approval of Plans and Specifications
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :construction_approval_of_plans_and_specs_section, class: 'form-control width-field-md'
+                  = f.text_field :construction_approval_of_plans_and_specs_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[construction_approval_of_plans_and_specs_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.construction_approval_of_plans_and_specs_rating}
               .property-comments-box
@@ -793,11 +793,11 @@ div.lease-subtabs[role="tabpanel"]
           .clearfix
           .form-group
             .property-action-fields
-              h2.heading Use Clause
+              h2.heading.lease-box.first Use Clause
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :use_clause_section, class: 'form-control width-field-md'
+                  = f.text_field :use_clause_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[use_clause_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_clause_rating}
               .property-comments-box
@@ -808,11 +808,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :use_clause_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Exclusive Clause
+              h2.heading.lease-box Exclusive Clause
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :use_exclusive_clause_section, class: 'form-control width-field-md'
+                  = f.text_field :use_exclusive_clause_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[use_exclusive_clause_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.use_exclusive_clause_rating}
               .property-comments-box
@@ -849,11 +849,11 @@ div.lease-subtabs[role="tabpanel"]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
-              h2.heading Quiet Enjoyment
+              h2.heading.lease-box.first Quiet Enjoyment
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_quiet_enjoyment_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_quiet_enjoyment_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_quiet_enjoyment_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_quiet_enjoyment_rating}
               .property-comments-box
@@ -864,11 +864,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_quiet_enjoyment_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Tenant Rights Under the Declaration
+              h2.heading.lease-box Tenant Rights Under the Declaration
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_tenant_rights_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_tenant_rights_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_tenant_rights_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenant_rights_rating}
               .property-comments-box
@@ -879,11 +879,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_tenant_rights_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Waste
+              h2.heading.lease-box Waste
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_waste_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_waste_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_waste_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_waste_rating}
               .property-comments-box
@@ -894,11 +894,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_waste_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Initial Opening
+              h2.heading.lease-box Initial Opening
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_initial_opening_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_initial_opening_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_initial_opening_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_initial_opening_rating}
               .property-comments-box
@@ -909,11 +909,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_initial_opening_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Recapture Clause
+              h2.heading.lease-box Recapture Clause
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_recapture_clause_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_recapture_clause_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_recapture_clause_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_recapture_clause_rating}
               .property-comments-box
@@ -924,11 +924,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_recapture_clause_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Demolition
+              h2.heading.lease-box Demolition
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_demolition_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_demolition_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_demolition_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_demolition_rating}
               .property-comments-box
@@ -939,11 +939,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_demolition_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Tenant's Equipment Defined
+              h2.heading.lease-box Tenant's Equipment Defined
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_tenants_equipment_defined_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_tenants_equipment_defined_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_tenants_equipment_defined_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_tenants_equipment_defined_rating}
               .property-comments-box
@@ -954,11 +954,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_tenants_equipment_defined_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Ownership and Removal of Tenant's Equipment
+              h2.heading.lease-box Ownership and Removal of Tenant's Equipment
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_ownership_and_removal_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_ownership_and_removal_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_ownership_and_removal_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_ownership_and_removal_rating}
               .property-comments-box
@@ -969,11 +969,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_ownership_and_removal_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Repairs
+              h2.heading.lease-box Repairs
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_repairs_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_repairs_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_repairs_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_repairs_rating}
               .property-comments-box
@@ -984,11 +984,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_repairs_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Compliance with Laws
+              h2.heading.lease-box Compliance with Laws
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_compliance_with_laws_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_compliance_with_laws_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_compliance_with_laws_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_compliance_with_laws_rating}
               .property-comments-box
@@ -999,11 +999,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_compliance_with_laws_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Surrender
+              h2.heading.lease-box Surrender
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_surrender_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_surrender_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_surrender_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_surrender_rating}
               .property-comments-box
@@ -1014,11 +1014,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_surrender_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Inspection
+              h2.heading.lease-box Inspection
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_inspection_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_inspection_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_inspection_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_inspection_rating}
               .property-comments-box
@@ -1029,11 +1029,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_inspection_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Insurance
+              h2.heading.lease-box Insurance
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_insurance_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_insurance_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_insurance_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_insurance_rating}
               .property-comments-box
@@ -1044,11 +1044,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_insurance_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Destruction
+              h2.heading.lease-box Destruction
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_destruction_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_destruction_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_destruction_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_destruction_rating}
               .property-comments-box
@@ -1059,11 +1059,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_destruction_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Total Taking
+              h2.heading.lease-box Total Taking
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_total_taking_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_total_taking_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_total_taking_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_total_taking_rating}
               .property-comments-box
@@ -1074,11 +1074,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_total_taking_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Partial Taking
+              h2.heading.lease-box Partial Taking
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_partial_taking_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_partial_taking_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_partial_taking_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_partial_taking_rating}
               .property-comments-box
@@ -1089,11 +1089,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_partial_taking_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Signs
+              h2.heading.lease-box Signs
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_signs_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_signs_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_signs_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_signs_rating}
               .property-comments-box
@@ -1104,11 +1104,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_signs_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Utilities
+              h2.heading.lease-box Utilities
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :premises_utilities_section, class: 'form-control width-field-md'
+                  = f.text_field :premises_utilities_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[premises_utilities_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.premises_utilities_rating}
               .property-comments-box
@@ -1145,11 +1145,11 @@ div.lease-subtabs[role="tabpanel"]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
-              h2.heading Assignment and Subletting
+              h2.heading.lease-box.first Assignment and Subletting
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :transfer_assignment_and_subletting_section, class: 'form-control width-field-md'
+                  = f.text_field :transfer_assignment_and_subletting_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[transfer_assignment_and_subletting_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_assignment_and_subletting_rating}
               .property-comments-box
@@ -1160,11 +1160,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :transfer_assignment_and_subletting_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Leasehold Mortgage
+              h2.heading.lease-box Leasehold Mortgage
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :transfer_leasehold_mortgage_section, class: 'form-control width-field-md'
+                  = f.text_field :transfer_leasehold_mortgage_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[transfer_leasehold_mortgage_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_leasehold_mortgage_rating}
               .property-comments-box
@@ -1175,11 +1175,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :transfer_leasehold_mortgage_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Subordination
+              h2.heading.lease-box Subordination
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :transfer_subordination_section, class: 'form-control width-field-md'
+                  = f.text_field :transfer_subordination_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[transfer_subordination_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_subordination_rating}
               .property-comments-box
@@ -1190,11 +1190,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :transfer_subordination_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Estoppel Certificate
+              h2.heading.lease-box Estoppel Certificate
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :transfer_estoppel_certificate_section, class: 'form-control width-field-md'
+                  = f.text_field :transfer_estoppel_certificate_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[transfer_estoppel_certificate_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.transfer_estoppel_certificate_rating}
               .property-comments-box
@@ -1231,11 +1231,11 @@ div.lease-subtabs[role="tabpanel"]
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
-              h2.heading Rent Defaults by Tenant
+              h2.heading.lease-box.first Rent Defaults by Tenant
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :remedies_rent_defaults_section, class: 'form-control width-field-md'
+                  = f.text_field :remedies_rent_defaults_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[remedies_rent_defaults_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_rent_defaults_rating}
               .property-comments-box
@@ -1246,11 +1246,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :remedies_rent_defaults_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Landlord Remedies for Tenant Defaults
+              h2.heading.lease-box Landlord Remedies for Tenant Defaults
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :remedies_landlord_section, class: 'form-control width-field-md'
+                  = f.text_field :remedies_landlord_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[remedies_landlord_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_rating}
               .property-comments-box
@@ -1261,11 +1261,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :remedies_landlord_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Mitigation
+              h2.heading.lease-box Mitigation
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :remedies_mitigation_section, class: 'form-control width-field-md'
+                  = f.text_field :remedies_mitigation_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[remedies_mitigation_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_mitigation_rating}
               .property-comments-box
@@ -1276,11 +1276,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :remedies_mitigation_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Dispute Resolution
+              h2.heading.lease-box Dispute Resolution
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :remedies_dispute_resolution_section, class: 'form-control width-field-md'
+                  = f.text_field :remedies_dispute_resolution_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[remedies_dispute_resolution_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_dispute_resolution_rating}
               .property-comments-box
@@ -1291,11 +1291,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :remedies_dispute_resolution_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Landlord Exoneration after Sale
+              h2.heading.lease-box Landlord Exoneration after Sale
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :remedies_landlord_exoneration_section, class: 'form-control width-field-md'
+                  = f.text_field :remedies_landlord_exoneration_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[remedies_landlord_exoneration_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_landlord_exoneration_rating}
               .property-comments-box
@@ -1306,11 +1306,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :remedies_landlord_exoneration_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Exculpation
+              h2.heading.lease-box Exculpation
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :remedies_exculpation_section, class: 'form-control width-field-md'
+                  = f.text_field :remedies_exculpation_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[remedies_exculpation_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.remedies_exculpation_rating}
               .property-comments-box
@@ -1344,16 +1344,16 @@ div.lease-subtabs[role="tabpanel"]
                 = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
               - else
                 = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-        
+
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .clearfix
           .form-group
             .property-action-fields
-              h2.heading Notices
+              h2.heading.lease-box.first Notices
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :misc_notices_section, class: 'form-control width-field-md'
+                  = f.text_field :misc_notices_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[misc_notices_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_notices_rating}
               .property-comments-box
@@ -1364,11 +1364,11 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :misc_notices_keywords, class: 'form-control'
           .form-group
             .property-action-fields
-              h2.heading Obligation to be reasonable
+              h2.heading.lease-box Obligation to be reasonable
               .section-star-wrapper
                 .pull-left
                   label Section
-                  = f.text_field :misc_obligation_section, class: 'form-control width-field-md'
+                  = f.text_field :misc_obligation_section, class: 'form-control width-field-sm'
                 - $attribute_name = 'property[misc_obligation_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_obligation_rating}
               .property-comments-box
