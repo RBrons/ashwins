@@ -372,3 +372,12 @@ $ ->
           console.log val
         error: (e) ->
           console.log e
+  
+  # make fixed tab while scrolling
+  $(document).on 'shown.bs.tab', '#lease_tab a[data-toggle="tab"]', ->
+    $('.mask_content').each ->
+      if $(this).is(':visible')
+        height = $(window).height() - $(this).offset().top - 5
+        if height > 50
+          $(this).css('overflow-y', 'scroll')
+          $(this).height(height)

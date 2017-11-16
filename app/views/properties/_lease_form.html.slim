@@ -57,8 +57,8 @@ div.lease-subtabs[role="tabpanel"]
         a#lease_misc[href="#lease_misc_section" role="tab" data-toggle="tab" aria-expanded="false"] Misc
 
 
-  .tab-content.mask_content
-    #lease_basics_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
+  .tab-content
+    #lease_basics_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_basics_section'
@@ -114,7 +114,7 @@ div.lease-subtabs[role="tabpanel"]
             = f.text_field :lease_original_guarantor, class: 'form-control'
           /.form-group
             /= f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_terms_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
+    #lease_terms_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_terms_section'
@@ -261,12 +261,12 @@ div.lease-subtabs[role="tabpanel"]
           /  = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
     #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
       .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_no_save
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+        p
+          .margin-md-left.breadcrum_no_save
+            = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+        <br><br>
+          = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
+          = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
       - if @property.rent_tables.present?
         .user-setup-wizard
           ul.wizard_steps
@@ -286,80 +286,79 @@ div.lease-subtabs[role="tabpanel"]
               a.disabled[data-step=4]
                 span.step_no 4
                 span.step_descr Option 2
-        .clearfix
-        .col-sm-4
-          .form-group
-            = label_tag "Rent Table Version"
-            = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control', data: {id: @property.id}, style: "width: 200px"
+        .mask_content
+          .col-sm-4
+            .form-group
+              = label_tag "Rent Table Version"
+              = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control', data: {id: @property.id}, style: "width: 200px"
 
-        .clearfix
-        div#rent-table-wrapper
-          table.table.table-striped.table-bordered#rent-table
-            thead
-              tr
-                th Particulars
-                th Amount
-            tbody
-              - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
+          .clearfix
+          div#rent-table-wrapper
+            table.table.table-striped.table-bordered#rent-table
+              thead
                 tr
-                  td
-                    = rent_row.display_info
-                  td
-                    = number_to_currency rent_row.rent
+                  th Particulars
+                  th Amount
+              tbody
+                - @property.rent_tables.where(version: @property.rent_table_version).each do |rent_row|
+                  tr
+                    td
+                      = rent_row.display_info
+                    td
+                      = number_to_currency rent_row.rent
 
-        .clearfix
-        .clearfix
-        div#monthly-rent-table-wrapper
-          table.table.table-striped.table-bordered
-            thead
-              tr
-                th Year
-                th Jan
-                th Feb
-                th Mar
-                th Apr
-                th May
-                th Jun
-                th Jul
-                th Aug
-                th Sep
-                th Oct
-                th Nov
-                th Dec
-                th Annual
-            tbody
-              - @property.monthly_rent_table.each do |row|
+          .clearfix
+          div#monthly-rent-table-wrapper
+            table.table.table-striped.table-bordered
+              thead
                 tr
-                  td
-                    = row[0]
-                  td
-                    = number_to_currency row[1]
-                  td
-                    = number_to_currency row[2]
-                  td
-                    = number_to_currency row[3]
-                  td
-                    = number_to_currency row[4]
-                  td
-                    = number_to_currency row[5]
-                  td
-                    = number_to_currency row[6]
-                  td
-                    = number_to_currency row[7]
-                  td
-                    = number_to_currency row[8]
-                  td
-                    = number_to_currency row[9]
-                  td
-                    = number_to_currency row[10]
-                  td
-                    = number_to_currency row[11]
-                  td
-                    = number_to_currency row[12]
-                  td
-                    = number_to_currency row[13]
+                  th Year
+                  th Jan
+                  th Feb
+                  th Mar
+                  th Apr
+                  th May
+                  th Jun
+                  th Jul
+                  th Aug
+                  th Sep
+                  th Oct
+                  th Nov
+                  th Dec
+                  th Annual
+              tbody
+                - @property.monthly_rent_table.each do |row|
+                  tr
+                    td
+                      = row[0]
+                    td
+                      = number_to_currency row[1]
+                    td
+                      = number_to_currency row[2]
+                    td
+                      = number_to_currency row[3]
+                    td
+                      = number_to_currency row[4]
+                    td
+                      = number_to_currency row[5]
+                    td
+                      = number_to_currency row[6]
+                    td
+                      = number_to_currency row[7]
+                    td
+                      = number_to_currency row[8]
+                    td
+                      = number_to_currency row[9]
+                    td
+                      = number_to_currency row[10]
+                    td
+                      = number_to_currency row[11]
+                    td
+                      = number_to_currency row[12]
+                    td
+                      = number_to_currency row[13]
 
-    #lease_rent_details_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
+    #lease_rent_details_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_rent_details_section'
@@ -430,7 +429,7 @@ div.lease-subtabs[role="tabpanel"]
                 = f.text_field :lease_percentage_rent_exclusions_keywords, class: 'form-control'
           /.form-group
           /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_taxes_and_fees_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
+    #lease_taxes_and_fees_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_taxes_and_fees_section'
@@ -594,7 +593,7 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :taxes_and_fees_easements_keywords, class: 'form-control'
           /.form-group
           /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_site_preparation_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
+    #lease_site_preparation_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_site_preparation_section'
@@ -681,7 +680,7 @@ div.lease-subtabs[role="tabpanel"]
           /.form-group
           /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
-    #lease_construction_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
+    #lease_construction_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_construction_section'
@@ -767,7 +766,7 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :construction_approval_of_plans_and_specs_keywords, class: 'form-control'
           /.form-group
           /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_use_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
+    #lease_use_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_use_section'
@@ -824,7 +823,7 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :use_exclusive_clause_keywords, class: 'form-control'
           /.form-group
           /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_premises_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
+    #lease_premises_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_premises_section'
@@ -1120,7 +1119,7 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :premises_utilities_keywords, class: 'form-control'
           /.form-group
           /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_transfer_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
+    #lease_transfer_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_transfer_section'
@@ -1206,7 +1205,7 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :transfer_estoppel_certificate_keywords, class: 'form-control'
           /.form-group
           /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_remedies_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
+    #lease_remedies_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_remedies_section'
@@ -1322,7 +1321,7 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :remedies_exculpation_keywords, class: 'form-control'
           /.form-group
             /= f.submit 'Save', class: 'btn btn-sm btn-primary'
-    #lease_misc_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
+    #lease_misc_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_misc_section'
