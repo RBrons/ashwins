@@ -5468,9 +5468,21 @@ ol.number_with_parentheses>li:before {
 
 
 /* Breadcrumb style kit. Please follow this style */
+.breadcrumb-wrapper{
+    background-color: inherit;
+    padding: 8px 15px;
+    margin: 10px 0;
+}
+
+.breadcrumb-wrapper .action-links a{
+    font-size: 12px;
+    text-decoration: underline;
+    color: #fff;
+}
 
 ul.m__breadcrumb {
-    padding: 10px 16px;
+    padding: 0;
+    margin: 0;
     list-style: none;
     background-color: inherit;
 }
@@ -5478,15 +5490,13 @@ ul.m__breadcrumb {
 ul.m__breadcrumb li {
     display: inline-block;
     font-size: 17px;
-    vertical-align: top;
     color: #fff;
 }
 
 ul.m__breadcrumb li+li:before {
     color: inherit;
     content: "/ ";
-    font-size: 20px;
-    vertical-align: middle;
+    font-size: 17px;
 }
 
 ul.m__breadcrumb li.no-separator:before {
@@ -5498,7 +5508,7 @@ ul.m__breadcrumb li a {
     text-decoration: none;
 }
 
-ul.m__breadcrumb li.action_links button {
+ul.m__breadcrumb li button {
     width: 64px;
     height: 30px;
     border-color: inherit;
@@ -5506,16 +5516,13 @@ ul.m__breadcrumb li.action_links button {
     border-radius: 0px;
     background-color: inherit;
     border-width: 2px;
+    margin: 0px;
 }
 
-ul.m__breadcrumb li.action_links button:hover {
+ul.m__breadcrumb li button:hover {
     color: white !important;
     border-color: white !important;
     background: #5eb14a !important;
-}
-
-ul.m__breadcrumb li.action_links a {
-    font-size: 12px;
 }
 
 ul.m__breadcrumb li a:hover {

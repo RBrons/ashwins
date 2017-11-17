@@ -1,8 +1,9 @@
-ul.m__breadcrumb
-  li
-    | Transactions
-  li
-    | List View
+.breadcrumb-wrapper
+  ul.m__breadcrumb
+    li
+      | Transactions
+    li
+      | List View
 .clearfix.margin-lg-top
 .text-center
   = link_to 'Sale Mode', transactions_path(mode: :sale), class: "btn #{(params[:mode].blank? || params[:mode] == 'sale') ? 'btn-primary' : 'btn-default'}"

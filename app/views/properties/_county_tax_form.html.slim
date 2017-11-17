@@ -13,52 +13,52 @@
 div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content 
   .clearfix.margin-lg-left.header-tab
     = render 'properties/form_header_link'
-
-  = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-    = hidden_field_tag :type_is, params[:type_is]
-    - if @property.errors.any?
-      #error_explanation
-        h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-        ul
-          - @property.errors.full_messages.each do |message|
-            li = message
-       
-    .col-lg-4.col-md-4.form-content
-      .clearfix
-      .form-group
-        = label_tag 'Website'
-        = f.text_field :county_tax_assessor_website, class: 'form-control'
-      .form-group
-        = label_tag 'Additional Info'
-        = f.text_area :county_tax_assessor_additional_info, class: 'form-control'
-      .clearfix
-        h2.heading
-          | County Tax Appraisal District
-      .clearfix
-      .form-group
-        = label_tag 'Website'
-        = f.text_field :county_tax_assessor_district_website, class: 'form-control'
-      .form-group
-        = label_tag 'Additional Info'
-        = f.text_area :county_tax_assessor_district_additional_info, class: 'form-control'
-      .clearfix
-        h2.heading
-          | Parcel(s)
-      .clearfix
-      = f.fields_for :parcels do |parcel_form|
+  .mask_content
+    = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+      = hidden_field_tag :type_is, params[:type_is]
+      - if @property.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+          ul
+            - @property.errors.full_messages.each do |message|
+              li = message
+        
+      .col-lg-4.col-md-4.form-content
+        .clearfix
         .form-group
-          = parcel_form.label :number
-          = parcel_form.text_field :number, class: 'form-control'
-          = parcel_form.link_to_remove 'Delete', class: 'btn btn-sm btn-danger pull-right margin-xs-top'
+          = label_tag 'Website'
+          = f.text_field :county_tax_assessor_website, class: 'form-control'
+        .form-group
+          = label_tag 'Additional Info'
+          = f.text_area :county_tax_assessor_additional_info, class: 'form-control'
+        .clearfix
+          h2.heading
+            | County Tax Appraisal District
+        .clearfix
+        .form-group
+          = label_tag 'Website'
+          = f.text_field :county_tax_assessor_district_website, class: 'form-control'
+        .form-group
+          = label_tag 'Additional Info'
+          = f.text_area :county_tax_assessor_district_additional_info, class: 'form-control'
+        .clearfix
+          h2.heading
+            | Parcel(s)
+        .clearfix
+        = f.fields_for :parcels do |parcel_form|
+          .form-group
+            = parcel_form.label :number
+            = parcel_form.text_field :number, class: 'form-control'
+            = parcel_form.link_to_remove 'Delete', class: 'btn btn-sm btn-danger pull-right margin-xs-top'
+        .clearfix
+        = f.link_to_add "Add a Parcel", :parcels, class: 'btn btn-sm btn-default margin-lg-top margin-sm-bottom'
       .clearfix
-      = f.link_to_add "Add a Parcel", :parcels, class: 'btn btn-sm btn-default margin-lg-top margin-sm-bottom'
-    .clearfix
-      .form-group
-        - if @property.persisted?
-          - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
-        - else
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
+        .form-group
+          - if @property.persisted?
+            - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
+          - else
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
 
 javascript:
   $(document).ready(function() {

@@ -1,80 +1,81 @@
 .col-lg-12.col-md-12.col-sm-12.col-xs-12
-  ul.m__breadcrumb
-    li.action_links.margin-sm-right
-      button.btn.btn-sm Save
-      <br>
-      = link_to 'Show in List', transactions_path
-    li.no-separator
-      - if defined?(@transaction) && @transaction.present?
-        - if @transaction.Sale? && @transaction.relinquishing_seller_entity
-          = link_to 'Transaction (' + @transaction.seller_name + ' )', transactions_path
-        - elsif @transaction.Purchase? && @transaction.replacement_purchaser_entity
-          = link_to 'Transaction ( ' + @transaction.purchaser_name + ' )', transactions_path
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      li.margin-sm-right
+        button.btn.btn-sm Save
+      li.no-separator
+        - if defined?(@transaction) && @transaction.present?
+          - if @transaction.Sale? && @transaction.relinquishing_seller_entity
+            = link_to 'Transaction (' + @transaction.seller_name + ' )', transactions_path
+          - elsif @transaction.Purchase? && @transaction.replacement_purchaser_entity
+            = link_to 'Transaction ( ' + @transaction.purchaser_name + ' )', transactions_path
+          - else
+            = link_to 'Transaction', transactions_path      
         - else
-          = link_to 'Transaction', transactions_path      
-      - else
-        = link_to 'Transaction', transactions_path
-      
-      - if params[:type] == 'qi_status'
-        li
-          = link_to  'QI', qi_status_transaction_path(@transaction, main_id: @transaction_main.id)
-      - elsif params[:sub] == 'personnel'
-        li
-          = link_to  'Personnel', personnel_transaction_path(@transaction, sub: 'personnel', main_id: params[:main_id])
-      - else        
-        - if defined?(@transaction) && @transaction.present? && @transaction.Sale? && params[:type] != 'status'
+          = link_to 'Transaction', transactions_path
+        
+        - if params[:type] == 'qi_status'
           li
-            = link_to (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type]) : '#') do
-              - if params[:cur_property]
-                - selected_property = get_property(params[:cur_property]) 
-                - if selected_property.present? 
-                  = 'Sale ( ' + selected_property.try(:title) + ' )'
+            = link_to  'QI', qi_status_transaction_path(@transaction, main_id: @transaction_main.id)
+        - elsif params[:sub] == 'personnel'
+          li
+            = link_to  'Personnel', personnel_transaction_path(@transaction, sub: 'personnel', main_id: params[:main_id])
+        - else        
+          - if defined?(@transaction) && @transaction.present? && @transaction.Sale? && params[:type] != 'status'
+            li
+              = link_to (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type]) : '#') do
+                - if params[:cur_property]
+                  - selected_property = get_property(params[:cur_property]) 
+                  - if selected_property.present? 
+                    = 'Sale ( ' + selected_property.try(:title) + ' )'
+                  - else
+                    | Sale
                 - else
                   | Sale
-              - else
-                | Sale
 
-        - if defined?(@transaction) && @transaction.present? && @transaction.Purchase? && params[:type] != 'status'
-          li
-            = link_to (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type]) : '#') do
-              - if params[:cur_property]
-                - selected_property = get_property(params[:cur_property]) 
-                - if selected_property.present?
-                  = 'Purchase ( ' + selected_property.try(:title) + ' )'
+          - if defined?(@transaction) && @transaction.present? && @transaction.Purchase? && params[:type] != 'status'
+            li
+              = link_to (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type]) : '#') do
+                - if params[:cur_property]
+                  - selected_property = get_property(params[:cur_property]) 
+                  - if selected_property.present?
+                    = 'Purchase ( ' + selected_property.try(:title) + ' )'
+                  - else
+                    | Purchase
                 - else
                   | Purchase
-              - else
-                | Purchase
 
-        - if defined?(@transaction) && @transaction.present? && params[:type] != 'status'
-          li
-            - if params[:sub].blank?
-              - if @transaction.Sale?
-                = link_to " #{(@transaction.relinquishing_seller_entity_id ? '' : 'Identify the Relinquishing Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
-            - else  
-              - case params[:sub]
-                - when 'parties'
-                  - if @transaction.Sale?
-                    = link_to " #{(@transaction.relinquishing_seller_entity_id ? '' : 'Identify the Relinquishing Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
-                  - else
-                    = link_to " #{(@transaction.replacement_seller_contact_id ? '' : 'Identify the Replacement Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
-                - when 'property'
-                  = link_to " #{(@transaction.Sale? ? 'Select Property to Sell' : 'Select Property to Buy' )}", (@transaction.id.present? ? properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id]) : '#')
-                - when 'terms'
-                  = link_to " #{(@transaction.Sale? ? 'Negotiate the Sales Price with the Prospective Purchaser' : params[:sub])}", (@transaction.id.present? ? terms_transaction_path(@transaction, sub: 'terms', type: params[:type], cur_property: params[:cur_property], main_id: params[:main_id]) : '#')
-                - when 'inspection'
-                  = link_to " #{params[:sub]}", (@transaction.id.present? ? inspection_transaction_path(@transaction, sub: 'inspection', type: params[:type], cur_property: params[:cur_property], main_id: params[:main_id]) : '#')
-                - when 'closing'
-                  = link_to " #{params[:sub]}", (@transaction.id.present? ? closing_transaction_path(@transaction, sub: 'closing', type: params[:type], cur_property: params[:cur_property], main_id: params[:main_id]) : '#')
-        - if params[:type] == 'status'
-          li
-            = link_to 'Status', defined?(@transaction_main) && @transaction_main.persisted? ? get_status_transaction_path(@transaction_main, type: 'status', main_id: @transaction_main) : '#', class: ""
-      
-    li.no-separator.pull-right
-      a[href="javascript:;"]
-        i.fa.fa-circle.text-danger
-        span.padding-md
-          | Notes
-        span.fa.fa-pencil-square-o.fa-2x
-  
+          - if defined?(@transaction) && @transaction.present? && params[:type] != 'status'
+            li
+              - if params[:sub].blank?
+                - if @transaction.Sale?
+                  = link_to " #{(@transaction.relinquishing_seller_entity_id ? '' : 'Identify the Relinquishing Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+              - else  
+                - case params[:sub]
+                  - when 'parties'
+                    - if @transaction.Sale?
+                      = link_to " #{(@transaction.relinquishing_seller_entity_id ? '' : 'Identify the Relinquishing Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+                    - else
+                      = link_to " #{(@transaction.replacement_seller_contact_id ? '' : 'Identify the Replacement Seller')}", (@transaction.id.present? ? edit_transaction_url(@transaction.id, main_id: params[:main_id], type: params[:type], sub: params[:sub]) : '#')
+                  - when 'property'
+                    = link_to " #{(@transaction.Sale? ? 'Select Property to Sell' : 'Select Property to Buy' )}", (@transaction.id.present? ? properties_edit_transaction_path(@transaction, sub: 'property', type: params[:type], main_id: params[:main_id]) : '#')
+                  - when 'terms'
+                    = link_to " #{(@transaction.Sale? ? 'Negotiate the Sales Price with the Prospective Purchaser' : params[:sub])}", (@transaction.id.present? ? terms_transaction_path(@transaction, sub: 'terms', type: params[:type], cur_property: params[:cur_property], main_id: params[:main_id]) : '#')
+                  - when 'inspection'
+                    = link_to " #{params[:sub]}", (@transaction.id.present? ? inspection_transaction_path(@transaction, sub: 'inspection', type: params[:type], cur_property: params[:cur_property], main_id: params[:main_id]) : '#')
+                  - when 'closing'
+                    = link_to " #{params[:sub]}", (@transaction.id.present? ? closing_transaction_path(@transaction, sub: 'closing', type: params[:type], cur_property: params[:cur_property], main_id: params[:main_id]) : '#')
+          - if params[:type] == 'status'
+            li
+              = link_to 'Status', defined?(@transaction_main) && @transaction_main.persisted? ? get_status_transaction_path(@transaction_main, type: 'status', main_id: @transaction_main) : '#', class: ""
+        
+      li.no-separator.pull-right
+        a[href="javascript:;"]
+          i.fa.fa-circle.text-danger
+          span.padding-md
+            | Notes
+          span.fa.fa-pencil-square-o.fa-2x
+    .action-links
+      = link_to 'List', transactions_path, class: 'margin-md-right'
+      = link_to 'Show', '#'
 input#global_transaction_type[type='hidden' value="#{params[:type]}"]

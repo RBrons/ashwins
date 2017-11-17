@@ -356,7 +356,7 @@ var set_breadcrumb_colors = function(){
     $(document).find('.breadcrum_text').css('color', text_color);
     $(document).find('.breadcrum_list').css('color', text_color);
 
-    $(document).find('.breadcrum, .breadcrum-breadcrum, .lease_breadcrum, .tenant_breadcrum')
+    $(document).find('.breadcrum, .breadcrum-breadcrum, .lease_breadcrum, .tenant_breadcrum, .gallery_breadcrum')
                                             .css('background-color', bg_color);
 
     $(document).find('.submit-edit-basic, .submit-edit')
@@ -364,7 +364,8 @@ var set_breadcrumb_colors = function(){
                                                     .css('border-color', text_color)
                                                     .css('color', text_color);
 
-    $(document).find('ul.m__breadcrumb').css('background-color', bg_color);
+    $(document).find('.breadcrumb-wrapper').css('background-color', bg_color);
+    $(document).find('.breadcrumb-wrapper .action-links a').css('color', text_color);
     $(document).find('ul.m__breadcrumb li').css('color', text_color);
     
     /*Breadcrumb colors for clients module*/
