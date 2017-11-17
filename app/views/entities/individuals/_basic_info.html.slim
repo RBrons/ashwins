@@ -22,8 +22,8 @@
       ul
         - override_active_record_errors(@entity.errors.messages, {base: ''}).each do |message|
           li = message
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group style="display: inline "
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12.trust-form-gape
+    .form-group
       label Honorific
       = f.hidden_field :is_honorific, value: true
       = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
@@ -35,10 +35,12 @@
       = f.label :last_name, class: "control-label"
       = f.text_field :last_name, class: "form-control"
     .form-group
-      = f.label :phone1
+      /= f.label :phone1
+      label Phone 1
       = f.text_field :phone1, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
     .form-group
-      = f.label :phone2
+      /= f.label :phone2
+      label Phone 2
       = f.text_field :phone2, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
     .form-group
       = f.label :fax

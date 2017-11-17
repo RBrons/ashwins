@@ -298,7 +298,7 @@ table#data_table tbody tr.child-row.active-item{
 }
 #entity_jurisdiction,#entity_state{
   position: relative !important;
-  left: 12px !important;
+  left: 4px !important;
 }
 .white_line{
   position: fixed;
@@ -337,4 +337,12 @@ table#data_table tbody tr.child-row.active-item{
 }
 .contact_breadcrumb_fixed{
   top: 120px;
+}
+
+.form-height-button {
+  margin-top: 65px !important;
+}
+
+.ein-sole{
+  margin-top: 25px;
 }

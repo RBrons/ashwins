@@ -25,7 +25,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
-        add_breadcrumb " Edit: #{@entity.first_name} #{@entity.last_name}/", '',  :title => "Edit" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
         add_breadcrumb " Principal", '',  :title => "Principal"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
         add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
@@ -149,11 +149,12 @@ class Entities::PowerOfAttorneyController < ApplicationController
       if @agent.new_record?
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
+        add_breadcrumb " Edit: #{@entity.name}/" 
         add_breadcrumb " Agent Create", '',  :title => "Agent Create"
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
-        add_breadcrumb " Edit: #{@entity.first_name} #{@entity.last_name}/", '',  :title => "Edit" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
         add_breadcrumb " Agent", '',  :title => "Agent"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
         add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
@@ -195,8 +196,9 @@ class Entities::PowerOfAttorneyController < ApplicationController
   def agents
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Agents </a></h4></div>".html_safe
     @entity = Entity.find_by(key: params[:entity_key])
-     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Power Of Attorney #{@entity.name}/", '',  :title => "Power Of Attorney"
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
+    add_breadcrumb " Edit: #{@entity.name}/"
     add_breadcrumb " Agents", '',  :title => "Agents"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
@@ -212,7 +214,8 @@ class Entities::PowerOfAttorneyController < ApplicationController
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Power Of Attorney #{@entity.name}/", '',  :title => "Power Of Attorney"
+    add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
+    add_breadcrumb " Edit: #{@entity.name}/"
     add_breadcrumb " Owns", '',  :title => "Owns"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list_own", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"

@@ -20,6 +20,7 @@ class Entities::TrustController < ApplicationController
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Trust/", '',  :title => "Trust"
         add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+        add_breadcrumb " Basic info", '', :title => "Basic info"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
         add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
       end
@@ -87,7 +88,8 @@ class Entities::TrustController < ApplicationController
     if request.get?
       if @settlor.new_record?
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Trust: #{@entity.name}/", '',  :title => "Trust" 
+        add_breadcrumb " Trust/", '',  :title => "Trust" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
         add_breadcrumb " Settlor Create", '',  :title => "Settlor Create"
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
@@ -147,7 +149,8 @@ class Entities::TrustController < ApplicationController
   def settlors
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Trust/", '',  :title => "Trust" 
+    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
     add_breadcrumb " Settlors", '',  :title => "Settlors"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    
@@ -170,7 +173,8 @@ class Entities::TrustController < ApplicationController
     if request.get?
       if @trustee.new_record?
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Trust: #{@entity.name}/", '',  :title => "Trust" 
+        add_breadcrumb " Trust/", '',  :title => "Trust" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
         add_breadcrumb " Trustee Create", '',  :title => "Trustee Create"
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
@@ -223,7 +227,8 @@ class Entities::TrustController < ApplicationController
   def trustees
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Trust/", '',  :title => "Trust" 
+    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
     add_breadcrumb " Trustees", '',  :title => "Trustees"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    
@@ -246,7 +251,8 @@ class Entities::TrustController < ApplicationController
     if request.get?
       if @beneficiary.new_record?
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Trust: #{@entity.name}/", '',  :title => "Trust" 
+        add_breadcrumb " Trust/", '',  :title => "Trust" 
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
         add_breadcrumb " Beneficiary Create", '',  :title => "Beneficiary Create"
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
@@ -298,7 +304,8 @@ class Entities::TrustController < ApplicationController
   def beneficiaries
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Trust/", '',  :title => "Trust" 
+    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
     add_breadcrumb " Beneficiaries", '',  :title => "Beneficiaries"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    
@@ -314,7 +321,8 @@ class Entities::TrustController < ApplicationController
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Trust #{@entity.name}/", '',  :title => "Trust"
+    add_breadcrumb " Trust/", '',  :title => "Trust" 
+    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
     add_breadcrumb " Owns", '',  :title => "Owns"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"    

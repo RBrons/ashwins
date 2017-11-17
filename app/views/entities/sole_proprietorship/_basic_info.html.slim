@@ -24,8 +24,8 @@
         - override_active_record_errors(@entity.errors.messages, {:name => :owner, base: ''}).each do |message|
           li = message
 
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
-    .form-group style="display: inline "
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12.trust-form-gape
+    .form-group
       label Honorific
       = f.hidden_field :is_basichonorific, value: true
       = f.select :basichonorific, options_for_select(GeneralMethods.basichonorific, @entity.basichonorific), {}, {class: "state form-control"}
@@ -50,6 +50,9 @@
         .pull-right
           = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
     .clearfix
+    .form-group.ein-sole
+      = f.label "Ein"
+      = f.text_field :ein_or_ssn, class: "form-control"
     .form-group
       label Postal Address
       = f.text_field :postal_address2, class: "partnership form-control"
@@ -61,10 +64,7 @@
       = f.select :state2, options_for_select(GeneralMethods.USSTATES, @entity.state2), {}, {class: "state form-control selectize-single"}
     .form-group
       = f.label "Zip"
-      = f.text_field :zip2, class: "zip form-control"
-    .form-group
-      = f.label "Ein"
-      = f.text_field :ein_or_ssn, class: "form-control"
+      = f.text_field :zip2, class: "zip form-control"    
     .clearfix
     .form-group.margin-sm-top
       = f.hidden_field :number_of_assets, value: "100"

@@ -18,7 +18,8 @@ class Entities::IndividualsController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Individual/", '',  :title => "Individual"
-        add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+        add_breadcrumb " Basic Info", '',  :title => "Basic Info"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
         add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
       end
@@ -55,7 +56,8 @@ class Entities::IndividualsController < ApplicationController
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Individual #{@entity.name}/", '',  :title => "Individual"
+    add_breadcrumb " Individual/", '',  :title => "Individual"
+    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
     add_breadcrumb " Owns", '',  :title => "Owns"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"

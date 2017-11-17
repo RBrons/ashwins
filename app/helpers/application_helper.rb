@@ -211,10 +211,19 @@ module ApplicationHelper
     end
   end
   
-   def owned_by_power(entity)
+  def owned_by_power(entity)
     case entity.entity_type.try(:name)
       when "Power of Attorney"
         entity.agents.map { |m| ["#{m.first_name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] if m.is_person? }
+      else
+        [["", "#"]]
+    end
+  end
+
+  def owned_by_agent(entity)
+    case entity.entity_type.try(:name)
+      when "Power of Attorney"
+        entity.agents.map { |m| ["#{m.honorific}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] if m.is_person? }
       else
         [["", "#"]]
     end
