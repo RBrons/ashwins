@@ -14,13 +14,13 @@ div.bredcum-content
 .clearfix
 .mask_content    
   - if @latLng.nil?
-    .col-md-6.lease-analy
+    .col-md-6.margin-sm-top
       p Map is not available for this property
-    .col-md-6.lease-analy
+    .col-md-6.margin-sm-top
   - else
-    .col-md-6.lease-analy
+    .col-md-6.margin-sm-top
       #map_canvas_1.map_canvas
-    .col-md-6.lease-analy
+    .col-md-6.margin-sm-top
       #map_canvas_2.map_canvas
 
 - if !@latLng.nil?
