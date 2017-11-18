@@ -221,16 +221,15 @@ $(document).ready(function () {
     $('#breadcrum_id').removeClass('breadcrum_line');
     $('#breadcrum_id').addClass('breadcrum_no_save');
   }
-  $('.tab_content').click(function(){
-    lease_tab_rent = $("li[class='tab_content active']").find("a").attr('id');
-    if(lease_tab_rent == "lease_rent_table"){
+  $('.sub_tab_menu').click(function(){
+    if($(this).attr("id") == "lease_rent_table"){
       $('#save_btn_lease').addClass('hidden');
       $('#breadcrum_id').removeClass('breadcrum_line');
-      $('#breadcrum_id').addClass('breadcrum_no_save');
+      $('#breadcrum_id').addClass('breadcrum_no_save');      
     }else{
       $('#save_btn_lease').removeClass('hidden');
       $('#breadcrum_id').addClass('breadcrum_line');
-      $('#breadcrum_id').removeClass('breadcrum_no_save');
+      $('#breadcrum_id').removeClass('breadcrum_no_save');      
     }
   });
 });

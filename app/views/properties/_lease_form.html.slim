@@ -43,29 +43,29 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12
 div.lease-subtabs[role="tabpanel"]
   ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
-      a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Parties
+      a#lease_basics[href="#lease_basics_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="true"] Parties
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_terms_section'}")
-      a#lease_terms[href="#lease_terms_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease Term
+      a#lease_terms[href="#lease_terms_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Lease Term
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
-        a#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
+      a#lease_rent_table[href="#lease_rent_table_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
-        a#lease_rent_details[href="#lease_rent_details_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
+      a#lease_rent_details[href="#lease_rent_details_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
-        a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
+      a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
-        a#lease_taxes_and_fees[href="#lease_site_preparation_section" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
+      a#lease_taxes_and_fees[href="#lease_site_preparation_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_construction_section'}")
-        a#lease_construction[href="#lease_construction_section" role="tab" data-toggle="tab" aria-expanded="false"] Construction
+      a#lease_construction[href="#lease_construction_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Construction
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_use_section'}")
-        a#lease_use[href="#lease_use_section" role="tab" data-toggle="tab" aria-expanded="false"] Use
+      a#lease_use[href="#lease_use_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Use
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_premises_section'}")
-        a#lease_premises[href="#lease_premises_section" role="tab" data-toggle="tab" aria-expanded="false"] Premises
+      a#lease_premises[href="#lease_premises_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Premises
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_transfer_section'}")
-        a#lease_transfer[href="#lease_transfer_section" role="tab" data-toggle="tab" aria-expanded="false"] Transfer
+      a#lease_transfer[href="#lease_transfer_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Transfer
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_remedies_section'}")
-        a#lease_remedies[href="#lease_remedies_section" role="tab" data-toggle="tab" aria-expanded="false"] Remedies
+      a#lease_remedies[href="#lease_remedies_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Remedies
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_misc_section'}")
-        a#lease_misc[href="#lease_misc_section" role="tab" data-toggle="tab" aria-expanded="false"] Misc
+      a#lease_misc[href="#lease_misc_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Misc
 
 
   .tab-content
@@ -1230,7 +1230,7 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_field :misc_obligation_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-
+  
 javascript:  
   $(document).ready(function() {
     $('#save_btn_lease').on('click', function() {      
@@ -1241,13 +1241,12 @@ javascript:
           return false;
         }
         else {
-          var div_id = $("li[class='tab_content active']").find("a").attr('href');
-          $(div_id).find('form').submit(); 
+          $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit();
         }
       }
       else {
-        var div_id = $("li[class='tab_content active']").find("a").attr('href');
-        $(div_id).find('form').submit(); 
+        $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit(); 
       }
     });
-  });
+  })
+
