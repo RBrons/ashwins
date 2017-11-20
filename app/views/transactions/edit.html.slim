@@ -1,8 +1,5 @@
 .clearfix
-.step_wizard_fixed
-  = render 'transactions/breadcrum'
-  .clearfix
-  = render 'transactions/header_link'
+= render 'transactions/header_link'
 .clearfix
 .col-lg-12.col-md-12.col-sm-12.col-xs-12
   = hidden_field_tag :entity_info, @transaction.entity_info

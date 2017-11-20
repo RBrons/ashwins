@@ -53,7 +53,7 @@
         - elsif individual_sellers.length == 0 && entity_sellers.length == 1
           p.text-info = basic_str + " Therefore, it has been pre-selected."
         - else
-          p.text-info = basic_str + ". Please select one."
+          p.text-info = basic_str + " Please select one."
               
       .form-group style=("#{('display: none;' if entity_sellers.length == 0 || individual_sellers.length == 0)}")
         .heading_blue.radio-inline
