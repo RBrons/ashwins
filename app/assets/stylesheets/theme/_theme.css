@@ -458,7 +458,7 @@ body .container.body .right_col {
 }
 
 .nav-md .container.body .right_col {
-    padding: 90px 20px 0;
+    padding: 170px 20px 0;
     margin-left: 230px
 }
 
@@ -644,6 +644,7 @@ body {
     position: fixed;
     width: calc(100% - 230px);
     z-index: 300;
+    top: 0;
 }
 
 .no-padding {
