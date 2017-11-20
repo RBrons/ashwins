@@ -1,4 +1,16 @@
 .white_line.container.breadcrum-breadcrum.bredcrum-fixed
+.container.breadcrum-breadcrum.bredcrum-fixed
+  p
+    #breadcrum_id.margin-md-left.breadcrum_line
+      = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+  <br><br>
+    - if @property.id.present?
+      = link_to "List", properties_path, class: "breadcrum_list list_show_basic list_property"
+      = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show_basic show_property"
+    button class="btn btn-sm submit-edit-basic property_save" name="save" type="submit" id="save_btn_lease"
+       = "Save"     
+
+.white_line.container.breadcrum-breadcrum.bredcrum-fixed
 #comments-modal.modal.fade[data-keyboard="false" data-backdrop="static"]
   .modal-dialog.modal-md
     .modal-header
@@ -28,33 +40,32 @@ input#property_id[type="hidden" value=(@property.id)]
 div.col-lg-12.col-md-12.col-sm-12.col-xs-12
   .clearfix.margin-lg-left.lease-header-tab
     = render 'properties/form_header_link'
-
 div.lease-subtabs[role="tabpanel"]
   ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
-        a#lease_basics[href="#lease_basics_section" role="tab" data-toggle="tab" aria-expanded="true"] Parties
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_terms_section'}")
-        a#lease_terms[href="#lease_terms_section" role="tab" data-toggle="tab" aria-expanded="false"] Lease Term
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
-        a#lease_rent_table[href="#lease_rent_table_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
-        a#lease_rent_details[href="#lease_rent_details_section" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
-        a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
-        a#lease_taxes_and_fees[href="#lease_site_preparation_section" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_construction_section'}")
-        a#lease_construction[href="#lease_construction_section" role="tab" data-toggle="tab" aria-expanded="false"] Construction
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_use_section'}")
-        a#lease_use[href="#lease_use_section" role="tab" data-toggle="tab" aria-expanded="false"] Use
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_premises_section'}")
-        a#lease_premises[href="#lease_premises_section" role="tab" data-toggle="tab" aria-expanded="false"] Premises
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_transfer_section'}")
-        a#lease_transfer[href="#lease_transfer_section" role="tab" data-toggle="tab" aria-expanded="false"] Transfer
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_remedies_section'}")
-        a#lease_remedies[href="#lease_remedies_section" role="tab" data-toggle="tab" aria-expanded="false"] Remedies
-    li role="presentation" class=("#{'active' if params[:lease_sub] == 'lease_misc_section'}")
-        a#lease_misc[href="#lease_misc_section" role="tab" data-toggle="tab" aria-expanded="false"] Misc
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
+      a#lease_basics[href="#lease_basics_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="true"] Parties
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_terms_section'}")
+      a#lease_terms[href="#lease_terms_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Lease Term
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
+      a#lease_rent_table[href="#lease_rent_table_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
+      a#lease_rent_details[href="#lease_rent_details_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
+      a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
+      a#lease_taxes_and_fees[href="#lease_site_preparation_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_construction_section'}")
+      a#lease_construction[href="#lease_construction_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Construction
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_use_section'}")
+      a#lease_use[href="#lease_use_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Use
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_premises_section'}")
+      a#lease_premises[href="#lease_premises_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Premises
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_transfer_section'}")
+      a#lease_transfer[href="#lease_transfer_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Transfer
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_remedies_section'}")
+      a#lease_remedies[href="#lease_remedies_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Remedies
+    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_misc_section'}")
+      a#lease_misc[href="#lease_misc_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Misc
 
 
   .tab-content
@@ -67,21 +78,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             label Lease Analysis Perspective
@@ -92,16 +89,12 @@ div.lease-subtabs[role="tabpanel"]
             .heading_blue.radio-inline
               span.margin-md-left = f.radio_button :lease_analysis_perspective, false, checked: !@property.lease_analysis_perspective, class: 'form-control flat-icheck radiobuttons'
               span.margin-md-left Landlord's Perspective
-
           .clearfix.margin-lg-top
-
           .form-group
             label Lease Analysis Date
             .clearfix
             = f.date_select :lease_analysis_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
-
           .clearfix.margin-lg-top
-
           h2.heading Original Parties
           .form-group.margin-lg-top
             label Original Landlord
@@ -112,8 +105,8 @@ div.lease-subtabs[role="tabpanel"]
           .form-group
             label Original Guarantor
             = f.text_field :lease_original_guarantor, class: 'form-control'
-          /.form-group
-            /= f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group
+            = f.submit 'Save', id: "mynameis", class: 'submit btn btn-sm btn-primary', style: "display: none;"
     #lease_terms_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -123,21 +116,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save', id: "lease_submit", class: 'btn btn-sm submit-edit property_save'
-
+                li = message    
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .heading_blue.radio-inline
@@ -179,7 +158,6 @@ div.lease-subtabs[role="tabpanel"]
                 /label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
               .pull-right
                 = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date', style: "display: none;"
-
           .form-group
             label.mg-top-5 Date Of Lease Details
             .clearfix
@@ -243,7 +221,6 @@ div.lease-subtabs[role="tabpanel"]
               .input-group.width-field-sm
                 = f.text_field :base_rent_increase_percentage, class: 'form-control'
                 .input-group-addon %
-
           div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
             h2.heading Optional Extensions
             .form-group
@@ -257,16 +234,9 @@ div.lease-subtabs[role="tabpanel"]
               .input-group.width-field-sm
                 = f.text_field :lease_rent_increase_percentage, class: 'form-control'
                 .input-group-addon %
-          /.form-group
-          /  = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary'
-    #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")
-      .container.lease_breadcrum.bredcrum-fixed
-        p
-          .margin-md-left.breadcrum_no_save
-            = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-        <br><br>
-          = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-          = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
+          .form-group
+            = f.submit 'Save', id:'lease_submit',class: 'submit btn btn-sm btn-primary',style: "display: none;"            
+    #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")      
       - if @property.rent_tables.present?
         .user-setup-wizard
           ul.wizard_steps
@@ -291,7 +261,6 @@ div.lease-subtabs[role="tabpanel"]
             .form-group
               = label_tag "Rent Table Version"
               = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control', data: {id: @property.id}, style: "width: 200px"
-
           .clearfix
           div#rent-table-wrapper
             table.table.table-striped.table-bordered#rent-table
@@ -306,7 +275,6 @@ div.lease-subtabs[role="tabpanel"]
                       = rent_row.display_info
                     td
                       = number_to_currency rent_row.rent
-
           .clearfix
           div#monthly-rent-table-wrapper
             table.table.table-striped.table-bordered
@@ -367,20 +335,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
@@ -427,8 +382,8 @@ div.lease-subtabs[role="tabpanel"]
                 = f.text_area :lease_percentage_rent_exclusions, rows: 7, class: 'form-control'
                 h2.heading.mg-top-5 Keywords (separate by commas)
                 = f.text_field :lease_percentage_rent_exclusions_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
     #lease_taxes_and_fees_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -438,20 +393,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
@@ -591,8 +533,8 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :taxes_and_fees_easements, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :taxes_and_fees_easements_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
     #lease_site_preparation_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -602,20 +544,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
@@ -677,8 +606,8 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :site_preparation_env_permits_and_licenses, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :site_preparation_env_permits_and_licenses_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
 
     #lease_construction_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
@@ -689,20 +618,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message       
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
@@ -764,8 +680,8 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :construction_approval_of_plans_and_specs, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :construction_approval_of_plans_and_specs_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
     #lease_use_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -775,20 +691,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .clearfix
           .form-group
@@ -821,8 +724,8 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :use_exclusive_clause, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :use_exclusive_clause_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
     #lease_premises_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -832,20 +735,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
@@ -1117,8 +1007,8 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :premises_utilities, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :premises_utilities_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
     #lease_transfer_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -1128,20 +1018,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
@@ -1203,8 +1080,8 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :transfer_estoppel_certificate, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :transfer_estoppel_certificate_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
     #lease_remedies_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -1214,20 +1091,7 @@ div.lease-subtabs[role="tabpanel"]
             h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
             ul
               - @property.errors.full_messages.each do |message|
-                li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
+                li = message        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .form-group
             .property-action-fields
@@ -1319,8 +1183,8 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :remedies_exculpation, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :remedies_exculpation_keywords, class: 'form-control'
-          /.form-group
-            /= f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
     #lease_misc_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -1331,20 +1195,7 @@ div.lease-subtabs[role="tabpanel"]
             ul
               - @property.errors.full_messages.each do |message|
                 li = message
-        .container.lease_breadcrum.bredcrum-fixed
-          p
-            .margin-md-left.breadcrum_line
-              = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-          <br><br>
-            = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-            = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-            div.save_property
-              - if @property.persisted?
-                - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? "
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-              - else
-                = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-
+        
         .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-form
           .clearfix
           .form-group
@@ -1377,5 +1228,42 @@ div.lease-subtabs[role="tabpanel"]
               = f.text_area :misc_obligation, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
               = f.text_field :misc_obligation_keywords, class: 'form-control'
-          /.form-group
-          /  = f.submit 'Save', class: 'btn btn-sm btn-primary'
+          .form-group.submit
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
+  
+javascript:  
+  $(document).ready(function() {
+    $('#save_btn_lease').on('click',function(e) {   
+      var CurrentDate = new Date().getTime();
+      var RentComDate = new Date($("#property_rent_commencement_date_1i").val()+"-"+$("#property_rent_commencement_date_2i").val()+"-"+$("#property_rent_commencement_date_3i").val()).getTime();      
+      var LeaseDate = new Date($("#property_date_of_lease_1i").val()+"-"+$("#property_date_of_lease_2i").val()+"-"+$("#property_date_of_lease_3i").val()).getTime();     
+      var persisted = #{@property.persisted?}
+      if ($(".tab-content").find("div.active").attr("id") == "lease_terms_section") {
+        if (LeaseDate >= CurrentDate) {
+          alert("Date of Lease should be prior to Today's date.");
+          return false;
+        }
+        if (LeaseDate >= RentComDate) {
+          alert("Rent Commencement date should be greater than the Lease Date.");
+          return false;
+        }
+        if ($('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == "" && $('#property_length_of_option_period').val() == "" && $('#property_lease_rent_increase_percentage').val() == "") {
+          alert('Optional Extension fields are need to be filled.');
+          return false;
+        }  
+      }
+      if (persisted === true) {
+        var answer = confirm ("Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " )
+        if (!answer) {
+          return false;
+        }
+        else {          
+          $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit();
+        }
+      }
+      else {       
+        $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit(); 
+      }
+    });
+  })
+

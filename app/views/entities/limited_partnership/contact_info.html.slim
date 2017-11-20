@@ -15,7 +15,7 @@
     .clearfix
       .h4
         = "Edit #{@entity.name}'s Contact Info"
-    .form-group style="display: inline "
+    .form-group
       label Honorific
       = f.hidden_field :is_honorific, value: true
       = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}

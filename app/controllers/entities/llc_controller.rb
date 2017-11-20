@@ -21,7 +21,8 @@ class Entities::LlcController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " LLC/", '',  :title => "LLC"
-        add_breadcrumb " Edit: #{@entity.display_name}", '',  :title => "Edit"
+        add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+        add_breadcrumb " Basic info", '', :title => "Basic info"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
         add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
       end
@@ -91,6 +92,7 @@ class Entities::LlcController < ApplicationController
         if @manager.new_record?
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " LLC/", '',  :title => "LLC"
+          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
           add_breadcrumb " Manager Create", '',  :title => "Manager Create"
         else
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
@@ -143,9 +145,9 @@ class Entities::LlcController < ApplicationController
   def managers
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " LLC/", '',  :title => "LLC"
-    add_breadcrumb " Managers List View/", '',  :title => "Managers List View"
-    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb " LLC/", '',  :title => "LLC"    
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+    add_breadcrumb " Managers List View", '',  :title => "Managers List View"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
@@ -168,6 +170,7 @@ class Entities::LlcController < ApplicationController
         if @member.new_record?
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " LLC/", '',  :title => "LLC"
+          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
           add_breadcrumb " Member Create", '',  :title => "Member Create"
         else
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
@@ -220,9 +223,9 @@ class Entities::LlcController < ApplicationController
   def members(entity_key = params[:entity_key])
     @entity = Entity.find_by(key: entity_key)
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " LLC/", '',  :title => "LLC"
-    add_breadcrumb " Members List View/", '',  :title => "Members List View"
-    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb " LLC/", '',  :title => "LLC"    
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+    add_breadcrumb " Members List View", '',  :title => "Members List View"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
@@ -238,6 +241,7 @@ class Entities::LlcController < ApplicationController
     @ownership = @ownership_.to_json
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
     add_breadcrumb " LLC/", '',  :title => "LLC"
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
     add_breadcrumb " Owns", '',  :title => "Owns"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"

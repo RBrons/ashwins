@@ -21,7 +21,8 @@ class Entities::LlpController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " LLP/", '',  :title => "LLP"
-        add_breadcrumb " Edit: #{@entity.display_name}", '',  :title => "Edit"
+        add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+        add_breadcrumb " Basic info", '', :title => "Basic info"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
         add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
       end
@@ -91,6 +92,7 @@ class Entities::LlpController < ApplicationController
         if @partner.new_record?
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " LLP/", '',  :title => "LLP"
+          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
           add_breadcrumb " Partner Create", '',  :title => "Partner Create"
         else
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
@@ -143,9 +145,9 @@ class Entities::LlpController < ApplicationController
   def partners
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " LLP/", '',  :title => "LLP"
-    add_breadcrumb " Partners List View/", '',  :title => "Partners List View"
-    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb " LLP/", '',  :title => "LLP"    
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+    add_breadcrumb " Partners List View", '',  :title => "Partners List View"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
@@ -161,6 +163,7 @@ class Entities::LlpController < ApplicationController
     @ownership = @ownership_.to_json
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
     add_breadcrumb " LLP/", '',  :title => "LLP"
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
     add_breadcrumb " Owns", '',  :title => "Owns"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"

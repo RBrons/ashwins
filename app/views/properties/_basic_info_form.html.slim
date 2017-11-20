@@ -33,7 +33,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
               /li = message  
 
       .clearfix
-      .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
+      .col-lg-6.col-md-6.col-sm-12.col-xs-12.margin-sm-top
         .form-group
           = label_tag 'Tenant'
           / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
@@ -103,7 +103,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
               - owner_entity = Entity.find(@property.owner_entity_id)
-              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "property-owner"
+              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
 
           .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 1)}")
             - if individual_clients.length > 1
@@ -114,7 +114,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
               - owner_entity = Entity.find(@property.owner_entity_id)
-              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "property-owner"
+              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
 
         - else
           - entity_owners = Contact.TransactionContacts("company", current_user.id)
@@ -153,7 +153,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
               - owner_contact = Contact.find(@property.owner_entity_id)
-              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "property-owner"
+              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
 
           .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is == 1)}")
             - if individual_owners.length > 1
@@ -164,7 +164,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
               - owner_contact = Contact.find(@property.owner_entity_id)
-              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "property-owner"
+              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
           /= f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("all"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
 
         .form-group

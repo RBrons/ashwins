@@ -24,7 +24,8 @@ class Entities::JointTenancyController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
-        add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
+        add_breadcrumb " Baisic Info", '',  :title => "Baisic Info"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
         add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
       end
@@ -64,6 +65,7 @@ class Entities::JointTenancyController < ApplicationController
         if @joint_tenant.new_record?
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
+          add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
           add_breadcrumb " Joint Tenant Create", '',  :title => "Joint Tenant Create"
         else
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
@@ -110,9 +112,9 @@ class Entities::JointTenancyController < ApplicationController
     @entity = Entity.find_by(key: params[:entity_key])
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"
-    add_breadcrumb " Joint Tenants List View/", '',  :title => "Joint Tenants List View"
-    add_breadcrumb " #{@entity.name}", '',  :title => "Name"
+    add_breadcrumb " Joint Tenancy/", '',  :title => "Joint Tenancy"    
+    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
+    add_breadcrumb " Joint Tenants List View", '',  :title => "Joint Tenants List View"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?

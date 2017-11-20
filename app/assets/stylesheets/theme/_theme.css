@@ -5408,7 +5408,7 @@ ol.number_with_parentheses>li:before {
 }
 
 .corporate-forms-margin {
-    margin-top: 45px !important;
+    margin-top: 36px !important;
 }
 
 .internal-list {
@@ -5442,16 +5442,28 @@ ol.number_with_parentheses>li:before {
     width: 90px;
 }
 
+#entity_basichonorific {
+    width: 90px;
+}
+
 #own_heading_content {
     left: 11px
 }
 
 #own_content {
-    margin-left: 11px
+  margin-left: 11px
 }
 
 #owner-treeview {
-    margin-left: 11px;
+  margin-left: 11px;
+}
+
+.trust-form-gape{
+  margin-top: -20px;
+}
+
+.trust-contact-gape{
+  margin-top: -25px;
 }
 
 
