@@ -19,7 +19,8 @@ class Entities::SoleProprietorshipController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
-        add_breadcrumb " Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
+        add_breadcrumb " Basic info", '', :title => "Basic info"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
         add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
       end
@@ -91,6 +92,7 @@ class Entities::SoleProprietorshipController < ApplicationController
     @ownership = @ownership_.to_json
     add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
     add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
+    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
     add_breadcrumb " Owns", '',  :title => "Owns"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
@@ -103,7 +105,7 @@ class Entities::SoleProprietorshipController < ApplicationController
   def entity_params
     params.require(:entity).permit(:name, :name2, :address, :type_, :jurisdiction, :number_of_assets,
                                    :first_name, :last_name,:first_name2, :last_name2, :phone1, :phone2, :fax, :email,
-                                   :postal_address, :postal_address2, :city, :city2, :state, :state2, :zip, :zip2, :date_of_formation, :m_date_of_formation,
+                                   :postal_address,:basichonorific, :is_basichonorific, :postal_address2, :city, :city2, :state, :state2, :zip, :zip2, :date_of_formation, :m_date_of_formation,
                                    :ein_or_ssn, :s_corp_status, :not_for_profit_status, :legal_ending, :honorific, :is_honorific)
   end
 

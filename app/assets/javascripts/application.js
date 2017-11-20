@@ -214,9 +214,6 @@ function getJsonFromUrl() {
     return result;
 }
 
-
-
-
 $( document ).ready(function() {
   $('#new-contacts-type').click(function () {
     return typewatch(function() {
@@ -259,11 +256,32 @@ $( document ).ready(function() {
   // });
 });
 
-$(document).ready(function(){
+$(document).ready(function () {
+  lease_tab_rent = $("li[class='tab_content active']").find("a").attr('id');
+  if(lease_tab_rent == "lease_rent_table"){
+    $('#save_btn_lease').addClass('hidden');
+    $('#breadcrum_id').removeClass('breadcrum_line');
+    $('#breadcrum_id').addClass('breadcrum_no_save');
+  }
+  $('.sub_tab_menu').click(function(){
+    if($(this).attr("id") == "lease_rent_table"){
+      $('#save_btn_lease').addClass('hidden');
+      $('#').removeClass('breadcrum_line');
+      $('#breadcrum_id').addClass('breadcrum_no_save');      
+    }else{
+      $('#save_btn_lease').removeClass('hidden');
+      $('#breadcrum_id').addClass('breadcrum_line');
+      $('#breadcrum_id').removeClass('breadcrum_no_save');      
+    }
+  });
+});
+
+
+$(document).ready(function(){  
   $('.product-list').on('change', function() {
     $('.product-list').not(this).prop('checked', false);
   });
-
+  
   var unsaved = false;
   $(":input").change(function(){ //trigers change in all input fields including text type
       unsaved = true;

@@ -21,7 +21,8 @@ class Entities::LimitedPartnershipController < ApplicationController
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients"
         add_breadcrumb " Limited Partnership/", '',  :title => "Limited Partnership"
-        add_breadcrumb " Edit: #{@entity.display_name}", '',  :title => "Edit"
+        add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+        add_breadcrumb " Basic info", '', :title => "Basic info"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
         add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
       end
@@ -89,6 +90,7 @@ class Entities::LimitedPartnershipController < ApplicationController
         if @partner.new_record?
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " Limted Partnership/", '',  :title => "Limted Partnership"
+          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
           add_breadcrumb " Limited Partner Create", '',  :title => "Limited Partner Create"
         else
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
@@ -134,8 +136,8 @@ class Entities::LimitedPartnershipController < ApplicationController
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
     add_breadcrumb " Limited Partnership/", '',  :title => "Limited Partnership"
-    add_breadcrumb " Limted Partners List View/", '',  :title => "Limted Partners List View"
-    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+    add_breadcrumb " Limted Partners List View", '',  :title => "Limted Partners List View"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
@@ -156,6 +158,7 @@ class Entities::LimitedPartnershipController < ApplicationController
         if @partner.new_record?
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
           add_breadcrumb " Limted Partnership/", '',  :title => "Limted Partnership"
+          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
           add_breadcrumb " General Partner Create", '',  :title => "General Partner Create"
         else
           add_breadcrumb "/Clients/", clients_path, :title => "Clients"
@@ -200,8 +203,8 @@ class Entities::LimitedPartnershipController < ApplicationController
     @entity = Entity.find_by(key: params[:entity_key])
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
     add_breadcrumb " Limited Partnership/", '',  :title => "Limited Partnership"
-    add_breadcrumb " General Partners List View/", '',  :title => "General Partners List View"
-    add_breadcrumb " #{@entity.display_name}", '',  :title => "Name"
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
+    add_breadcrumb " General Partners List View", '',  :title => "General Partners List View"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
     raise ActiveRecord::RecordNotFound if @entity.blank?
@@ -216,6 +219,7 @@ class Entities::LimitedPartnershipController < ApplicationController
     @ownership = @ownership_.to_json
     add_breadcrumb "/Clients/", clients_path, :title => "Clients"
     add_breadcrumb " Limited Partnership/", '',  :title => "Limited Partnership"
+    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
     add_breadcrumb " Owns", '',  :title => "Owns"
     add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
     add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"

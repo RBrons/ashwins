@@ -50,7 +50,6 @@ table#data_table tbody tr.child-row.active-item{
    color:red;
 }
 
-
 .breadcrum-breadcrum {
   width: 200% !important;
   height: 60px;
@@ -94,6 +93,9 @@ table#data_table tbody tr.child-row.active-item{
   margin-top: 30px;
 }
 
+.right-align {
+  margin-left: 30px
+}
 .list_show {
   margin-left: 48px !important;
   display: block !important;
@@ -138,10 +140,6 @@ table#data_table tbody tr.child-row.active-item{
   top: 2px !important;
 }
 
-.submit-button{
-  float: right;
-}
-
 .sub-class{
   width: 72px;
   height: 37px;
@@ -151,9 +149,6 @@ table#data_table tbody tr.child-row.active-item{
   background-color: #005826;
   border-width: 3px !important;
   font-size: 17px !important;
-}
-.property-owner {
-  margin-left: 10px;
 }
 
 .submit-edit{
@@ -182,10 +177,6 @@ table#data_table tbody tr.child-row.active-item{
   padding-top: 2px !important;
 }
 
-.lease-analy{
-  margin-top: 10px;
-}
-
 .lease-form{
   margin-top: 20px;
   margin-left: -5px;
@@ -201,40 +192,22 @@ table#data_table tbody tr.child-row.active-item{
 }
 
 .form-content {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 .upload-image {
   margin-top: 46px;
 }
 
-.breadcrum_text:focus, .breadcrum_text:hover{
+.breadcrum_text:focus, .breadcrum_text:hover, .sub-class:focus, .sub-class:hover, .breadcrum_list:focus, .breadcrum_list:hover{
   color: white !important;
 }
 
-.sub-class:focus, .sub-class:hover{
-  color: white !important;
-}
-
-.breadcrum_list:focus, .breadcrum_list:hover{
-  color: white !important;
-}
-
-.submit-edit:focus, .submit-edit:hover{
+.submit-edit:focus, .submit-edit:hover, .submit-edit-basic:focus, .submit-edit-basic:hover{
   color: white !important;
   border-color: white !important;
   background: #5eb14a !important;
 }
 
-.submit-edit-basic:focus, .submit-edit-basic:hover{
-  color: white !important;
-  border-color: white !important;
-  background: #5eb14a !important;
-}
-
-/*.nav-tabs{
-  border-bottom: none !important;
-}
-*/
 .lease_breadcrum {
   width: 200% !important;
   height: 60px;
@@ -296,10 +269,6 @@ table#data_table tbody tr.child-row.active-item{
   position: relative !important;
   left: 12px !important;
 }
-#entity_jurisdiction,#entity_state{
-  position: relative !important;
-  left: 12px !important;
-}
 .white_line{
   position: fixed;
   width: 131% !important;
@@ -338,3 +307,8 @@ table#data_table tbody tr.child-row.active-item{
 .contact_breadcrumb_fixed{
   top: 120px;
 }
+
+.form-height-button {
+  margin-top: 65px !important;
+}
+

@@ -1,155 +1,159 @@
-  .white_line.container.breadcrum-breadcrum.bredcrum-fixed  
-  .col-lg-12.col-md-12.col-sm-12.col-xs-12 
-    .clearfix.margin-lg-left.tenant-header-tab
-      = render 'properties/form_header_link'
+.white_line.container.breadcrum-breadcrum.bredcrum-fixed
+.container.breadcrum-breadcrum.bredcrum-fixed
+  p
+    #breadcrum_id.margin-md-left.breadcrum_line
+      = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
+  <br><br>
+    - if @property.id.present?
+      = link_to "List", properties_path, class: "breadcrum_list list_show_basic list_property"
+      = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show_basic show_property"
+    button class="btn btn-sm submit-edit-basic property_save" name="save" type="submit" id="save_btn_tenant"
+       = "Save"   
+       
+.white_line.container.breadcrum-breadcrum.bredcrum-fixed  
+.col-lg-12.col-md-12.col-sm-12.col-xs-12 
+  .clearfix.margin-lg-left.tenant-header-tab
+    = render 'properties/form_header_link'
 
-  div.lease-subtabs[role="tabpanel"]
-    ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
-      li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
-        a#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
-      li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
-        a#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
+div.lease-subtabs[role="tabpanel"]
+  ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+    li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
+      a#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company
+    li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_facilities_section'}")
+      a#lease_terms[href="#tenant_facilities_section" role="tab" data-toggle="tab" aria-expanded="false"] Facilities Manager
 
-    .tab-content.mask_content
-      #tenant_company_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.tenant_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path, class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          
-          
-          .col-lg-4.col-md-4.form-content
-            .clearfix
-            .form-group
-              = label_tag 'Tenant'
-              = f.text_field :tenant_name,class: 'form-control'
-            .form-group
-              label Store Number
-              = f.text_field :tenants_store_number, class: 'form-control'
-            .form-group
-              label Contact Name
-              = f.text_field :tenant_contact_name, class: 'form-control'
-            .form-group
-              label Contact Company
-              = f.text_field :tenant_contact_company, class: 'form-control'
-            .form-group
-              label Contact Phone
-              = f.text_field :tenant_contact_phone, class: 'form-control'
-            .form-group
-              label Contact Email
-              = f.text_field :tenant_contact_email, class: 'form-control'
-            .form-group
-              label Contact Fax
-              = f.text_field :tenant_contact_fax, class: 'form-control'
-            .form-group
-              label Contact Street Address
-              = f.text_area :tenant_contact_street_address, class: 'form-control'
-            .form-group
-              = label_tag 'State'
-              = f.text_area :tenant_state, class: 'form-control'
-            .form-group
-              = label_tag 'City'
-              = f.text_area :tenant_city, class: 'form-control'
-            .form-group
-              = label_tag 'Country'
-              = f.text_area :tenant_county, class: 'form-control'            
-          /.clearfix
-          /.form-group
-          / = f.submit 'Save', class: 'btn btn-sm btn-primary'
-
-      #tenant_facilities_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_facilities_section'}")
-        = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-          = hidden_field_tag :type_is, params[:type_is]
-          - if @property.errors.any?
-            #error_explanation
-              h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-              ul
-                - @property.errors.full_messages.each do |message|
-                  li = message
-          .container.tenant_breadcrum.bredcrum-fixed
-            p
-              .margin-md-left.breadcrum_line
-                = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-            <br><br>
-              = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-              = link_to "Show", property_path, class: "breadcrum_list list_show show_property"
-              div.save_property
-                - if @property.persisted?
-                  - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save', data: { confirm: c_str }
-                - else
-                  = f.submit 'Save',  class: 'btn btn-sm submit-edit property_save'
-          
-          .col-lg-4.col-md-4.form-content
-            .clearfix
-            .form-group
-              = label_tag 'Tenant'
-              = f.text_field :tenant_name, class: 'form-control', readonly: true
-            .form-group
-              label Store Number
-              = f.text_field :facilities_store_number, class: 'form-control'
-            .form-group
-              label Facilities Contact Name
-              = f.text_field :facilities_contact_name, class: 'form-control'
-            .form-group
-              label Contact Company
-              = f.text_field :facilities_contact_company, class: 'form-control'
-            .form-group
-              label Contact Phone
-              = f.text_field :facilities_contact_phone, class: 'form-control'
-            .form-group
-              label Contact Email
-              = f.text_field :facilities_contact_email, class: 'form-control'
-            .form-group
-              label Contact Fax
-              = f.text_field :facilities_contact_fax, class: 'form-control'
-            .form-group
-              label Contact Street Address
-              = f.text_area :facilities_contact_street_address, class: 'form-control'
-            .form-group
-              = label_tag 'State'
-              = f.text_area :facilities_contact_state, class: 'form-control'
-            .form-group
-              = label_tag 'City'
-              = f.text_area :facilities_contact_city, class: 'form-control'
-            .form-group
-              = label_tag 'Country'
-              = f.text_area :facilities_contact_country, class: 'form-control'            
-          /.clearfix
-          /.form-group
-          / = f.submit 'Save', class: 'btn btn-sm btn-primary'
-  /! Modal
-  #new-tenant.modal.fade aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-5"
-    .modal-dialog
-      .modal-content
-        .modal-header
-          button type="button" class="close" data-dismiss="modal" aria-label="Close"
-            span aria-hidden="true" &times;
-          h4.modal-title New Tenant
-        .model-body style="padding: 20px"
-          .error-message style='display: none'
-            | Please input valid tenant name.
-          .form-group.margin-sm-top
-            label New Tenant Name
-            input type="text" id="new-tenant-name" class="form-control"
+  .tab-content.mask_content
+    #tenant_company_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message  
+        .col-lg-4.col-md-4.form-content
+          .clearfix
           .form-group
-            input type="button" id="save-new-tenant" class="btn btn-sm btn-primary" value="Save"
-            button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close"
-              | Close
+            = label_tag 'Tenant'
+            = f.text_field :tenant_name,class: 'form-control'
+          .form-group
+            label Store Number
+            = f.text_field :tenants_store_number, class: 'form-control'
+          .form-group
+            label Contact Name
+            = f.text_field :tenant_contact_name, class: 'form-control'
+          .form-group
+            label Contact Company
+            = f.text_field :tenant_contact_company, class: 'form-control'
+          .form-group
+            label Contact Phone
+            = f.text_field :tenant_contact_phone, class: 'form-control'
+          .form-group
+            label Contact Email
+            = f.text_field :tenant_contact_email, class: 'form-control'
+          .form-group
+            label Contact Fax
+            = f.text_field :tenant_contact_fax, class: 'form-control'
+          .form-group
+            label Contact Street Address
+            = f.text_area :tenant_contact_street_address, class: 'form-control'
+          .form-group
+            = label_tag 'State'
+            = f.text_area :tenant_state, class: 'form-control'
+          .form-group
+            = label_tag 'City'
+            = f.text_area :tenant_city, class: 'form-control'
+          .form-group
+            = label_tag 'Country'
+            = f.text_area :tenant_county, class: 'form-control'            
+        .clearfix
+        .form-group
+         = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
+
+    #tenant_facilities_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:tenant_sub] == 'tenant_facilities_section'}")
+      = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+        = hidden_field_tag :type_is, params[:type_is]
+        - if @property.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+            ul
+              - @property.errors.full_messages.each do |message|
+                li = message     
+        .col-lg-4.col-md-4.form-content
+          .clearfix
+          .form-group
+            = label_tag 'Tenant'
+            = f.text_field :tenant_name, class: 'form-control', readonly: true
+          .form-group
+            label Store Number
+            = f.text_field :facilities_store_number, class: 'form-control'
+          .form-group
+            label Facilities Contact Name
+            = f.text_field :facilities_contact_name, class: 'form-control'
+          .form-group
+            label Contact Company
+            = f.text_field :facilities_contact_company, class: 'form-control'
+          .form-group
+            label Contact Phone
+            = f.text_field :facilities_contact_phone, class: 'form-control'
+          .form-group
+            label Contact Email
+            = f.text_field :facilities_contact_email, class: 'form-control'
+          .form-group
+            label Contact Fax
+            = f.text_field :facilities_contact_fax, class: 'form-control'
+          .form-group
+            label Contact Street Address
+            = f.text_area :facilities_contact_street_address, class: 'form-control'
+          .form-group
+            = label_tag 'State'
+            = f.text_area :facilities_contact_state, class: 'form-control'
+          .form-group
+            = label_tag 'City'
+            = f.text_area :facilities_contact_city, class: 'form-control'
+          .form-group
+            = label_tag 'Country'
+            = f.text_area :facilities_contact_country, class: 'form-control'            
+        .clearfix
+        .form-group
+         = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
+
+javascript:  
+  $(document).ready(function() {
+    $('#save_btn_tenant').on('click',function(e) {   
+      var persisted = #{@property.persisted?}      
+      if (persisted === true) {
+        var answer = confirm ("Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " )
+        if (!answer) {
+          return false;
+        }
+        else {          
+          $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit();
+        }
+      }
+      else {       
+        $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit(); 
+      }
+    });
+  })
+
+
+/! Modal
+#new-tenant.modal.fade aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-5"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+        h4.modal-title New Tenant
+      .model-body style="padding: 20px"
+        .error-message style='display: none'
+          | Please input valid tenant name.
+        .form-group.margin-sm-top
+          label New Tenant Name
+          input type="text" id="new-tenant-name" class="form-control"
+        .form-group
+          input type="button" id="save-new-tenant" class="btn btn-sm btn-primary" value="Save"
+          button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close"
+            | Close

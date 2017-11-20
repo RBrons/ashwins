@@ -25,11 +25,15 @@ class PeopleAndFirm < ApplicationRecord
                 self.entity_id = nil
                 self.member_type_id = nil
                 obj = Contact.where(id: tid_).first
+                self.honorific = obj.honorific
+                self.is_honorific = obj.is_honorific
             elsif type_ == "e"
                 self.entity_id = tid_
                 self.contact_id = nil
                 obj = Entity.where(id: tid_).first
                 self.member_type_id = obj.type_
+                self.honorific = obj.honorific
+                self.is_honorific = obj.is_honorific
             else 
                 return nil
             end
@@ -42,6 +46,8 @@ class PeopleAndFirm < ApplicationRecord
             self.city = obj.city
             self.state = obj.state
             self.zip = obj.zip
+            self.honorific = obj.honorific
+            self.is_honorific = obj.is_honorific
         end
     end
 

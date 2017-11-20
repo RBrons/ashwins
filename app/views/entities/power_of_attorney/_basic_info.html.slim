@@ -56,8 +56,12 @@
 
         - if @principal.is_person
           = select_tag "temp_id", options_html('principal', "true", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if individual_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (individual_principals.length == 1)
+          .clearfix
+          = linkbacks_entity(@entity)
         - else
           = select_tag "temp_id", options_html('principal', "false", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if entity_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (entity_principals.length == 1)
+          .clearfix
+          = linkbacks_entity(@entity)
 
         = hidden_field_tag :person_true_class, "#{'disabled-like' if individual_principals.length == 1}"
         = hidden_field_tag :person_false_class, "#{'disabled-like' if entity_principals.length == 1}"
@@ -80,6 +84,7 @@
       .clearfix
       .form-group.margin-sm-top
         = f.label "State of Formation"
+        .clearfix
         = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction),class: "form-control selectize-single"
       .clearfix
         .form-group

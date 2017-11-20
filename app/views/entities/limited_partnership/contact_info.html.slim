@@ -15,7 +15,7 @@
     .clearfix
       .h4
         = "Edit #{@entity.name}'s Contact Info"
-    .form-group style="display: inline "
+    .form-group
       label Honorific
       = f.hidden_field :is_honorific, value: true
       = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
@@ -46,7 +46,7 @@
       = f.text_field :city, class: 'city form-control'
     .form-group
       label State
-      = f.select :state, options_for_select(GeneralMethods.USSTATES, @entity.state), html_options: {class: 'state form-control selectize-single'}
+      = f.select :state, options_for_select(GeneralMethods.USSTATES, @entity.state), {}, class: 'state form-control selectize-single'
     .form-group
       label Zip
       = f.text_field :zip, class: 'zip form-control'

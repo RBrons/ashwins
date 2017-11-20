@@ -4,12 +4,12 @@
       .margin-md-left.breadcrum_line
         = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
     <br><br>
-      - if @property.id.present?
+      - unless @property.new_record?
         = link_to "List", properties_path, class: "breadcrum_list list_show_basic list_property"
         = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show_basic show_property"
       button class="btn btn-sm submit-edit-basic property_save" name="save" type="submit" id="save_btn_prop_basic"
-         = "Save"      
-    
+         = "Save"
+
 
 div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
   .clearfix.margin-lg-left.header-tab
@@ -30,10 +30,10 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
           /h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
           /ul
             /- @property.errors.full_messages.each do |message|
-              /li = message  
+              /li = message
 
       .clearfix
-      .col-lg-6.col-md-6.col-sm-12.col-xs-12.lease-analy
+      .col-lg-6.col-md-6.col-sm-12.col-xs-12.margin-sm-top
         .form-group
           = label_tag 'Tenant'
           / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
@@ -89,7 +89,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
               span.margin-md-left Entity
             .heading_blue.radio-inline
               = f.radio_button :owner_person_is, 0, checked: (f.object.owner_person_is == 0 || f.object.owner_person_is == nil), class: 'form-control flat-icheck radiobuttons'
-              span.margin-md-left.pull-right 
+              span.margin-md-left.pull-right
                 | No Current Owner
                 br
                 | or Concurrent Estate
@@ -103,7 +103,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
               - owner_entity = Entity.find(@property.owner_entity_id)
-              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "property-owner"
+              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
 
           .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 1)}")
             - if individual_clients.length > 1
@@ -114,7 +114,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
               - owner_entity = Entity.find(@property.owner_entity_id)
-              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "property-owner"
+              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
 
         - else
           - entity_owners = Contact.TransactionContacts("company", current_user.id)
@@ -153,7 +153,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
               - owner_contact = Contact.find(@property.owner_entity_id)
-              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "property-owner"
+              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
 
           .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is == 1)}")
             - if individual_owners.length > 1
@@ -164,7 +164,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
 
             - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
               - owner_contact = Contact.find(@property.owner_entity_id)
-              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "property-owner"
+              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
           /= f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("all"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
 
         .form-group
@@ -236,7 +236,7 @@ div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
         .clearfix
           .form-group
             - if @property.persisted?
-              - c_str = "Warning, you just made changes to #{@property.tenant_id} Are you sure you want to proceed to do this? " 
+              - c_str = "Warning, you just made changes to #{@property.tenant_id} Are you sure you want to proceed to do this? "
               = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
             - else
               = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
@@ -270,11 +270,11 @@ javascript:
           return false;
         }
         else {
-          $('.basic-info-property-form form').submit();   
+          $('.basic-info-property-form form').submit();
         }
       }
       else {
-        $('.basic-info-property-form form').submit(); 
+        $('.basic-info-property-form form').submit();
       }
     });
   });
