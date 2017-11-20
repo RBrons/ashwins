@@ -274,10 +274,6 @@ table#data_table tbody tr.child-row.active-item{
   position: relative !important;
   left: 12px !important;
 }
-#entity_jurisdiction,#entity_state{
-  position: relative !important;
-  left: 4px !important;
-}
 .white_line{
   position: fixed;
   width: 131% !important;

@@ -10,53 +10,54 @@
         - override_active_record_errors(@entity.errors.messages, {base: ''}).each do |message|
           li = message
 .clearfix
-table#data_table
-  thead
-    tr
-      th
-        | Actions
-      th
-        | Contact First Name
-      th
-        | Contact Last Name
-      th
-        | Gender
-      th
-        | Social
-      th
-        | Client?
-      th
-        | Phone
-      th
-        | Email
-  tbody
-    - @spouses.each do |spouse|
-      - entity_flag = spouse.entity.present?
-      - person_flag = true
+.col-sm-12
+  table#data_table
+    thead
       tr
-        td.actions
-          = link_to 'Edit', entities_tenancy_by_entirety_spouse_path( @entity.key, spouse.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_tenancy_by_entirety_spouse_path( spouse.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
-        td
-          - if person_flag
-            - if spouse.entity.present?
-              = link_to spouse.first_name, edit_entity_path(spouse.entity.key)
-            - elsif spouse.contact.present?
-              = link_to spouse.first_name, edit_contact_path(spouse.contact)
-          - else
-            = spouse.first_name
-        td
-          = spouse.last_name
-        td
-          = spouse.gender
-        td
-          = spouse.ein_or_ssn
-        td
-          - if spouse.contact_id.nil?
-              = 'Yes'
-          - else
-              = 'No'
-        td
-          = spouse.phone1
-        td
-          = spouse.email
+        th
+          | Actions
+        th
+          | Contact First Name
+        th
+          | Contact Last Name
+        th
+          | Gender
+        th
+          | Social
+        th
+          | Client?
+        th
+          | Phone
+        th
+          | Email
+    tbody
+      - @spouses.each do |spouse|
+        - entity_flag = spouse.entity.present?
+        - person_flag = true
+        tr
+          td.actions
+            = link_to 'Edit', entities_tenancy_by_entirety_spouse_path( @entity.key, spouse.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
+            = link_to 'Delete', entities_tenancy_by_entirety_spouse_path( spouse.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
+          td
+            - if person_flag
+              - if spouse.entity.present?
+                = link_to spouse.first_name, edit_entity_path(spouse.entity.key)
+              - elsif spouse.contact.present?
+                = link_to spouse.first_name, edit_contact_path(spouse.contact)
+            - else
+              = spouse.first_name
+          td
+            = spouse.last_name
+          td
+            = spouse.gender
+          td
+            = spouse.ein_or_ssn
+          td
+            - if spouse.contact_id.nil?
+                = 'Yes'
+            - else
+                = 'No'
+          td
+            = spouse.phone1
+          td
+            = spouse.email
