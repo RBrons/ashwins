@@ -39,6 +39,7 @@ class PropertiesController < ApplicationController
   # GET /properties/new
   def new
     @property = defaultize(Property.new({ostatus: params[:ostatus]}))
+
     @property.lease_base_rent = @property.current_rent
     # @property.ostatus = params["ostatus"]
     @property.check_price_current_rent_cap_rate
@@ -71,7 +72,7 @@ class PropertiesController < ApplicationController
       if params[:type_is] == 'basic_info' || params[:type_is] == nil
         add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Basic Info</a></div>".html_safe
       elsif params[:type_is] == 'map'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Map</a></div>".html_safe        
+        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Map</a></div>".html_safe
       elsif params[:type_is] == 'photo_gallery'
         add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Photo Gallery</a></div>".html_safe
       elsif params[:type_is] == 'county_tax'
