@@ -105,8 +105,8 @@ div.lease-subtabs[role="tabpanel"]
           .form-group
             label Original Guarantor
             = f.text_field :lease_original_guarantor, class: 'form-control'
-          .form-group.submit
-            = f.submit 'Save', id: "mynameis", class: 'btn btn-sm btn-primary', style: "display: none;"
+          .form-group
+            = f.submit 'Save', id: "mynameis", class: 'submit btn btn-sm btn-primary', style: "display: none;"
     #lease_terms_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
@@ -234,8 +234,8 @@ div.lease-subtabs[role="tabpanel"]
               .input-group.width-field-sm
                 = f.text_field :lease_rent_increase_percentage, class: 'form-control'
                 .input-group-addon %
-          .form-group.submit
-            = f.submit 'Save', id:'lease_submit',class: 'btn btn-sm btn-primary',style: "display: none;"            
+          .form-group
+            = f.submit 'Save', id:'lease_submit',class: 'submit btn btn-sm btn-primary',style: "display: none;"            
     #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")      
       - if @property.rent_tables.present?
         .user-setup-wizard
@@ -1233,18 +1233,35 @@ div.lease-subtabs[role="tabpanel"]
   
 javascript:  
   $(document).ready(function() {
-    $('#save_btn_lease').on('click', function() {      
+    $('#save_btn_lease').on('click',function(e) {   
+      var CurrentDate = new Date().getTime();
+      var RentComDate = new Date($("#property_rent_commencement_date_1i").val()+"-"+$("#property_rent_commencement_date_2i").val()+"-"+$("#property_rent_commencement_date_3i").val()).getTime();      
+      var LeaseDate = new Date($("#property_date_of_lease_1i").val()+"-"+$("#property_date_of_lease_2i").val()+"-"+$("#property_date_of_lease_3i").val()).getTime();     
       var persisted = #{@property.persisted?}
+      if ($(".tab-content").find("div.active").attr("id") == "lease_terms_section") {
+        if (LeaseDate >= CurrentDate) {
+          alert("Date of Lease should be prior to Today's date.");
+          return false;
+        }
+        if (LeaseDate >= RentComDate) {
+          alert("Rent Commencement date should be greater than the Lease Date.");
+          return false;
+        }
+        if ($('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == "" && $('#property_length_of_option_period').val() == "" && $('#property_lease_rent_increase_percentage').val() == "") {
+          alert('Optional Extension fields are need to be filled.');
+          return false;
+        }  
+      }
       if (persisted === true) {
         var answer = confirm ("Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " )
         if (!answer) {
           return false;
         }
-        else {
+        else {          
           $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit();
         }
       }
-      else {
+      else {       
         $("#"+$(".tab-content").find("div.active").attr("id")).find("form").submit(); 
       }
     });

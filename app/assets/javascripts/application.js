@@ -214,27 +214,6 @@ function getJsonFromUrl() {
     return result;
 }
 
-$(document).ready(function () {
-  lease_tab_rent = $("li[class='tab_content active']").find("a").attr('id');
-  if(lease_tab_rent == "lease_rent_table"){
-    $('#save_btn_lease').addClass('hidden');
-    $('#breadcrum_id').removeClass('breadcrum_line');
-    $('#breadcrum_id').addClass('breadcrum_no_save');
-  }
-  $('.sub_tab_menu').click(function(){
-    if($(this).attr("id") == "lease_rent_table"){
-      $('#save_btn_lease').addClass('hidden');
-      $('#breadcrum_id').removeClass('breadcrum_line');
-      $('#breadcrum_id').addClass('breadcrum_no_save');      
-    }else{
-      $('#save_btn_lease').removeClass('hidden');
-      $('#breadcrum_id').addClass('breadcrum_line');
-      $('#breadcrum_id').removeClass('breadcrum_no_save');      
-    }
-  });
-});
-
-
 $( document ).ready(function() {
   $('#new-contacts-type').click(function () {
     return typewatch(function() {
@@ -277,34 +256,32 @@ $( document ).ready(function() {
   // });
 });
 
+$(document).ready(function () {
+  lease_tab_rent = $("li[class='tab_content active']").find("a").attr('id');
+  if(lease_tab_rent == "lease_rent_table"){
+    $('#save_btn_lease').addClass('hidden');
+    $('#breadcrum_id').removeClass('breadcrum_line');
+    $('#breadcrum_id').addClass('breadcrum_no_save');
+  }
+  $('.sub_tab_menu').click(function(){
+    if($(this).attr("id") == "lease_rent_table"){
+      $('#save_btn_lease').addClass('hidden');
+      $('#').removeClass('breadcrum_line');
+      $('#breadcrum_id').addClass('breadcrum_no_save');      
+    }else{
+      $('#save_btn_lease').removeClass('hidden');
+      $('#breadcrum_id').addClass('breadcrum_line');
+      $('#breadcrum_id').removeClass('breadcrum_no_save');      
+    }
+  });
+});
+
 
 $(document).ready(function(){  
   $('.product-list').on('change', function() {
     $('.product-list').not(this).prop('checked', false);
   });
-
-  $('#lease_submit').click(function(e){
-    var CurrentDate = new Date().getTime();
-    var strdt = $("#property_rent_commencement_date_1i").val().trim() + "-" + $("#property_rent_commencement_date_2i").val().trim() + "-" + $("#property_rent_commencement_date_3i").val().trim();
-    var rent_commencement_date = new Date(strdt).getTime();
-    var LeaseDate = $("#property_date_of_lease_1i").val()+"-"+$("#property_date_of_lease_2i").val()+"-"+$("#property_date_of_lease_3i").val();
-    var lease = new Date(LeaseDate).getTime();
-
-    if (lease >= CurrentDate) {
-      alert("Date of Lease should be prior to Today's date.");
-      e.preventDefault();
-    }
-    if (lease >= rent_commencement_date) {
-      alert("Rent Commencement date should be greater than the Lease Date.");
-      e.preventDefault();
-    }
-
-    if ($('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == "" && $('#property_length_of_option_period').val() == "" && $('#property_lease_rent_increase_percentage').val() == "") {
-      alert('Optional Extension fields are need to be filled.');
-      e.preventDefault();
-    }
-  });
-
+  
   var unsaved = false;
   $(":input").change(function(){ //trigers change in all input fields including text type
       unsaved = true;
