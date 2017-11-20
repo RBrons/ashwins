@@ -3,30 +3,31 @@
     = render_breadcrumbs :separator => ' '
 = hidden_field_tag :int_action, 'Directors List'
 .clearfix
-table#data_table
-  thead
-    tr
-      th
-        | Actions
-      th
-        | First Name
-      th
-        | Last Name
-      th
-        | Email
-      th
-        | phone1
-  tbody data-active-id=@activeId
-    - @directors.each do |director|
-      tr data-id=director.id
-        td
-          = link_to 'Edit', entities_corporates_director_path(@entity.key, director.id), class: "#{edit_xs} entity-page-xhr"
-          = link_to 'Delete', entities_corporates_director_path(director.id), method: :delete, class: "#{delete_xs} entity-page-xhr"
-        td
-          = director.first_name
-        td
-          = director.last_name
-        td
-          = director.email
-        td
-          = director.phone1
+.col-sm-12
+  table#data_table
+    thead
+      tr
+        th
+          | Actions
+        th
+          | First Name
+        th
+          | Last Name
+        th
+          | Email
+        th
+          | phone1
+    tbody data-active-id=@activeId
+      - @directors.each do |director|
+        tr data-id=director.id
+          td
+            = link_to 'Edit', entities_corporates_director_path(@entity.key, director.id), class: "#{edit_xs} entity-page-xhr"
+            = link_to 'Delete', entities_corporates_director_path(director.id), method: :delete, class: "#{delete_xs} entity-page-xhr"
+          td
+            = director.first_name
+          td
+            = director.last_name
+          td
+            = director.email
+          td
+            = director.phone1
