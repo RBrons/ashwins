@@ -11,49 +11,49 @@
       ul
         - @entity.errors.full_messages.each do |message|
           li = message
-
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12.trust-contact-gape
-    .clearfix
-      .h4
-        = "Edit #{@entity.name}'s Contact Info"
-    .form-group
-      label Honorific
-      = f.hidden_field :is_honorific, value: true
-      = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
-    .clearfix
-    .form-group.required
-      = f.label :first_name, class: "control-label"
-      = f.text_field :first_name, class: "form-control"
-    .form-group.required
-      = f.label :last_name, class: "control-label"
-      = f.text_field :last_name, class: "form-control"
-    .form-group
-      = f.label :phone1
-      = f.text_field :phone1, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
-    .form-group
-      = f.label :phone2
-      = f.text_field :phone2, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
-    .form-group
-      = f.label :fax
-      = f.text_field :fax, class: "form-control"
-    .form-group
-      = f.label :email
-      = f.text_field :email, class: "form-control"
-    .form-group
-      = f.label :postal_address
-      = f.text_field :postal_address, class: "form-control"
-    .form-group
-      label City
-      = f.text_field :city, class: 'city form-control'
-    .form-group
-      label State
-      = f.select :state, options_for_select(GeneralMethods.USSTATES, @entity.state), html_options: {class: 'state form-control selectize-single'}
-    .form-group
-      label Zip
-      = f.text_field :zip, class: 'zip form-control'
-    /.clearfix
+  .mask_content
+    .col-lg-4.close-md-4.col-sm-12.col-xs-12
+      .clearfix
+        .h4
+          = "Edit #{@entity.name}'s Contact Info"
       .form-group
-        = f.submit 'Save', class: 'btn btn-sm btn-primary'
+        label Honorific
+        = f.hidden_field :is_honorific, value: true
+        = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
+      .clearfix
+      .form-group.required
+        = f.label :first_name, class: "control-label"
+        = f.text_field :first_name, class: "form-control"
+      .form-group.required
+        = f.label :last_name, class: "control-label"
+        = f.text_field :last_name, class: "form-control"
+      .form-group
+        = f.label :phone1
+        = f.text_field :phone1, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
+      .form-group
+        = f.label :phone2
+        = f.text_field :phone2, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
+      .form-group
+        = f.label :fax
+        = f.text_field :fax, class: "form-control"
+      .form-group
+        = f.label :email
+        = f.text_field :email, class: "form-control"
+      .form-group
+        = f.label :postal_address
+        = f.text_field :postal_address, class: "form-control"
+      .form-group
+        label City
+        = f.text_field :city, class: 'city form-control'
+      .form-group
+        label State
+        = f.select :state, options_for_select(GeneralMethods.USSTATES, @entity.state), html_options: {class: 'state form-control selectize-single'}
+      .form-group
+        label Zip
+        = f.text_field :zip, class: 'zip form-control'
+      /.clearfix
+        .form-group
+          = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 javascript:
   $(document).ready(function() {

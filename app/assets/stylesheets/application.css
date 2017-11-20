@@ -65,7 +65,7 @@ table#data_table tbody tr.child-row.active-item{
 
 .bredcrum-fixed{
   position: fixed;
-  z-index: 300;
+  z-index: 299;
 }
 
 .breadcrum_text {
@@ -94,8 +94,9 @@ table#data_table tbody tr.child-row.active-item{
 }
 
 .right-align {
-  margin-left: 30px
+  margin-left: 30px !important;
 }
+
 .list_show {
   margin-left: 48px !important;
   display: block !important;
@@ -177,22 +178,29 @@ table#data_table tbody tr.child-row.active-item{
   padding-top: 2px !important;
 }
 
-.lease-form{
+.lease-form {
   margin-top: 20px;
-  margin-left: -5px;
+  margin-left: 10px;
 }
 
+.tenant-shift {
+  margin-left: 9px;
+}
 .cover-pic{
   margin-top: 26px;
 }
 
 .header-tab{
-  margin-left: -10px !important;
+  margin-left: -1px !important;
   margin-top: 21px;
 }
 
+.form-content-tax {
+  margin-top: 25px;
+}
 .form-content {
   margin-top: 25px;
+  margin-left: 11px;
 }
 .upload-image {
   margin-top: 46px;
@@ -249,12 +257,12 @@ table#data_table tbody tr.child-row.active-item{
 
 
 .lease-header-tab {
-    margin-left: -21px !important;
+    margin-left: -1px !important;
     margin-top: 45px !important;
 }
 
 .tenant-header-tab {
-    margin-left: -10px !important;
+    margin-left: -1px !important;
     margin-top: 45px !important;
 }
 
@@ -262,9 +270,6 @@ table#data_table tbody tr.child-row.active-item{
   margin-top: 108px !important;
 }
 
-.tenant-form-content {
-  margin-top: 73px !important;
-}
 .check_box_label{
   position: relative !important;
   left: 12px !important;

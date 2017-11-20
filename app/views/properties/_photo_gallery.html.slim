@@ -15,7 +15,7 @@ div.bredcum-content
       = render 'properties/form_header_link'  
   
   .clearfix
-  .mask_content
+  .mask_content.tenant-shift
     = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
       
       .col-lg-3.col-md-3.col-sm-6.col-xs-12.upload-image
