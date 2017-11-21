@@ -24,46 +24,46 @@
         - override_active_record_errors(@entity.errors.messages, {base: ''}).each do |message|
           li = message
 
+  .mask_content
+    .col-lg-4.close-md-4.col-sm-12.col-xs-12
+      .form-group.required
+        = f.label "Name", class: "control-label"
+        = f.text_field :name, class: "form-control"
+        .clearfix
+        = linkbacks_entity(@entity)
+      .form-group
+        = f.label "Ein"
+        = f.text_field :ein_or_ssn, class: "form-control"
 
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12.trust-form-gape
-    .form-group.required
-      = f.label "Name", class: "control-label"
-      = f.text_field :name, class: "form-control"
       .clearfix
-      = linkbacks_entity(@entity)
-    .form-group
-      = f.label "Ein"
-      = f.text_field :ein_or_ssn, class: "form-control"
-
-    .clearfix
-    .form-group.required
-      label.control-label Date of Formation
-      .clearfix
-      .pull-left
-        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
-        = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
-      .pull-right
+      .form-group.required
+        label.control-label Date of Formation
+        .clearfix
         .pull-left
-          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+          = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
+          = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
         .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
+          .pull-left
+            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+          .pull-right
+            = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
 
-    .clearfix
-    .form-group.margin-sm-top
-      label State of Formation
       .clearfix
-      = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction), class: "form-control selectize-single"
-    - if @entity.persisted?
-      .form-group
-        .heading
-          = "#{(100 - Beneficiary.new(super_entity_id: @entity.id).remaining_share_or_interest rescue 0) }% of Beneficial Interests have been assigned out of 100%"
-    .clearfix
-      .form-group
-        - if @entity.persisted?
-          - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
-        - else
-          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+      .form-group.margin-sm-top
+        label State of Formation
+        .clearfix
+        = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction), class: "form-control selectize-single"
+      - if @entity.persisted?
+        .form-group
+          .heading
+            = "#{(100 - Beneficiary.new(super_entity_id: @entity.id).remaining_share_or_interest rescue 0) }% of Beneficial Interests have been assigned out of 100%"
+      .clearfix
+        .form-group
+          - if @entity.persisted?
+            - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+          - else
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 #popup-should-not-change.corporate
   = hidden_field_tag "should_not_change[name]", (@entity.persisted? ? @entity.reload["name"] : '')

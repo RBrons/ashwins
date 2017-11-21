@@ -22,57 +22,58 @@
       ul
         - override_active_record_errors(@entity.errors.messages, {base: ''}).each do |message|
           li = message
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12.trust-form-gape
-    .form-group
-      label Honorific
-      = f.hidden_field :is_honorific, value: true
-      = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
-    .clearfix
-    .form-group.required
-      = f.label :first_name, class: "control-label"
-      = f.text_field :first_name, class: "form-control"
-    .form-group.required
-      = f.label :last_name, class: "control-label"
-      = f.text_field :last_name, class: "form-control"
-    .form-group
-      /= f.label :phone1
-      label Phone 1
-      = f.text_field :phone1, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
-    .form-group
-      /= f.label :phone2
-      label Phone 2
-      = f.text_field :phone2, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
-    .form-group
-      = f.label :fax
-      = f.text_field :fax, class: "form-control"
-    .form-group
-      = f.label :email
-      = f.text_field :email, class: "form-control"
-    .form-group
-      = f.label "SSN"
-      = f.text_field :ein_or_ssn, class: "form-control"
-    .form-group
-      label Postal Address
-      = f.text_field :postal_address, class: "form-control"
-    .form-group
-      label City
-      = f.text_field :city, class: 'city form-control'
-    .form-group  
-      label State
-      = f.select :state, options_for_select(GeneralMethods.USSTATES, @entity.state), html_options: {class: 'state form-control selectize-single'}
-    .form-group  
-      label Zip
-      = f.text_field :zip, class: 'zip form-control'
-    .form-group
-      = f.label :notes
-      = f.text_area :notes, class: "form-control"
-    .clearfix
+  .mask_content
+    .col-lg-4.close-md-4.col-sm-12.col-xs-12
       .form-group
-        - if @entity.persisted?
-          - c_str = "Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? " 
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
-        - else
-          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+        label Honorific
+        = f.hidden_field :is_honorific, value: true
+        = f.select :honorific, options_for_select(GeneralMethods.honorific, @entity.honorific), {}, {class: "state form-control"}
+      .clearfix
+      .form-group.required
+        = f.label :first_name, class: "control-label"
+        = f.text_field :first_name, class: "form-control"
+      .form-group.required
+        = f.label :last_name, class: "control-label"
+        = f.text_field :last_name, class: "form-control"
+      .form-group
+        /= f.label :phone1
+        label Phone 1
+        = f.text_field :phone1, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
+      .form-group
+        /= f.label :phone2
+        label Phone 2
+        = f.text_field :phone2, "placeholder" => "example: +(country code) (phone number)", class: "form-control"
+      .form-group
+        = f.label :fax
+        = f.text_field :fax, class: "form-control"
+      .form-group
+        = f.label :email
+        = f.text_field :email, class: "form-control"
+      .form-group
+        = f.label "SSN"
+        = f.text_field :ein_or_ssn, class: "form-control"
+      .form-group
+        label Postal Address
+        = f.text_field :postal_address, class: "form-control"
+      .form-group
+        label City
+        = f.text_field :city, class: 'city form-control'
+      .form-group  
+        label State
+        = f.select :state, options_for_select(GeneralMethods.USSTATES, @entity.state), html_options: {class: 'state form-control selectize-single'}
+      .form-group  
+        label Zip
+        = f.text_field :zip, class: 'zip form-control'
+      .form-group
+        = f.label :notes
+        = f.text_area :notes, class: "form-control"
+      .clearfix
+        .form-group
+          - if @entity.persisted?
+            - c_str = "Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? " 
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+          - else
+            = f.submit 'Save', class: 'btn btn-sm btn-primary'
 javascript:
   $(document).ready(function() {
     $('#save_btn').on('click', function() {

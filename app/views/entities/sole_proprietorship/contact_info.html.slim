@@ -2,7 +2,7 @@
   .bread_crumb_show
     = render_breadcrumbs :separator => ' '
   button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
-    = "Save"
+    = "Save" 
 = form_for @entity, url: entities_sole_proprietorship_contact_info_path( @entity.key ), remote: true, html: { class: "entity-page-xhr" } do |f|
   = hidden_field_tag :int_action, 'Contact Info'
   - if @entity.errors.any?
@@ -11,7 +11,7 @@
       ul
         - @entity.errors.full_messages.each do |message|
           li = message
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12.trust-contact-gape
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
     / .form-group.honorific
     /   = f.label :honorific
     /   / = f.check_box :is_honorific
