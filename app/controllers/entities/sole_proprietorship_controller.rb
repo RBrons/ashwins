@@ -13,9 +13,7 @@ class Entities::SoleProprietorshipController < ApplicationController
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
       if @entity.name == ""
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole proprietorship"
-        add_breadcrumb " Create", '',  :title => "Create"
+        individual_breadcrumb
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
@@ -38,6 +36,8 @@ class Entities::SoleProprietorshipController < ApplicationController
         #return render json: {redirect: view_context.entities_sole_proprietorship_basic_info_path( @entity.key ), just_created: true}
         # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_sole_proprietorship_basic_info_path( @entity.key )
+      else
+        individual_breadcrumb
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
@@ -56,6 +56,12 @@ class Entities::SoleProprietorshipController < ApplicationController
       raise UnknownRequestFormat
     end
     render layout: false if request.xhr?
+  end
+
+  def individual_breadcrumb
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole proprietorship"
+    add_breadcrumb " Create", '',  :title => "Create"
   end
 
   def contact_info

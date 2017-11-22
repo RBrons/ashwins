@@ -19,9 +19,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
         @principal = Principal.new
       end
       if @principal.new_record?
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
-        add_breadcrumb " Principal Create", '',  :title => "Principal Create"
+        individual_breadcrumb
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
@@ -53,9 +51,10 @@ class Entities::PowerOfAttorneyController < ApplicationController
           AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
           # return render json: {redirect: view_context.entities_power_of_attorney_basic_info_path( @entity.key ), just_created: true}
           # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
-          return redirect_to entities_power_of_attorney_basic_info_path( @entity.key )
+          return redirect_to entities_power_of_attorney_basic_info_path( @entity.key )          
         end
       else
+        individual_breadcrumb
         @principal = Principal.new
       end
     elsif request.patch?
@@ -80,6 +79,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
         end
         #redirect_to edit_entity_path(@entity.key)
       else
+        individual_breadcrumb
         @principal = Principal.new
       end
     else
@@ -135,6 +135,12 @@ class Entities::PowerOfAttorneyController < ApplicationController
   #   render layout: false if request.xhr?
   # end
 
+  def individual_breadcrumb
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Power Of Attorney/", '',  :title => "Power Of Attorney" 
+    add_breadcrumb " Principal Create", '',  :title => "Principal Create"
+  end
+
  def agent
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Agent </a></h4></div>".html_safe
     unless request.delete?
@@ -157,7 +163,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
         add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit" 
         add_breadcrumb " Agent", '',  :title => "Agent"
         add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
-        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
+        add_breadcrumb "Show", entity_path(@entity.id), :title => "show", :id => "show_in_list", :class => "show_client"
       end
     elsif request.post?
       @agent                 = Agent.new(agent_params)

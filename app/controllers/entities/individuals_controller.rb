@@ -12,9 +12,7 @@ class Entities::IndividualsController < ApplicationController
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
       if @entity.new_record?
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Individual/", '',  :title => "Individual"
-        add_breadcrumb " Create", '',  :title => "Create"
+        individual_breadcrumb
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Individual/", '',  :title => "Individual"
@@ -33,6 +31,8 @@ class Entities::IndividualsController < ApplicationController
         AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
         # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_individuals_basic_info_path(@entity.key)
+      else
+        individual_breadcrumb
       end
     elsif request.patch?
       @entity                 = Entity.find_by(key: key)
@@ -44,10 +44,16 @@ class Entities::IndividualsController < ApplicationController
         # flash[:success] = "This Client Successfully Updated.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_individuals_basic_info_path(@entity.key)
       end
-    else
+    else      
       raise UnknownRequestFormat
     end
     render layout: false if request.xhr?
+  end
+  
+  def individual_breadcrumb
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Individual/", '',  :title => "Individual"
+    add_breadcrumb " Create", '',  :title => "Create"
   end
 
   def owns
