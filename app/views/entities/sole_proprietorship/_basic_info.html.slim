@@ -23,59 +23,59 @@
       ul
         - override_active_record_errors(@entity.errors.messages, {:name => :owner, base: ''}).each do |message|
           li = message
-  .mask_content
-    .col-lg-4.close-md-4.col-sm-12.col-xs-12
-      .form-group
-        label Honorific
-        = f.hidden_field :is_basichonorific, value: true
-        = f.select :basichonorific, options_for_select(GeneralMethods.basichonorific, @entity.basichonorific), {}, {class: "state form-control"}
-      .form-group.required
-        label.control-label Owner First Name
-        = f.text_field :first_name, class: "partnership form-control"
-      .form-group.required
-        label.control-label Owner Last Name
-        = f.text_field :last_name, class: "partnership form-control"
-      .form-group
-        label Fictitious Business Name
-        = f.text_field :name2, class: "partnership form-control"
-      .form-group.required
-        label.control-label Date of Registration
-        .clearfix
+  
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    .form-group
+      label Honorific
+      = f.hidden_field :is_basichonorific, value: true
+      = f.select :basichonorific, options_for_select(GeneralMethods.basichonorific, @entity.basichonorific), {}, {class: "state form-control"}
+    .form-group.required
+      label.control-label Owner First Name
+      = f.text_field :first_name, class: "partnership form-control"
+    .form-group.required
+      label.control-label Owner Last Name
+      = f.text_field :last_name, class: "partnership form-control"
+    .form-group
+      label Fictitious Business Name
+      = f.text_field :name2, class: "partnership form-control"
+    .form-group.required
+      label.control-label Date of Registration
+      .clearfix
+      .pull-left
+        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
+        = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
+      .pull-right
         .pull-left
-          = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
-          = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
+          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
         .pull-right
-          .pull-left
-            label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-          .pull-right
-            = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
-      .clearfix
-      .form-content-tax
-        .form-group
-          = f.label "Ein"
-          = f.text_field :ein_or_ssn, class: "ein form-control"
+          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
+    .clearfix
+    .form-content-tax
       .form-group
-        label Postal Address
-        = f.text_field :postal_address2, class: "partnership form-control"
+        = f.label "Ein"
+        = f.text_field :ein_or_ssn, class: "ein form-control"
+    .form-group
+      label Postal Address
+      = f.text_field :postal_address2, class: "partnership form-control"
+    .form-group
+      = f.label "City"
+      = f.text_field :city2, class: "city form-control"
+    .form-group
+      = f.label "State"
+      = f.select :state2, options_for_select(GeneralMethods.USSTATES, @entity.state2), {}, {class: "state form-control selectize-single"}
+    .form-group
+      = f.label "Zip"
+      = f.text_field :zip2, class: "zip form-control"    
+    .clearfix
+    .form-group.margin-sm-top
+      = f.hidden_field :number_of_assets, value: "100"
+    .clearfix
       .form-group
-        = f.label "City"
-        = f.text_field :city2, class: "city form-control"
-      .form-group
-        = f.label "State"
-        = f.select :state2, options_for_select(GeneralMethods.USSTATES, @entity.state2), {}, {class: "state form-control selectize-single"}
-      .form-group
-        = f.label "Zip"
-        = f.text_field :zip2, class: "zip form-control"    
-      .clearfix
-      .form-group.margin-sm-top
-        = f.hidden_field :number_of_assets, value: "100"
-      .clearfix
-        .form-group
-          - if @entity.persisted?
-            - c_str = "Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? "
-            = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
-          - else
-            = f.submit 'Save', class: 'btn btn-sm btn-primary'
+        - if @entity.persisted?
+          - c_str = "Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? "
+          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+        - else
+          = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 #popup-should-not-change.corporate
   = hidden_field_tag "should_not_change[name]", (@entity.persisted? ? @entity.reload["name"] : '')

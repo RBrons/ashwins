@@ -11,34 +11,34 @@
       ul
         - @principal.errors.full_messages.each do |message|
           li = message
-  .mask_content
-    .col-lg-4.close-md-4.col-sm-12.col-xs-12
+  
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
 
-      .form-group
-        .option-1
-          = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @principal.is_person
-        .option-2
-          = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@principal.is_person
+    .form-group
+      .option-1
+        = f.label "Individual"
+        = f.radio_button :is_person, true, checked: @principal.is_person
+      .option-2
+        = f.label "Entity"
+        = f.radio_button :is_person, false, checked: !@principal.is_person
 
-      .form-group#principal_entity
-        label.is-person-hide style=("#{('display: none;' if @principal.is_person)}") Principal Entity
+    .form-group#principal_entity
+      label.is-person-hide style=("#{('display: none;' if @principal.is_person)}") Principal Entity
 
-        - if @principal.is_person
-          = f.select :temp_id, options_html('principal', "true", @principal.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @principal.super_entity.id, clienttype: 'principal'}
-        - else
-          = f.select :temp_id, options_html('principal', "false", @principal.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @principal.super_entity.id, clienttype: 'principal'}
-        = hidden_field_tag "principal[member_type_id]", MemberType.getPowerOfAttorneyId
-        = hidden_field_tag :cid, @principal.temp_id
-        .clearfix
-        div#linkbacks
-          = linkbacks f.object.temp_id
-          .add-list-entity-links.pull-right
-            = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
+      - if @principal.is_person
+        = f.select :temp_id, options_html('principal', "true", @principal.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @principal.super_entity.id, clienttype: 'principal'}
+      - else
+        = f.select :temp_id, options_html('principal', "false", @principal.super_entity, f.object.temp_id), {}, class: "form-control", data: {id: @principal.super_entity.id, clienttype: 'principal'}
+      = hidden_field_tag "principal[member_type_id]", MemberType.getPowerOfAttorneyId
+      = hidden_field_tag :cid, @principal.temp_id
+      .clearfix
+      div#linkbacks
+        = linkbacks f.object.temp_id
+        .add-list-entity-links.pull-right
+          = link_to "New", "javascript:void(0)", class: "resource-form-new-entity pull-right"
 
-      .form-group
-        = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    .form-group
+      = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
 javascript:
   $(document).ready(function() {

@@ -13,9 +13,7 @@ class Entities::TrustController < ApplicationController
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b    
       if @entity.name == ""
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Trust/", '',  :title => "Trust"
-        add_breadcrumb " Create", '',  :title => "Create"
+        individual_breadcrumb
       else
         add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
         add_breadcrumb " Trust/", '',  :title => "Trust"
@@ -35,6 +33,8 @@ class Entities::TrustController < ApplicationController
         #return redirect_to clients_path
         # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_trust_basic_info_path( @entity.key )
+      else
+        individual_breadcrumb
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
@@ -47,6 +47,12 @@ class Entities::TrustController < ApplicationController
       raise UnknownRequestFormat
     end
     render layout: false if request.xhr?
+  end
+
+  def individual_breadcrumb
+    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
+    add_breadcrumb " Trust/", '',  :title => "Trust"
+    add_breadcrumb " Create", '',  :title => "Create"
   end
 
   def contact_info
