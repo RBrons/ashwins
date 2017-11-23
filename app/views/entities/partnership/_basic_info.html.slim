@@ -11,11 +11,17 @@
         .modal-footer
           button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Close
 
-.bread_crumb_area
-  .bread_crumb_show
-    = render_breadcrumbs :separator => ' '
-  button class="btn btn-sm btn-primary save-btn" name="save" type="submit" id="save_btn"
-    = "Save"
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      li.btn_bc.margin-sm-right
+        button.btn.btn-sm[type="submit" id="save_btn"] Save
+      = render_breadcrumbs :tag => :li, :separator => ''
+    - if @entity.id
+      .action-links
+        = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
+        = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
+
 = form_for @entity, url: entities_partnership_basic_info_path( @entity.key ), remote: true, html: { class: "entity-page-xhr" } do |f|
   - if @entity.errors.any?
     #error_explanation

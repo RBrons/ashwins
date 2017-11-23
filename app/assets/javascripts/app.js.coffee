@@ -70,7 +70,8 @@ $ ->
       input_object.attr('name', null)
   
   # Comming Soon Part
-  $(document).on 'click', '.comming-soon',  -> 
+  $(document).on 'click', '.comming-soon',  (e) ->
+    e.preventDefault()
     sweetAlert '', 'Under Construction', 'warning'
   
   flat_icheckbox = ->

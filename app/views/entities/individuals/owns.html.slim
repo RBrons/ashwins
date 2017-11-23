@@ -1,6 +1,11 @@
-.bread_crumb_area
-  .bread_crumb_show_not_save_btn
-    = render_breadcrumbs :separator => ' '
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      = render_breadcrumbs :tag => :li, :separator => ''
+    .action-links
+      = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
+      = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
+      
 = hidden_field_tag :int_action, 'Ownerships'
 .heading#own_heading_content
   = "List of #{@entity.display_name}'s Ownerships"

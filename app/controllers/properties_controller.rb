@@ -25,8 +25,7 @@ class PropertiesController < ApplicationController
     end
     @properties = @properties.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
     @activeId = params[:active_id]
-    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"#\">List</a></div>".html_safe
-
+    
     render template: 'properties/xhr_list', layout: false if request.xhr?
   end
 
@@ -43,8 +42,7 @@ class PropertiesController < ApplicationController
     @property.lease_base_rent = @property.current_rent
     # @property.ostatus = params["ostatus"]
     @property.check_price_current_rent_cap_rate
-    add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + new_property_path(ostatus: params["ostatus"]) +
-      "\'>Create " + params["ostatus"] + "&nbsp;Property" + "</a></div>").html_safe
+    add_breadcrumb "Create #{params["ostatus"]} Property", new_property_path(ostatus: params["ostatus"])
     render layout: false if request.xhr?
   end
 
@@ -66,27 +64,25 @@ class PropertiesController < ApplicationController
     else
       @property.owner_entity_id = @property.owner_entity_id_indv = 0
     end
-    add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + edit_property_path(@property.key) +
-      "\'> " + @property.ownership_status + "&nbsp;Edit" + ":" + "&nbsp;" + @property.title + "/" + "</a></div>").html_safe
+    
+    add_breadcrumb "#{@property.ownership_status} Edit: #{@property.title}", edit_property_path(@property.key)
     if params[:action] == "edit"
       if params[:type_is] == 'basic_info' || params[:type_is] == nil
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Basic Info</a></div>".html_safe
+        add_breadcrumb "Basic Info", ''
       elsif params[:type_is] == 'map'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Map</a></div>".html_safe
+        add_breadcrumb "Map", ''
       elsif params[:type_is] == 'photo_gallery'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Photo Gallery</a></div>".html_safe
+        add_breadcrumb "Photo Gallery", ''
       elsif params[:type_is] == 'county_tax'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">County Tax</a></div>".html_safe
+        add_breadcrumb "County Tax", ''
       elsif params[:type_is] == 'tenant'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Tenant</a></div>".html_safe
+        add_breadcrumb "Tenant", ''
       elsif params[:type_is] == 'lease'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Lease</a></div>".html_safe
+        add_breadcrumb "Lease", ''
       elsif params[:type_is] == 'ownership'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Ownership</a></div>".html_safe
+        add_breadcrumb "Ownership", ''
       elsif params[:type_is] == 'survey'
-        add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">Survey</a></div>".html_safe
-      else
-        #add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/properties\"> Basic Info </a></h4></div>".html_safe
+        add_breadcrumb "Survey", ''
       end
     end
     render layout: false if request.xhr?
@@ -362,7 +358,7 @@ class PropertiesController < ApplicationController
   end
 
   def add_breadcrum
-    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/properties\">/Properties/</a></div>".html_safe
+    add_breadcrumb "<a href='/properties'>Properties</a>".html_safe
   end
 
   def validate_ipp

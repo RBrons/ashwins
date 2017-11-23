@@ -1,8 +1,4 @@
-- style_str = (params[:grp] && !params[:page]) ? "" : "width: 80%;"
-- if !params[:grp] || params[:page]
-  div.pull-left style="width: 15%"
-    /label Left Sidebar
-    div#entity-groups-tree
+
 #md-delete-client.header-submenu-modal.delete-modal-with-footer.modal.fade[tabindex="-1" role="dialog"]
   .modal-dialog.modal-lg[role="document"]
     .modal-content
@@ -15,141 +11,147 @@
         span Are you sure you want to continue?
         = link_to 'Yes', 'javascript:void(0)', data: {:key => ''}, class: "#{delete_xs} delete-client-yes"
         = link_to 'No', 'javascript:void(0)', class: "#{show_xs} delete-client-no", data: {dismiss: "modal"}, aria: {label: "Close"}
-div#entities-list.pull-right style=style_str
-  = hidden_field_tag :current_group_id, @current_grp
-  - if @current_grp == '0'
-    = form_tag(clients_index_path, method: :post, remote: true, id: 'addmultiform', style: "display: none;") do
-      = select_tag 'group_id', options_for_select(@groups)
-      = hidden_field_tag :form_type, 'addmultitogroup'
-      = hidden_field_tag :multi_add_entities, ''
-      = link_to 'Add Selected To Group', 'javascript:void(0);', class: 'btn btn-sm btn-primary', id: 'multi_add_entities', 'data-confirm' => 'false'
-  - else
-    = form_tag(clients_index_path, method: :post, remote: true, id: 'removemultiform') do
-      = hidden_field_tag :form_type, 'removemultifromgroup'
-      = hidden_field_tag :multi_remove_entities, ''
-      = hidden_field_tag :group_id, @current_grp
-      = link_to 'Remove Selected From Group', 'javascript:void(0);', class: 'btn btn-sm btn-danger', id: 'multi_remove_entities', 'data-confirm' => 'false'
-  .breadcrumb-wrapper
-    ul.m__breadcrumb
-      li
-        | Clients
-      li
-        | List View
-  
-  table#data_table
-    thead
-      tr
-        th = check_box_tag :object_all, false, false
-        th
-          | Actions        
-        th style="width: 100px;"
-          | Client
-        th
-          | Type
-        th style="width: 112px;"
-          | Owns
-        th style="width: 112px;"
-          | Owned By
-        th
-          | State Of Formation
-        th
-          | Date Of Formation
-        th
-          | EIN / Social
-        th
-          | Honorific
-        th
-          | Contact First Name
-        th
-          | Contact Last Name
-        th
-          | Phone Number
-        th
-          | Email
-    tbody data-active-id=@activeId
-      - @entities.each do |entity|
-        tr data-id=entity.id
-          td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => entity.id
-          td.action
-            = link_to 'Edit', edit_entity_path(entity.key), class: "#{edit_xs}"
-            = link_to 'Show', entity_path(entity), class: "#{show_xs}"
-            = link_to 'Delete', 'javascript:void(0)', data: {:key => entity.key}, class: "#{delete_xs} delete-client"         
-          td
-            = client_entity(entity)
-          td
-            = entity.entity_type.try(:name)
-          td
-            - arr = owns(entity)
-            - if arr
-              - arr.each do |name|
-                - if (name.try(:length) || 0) > 1
-                  a href = name[1] style="display: block"
-                    span.badge
-                      = name[0]
-          td
-            - arr = owned_by(entity)
-            - if arr
-              - arr.each do |name|
-                - if (name.try(:length) || 0) > 1
-                  a href = name[1] style="display: block"
-                    span.badge
-                      = name[0]
-          td
-            = entity.jurisdiction
-          td
-            = entity.date_of_formation || entity.date_of_commission
-          td
-            = entity.ein_or_ssn
-          td
-            - arr = owned_by_agent(entity)
-            - if arr
-              - arr.each do |name|
-                - if (name.try(:length) || 0) > 1
-                  a href = name[1] style="display: block"
-                    span.badge
-                      = name[0] 
-            - if entity.entity_type == "Sole Proprietorship"
-              = entity.basichonorific
-            = entity.honorific
-          td
-            - arr = owned_by_power(entity)
-            - if arr
-              - arr.each do |name|
-                - if (name.try(:length) || 0) > 1
-                  a href = name[1] style="display: block"
-                    span.badge
-                      = name[0]           
-            - if entity.entity_type.name == "Sole Proprietorship"
-              - if entity.first_name2.nil?
-                = entity.first_name
-              - else 
-                = entity.first_name2
-            - else
-              = first_name_of_entity entity
-          td
-            - arr = owned_by_power_last(entity)
-            - if arr
-              - arr.each do |name|
-                - if (name.try(:length) || 0) > 1
-                  a href = name[1] style="display: block"
-                    span.badge
-                      = name[0]
-            - if entity.entity_type.name == "Sole Proprietorship"
-              - if entity.last_name2.nil?
-                = entity.last_name
-              - else                
-                = entity.last_name2
-            - else
-              = last_name_of_entity entity
-          td
-            = entity.phone1
-          td
-            = entity.email
+
+.clients_list_view
+  - if !params[:grp] || params[:page]
+    div.tree-wrapper
+      div#entity-groups-tree
+  div#entities-list
+    = hidden_field_tag :current_group_id, @current_grp
+    - if @current_grp == '0'
+      = form_tag(clients_index_path, method: :post, remote: true, id: 'addmultiform', style: "display: none;") do
+        = select_tag 'group_id', options_for_select(@groups)
+        = hidden_field_tag :form_type, 'addmultitogroup'
+        = hidden_field_tag :multi_add_entities, ''
+        = link_to 'Add Selected To Group', 'javascript:void(0);', class: 'btn btn-sm btn-primary', id: 'multi_add_entities', 'data-confirm' => 'false'
+    - else
+      = form_tag(clients_index_path, method: :post, remote: true, id: 'removemultiform') do
+        = hidden_field_tag :form_type, 'removemultifromgroup'
+        = hidden_field_tag :multi_remove_entities, ''
+        = hidden_field_tag :group_id, @current_grp
+        = link_to 'Remove Selected From Group', 'javascript:void(0);', class: 'btn btn-sm btn-danger', id: 'multi_remove_entities', 'data-confirm' => 'false'
+    .fixed-breadcrumb
+      .breadcrumb-wrapper
+        ul.m__breadcrumb
+          li
+            | Clients
+          li
+            | List View
+    
+    table#data_table
+      thead
+        tr
+          th = check_box_tag :object_all, false, false
+          th
+            | Actions        
+          th style="width: 100px;"
+            | Client
+          th
+            | Type
+          th style="width: 112px;"
+            | Owns
+          th style="width: 112px;"
+            | Owned By
+          th
+            | State Of Formation
+          th
+            | Date Of Formation
+          th
+            | EIN / Social
+          th
+            | Honorific
+          th
+            | Contact First Name
+          th
+            | Contact Last Name
+          th
+            | Phone Number
+          th
+            | Email
+      tbody data-active-id=@activeId
+        - @entities.each do |entity|
+          tr data-id=entity.id
+            td.align-with-th = check_box_tag :object_select, false, false, 'data-id' => entity.id
+            td.action
+              = link_to 'Edit', edit_entity_path(entity.key), class: "#{edit_xs}"
+              = link_to 'Show', entity_path(entity), class: "#{show_xs}"
+              = link_to 'Delete', 'javascript:void(0)', data: {:key => entity.key}, class: "#{delete_xs} delete-client"         
+            td
+              = client_entity(entity)
+            td
+              = entity.entity_type.try(:name)
+            td
+              - arr = owns(entity)
+              - if arr
+                - arr.each do |name|
+                  - if (name.try(:length) || 0) > 1
+                    a href = name[1] style="display: block"
+                      span.badge
+                        = name[0]
+            td
+              - arr = owned_by(entity)
+              - if arr
+                - arr.each do |name|
+                  - if (name.try(:length) || 0) > 1
+                    a href = name[1] style="display: block"
+                      span.badge
+                        = name[0]
+            td
+              = entity.jurisdiction
+            td
+              = entity.date_of_formation || entity.date_of_commission
+            td
+              = entity.ein_or_ssn
+            td
+              - arr = owned_by_agent(entity)
+              - if arr
+                - arr.each do |name|
+                  - if (name.try(:length) || 0) > 1
+                    a href = name[1] style="display: block"
+                      span.badge
+                        = name[0] 
+              - if entity.entity_type == "Sole Proprietorship"
+                = entity.basichonorific
+              = entity.honorific
+            td
+              - arr = owned_by_power(entity)
+              - if arr
+                - arr.each do |name|
+                  - if (name.try(:length) || 0) > 1
+                    a href = name[1] style="display: block"
+                      span.badge
+                        = name[0]           
+              - if entity.entity_type.name == "Sole Proprietorship"
+                - if entity.first_name2.nil?
+                  = entity.first_name
+                - else 
+                  = entity.first_name2
+              - else
+                = first_name_of_entity entity
+            td
+              - arr = owned_by_power_last(entity)
+              - if arr
+                - arr.each do |name|
+                  - if (name.try(:length) || 0) > 1
+                    a href = name[1] style="display: block"
+                      span.badge
+                        = name[0]
+              - if entity.entity_type.name == "Sole Proprietorship"
+                - if entity.last_name2.nil?
+                  = entity.last_name
+                - else                
+                  = entity.last_name2
+              - else
+                = last_name_of_entity entity
+            td
+              = entity.phone1
+            td
+              = entity.email
 
 
-  .margin-lg-top
-  = render template: 'shared/trashed_un', locals: {local_path: multi_delete_clients_path, klazz: Entity, index_path: clients_path(trashed: !params[:trashed].to_b)}
-  .clearfix
-  = render template: 'shared/per_page_set'
-  .pull-right
-    = will_paginate @entities
+    .margin-lg-top
+    = render template: 'shared/trashed_un', locals: {local_path: multi_delete_clients_path, klazz: Entity, index_path: clients_path(trashed: !params[:trashed].to_b)}
+    .clearfix
+    = render template: 'shared/per_page_set'
+    .pull-right
+      = will_paginate @entities

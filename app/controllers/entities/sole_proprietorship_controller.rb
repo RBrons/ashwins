@@ -15,12 +15,10 @@ class Entities::SoleProprietorshipController < ApplicationController
       if @entity.name == ""
         individual_breadcrumb
       else
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-        add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
-        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
-        add_breadcrumb " Basic info", '', :title => "Basic info"
-        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
-        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
+        add_breadcrumb "Clients", clients_path, :title => "Clients" 
+        add_breadcrumb "Sole Proprietorship", '',  :title => "Sole Proprietorship"
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb "Basic info", '', :title => "Basic info"
       end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
@@ -59,9 +57,9 @@ class Entities::SoleProprietorshipController < ApplicationController
   end
 
   def individual_breadcrumb
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole proprietorship"
-    add_breadcrumb " Create", '',  :title => "Create"
+    add_breadcrumb "Clients", clients_path, :title => "Clients" 
+    add_breadcrumb "Sole Proprietorship", '',  :title => "Sole proprietorship"
+    add_breadcrumb "Create", '',  :title => "Create"
   end
 
   def contact_info
@@ -69,21 +67,19 @@ class Entities::SoleProprietorshipController < ApplicationController
     raise ActiveRecord::RecordNotFound if @entity.blank?
     if request.get?
       #TODO0
-      add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-      add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
-      add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
-      add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
-      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
+      add_breadcrumb "Clients", clients_path, :title => "Clients" 
+      add_breadcrumb "Sole Proprietorship", '',  :title => "Sole Proprietorship"
+      add_breadcrumb "Edit: #{@entity.name}", '',  :title => "edit"
+      add_breadcrumb "Contact info", '', :title => "Contact info"
+      
     elsif request.patch?
       @entity.basic_info_only = false
       @entity.update(entity_params)
-      add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-      add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
-      add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
-      add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"        
-      add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
+      add_breadcrumb "Clients", clients_path, :title => "Clients" 
+      add_breadcrumb "Sole Proprietorship", '',  :title => "Sole Proprietorship"
+      add_breadcrumb "Edit: #{@entity.name}", '',  :title => "edit"
+      add_breadcrumb "Contact info", '', :title => "Contact info"
+      
       return render layout: false, template: "entities/sole_proprietorship/contact_info"
     else
       raise UnknownRequestFormat
@@ -96,12 +92,11 @@ class Entities::SoleProprietorshipController < ApplicationController
     @ownership_ = @entity.build_ownership_tree_json
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients" 
-    add_breadcrumb " Sole Proprietorship/", '',  :title => "Sole Proprietorship"
-    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
-    add_breadcrumb " Owns", '',  :title => "Owns"
-    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"    
-    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
+    add_breadcrumb "Clients", clients_path, :title => "Clients" 
+    add_breadcrumb "Sole Proprietorship", '',  :title => "Sole Proprietorship"
+    add_breadcrumb "Edit: #{@entity.name}", '',  :title => "edit"
+    add_breadcrumb "Owns", '',  :title => "Owns"
+    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end

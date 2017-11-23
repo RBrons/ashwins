@@ -4,7 +4,6 @@ class TransactionsController < ApplicationController
                                          :terms, :terms_update, :inspection, :closing, :personnel,
                                          :personnel_update, :get_status, :set_status, :qi_status, :inspection_update]
   before_action :current_page
-  before_action :add_breadcrum, only: [:index]
   before_action :validate_ipp, except: [:index]
   # GET /project
   # GET /project.json
@@ -61,7 +60,9 @@ class TransactionsController < ApplicationController
     end
     @transactions = @transactions.where.not('transactions.id in (?)', del_transaction_ids) if del_transaction_ids.count > 0
     @transactions = @transactions.order('transactions.updated_at DESC, transactions.created_at DESC').paginate(page: params[:page], per_page: sessioned_per_page)
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/transactions\">List </a></h4></div>".html_safe
+    
+    add_breadcrumb "Transactions"
+    add_breadcrumb "List View"
   end
 
   # GET /project/1
@@ -1046,10 +1047,6 @@ class TransactionsController < ApplicationController
       # not created relinquishing seller
       return redirect_to '/initial-participants'
     end
-  end
-
-  def add_breadcrum
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/transactions\">Transactions </a></h4></div>".html_safe
   end
 
   def build_gallery_transaction_properties transaction, type

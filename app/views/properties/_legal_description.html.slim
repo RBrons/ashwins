@@ -2,7 +2,7 @@
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
-        button#save_btn_prop_survey.btn.btn-sm[type="submit"] Save
+        button#save_btn_prop_legal_desc.btn.btn-sm[type="submit"] Save
       = render_breadcrumbs :tag => :li, :separator => ''
     
     - if @property.id.present?
@@ -23,23 +23,10 @@
           - @property.errors.full_messages.each do |message|
             li = message    
     .col-lg-4.col-md-4.form-content.no-padding
-      .clearfix
       .form-group
-        label.control-label Survey Doc
-        .input-group.select_in_gdrive
-            input.form-control[type="text"]
-            span.input-group-btn
-              button.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                span.margin-md-left.blue Select in Google Drive
-      .clearfix
-      .form-group
-        label.control-label Survey
-        = f.text_field :survey, class: 'form-control'
-      .clearfix
-      .form-group
-        label.control-label Survey Described
-        = f.text_field :survey_described, class: 'form-control'
+        label.control-label Legal Description
+        = f.text_area :description, rows: 6, class: 'form-control'
+      
     .clearfix
     .form-group
       - if @property.persisted?
@@ -50,7 +37,7 @@
 
 javascript:
   $(document).ready(function() {
-    $('#save_btn_prop_survey').on('click', function() {
+    $('#save_btn_prop_legal_desc').on('click', function() {
       var persisted = #{@property.persisted?}
       if (persisted === true) {
         var answer = confirm ("Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " )
@@ -58,12 +45,11 @@ javascript:
           return false;
         }
         else {
-          $('.survey-property-form form').submit();   
+          $('.legal-desc-form form').submit();   
         }
       }
       else {
-        $('.survey-property-form form').submit(); 
+        $('.legal-desc-form form').submit(); 
       }
     });
   });
-

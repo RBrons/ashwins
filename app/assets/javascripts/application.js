@@ -256,27 +256,6 @@ $( document ).ready(function() {
   // });
 });
 
-$(document).ready(function () {
-  lease_tab_rent = $("li[class='tab_content active']").find("a").attr('id');
-  if(lease_tab_rent == "lease_rent_table"){
-    $('#save_btn_lease').addClass('hidden');
-    $('#breadcrum_id').removeClass('breadcrum_line');
-    $('#breadcrum_id').addClass('breadcrum_no_save');
-  }
-  $('.sub_tab_menu').click(function(){
-    if($(this).attr("id") == "lease_rent_table"){
-      $('#save_btn_lease').addClass('hidden');
-      $('#').removeClass('breadcrum_line');
-      $('#breadcrum_id').addClass('breadcrum_no_save');      
-    }else{
-      $('#save_btn_lease').removeClass('hidden');
-      $('#breadcrum_id').addClass('breadcrum_line');
-      $('#breadcrum_id').removeClass('breadcrum_no_save');      
-    }
-  });
-});
-
-
 $(document).ready(function(){  
   $('.product-list').on('change', function() {
     $('.product-list').not(this).prop('checked', false);
@@ -305,9 +284,6 @@ $(document).ready(function(){
       $('#lease_tab a[href="' + activeTab + '"]').tab('show');
   }
 
-  $('.comming-soon').click(function(e){
-    e.preventDefault();
-  });
 });
 
 
@@ -348,31 +324,9 @@ var set_breadcrumb_colors = function(){
     text_color = $(document).find('#bc_text_color').val();
     bg_color = $(document).find('#bc_bg_color').val();
 
-    $(document).find('.breadcrum_text').css('color', text_color);
-    $(document).find('.breadcrum_list').css('color', text_color);
-
-    $(document).find('.breadcrum, .breadcrum-breadcrum, .lease_breadcrum, .tenant_breadcrum, .gallery_breadcrum')
-                                            .css('background-color', bg_color);
-
-    $(document).find('.submit-edit-basic, .submit-edit')
-                                                    .css('background-color', bg_color)
-                                                    .css('border-color', text_color)
-                                                    .css('color', text_color);
-
     $(document).find('.breadcrumb-wrapper').css('background-color', bg_color);
     $(document).find('.breadcrumb-wrapper .action-links a').css('color', text_color);
     $(document).find('ul.m__breadcrumb li').css('color', text_color);
-    
-    /*Breadcrumb colors for clients module*/
-    $(document).find('.corporate-contact-form .bread_crumb_area').css('background-color', bg_color);
-    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show').css('color', text_color);
-    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show a').css('color', text_color);
-    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show_not_save_btn').css('color', text_color);
-    $(document).find('.corporate-contact-form .bread_crumb_area .bread_crumb_show_not_save_btn a').css('color', text_color);
-    $(document).find('.corporate-contact-form .bread_crumb_area #save_btn')
-                                                    .css('background-color', bg_color)
-                                                    .css('border-color', text_color)
-                                                    .css('color', text_color);
 };
 
 /**

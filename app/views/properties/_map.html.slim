@@ -1,26 +1,25 @@
-.white_line.container.breadcrum-breadcrum.bredcrum-fixed  
-.container.breadcrum-breadcrum.bredcrum-fixed
-  p
-    .margin-md-left.breadcrum_no_save
-      = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-  <br><br>
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      = render_breadcrumbs :tag => :li, :separator => ''
+    
     - if @property.id.present?
-      = link_to "List", properties_path, class: "breadcrum_list list_show list_property"
-      = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show show_property"
-div.bredcum-content 
-  div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-    .clearfix.margin-lg-left.header-tab
-      = render 'properties/form_header_link' 
+      .action-links
+        = link_to "List", properties_path, class: "margin-md-right"
+        = link_to "Show", property_path(@property.key), class: ""
+
 .clearfix
-.mask_content    
+  = render 'properties/form_header_link' 
+
+.clearfix.mask_content
   - if @latLng.nil?
-    .col-md-6.margin-sm-top.tenant-shift
+    .col-md-6.margin-sm-top
       p Map is not available for this property
-    .col-md-6.margin-sm-top.tenant-shift
+    .col-md-6.margin-sm-top
   - else
-    .col-md-6.margin-sm-top.tenant-shift
+    .col-md-6.margin-sm-top
       #map_canvas_1.map_canvas
-    .col-md-6.margin-sm-top.tenant-shift
+    .col-md-6.margin-sm-top
       #map_canvas_2.map_canvas
 
 - if !@latLng.nil?
