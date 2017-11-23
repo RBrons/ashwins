@@ -305,9 +305,6 @@ $(document).ready(function(){
       $('#lease_tab a[href="' + activeTab + '"]').tab('show');
   }
 
-  $('.comming-soon').click(function(e){
-    e.preventDefault();
-  });
 });
 
 

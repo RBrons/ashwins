@@ -12,10 +12,7 @@
         = link_to 'No', 'javascript:void(0)', class: "#{show_xs} delete-contact-no", data: {dismiss: "modal"}, aria: {label: "Close"}
 .breadcrumb-wrapper
   ul.m__breadcrumb
-    li 
-      | Contacts
-    li
-      | List View
+    = render_breadcrumbs tag: :li, separator: ""
 
 table#data_table
   thead

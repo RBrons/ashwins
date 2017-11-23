@@ -16,6 +16,8 @@
       == render 'properties/survey'
   - elsif params[:type_is] == 'map'
     == render 'properties/map'
+  - elsif params[:type_is] == 'legal_description'
+    == render 'properties/legal_description'
   - else
     .basic-info-property-form
       == render 'properties/basic_info_form'

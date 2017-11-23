@@ -643,6 +643,8 @@ ActiveRecord::Schema.define(version: 20171115171249) do
     t.string   "use_clause_section"
     t.string   "use_exclusive_clause_section"
     t.string   "premises_tenant_rights_section"
+    t.string   "premises_waste_section"
+    t.string   "premises_initial_opening_section"
     t.string   "premises_recapture_clause_section"
     t.string   "premises_demolition_section"
     t.string   "premises_tenants_equipment_defined_section"
@@ -672,8 +674,6 @@ ActiveRecord::Schema.define(version: 20171115171249) do
     t.string   "taxes_and_fees_additional_rent_keywords"
     t.string   "taxes_and_fees_net_nature_keywords"
     t.string   "premises_quiet_enjoyment_keywords"
-    t.string   "premises_waste_section"
-    t.string   "premises_initial_opening_section"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
@@ -926,9 +926,6 @@ ActiveRecord::Schema.define(version: 20171115171249) do
     t.string   "first_name"
     t.string   "last_name"
     t.boolean  "enabled",                                default: false
-    t.string   "business_name"
-    t.string   "business_contact_first_name"
-    t.string   "business_contact_last_name"
     t.string   "last_sign_out_page"
     t.string   "user_type"
     t.integer  "attorney_firm_id"

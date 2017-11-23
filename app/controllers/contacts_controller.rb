@@ -79,8 +79,8 @@ class ContactsController < ApplicationController
     @contacts = @contacts.where(user_id: current_user.id)
     @contacts = @contacts.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
     @activeId = params[:active_id]
-    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">Contacts </a></div>".html_safe
-    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts/new\"> List </a></div>".html_safe
+    add_breadcrumb "Contacts"
+    add_breadcrumb "List View"
   end
 
   def show
@@ -92,8 +92,8 @@ class ContactsController < ApplicationController
     else
       @ctype_ = "Individual"
       @ctype_ = "Company" if @contact.is_company
-      add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">Contacts </a></div>".html_safe
-      add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"#{contact_path(@contact.id)}\">Show #{@ctype_} Contact: #{@contact.name} </a></div>".html_safe
+      add_breadcrumb "Contacts"
+      add_breadcrumb "#{@ctype_} Show: #{@contact.name}", contact_path(@contact.id)
     end
   end
 
@@ -112,8 +112,8 @@ class ContactsController < ApplicationController
     end
     ctype_ = "Individual"
     ctype_ = "Company" if @contact.is_company
-    add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/</a><a class=\"breadcrum_text\" href=\'" + edit_contact_path(@contact.id) +
-      "\'>" + ctype_  + '&nbsp;' + "Edit" + ":" + '&nbsp;' + @contact.name + "</a></div>").html_safe
+    add_breadcrumb "Contacts", contacts_path
+    add_breadcrumb "#{ctype_} Edit: #{@contact.name}", edit_contact_path(@contact.id)
   end
 
   def destroy
