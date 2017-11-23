@@ -11,6 +11,7 @@
       ul
         - @settlor.errors.full_messages.each do |message|
           li = message
+  
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - prepopulated_settlors = options_html('settlor', "true", @settlor.super_entity, f.object.temp_id, 'array')
     - if prepopulated_settlors.length == 0

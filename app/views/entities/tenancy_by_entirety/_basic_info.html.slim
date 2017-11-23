@@ -42,13 +42,25 @@
     .clearfix
     - unless @entity.key.present?
       - if available_properties.length == 0
-        p.text-info.con-current = "You have 0 properties that can be the property of this Tenancy By Entirety. Please create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner.".html_safe
+        p.text-info = "You have 0 properties that can be the property of this Tenancy By Entirety. Please create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner.".html_safe
       - elsif available_properties.length == 1
-        p.text-info.con-current = "You have 1 property that can be the property of this Tenancy By Entirety. Therefore, it has been pre-selected. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
+        p.text-info = "You have 1 property that can be the property of this Tenancy By Entirety. Therefore, it has been pre-selected. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
       - else
-        p.text-info.con-current = "You have #{available_properties.length} properties that can be the property of this Tenancy By Entirety. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
+        p.text-info = "You have #{available_properties.length} properties that can be the property of this Tenancy By Entirety. However you could also create a new <span class='ipp-modal' data-id='add-property'><b>Purchased Property</b></span> without an owner if you so desire.".html_safe
 
-    - if available_properties.length > 0
+    - if @entity.property_id.present?
+      .clearfix
+      .form-group.required
+        label.control-label Property Title
+        = f.select :property_id, options_for_select([[@entity.property.title, @entity.property_id]], @entity.property_id), {}, class: 'form-control disabled-like', readonly: true
+
+      .form-group
+        - if @entity.persisted?
+          - c_str = "Warning, you just made changes to #{@entity.name} Are you sure you want to proceed to do this? "
+          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
+        - else
+          = f.submit 'Save', class: 'btn btn-sm btn-primary'
+    - elsif available_properties.length > 0
       .clearfix
       .form-group.required
         label.control-label Property Title

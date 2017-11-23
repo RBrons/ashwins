@@ -27,11 +27,11 @@ table#data_table
           = link_to 'D', entities_power_of_attorney_agent_path(agent.id), data: {:confirm => 'Are you sure?'}, :method => :delete, class: "#{delete_xs} entity-page-xhr"
         td
           - if agent.entity.present?
-            = link_to "#{agent.entity.try(:name)}" , entities_power_of_attorney_agent_path(@entity.key, agent.id)           
+            = link_to "#{agent.entity.try(:name)}" , entity_path(agent.entity.key)           
           - elsif agent.contact.present?
-            = link_to "#{agent.contact.try(:name)}" , entities_power_of_attorney_agent_path(@entity.key, agent.id)
+            = link_to "#{agent.contact.try(:name)}" , entity_path(agent.entity.key)
           - else
-            = link_to "#{agent.first_name} #{agent.last_name}", entities_power_of_attorney_agent_path(@entity.key, agent.id)
+            = link_to "#{agent.first_name} #{agent.last_name}", entity_path(agent.entity.key)
         td
           - if agent.entity.present?
             = agent.entity.entity_type.try(:name)
