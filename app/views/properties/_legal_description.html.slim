@@ -1,37 +1,55 @@
-.white_line.container.breadcrum-breadcrum.bredcrum-fixed
-.container.breadcrum-breadcrum.bredcrum-fixed
-    p
-      .margin-md-left.breadcrum_line
-        = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-    <br><br>
-      - if @property.id.present?
-        = link_to "List", properties_path, class: "breadcrum_list list_show_basic list_property"
-        = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show_basic show_property"
-      button class="btn btn-sm submit-edit-basic property_save" name="save" type="submit" id="save_btn_prop_survey"
-         = "Save"      
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      li.btn_bc.margin-sm-right
+        button#save_btn_prop_legal_desc.btn.btn-sm[type="submit"] Save
+      = render_breadcrumbs :tag => :li, :separator => ''
     
-div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content 
-  .clearfix.margin-lg-left.header-tab
-    = render 'properties/form_header_link'
+    - if @property.id.present?
+      .action-links
+        = link_to "List", properties_path, class: "margin-md-right"
+        = link_to "Show", property_path(@property.key), class: ""
+
+.clearfix
+  = render 'properties/form_header_link'
   
-  .mask_content
-    = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-      = hidden_field_tag :type_is, params[:type_is]
-      - if @property.errors.any?
-        #error_explanation
-          h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-          ul
-            - @property.errors.full_messages.each do |message|
-              li = message    
-      .col-lg-4.col-md-4.form-content.no-padding
-        .form-group
-          label.control-label Legal Description
-          = f.text_area :description, rows: 6, class: 'form-control'
-        
-      .clearfix
+.clearfix.mask_content
+  = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+    = hidden_field_tag :type_is, params[:type_is]
+    - if @property.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+        ul
+          - @property.errors.full_messages.each do |message|
+            li = message    
+    .col-lg-4.col-md-4.form-content.no-padding
       .form-group
-        - if @property.persisted?
-          - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
-        - else
-          = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
+        label.control-label Legal Description
+        = f.text_area :description, rows: 6, class: 'form-control'
+      
+    .clearfix
+    .form-group
+      - if @property.persisted?
+        - c_str = "Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " 
+        = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
+      - else
+        = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
+
+javascript:
+  $(document).ready(function() {
+    $('#save_btn_prop_legal_desc').on('click', function() {
+      var persisted = #{@property.persisted?}
+      if (persisted === true) {
+        var answer = confirm ("Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " )
+        if (!answer) {
+          return false;
+        }
+        else {
+          $('.legal-desc-form form').submit();   
+        }
+      }
+      else {
+        $('.legal-desc-form form').submit(); 
+      }
+    });
+  });

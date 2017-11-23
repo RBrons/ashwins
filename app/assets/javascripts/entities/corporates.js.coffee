@@ -266,7 +266,12 @@ $ ->
       window.history.pushState("next", "page", $(this).attr("href"))
     $.blockUI()
 
-  $(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr", (data, xhr, status)->
+  $(document).on "ajax:success", "a.entity-page-xhr, form.entity-page-xhr", (data, xhr, status) ->
+    # conform admin color to breadcrumb
+    $(document).find('.breadcrumb-wrapper').css('background-color', bg_color)
+    $(document).find('.breadcrumb-wrapper .action-links a').css('color', text_color)
+    $(document).find('ul.m__breadcrumb li').css('color', text_color)
+
     v = $("#entity_has_comma").val()
     name = $("#entity_name").val()
     legal_ending_str = $("#entity_legal_ending").val()
@@ -278,9 +283,9 @@ $ ->
       toggle_comma("on")
     if name
       name = name.trim()
-      $('#edit-title-corp').html(name+comma_str+legal_ending_str)
+      $('#edit-title-corp').html(name + comma_str + legal_ending_str)
     if (typeof xhr) == "object" && xhr.redirect != undefined
-      window.location.href = xhr.redirect+"?just_created="+xhr.just_created
+      window.location.href = xhr.redirect + "?just_created=" + xhr.just_created
     else
       #console.log(xhr)
       $(document).find("div.corporate-contact-form").html(xhr)
@@ -289,7 +294,7 @@ $ ->
       tab_ = $("#int_action").val()
       if tab_
         str = " / "
-        $("#int-action-corp").html(str + '<a href="#">'+tab_+'</a>')
+        $("#int-action-corp").html(str + '<a href="#">' + tab_ + '</a>')
       $.scrollTo(0)
       $.unblockUI()
 

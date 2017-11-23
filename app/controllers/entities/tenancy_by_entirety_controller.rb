@@ -18,16 +18,14 @@ class Entities::TenancyByEntiretyController < ApplicationController
       @entity       ||= EntityTenancyByEntirety.new(type_: params[:type])
       @just_created = params[:just_created].to_b
       if @entity.new_record?
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-        add_breadcrumb " Tenancy by the Entirety/", '',  :title => "Tenancy by the Entirety"
-        add_breadcrumb " Create", '',  :title => "Create"
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+        add_breadcrumb "Create", '',  :title => "Create"
       else
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-        add_breadcrumb " Tenancy by the Entirety/", '',  :title => "Tenancy by the Entirety"
-        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "edit"
-        add_breadcrumb " Basic Info", '',  :title => "Basic Info"
-        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-        add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "edit"
+        add_breadcrumb "Basic Info", '',  :title => "Basic Info"
       end
     elsif request.post?
       @entity                 = EntityTenancyByEntirety.new(entity_tenancy_by_entirety_params)
@@ -62,17 +60,15 @@ class Entities::TenancyByEntiretyController < ApplicationController
       @spouse.super_entity_id = @entity.id
       if request.get?
         if @spouse.new_record?
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Tenancy by the Entirety/", '',  :title => "Tenancy by the Entirety"
-          add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
-          add_breadcrumb " Spouse Create", '',  :title => "Spouse Create"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+          add_breadcrumb "Spouse Create", '',  :title => "Spouse Create"
         else
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Tenancy by the Entirety/", '',  :title => "Tenancy by the Entirety"
-          add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
-          add_breadcrumb " Spouse", '',  :title => "Spouse"
-          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-          add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+          add_breadcrumb "Spouse", '',  :title => "Spouse"
         end
       end
     end
@@ -114,12 +110,11 @@ class Entities::TenancyByEntiretyController < ApplicationController
 
   def spouses
     @entity = Entity.find_by(key: params[:entity_key])
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " Joint by the Entirety/", '',  :title => "Joint by the Entirety"    
-    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
-    add_breadcrumb " Spouses List View", '',  :title => "Spouses List View"
-    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
-    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
+    add_breadcrumb "Clients", clients_path, :title => "Clients"
+    add_breadcrumb "Joint by the Entirety", '',  :title => "Joint by the Entirety"    
+    add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+    add_breadcrumb "Spouses List View", '',  :title => "Spouses List View"
+    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @spouses = @entity.spouses
     render layout: false if request.xhr?

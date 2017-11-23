@@ -16,18 +16,14 @@ class Entities::TenancyInCommonController < ApplicationController
       @entity       ||= EntityTenancyInCommon.new(type_: params[:type])
       @just_created = params[:just_created].to_b
       if @entity.new_record?
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-        add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"
-        add_breadcrumb " Create", '',  :title => "Create"
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
+        add_breadcrumb "Create", '',  :title => "Create"
       else
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-        add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"
-        add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
-        add_breadcrumb " Basic Info", '',  :title => "Basic Info"
-        # if @entity.id.present?
-        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
-        add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
-        # end
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+        add_breadcrumb "Basic Info", '',  :title => "Basic Info"
       end
     elsif request.post?
       @entity                 = EntityTenancyInCommon.new(entity_tenancy_in_common_params)
@@ -63,17 +59,15 @@ class Entities::TenancyInCommonController < ApplicationController
       @tenant_in_common.super_entity_id = @entity.id
       if request.get?
         if @tenant_in_common.new_record?
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"
-          add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
-          add_breadcrumb " Tenant in Common Create", '',  :title => "Tenant in Common Create"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+          add_breadcrumb "Tenant in Common Create", '',  :title => "Tenant in Common Create"
         else
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"
-          add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
-          add_breadcrumb " Tenant in Common", '',  :title => "Tenant in Common"
-          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "show", :id => "show_in_list", :class => "list_client"
-          add_breadcrumb "Show", entity_path(@entity), :title => "show", :id => "show_in_list", :class => "show_client"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
+          add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+          add_breadcrumb "Tenant in Common", '',  :title => "Tenant in Common"
         end
       end
     end
@@ -112,12 +106,11 @@ class Entities::TenancyInCommonController < ApplicationController
 
   def tenants_in_common
     @entity = Entity.find_by(key: params[:entity_key])
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " Tenancy in Common/", '',  :title => "Tenancy in Common"    
-    add_breadcrumb " Edit: #{@entity.name}/", '',  :title => "Edit"
-    add_breadcrumb " Tenants in Common List View", '',  :title => "Tenants in Common List View"
-    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
-    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
+    add_breadcrumb "Clients", clients_path, :title => "Clients"
+    add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"    
+    add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+    add_breadcrumb "Tenants in Common List View", '',  :title => "Tenants in Common List View"
+    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @tenants_in_common = @entity.tenants_in_common
     render layout: false if request.xhr?

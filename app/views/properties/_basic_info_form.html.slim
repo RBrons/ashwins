@@ -1,245 +1,244 @@
-.white_line.container.breadcrum-breadcrum.bredcrum-fixed
-.container.breadcrum-breadcrum.bredcrum-fixed
-    p
-      .margin-md-left.breadcrum_line
-        = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-    <br><br>
-      - unless @property.new_record?
-        = link_to "List", properties_path, class: "breadcrum_list list_show_basic list_property"
-        = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show_basic show_property"
-      button class="btn btn-sm submit-edit-basic property_save" name="save" type="submit" id="save_btn_prop_basic"
-         = "Save"
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      li.btn_bc.margin-sm-right
+        button#save_btn_prop_basic.btn.btn-sm[type="submit"] Save
+      = render_breadcrumbs :tag => :li, :separator => ''
+    
+    - unless @property.new_record?
+      .action-links
+        = link_to "List", properties_path, class: "margin-md-right"
+        = link_to "Show", property_path(@property.key)
 
+.clearfix
+  = render 'properties/form_header_link'
 
-div.col-lg-12.col-md-12.col-sm-12.col-xs-12.bredcum-content
-  .clearfix.margin-lg-left.header-tab
-    = render 'properties/form_header_link'
-  .mask_content
-    = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
-      = hidden_field_tag :type_is, params[:type_is]
-      = f.hidden_field :ownership_status, value: @property.ostatus
-      /! These values are defaultized so need to carry them through this action
-      = f.hidden_field :lease_duration_in_years, value: @property.lease_duration_in_years
-      = f.hidden_field :lease_rent_increase_percentage, value: @property.lease_rent_increase_percentage
-      = f.hidden_field :lease_rent_slab_in_years, value: @property.lease_rent_slab_in_years
-      = f.hidden_field :number_of_option_period, value: @property.number_of_option_period
-      = f.hidden_field :length_of_option_period, value: @property.length_of_option_period
+.clearfix.mask_content
+  = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+    = hidden_field_tag :type_is, params[:type_is]
+    = f.hidden_field :ownership_status, value: @property.ostatus
+    /! These values are defaultized so need to carry them through this action
+    = f.hidden_field :lease_duration_in_years, value: @property.lease_duration_in_years
+    = f.hidden_field :lease_rent_increase_percentage, value: @property.lease_rent_increase_percentage
+    = f.hidden_field :lease_rent_slab_in_years, value: @property.lease_rent_slab_in_years
+    = f.hidden_field :number_of_option_period, value: @property.number_of_option_period
+    = f.hidden_field :length_of_option_period, value: @property.length_of_option_period
 
-      /- if @property.errors.any?
-        #error_explanation
-          /h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
-          /ul
-            /- @property.errors.full_messages.each do |message|
-              /li = message
+    /- if @property.errors.any?
+      #error_explanation
+        /h2 = "#{pluralize(@property.errors.count, "error")} prohibited this Property from being saved:"
+        /ul
+          /- @property.errors.full_messages.each do |message|
+            /li = message
+
+    .clearfix
+    .col-lg-6.col-md-6.col-sm-12.col-xs-12.margin-sm-top
+      .form-group
+        = label_tag 'Tenant'
+        / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
+        = f.select :tenant_id, Tenant.all().pluck(:name, :id), {}, class: 'form-control width-field-md'
+      .form-group
+        = label_tag 'City'
+        = f.text_field :location_city, class: 'form-control width-field-md'
+      .form-group.tilte_basic_info
+        = label_tag 'Title'
+        = f.text_field :title, class: 'form-control width-field-md'
+      .form-group
+        label Document
+        .input-group.select_in_gdrive
+          = f.text_field :document_in_gdrive, id: 'gd_property_document', class: 'form-control'
+          span.input-group-btn
+            button#select_property_document.btn-gdrive.btn.btn-default.border-blue[type="button"]
+              = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
+              span.margin-md-left.blue Select in Google Drive
+      .form-group
+        label Square Feet
+        = f.text_field :square_feet, class: 'form-control width-field-md'
+      .form-group
+        = label_tag 'Description'
+        = f.text_area :description, class: 'form-control width-field-lg'
+      .form-group
+      - if @property.ostatus == "Purchased"
+        - entity_clients = options_html_entities(f.object.owner_entity_id, "properties", "entity", "array")
+        - individual_clients = options_html_entities(f.object.owner_entity_id, "properties", "individual", "array")
+
+        - plural_entity_client_str = entity_clients.length != 1 ? 'business clients' : 'business client'
+        - plural_individual_client_str = individual_clients.length != 1 ? 'individual clients' : 'individual client'
+        - basic_str = "You have #{individual_clients.length} #{plural_individual_client_str} and #{entity_clients.length} #{plural_entity_client_str} who could own this property."
+
+        - if individual_clients.length == 1 && entity_clients.length == 0
+          - f.object.owner_person_is = 1
+          p.text-info = basic_str + " Therefore, it has been pre-selected"
+        - elsif individual_clients.length == 0 && entity_clients.length == 1
+          - f.object.owner_person_is = 2
+          p.text-info = basic_str + " Therefore, it has been pre-selected"
+        - else
+          p.text-info
+            = basic_str + " Please select one from the dropdown or make a "
+            = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
+            = " one."
+
+        label Owning Client
+        .form-group style=("#{('display: none;' if entity_clients.length == 0 && individual_clients.length == 0)}")
+          .heading_blue.radio-inline style=("#{('display: none;' if individual_clients.length == 0)}")
+            = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
+            span.margin-md-left Individual
+          .heading_blue.radio-inline style=("#{('display: none;' if entity_clients.length == 0)}")
+            = f.radio_button :owner_person_is, 2, checked: f.object.owner_person_is == 2, class: 'form-control flat-icheck radiobuttons'
+            span.margin-md-left Entity
+          .heading_blue.radio-inline
+            = f.radio_button :owner_person_is, 0, checked: (f.object.owner_person_is == 0 || f.object.owner_person_is == nil), class: 'form-control flat-icheck radiobuttons'
+            span.margin-md-left.pull-right
+              | No Current Owner
+              br
+              | or Concurrent Estate
+
+        .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 2)}")
+          - if entity_clients.length > 1
+            = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single width-field-lg'
+          - elsif entity_clients.length == 1
+            = f.hidden_field :owner_entity_id, value: entity_clients[0][1]
+            input.form-control.width-field-lg[type="text" value="#{entity_clients[0][0]}" readonly]
+
+          - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
+            - owner_entity = Entity.find(@property.owner_entity_id)
+            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
+
+        .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 1)}")
+          - if individual_clients.length > 1
+            = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single width-field-lg'
+          - elsif individual_clients.length == 1
+            = f.hidden_field :owner_entity_id_indv, value: individual_clients[0][1]
+            input.form-control.width-field-lg[type="text" value="#{individual_clients[0][0]}" readonly]
+
+          - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
+            - owner_entity = Entity.find(@property.owner_entity_id)
+            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
+
+      - else
+        - entity_owners = Contact.TransactionContacts("company", current_user.id)
+        - individual_owners = Contact.TransactionContacts("individual", current_user.id)
+
+        - plural_entity_contact_str = entity_owners.length != 1 ? 'business contacts' : 'business contact'
+        - plural_individual_contact_str = individual_owners.length != 1 ? 'individual contacts' : 'individual contact'
+        - basic_str = "You have #{individual_owners.length} #{plural_individual_contact_str} and #{entity_owners.length} #{plural_entity_contact_str} who could own this property."
+
+        - if individual_owners.length == 1 && entity_owners.length == 0
+          - f.object.owner_person_is = 1
+          p.text-info = basic_str + " Therefore, it has been pre-selected"
+        - elsif individual_owners.length == 0 && entity_owners.length == 1
+          p.text-info = basic_str + " Therefore, it has been pre-selected"
+        - else
+          p.text-info
+            = basic_str + " Please select one from the dropdown or make a "
+            = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
+            = " one."
+
+        label Owner
+        .form-group style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")
+          .heading_blue.radio-inline
+            span = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
+            span.margin-md-left Individual
+          .heading_blue.radio-inline
+            span.margin-md-left = f.radio_button :owner_person_is, 2, checked: f.object.owner_person_is != 1, class: 'form-control flat-icheck radiobuttons'
+            span.margin-md-left Company
+
+        .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is == 1)}")
+          - if entity_owners.length > 1
+            = f.select :owner_entity_id, options_for_select(entity_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+          - elsif entity_owners.length == 1
+            = f.hidden_field :owner_entity_id, value: entity_owners[0][1]
+            input.form-control.width-field-lg[type="text" value="#{entity_owners[0][0]}" readonly]
+
+          - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
+            - owner_contact = Contact.find(@property.owner_entity_id)
+            = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
+
+        .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is == 1)}")
+          - if individual_owners.length > 1
+            = f.select :owner_entity_id_indv, options_for_select(individual_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+          - elsif individual_owners.length == 1
+            = f.hidden_field :owner_entity_id_indv, value: individual_owners[0][1]
+            input.form-control.width-field-lg[type="text" value="#{individual_owners[0][0]}" readonly]
+
+          - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
+            - owner_contact = Contact.find(@property.owner_entity_id)
+            = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
+        /= f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("all"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
+
+      .form-group
+        = label_tag "#{(params[:ostatus] == 'Prospective Purchase' || @property.ownership_status == 'Prospective Purchase') ? 'Asking Price' : 'Purchase Price'}"
+        .input-group
+          .input-group-addon $
+          = f.text_field :price, class: 'form-control width-field-md input-mask-currency'
+      .form-group
+        label Current Rent
+        .input-group
+          .input-group-addon $
+          = f.text_field :current_rent, class: 'form-control width-field-md input-mask-currency'
+      .form-group
+        label Cap Rate
+        .input-group.width-field-md
+          = f.text_field :cap_rate, readonly: true, class: 'form-control input-mask-currency'
+          .input-group-addon %
+
+      - unless (params[:ostatus] == 'Prospective Purchase' || @property.ownership_status == 'Prospective Purchase')
+        .clearfix
+        .form-group.width-field-lg
+          label.control-label Closing Date
+          .clearfix
+          .pull-left
+            = f.date_select :closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_closing_date", style: "#{'display: none;' if f.object.m_closing_date?}"
+            = f.text_field :closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_closing_date?}"
+          .pull-right
+            .pull-left
+              label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
+            .pull-right
+              = f.check_box :m_closing_date, data: {class: 'property_closing_date'}, class: 'manually_date'
 
       .clearfix
-      .col-lg-6.col-md-6.col-sm-12.col-xs-12.margin-sm-top
+      .form-group.margin-sm-top
+        label General Property Type
+        = f.select :type_is, Property::TYPES, {}, class: 'form-control width-field-md'
+      .clearfix
+      .form-group
+        label Property Location
+      .clearfix
+      .form-group
+        label Street Address (from closing statement)
+        .clearfix
         .form-group
-          = label_tag 'Tenant'
-          / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
-          = f.select :tenant_id, Tenant.all().pluck(:name, :id), {}, class: 'form-control width-field-md'
+          = f.text_field :location_street_address, class: 'form-control width-field-md', style: "display: inline-block"
+          = f.select :st_address_suffix, Property::STREET_SUFFIX, {}, class: 'form-control width-field-sm', style: "display: inline-block"
+      .form-group
+        = f.check_box :location_street_address_from_county_tax_authorities_is
+        label.check_box_label Street Address (county tax authorities)
+        .clearfix
+        div#location_street_address_from_county_tax_authorities style="#{ 'display: none;' unless f.object.location_street_address_from_county_tax_authorities_is?}"
+          = f.text_field :location_street_address_from_county_tax_authorities, class: 'form-control width-field-md'
+      .form-group
+        = label_tag 'City'
+        input type='text' disabled='true' value = "#{f.object.location_city}" id='property-readonly-city' class='form-control width-field-md'
+      .form-group
+        = label_tag 'State'
+        = f.select :location_state, Property::US_STATES, {}, class: 'form-control selectize-single width-field-md'
+      .form-group
+        = label_tag 'Zip'
+        = f.text_field :zip, class: 'form-control width-field-md'
+      .form-group
+        = label_tag 'County'
+        = f.text_field :location_county, class: 'form-control width-field-md'
+      - if @property.property_cover_image.present? && @property.property_cover_image.cl_image_url
         .form-group
-          = label_tag 'City'
-          = f.text_field :location_city, class: 'form-control width-field-md'
-        .form-group.tilte_basic_info
-          = label_tag 'Title'
-          = f.text_field :title, class: 'form-control width-field-md'
+          = label_tag "Cover Image"
+          = cl_image_tag(@property.property_cover_image.cl_image_url, :height => 200, :crop => :scale)
+      .clearfix
         .form-group
-          label Document
-          .input-group.select_in_gdrive
-            = f.text_field :document_in_gdrive, id: 'gd_property_document', class: 'form-control'
-            span.input-group-btn
-              button#select_property_document.btn-gdrive.btn.btn-default.border-blue[type="button"]
-                = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
-                span.margin-md-left.blue Select in Google Drive
-        .form-group
-          label Square Feet
-          = f.text_field :square_feet, class: 'form-control width-field-md'
-        .form-group
-          = label_tag 'Description'
-          = f.text_area :description, class: 'form-control width-field-lg'
-        .form-group
-        - if @property.ostatus == "Purchased"
-          - entity_clients = options_html_entities(f.object.owner_entity_id, "properties", "entity", "array")
-          - individual_clients = options_html_entities(f.object.owner_entity_id, "properties", "individual", "array")
-
-          - plural_entity_client_str = entity_clients.length != 1 ? 'business clients' : 'business client'
-          - plural_individual_client_str = individual_clients.length != 1 ? 'individual clients' : 'individual client'
-          - basic_str = "You have #{individual_clients.length} #{plural_individual_client_str} and #{entity_clients.length} #{plural_entity_client_str} who could own this property."
-
-          - if individual_clients.length == 1 && entity_clients.length == 0
-            - f.object.owner_person_is = 1
-            p.text-info = basic_str + " Therefore, it has been pre-selected"
-          - elsif individual_clients.length == 0 && entity_clients.length == 1
-            - f.object.owner_person_is = 2
-            p.text-info = basic_str + " Therefore, it has been pre-selected"
+          - if @property.persisted?
+            - c_str = "Warning, you just made changes to #{@property.tenant_id} Are you sure you want to proceed to do this? "
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
           - else
-            p.text-info
-              = basic_str + " Please select one from the dropdown or make a "
-              = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
-              = " one."
-
-          label Owning Client
-          .form-group style=("#{('display: none;' if entity_clients.length == 0 && individual_clients.length == 0)}")
-            .heading_blue.radio-inline style=("#{('display: none;' if individual_clients.length == 0)}")
-              = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
-              span.margin-md-left Individual
-            .heading_blue.radio-inline style=("#{('display: none;' if entity_clients.length == 0)}")
-              = f.radio_button :owner_person_is, 2, checked: f.object.owner_person_is == 2, class: 'form-control flat-icheck radiobuttons'
-              span.margin-md-left Entity
-            .heading_blue.radio-inline
-              = f.radio_button :owner_person_is, 0, checked: (f.object.owner_person_is == 0 || f.object.owner_person_is == nil), class: 'form-control flat-icheck radiobuttons'
-              span.margin-md-left.pull-right
-                | No Current Owner
-                br
-                | or Concurrent Estate
-
-          .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 2)}")
-            - if entity_clients.length > 1
-              = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single width-field-lg'
-            - elsif entity_clients.length == 1
-              = f.hidden_field :owner_entity_id, value: entity_clients[0][1]
-              input.form-control.width-field-lg[type="text" value="#{entity_clients[0][0]}" readonly]
-
-            - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
-              - owner_entity = Entity.find(@property.owner_entity_id)
-              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
-
-          .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 1)}")
-            - if individual_clients.length > 1
-              = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single width-field-lg'
-            - elsif individual_clients.length == 1
-              = f.hidden_field :owner_entity_id_indv, value: individual_clients[0][1]
-              input.form-control.width-field-lg[type="text" value="#{individual_clients[0][0]}" readonly]
-
-            - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
-              - owner_entity = Entity.find(@property.owner_entity_id)
-              = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
-
-        - else
-          - entity_owners = Contact.TransactionContacts("company", current_user.id)
-          - individual_owners = Contact.TransactionContacts("individual", current_user.id)
-
-          - plural_entity_contact_str = entity_owners.length != 1 ? 'business contacts' : 'business contact'
-          - plural_individual_contact_str = individual_owners.length != 1 ? 'individual contacts' : 'individual contact'
-          - basic_str = "You have #{individual_owners.length} #{plural_individual_contact_str} and #{entity_owners.length} #{plural_entity_contact_str} who could own this property."
-
-          - if individual_owners.length == 1 && entity_owners.length == 0
-            - f.object.owner_person_is = 1
-            p.text-info = basic_str + " Therefore, it has been pre-selected"
-          - elsif individual_owners.length == 0 && entity_owners.length == 1
-            p.text-info = basic_str + " Therefore, it has been pre-selected"
-          - else
-            p.text-info
-              = basic_str + " Please select one from the dropdown or make a "
-              = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
-              = " one."
-
-          label Owner
-          .form-group style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")
-            .heading_blue.radio-inline
-              span = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
-              span.margin-md-left Individual
-            .heading_blue.radio-inline
-              span.margin-md-left = f.radio_button :owner_person_is, 2, checked: f.object.owner_person_is != 1, class: 'form-control flat-icheck radiobuttons'
-              span.margin-md-left Company
-
-          .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is == 1)}")
-            - if entity_owners.length > 1
-              = f.select :owner_entity_id, options_for_select(entity_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
-            - elsif entity_owners.length == 1
-              = f.hidden_field :owner_entity_id, value: entity_owners[0][1]
-              input.form-control.width-field-lg[type="text" value="#{entity_owners[0][0]}" readonly]
-
-            - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
-              - owner_contact = Contact.find(@property.owner_entity_id)
-              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
-
-          .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is == 1)}")
-            - if individual_owners.length > 1
-              = f.select :owner_entity_id_indv, options_for_select(individual_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
-            - elsif individual_owners.length == 1
-              = f.hidden_field :owner_entity_id_indv, value: individual_owners[0][1]
-              input.form-control.width-field-lg[type="text" value="#{individual_owners[0][0]}" readonly]
-
-            - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
-              - owner_contact = Contact.find(@property.owner_entity_id)
-              = link_to owner_contact.name, edit_contact_path(owner_contact), target: '_blank',class: "margin-sm-left"
-          /= f.select :owner_entity_id, options_for_select(Contact.TransactionContacts("all"), f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
-
-        .form-group
-          = label_tag "#{(params[:ostatus] == 'Prospective Purchase' || @property.ownership_status == 'Prospective Purchase') ? 'Asking Price' : 'Purchase Price'}"
-          .input-group
-            .input-group-addon $
-            = f.text_field :price, class: 'form-control width-field-md input-mask-currency'
-        .form-group
-          label Current Rent
-          .input-group
-            .input-group-addon $
-            = f.text_field :current_rent, class: 'form-control width-field-md input-mask-currency'
-        .form-group
-          label Cap Rate
-          .input-group.width-field-md
-            = f.text_field :cap_rate, readonly: true, class: 'form-control input-mask-currency'
-            .input-group-addon %
-
-        - unless (params[:ostatus] == 'Prospective Purchase' || @property.ownership_status == 'Prospective Purchase')
-          .clearfix
-          .form-group.width-field-lg
-            label.control-label Closing Date
-            .clearfix
-            .pull-left
-              = f.date_select :closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_closing_date", style: "#{'display: none;' if f.object.m_closing_date?}"
-              = f.text_field :closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_closing_date?}"
-            .pull-right
-              .pull-left
-                label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-              .pull-right
-                = f.check_box :m_closing_date, data: {class: 'property_closing_date'}, class: 'manually_date'
-
-        .clearfix
-        .form-group.margin-sm-top
-          label General Property Type
-          = f.select :type_is, Property::TYPES, {}, class: 'form-control width-field-md'
-        .clearfix
-        .form-group
-          label Property Location
-        .clearfix
-        .form-group
-          label Street Address (from closing statement)
-          .clearfix
-          .form-group
-            = f.text_field :location_street_address, class: 'form-control width-field-md', style: "display: inline-block"
-            = f.select :st_address_suffix, Property::STREET_SUFFIX, {}, class: 'form-control width-field-sm', style: "display: inline-block"
-        .form-group
-          = f.check_box :location_street_address_from_county_tax_authorities_is
-          label.check_box_label Street Address (county tax authorities)
-          .clearfix
-          div#location_street_address_from_county_tax_authorities style="#{ 'display: none;' unless f.object.location_street_address_from_county_tax_authorities_is?}"
-            = f.text_field :location_street_address_from_county_tax_authorities, class: 'form-control width-field-md'
-        .form-group
-          = label_tag 'City'
-          input type='text' disabled='true' value = "#{f.object.location_city}" id='property-readonly-city' class='form-control width-field-md'
-        .form-group
-          = label_tag 'State'
-          = f.select :location_state, Property::US_STATES, {}, class: 'form-control selectize-single width-field-md'
-        .form-group
-          = label_tag 'Zip'
-          = f.text_field :zip, class: 'form-control width-field-md'
-        .form-group
-          = label_tag 'County'
-          = f.text_field :location_county, class: 'form-control width-field-md'
-        - if @property.property_cover_image.present? && @property.property_cover_image.cl_image_url
-          .form-group
-            = label_tag "Cover Image"
-            = cl_image_tag(@property.property_cover_image.cl_image_url, :height => 200, :crop => :scale)
-        .clearfix
-          .form-group
-            - if @property.persisted?
-              - c_str = "Warning, you just made changes to #{@property.tenant_id} Are you sure you want to proceed to do this? "
-              = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }, style: "display: none;"
-            - else
-              = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
+            = f.submit 'Save', class: 'btn btn-sm btn-primary', style: " display: none;"
 
 /! Modal
 #new-tenant.modal.fade aria-hidden="true" aria-labelledby="" role="dialog" tabindex="-5"

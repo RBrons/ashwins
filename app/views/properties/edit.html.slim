@@ -1,4 +1,4 @@
-.col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-lg-top
+.col-lg-12.col-md-12.col-sm-12.col-xs-12.margin-sm-top
   - if params[:type_is] == 'county_tax'
     .tax-property-form
       == render 'properties/county_tax_form'
@@ -17,7 +17,8 @@
   - elsif params[:type_is] == 'map'
     == render 'properties/map'
   - elsif params[:type_is] == 'legal_description'
-    == render 'properties/legal_description'
+    .legal-desc-form
+      == render 'properties/legal_description'
   - else
     .basic-info-property-form
       == render 'properties/basic_info_form'

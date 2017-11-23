@@ -1,16 +1,3 @@
-.white_line.container.breadcrum-breadcrum.bredcrum-fixed
-.container.breadcrum-breadcrum.bredcrum-fixed
-  p
-    #breadcrum_id.margin-md-left.breadcrum_line
-      = render_breadcrumbs :separator => "<div class=\"pull-left\"></div>".html_safe
-  <br><br>
-    - if @property.id.present?
-      = link_to "List", properties_path, class: "breadcrum_list list_show_basic list_property"
-      = link_to "Show", property_path(@property.key), class: "breadcrum_list list_show_basic show_property"
-    button class="btn btn-sm submit-edit-basic property_save" name="save" type="submit" id="save_btn_lease"
-       = "Save"     
-
-.white_line.container.breadcrum-breadcrum.bredcrum-fixed
 #comments-modal.modal.fade[data-keyboard="false" data-backdrop="static"]
   .modal-dialog.modal-md
     .modal-header
@@ -37,10 +24,22 @@
         | Close
 input#property_id[type="hidden" value=(@property.id)]
 
-div.col-lg-12.col-md-12.col-sm-12.col-xs-12
-  .clearfix.margin-lg-left.lease-header-tab
-    = render 'properties/form_header_link'
-div.lease-subtabs[role="tabpanel"]
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      li.btn_bc.margin-sm-right
+        button#save_btn_lease.btn.btn-sm[type="submit"] Save
+      = render_breadcrumbs :tag => :li, :separator => ''
+    
+    - if @property.id.present?
+      .action-links
+        = link_to "List", properties_path, class: "margin-md-right"
+        = link_to "Show", property_path(@property.key), class: ""
+      
+.clearfix
+  = render 'properties/form_header_link'
+
+.clearfix.margin-sm-top
   ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
       a#lease_basics[href="#lease_basics_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="true"] Parties

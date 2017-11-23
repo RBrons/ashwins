@@ -1,5 +1,5 @@
 - if params[:id]
-  = link_to 'Basic Info', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'basic_info')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'basic_info' || params[:type_is].blank?} #{'disabled' unless params[:id]}"
+  = link_to 'Basic Info', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'basic_info')), class: "btn btn-sm btn-default pull-left #{'active' if params[:type_is] == 'basic_info' || params[:type_is].blank?} #{'disabled' unless params[:id]}"
   - if !@property.tenant.try(:name).nil? && @property.tenant.try(:name) != 'No Tenant'
       = link_to 'Lease', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'lease')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'lease'} #{'disabled' unless params[:id]}"
   = link_to 'Map', edit_property_path(params[:id] || 'new', params.permit(:id).merge(type_is: 'map')), class: "btn btn-sm btn-default margin-sm-left pull-left #{'active' if params[:type_is] == 'map'} #{'disabled' unless params[:id]}"

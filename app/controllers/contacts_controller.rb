@@ -7,10 +7,8 @@ class ContactsController < ApplicationController
   def new
     @contact = Contact.new
     @contact.cprefix =  (params[:contact_type] == "company") ? "Contact " : ""
-    # add_breadcrumb ("<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\'" + new_contact_path() +
-    #   "\'>Create Contact " + "</a></div>").html_safe
-    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts\">/Contacts/ </a></div>".html_safe
-    add_breadcrumb "<div class=\"pull-left\"><a class=\"breadcrum_text\" href=\"/contacts/new\">Add Contact #{(params[:contact_type] || "contact").titleize} </a></div>".html_safe
+    add_breadcrumb "Contacts"
+    add_breadcrumb "Add Contact #{(params[:contact_type] || "contact").titleize}"
     render layout: false, template: "contacts/new" if request.xhr?
   end
 

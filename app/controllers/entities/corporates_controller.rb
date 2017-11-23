@@ -15,16 +15,14 @@ class Entities::CorporatesController < ApplicationController
       @entity       ||= Entity.new(type_: params[:type])
       @just_created = params[:just_created].to_b
       if @entity.new_record?
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-        add_breadcrumb " Corporation/", '',  :title => "Corporation"
-        add_breadcrumb " Create", '',  :title => "Create"
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Corporation", '',  :title => "Corporation"
+        add_breadcrumb "Create", '',  :title => "Create"
       else
-        add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-        add_breadcrumb " Corporation/", '',  :title => "Corporation"
-        add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
-        add_breadcrumb " Basic info", '', :title => "Basic info"
-        add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-        add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Corporation", '',  :title => "Corporation"
+        add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "edit"
+        add_breadcrumb "Basic info", '', :title => "Basic info"
       end
     elsif request.post?
       @entity                 = Entity.new(entity_params)
@@ -54,21 +52,17 @@ class Entities::CorporatesController < ApplicationController
     raise ActiveRecord::RecordNotFound if @entity.blank?
     if request.get?
       #TODO
-      add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-      add_breadcrumb " Corporation/", '',  :title => "Corporation"
-      add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
-      add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-      add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+      add_breadcrumb "Clients", clients_path, :title => "Clients"
+      add_breadcrumb "Corporation", '',  :title => "Corporation"
+      add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "edit"
+      add_breadcrumb "Contact info", '', :title => "Contact info"
     elsif request.patch?
       @entity.basic_info_only = false
       @entity.update(entity_params)
-      add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-      add_breadcrumb " Corporation/", '',  :title => "Corporation"
-      add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "edit"
-      add_breadcrumb " Contact info", '', :title => "Contact info"
-      add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-      add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+      add_breadcrumb "Clients", clients_path, :title => "Clients"
+      add_breadcrumb "Corporation", '',  :title => "Corporation"
+      add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "edit"
+      add_breadcrumb "Contact info", '', :title => "Contact info"
       return render layout: false, template: "entities/corporates/contact_info"
     else
       raise UnknownRequestFormat
@@ -89,17 +83,15 @@ class Entities::CorporatesController < ApplicationController
 
       if request.get?
         if @director.new_record?
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Corporation/", '',  :title => "Corporation"
-          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-          add_breadcrumb " Director Create", '',  :title => "Director Create"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Corporation", '',  :title => "Corporation"
+          add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+          add_breadcrumb "Director Create", '',  :title => "Director Create"
         else
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Corporation/", '',  :title => "Corporation"
-          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-          add_breadcrumb " Director", '',  :title => "Director"
-          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-          add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Corporation", '',  :title => "Corporation"
+          add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+          add_breadcrumb "Director", '',  :title => "Director"
         end
       end
     end
@@ -145,12 +137,10 @@ class Entities::CorporatesController < ApplicationController
   def directors
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Directors </a></h4></div>".html_safe
     @entity = Entity.find_by(key: params[:entity_key])
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " Corporation/", '',  :title => "Corporation"
-    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-    add_breadcrumb " Directors List View", '',  :title => "Director List View"
-    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
-    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
+    add_breadcrumb "Clients", clients_path, :title => "Clients"
+    add_breadcrumb "Corporation", '',  :title => "Corporation"
+    add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+    add_breadcrumb "Directors List View", '',  :title => "Director List View"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @directors = @entity.directors
     @activeId = params[:active_id]
@@ -170,17 +160,15 @@ class Entities::CorporatesController < ApplicationController
 
       if request.get?
         if @officer.new_record?
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Corporation/", '',  :title => "Corporation"
-          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-          add_breadcrumb " Officer Create", '',  :title => "Officer Create"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Corporation", '',  :title => "Corporation"
+          add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+          add_breadcrumb "Officer Create", '',  :title => "Officer Create"
         else
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Corporation/", '',  :title => "Corporation"
-          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-          add_breadcrumb " Officer", '',  :title => "Officer"
-          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-          add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Corporation", '',  :title => "Corporation"
+          add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+          add_breadcrumb "Officer", '',  :title => "Officer"
         end
       end
     end
@@ -227,12 +215,11 @@ class Entities::CorporatesController < ApplicationController
   def officers
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officers </a></h4></div>".html_safe
     @entity = Entity.find_by(key: params[:entity_key])
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " Corporation/", '',  :title => "Corporation"    
-    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-    add_breadcrumb " Officers List View", '',  :title => "Officer List View"
-    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
-    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
+    add_breadcrumb "Clients", clients_path, :title => "Clients"
+    add_breadcrumb "Corporation", '',  :title => "Corporation"    
+    add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+    add_breadcrumb "Officers List View", '',  :title => "Officer List View"
+    
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @officers = @entity.officers
     @activeId = params[:active_id]
@@ -254,17 +241,15 @@ class Entities::CorporatesController < ApplicationController
 
       if request.get?
         if @stockholder.new_record?
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Corporation/", '',  :title => "Corporation"
-          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-          add_breadcrumb " Stockholder Create", '',  :title => "Stockholder Create"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Corporation", '',  :title => "Corporation"
+          add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+          add_breadcrumb "Stockholder Create", '',  :title => "Stockholder Create"
         else
-          add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-          add_breadcrumb " Corporation/", '',  :title => "Corporation"
-          add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-          add_breadcrumb " Stockholder", '',  :title => "Stockholder"
-          add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list"
-          add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list list_btn"
+          add_breadcrumb "Clients", clients_path, :title => "Clients"
+          add_breadcrumb "Corporation", '',  :title => "Corporation"
+          add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+          add_breadcrumb "Stockholder", '',  :title => "Stockholder"
         end
       end
     end
@@ -315,12 +300,10 @@ class Entities::CorporatesController < ApplicationController
   def stockholders(entity_key = params[:entity_key])
     # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholders </a></h4></div>".html_safe
     @entity = Entity.find_by(key: entity_key)
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " Corporation/", '',  :title => "Corporation"    
-    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-    add_breadcrumb " Stockholders List View", '',  :title => "Stockholder List View"
-    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
-    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
+    add_breadcrumb "Clients", clients_path, :title => "Clients"
+    add_breadcrumb "Corporation", '',  :title => "Corporation"    
+    add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+    add_breadcrumb "Stockholders List View", '',  :title => "Stockholder List View"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     @stockholders = @entity.stockholders
     @activeId = params[:active_id]
@@ -332,12 +315,10 @@ class Entities::CorporatesController < ApplicationController
     @ownership_ = @entity.build_ownership_tree_json
     @owns_available = (@ownership_[0][:nodes] == nil) ? false : true
     @ownership = @ownership_.to_json
-    add_breadcrumb "/Clients/", clients_path, :title => "Clients"
-    add_breadcrumb " Corporation/", '',  :title => "Corporation"
-    add_breadcrumb " Edit: #{@entity.display_name}/", '',  :title => "Edit"
-    add_breadcrumb " Owns", '',  :title => "Owns"
-    add_breadcrumb "List", clients_path(active_id: @entity.id), :title => "List", :class => "show_and_list_own"
-    add_breadcrumb "Show", entity_path(@entity), :title => "Show", :class => "show_and_list_own list_btn"
+    add_breadcrumb "Clients", clients_path, :title => "Clients"
+    add_breadcrumb "Corporation", '',  :title => "Corporation"
+    add_breadcrumb "Edit: #{@entity.display_name}", '',  :title => "Edit"
+    add_breadcrumb "Owns", '',  :title => "Owns"
     raise ActiveRecord::RecordNotFound if @entity.blank?
     render layout: false if request.xhr?
   end
