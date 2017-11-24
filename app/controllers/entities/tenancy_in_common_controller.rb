@@ -81,6 +81,10 @@ class Entities::TenancyInCommonController < ApplicationController
         return render layout: false, template: "entities/tenancy_in_common/tenants_in_common"
       else
         @tenant_in_common.gen_temp_id
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+        add_breadcrumb "Tenant in Common Create", '',  :title => "Tenant in Common Create"
         return render layout: false, template: "entities/tenancy_in_common/tenant_in_common"
       end
     elsif request.patch?

@@ -86,6 +86,10 @@ class Entities::TenancyByEntiretyController < ApplicationController
         @spouses = @spouse.super_entity.spouses
         return render layout: false, template: "entities/tenancy_by_entirety/spouses"
       else
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+        add_breadcrumb "Spouse Create", '',  :title => "Spouse Create"
         return render layout: false, template: "entities/tenancy_by_entirety/spouse"
       end
     elsif request.patch?

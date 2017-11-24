@@ -34,7 +34,12 @@ class Entities::LlcController < ApplicationController
         # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
         return redirect_to entities_llc_basic_info_path( @entity.key )
         # return render json: {redirect: view_context.entities_llc_basic_info_path( @entity.key ), just_created: true}
-        #return redirect_to clients_path
+        # return redirect_to clients_path
+      else
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "LLC", '',  :title => "LLC"
+        add_breadcrumb "Create", '',  :title => "Create"
+        return render layout: false, template: "entities/llc/basic_info"
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
