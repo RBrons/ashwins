@@ -438,7 +438,7 @@ module ApplicationHelper
     poa_str = " (Principal Individual) " if is_person == "true"
 
     array_result = []
-    select_one_html = "<option>Select One...</option>"
+    select_one_html = "<option value=''>Select One...</option>"
     result = ""
 
     if is_person == "true"
