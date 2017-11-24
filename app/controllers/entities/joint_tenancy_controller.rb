@@ -82,6 +82,10 @@ class Entities::JointTenancyController < ApplicationController
         @joint_tenants = @joint_tenant.super_entity.joint_tenants
         return render layout: false, template: "entities/joint_tenancy/joint_tenants"
       else
+        add_breadcrumb "Clients", clients_path, :title => "Clients"
+        add_breadcrumb "Joint Tenancy", '',  :title => "Joint Tenancy"
+        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
+        add_breadcrumb "Joint Tenant Create", '',  :title => "Joint Tenant Create"
         return render layout: false, template: "entities/joint_tenancy/joint_tenant"
       end
     elsif request.patch?

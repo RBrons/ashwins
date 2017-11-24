@@ -5369,6 +5369,7 @@ ol.number_with_parentheses>li:before {
     z-index: 250;
     top: 80px;
     left: 0;
+    background: #fff;
 }
 
 .breadcrumb-wrapper{
