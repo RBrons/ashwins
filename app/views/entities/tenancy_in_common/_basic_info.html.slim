@@ -31,6 +31,7 @@
           li = message
   .col-lg-4.close-md-4.col-sm-12.col-xs-12
     - available_properties = Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased', owner_entity_id: [0, nil]).select {|s| !s.is_owned_by_concurrent_estate?}
+    input[type="hidden" value=(available_properties.length) id="available_properties"]
     - if available_properties.length > 0 || (available_properties.length == 0 && @entity.property_id != nil)
       .clearfix
       .form-group.date_of_formation
@@ -166,6 +167,10 @@ javascript:
         }
       }
       else {
+        if($('#available_properties').val() == "0"){
+          $.notify('Sorry, you need to make a Purchased Property without an Owner', 'error')
+          return false;
+        }
         $('.corporate-contact-form form').submit();
       }
     });
