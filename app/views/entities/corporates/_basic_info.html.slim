@@ -22,7 +22,7 @@
         = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
         = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
         
-= form_for @entity, url: entities_corporates_basic_info_path(@entity.key), html: {class: "entity-page-xhr"} do |f|
+= form_for @entity, url: entities_corporates_basic_info_path(@entity.key), html: {class: "entity-page-xhr validation_form"} do |f|
   - if @entity.errors.any?
     #error_explanation
       h2 = "#{pluralize(@entity.errors.count, "error")} prohibited this Corporation from being saved:"
@@ -33,7 +33,8 @@
     .form-group.required
       = f.label "name", class: "control-label"
       .clearfix
-      = f.text_field :name, class: "form-control width-field-md pull-left"
+      span.error-msg
+      = f.text_field :name, class: "form-control width-field-md pull-left", 'data-parsley-required' => "true", 'data-parsley-error-message' => "Name can't be blank"
       div
         = f.hidden_field :has_comma, class: "has_comma_val"
         = image_tag('Comma.png', :id=> 'comma', :width => '30px', :height=> '30px')
@@ -50,7 +51,7 @@
       label.control-label Date of Formation
       .clearfix
       .pull-left
-        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation}"
+        = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", "data-parsley-ui-enabled" => false, style: "#{'display: none;' if f.object.m_date_of_formation}"
         = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation}"
       .pull-right
         .pull-left

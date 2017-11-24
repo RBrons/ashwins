@@ -16,7 +16,7 @@ class Entities::LimitedPartnershipController < ApplicationController
       @just_created = params[:just_created].to_b
       if @entity.new_record?
         add_breadcrumb "Clients", clients_path, :title => "Clients"
-        add_breadcrumb "Limited Partnership/", '',  :title => "Limited Partnership"
+        add_breadcrumb "Limited Partnership", '',  :title => "Limited Partnership"
         add_breadcrumb "Create", '',  :title => "Create"
       else
         add_breadcrumb "Clients", clients_path, :title => "Clients"

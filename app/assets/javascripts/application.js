@@ -356,6 +356,19 @@ $(window).resize(function(){
     });
 });
 
+/**
+ * Make Parsley Validation on Form Submitation
+ */
+$(document).ready(function(){
+    $('form.validation_form').parsley(
+        {
+            errorsContainer: function(em){
+                $err = em.$element.parents('.form-group').find('.error-msg');
+                return $err
+            }
+        }
+    )
+})
 
 // Bootstrap tree view
 
