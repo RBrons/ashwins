@@ -187,7 +187,7 @@ module ApplicationHelper
       # when "Sole Proprietorship"
       #   [[entity.full_name, '#']]
       when "Power of Attorney"
-        entity.agents.map { |m| ["#{m.name}", m.entity.present? ? edit_entity_path(m.entity.key) : ( m.contact.present? ? edit_contact_path(m.contact) : "#")] }
+        [[entity.principal.try(:name), '#']]
       when "Guardianship"
         [[entity.full_name, '#']]
       when "Trust"
