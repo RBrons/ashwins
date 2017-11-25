@@ -21,7 +21,7 @@
         = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
         = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
     
-= form_for @entity, url: entities_power_of_attorney_basic_info_path( @entity.key ), html: { class: "entity-page-xhr" } do |f|
+= form_for @entity, url: entities_power_of_attorney_basic_info_path( @entity.key ), html: { class: "entity-page-xhr validation_form" } do |f|
   - if @entity.errors.any?
     #error_explanation
       h2 = "#{pluralize(@entity.errors.count, "error")} prohibited this Power Of Attorney from being saved:"
@@ -59,12 +59,13 @@
 
       .form-group#principal_entity
         label Principal
+        span.error-msg
         - if @principal.is_person
-          = select_tag "temp_id", options_html('principal', "true", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if individual_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (individual_principals.length == 1)
+          = select_tag "temp_id", options_html('principal', "true", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if individual_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (individual_principals.length == 1), required: true, "data-parsley-error-message" => "Please select a principal"
           .clearfix
           = linkbacks_entity(@entity)
         - else
-          = select_tag "temp_id", options_html('principal', "false", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if entity_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (entity_principals.length == 1)
+          = select_tag "temp_id", options_html('principal', "false", (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, @principal.temp_id), class: "form-control #{'disabled-like' if entity_principals.length == 1}", data: {id: (@principal.new_record?) ? @principal.super_entity : @principal.super_entity.id, clienttype: 'principal'}, readonly: (entity_principals.length == 1), required: true, "data-parsley-error-message" => "Please select a principal"
           .clearfix
           = linkbacks_entity(@entity)
 
@@ -155,14 +156,6 @@ javascript:
         }
       }
       else {
-        if ($('.corporate-contact-form form #temp_id').val() == ''){
-          $('#principal_entity').addClass('has-error');
-          $('#principal_entity select').notify('Please select a principal', 
-            {position: 'right middle', autoHideDelay: 3000}, 
-            'error'
-          )
-          return false;
-        }
         $('.corporate-contact-form form').submit(); 
       }
     });
