@@ -14,7 +14,7 @@
   = render 'properties/form_header_link'
 
 .clearfix.mask_content
-  = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
+  = nested_form_for @property, remote: (request.xhr?), html: { class: "validation_form new_property#{('_xhr' if request.xhr?)}" } do |f|
     = hidden_field_tag :type_is, params[:type_is]
     = f.hidden_field :ownership_status, value: @property.ostatus
     /! These values are defaultized so need to carry them through this action
@@ -37,9 +37,10 @@
         = label_tag 'Tenant'
         / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
         = f.select :tenant_id, Tenant.all().pluck(:name, :id), {}, class: 'form-control width-field-md'
-      .form-group
-        = label_tag 'City'
-        = f.text_field :location_city, class: 'form-control width-field-md'
+      .form-group.required
+        = f.label :location_city, "City", class: "control-label"
+        span.error-msg
+        = f.text_field :location_city, class: 'form-control width-field-md', required: true, "data-parsley-error-message" => "City can't be blank"
       .form-group.tilte_basic_info
         = label_tag 'Title'
         = f.text_field :title, class: 'form-control width-field-md'
