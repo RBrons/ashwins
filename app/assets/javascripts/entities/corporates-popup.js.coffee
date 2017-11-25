@@ -80,4 +80,4 @@ $ ->
   if $(document).has("span#flash_message")
     setTimeout(->
       $(document).find("span#flash_message").fadeOut()
-    , 7000)
+    , 12000)

@@ -1,9 +1,9 @@
 .fixed-breadcrumb
   span#flash_message.label.label-primary.margin-sm-left
     - if @just_created.present?
-      = "Congratulations, you have just created a record for #{@entity.first_name} #{@entity.last_name}"
+      = "Congratulations, you have just created a record for #{@entity.name}"
     - if @just_edited.present?
-      = "Congratulations, you have just made a change in the record for #{@entity.first_name} #{@entity.last_name}"
+      = "Congratulations, you have just made a change in the record for #{user_session[:prior_entity_name] || @entity.name }"
 
   .breadcrumb-wrapper
     ul.m__breadcrumb
@@ -79,21 +79,7 @@ javascript:
   $(document).ready(function() {
     if($('.flash_message').length)
       $.notify($('.flash_message').html(), {autoHideDelay: 7000, className: 'success'});
-    
-    $('#save_btn').on('click', function() {
-      var persisted = #{@entity.persisted?}
-      var flashMessage = "";
-      if (persisted === true) {
-        var answer = confirm ("Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? " )
-        if (!answer) {
-          return false;
-        }
-        else {
-          $('.corporate-contact-form form').submit();   
-        }
-      }
-      else {
-        $('.corporate-contact-form form').submit(); 
-      }
-    });
+  });
+  $('#save_btn').on('click', function() {
+    $('.corporate-contact-form form').submit(); 
   });
