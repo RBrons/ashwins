@@ -22,7 +22,7 @@
         = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
         = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
 
-= form_for @entity, url: entities_individuals_basic_info_path( @entity.key ), html: { class: "entity-page-xhr" } do |f|
+= form_for @entity, url: entities_individuals_basic_info_path( @entity.key ), html: { class: "entity-page-xhr validation_form" } do |f|
   - if @entity.errors.any?
     #error_explanation
       h2 = "#{pluralize(@entity.errors.count, "error")} prohibited this Contact Info from being saved:"
@@ -37,10 +37,12 @@
     .clearfix
     .form-group.required
       = f.label :first_name, class: "control-label"
-      = f.text_field :first_name, class: "form-control"
+      span.error-msg
+      = f.text_field :first_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
     .form-group.required
       = f.label :last_name, class: "control-label"
-      = f.text_field :last_name, class: "form-control"
+      span.error-msg
+      = f.text_field :last_name, class: "form-control", required: true, "data-parsley-error-message" => "Last name can't be blank"
     .form-group
       /= f.label :phone1
       label Phone 1

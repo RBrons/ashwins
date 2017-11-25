@@ -168,7 +168,11 @@ javascript:
       }
       else {
         if($('#available_properties').val() == "0"){
-          $.notify('Sorry, you need to make a Purchased Property without an Owner', 'error')
+          $('.corporate-contact-form form').notify(
+            'Sorry, you need to make a Purchased Property without an Owner', 
+            {position: "top left", arrowShow: false},
+            'error'
+          )
           return false;
         }
         $('.corporate-contact-form form').submit();
