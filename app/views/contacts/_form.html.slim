@@ -41,16 +41,24 @@
           = f.select :per_role, Contact::PERSONNEL_ROLE, {}, class: 'form-control selectize-single'
         div#cp-role-wrapper
           = f.select :cp_role, Contact::CLIENT_PARTICIPANT_ROLE, {}, class: 'form-control selectize-single'      
+    - if params[:contact_type] == "company"
+      .form-group
+        = f.label :first_name, "#{@contact.cprefix}First Name", class: "control-label"
+        = f.text_field :first_name, class: "form-control"
 
-    .form-group.required
-      = f.label :first_name, "#{@contact.cprefix}First Name", class: "control-label"
-      span.error-msg
-      = f.text_field :first_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
+      .form-group
+        = f.label :last_name, "#{@contact.cprefix}Last Name", class: "control-label"
+        = f.text_field :last_name, class: "form-control"
+    - else
+      .form-group.required
+        = f.label :first_name, "First Name", class: "control-label"
+        span.error-msg
+        = f.text_field :first_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
 
-    .form-group.required
-      = f.label :last_name, "#{@contact.cprefix}Last Name", class: "control-label"
-      span.error-msg
-      = f.text_field :last_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
+      .form-group.required
+        = f.label :last_name, "Last Name", class: "control-label"
+        span.error-msg
+        = f.text_field :last_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
 
     .form-group
       = f.label :phone1
