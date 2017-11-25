@@ -34,6 +34,7 @@ class Entities::IndividualsController < ApplicationController
       end
     elsif request.patch?
       @entity                 = Entity.find_by(key: key)
+      user_session[:prior_entity_name] = @entity.first_name + ' ' + @entity.last_name
       @entity.type_           = MemberType.getIndividualId
       @entity.basic_info_only = true
       @entity.assign_attributes(individuals_params)
