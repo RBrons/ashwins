@@ -22,7 +22,7 @@
         = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
         = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
         
-= form_for @entity, url: entities_sole_proprietorship_basic_info_path( @entity.key ), html: { class: "entity-page-xhr" } do |f|
+= form_for @entity, url: entities_sole_proprietorship_basic_info_path( @entity.key ), html: { class: "entity-page-xhr validation_form" } do |f|
   - if @entity.errors.any?
     #error_explanation
       h2 = "#{pluralize(@entity.errors.count, "error")} prohibited this Sole Proprietorship from being saved:"
@@ -37,10 +37,12 @@
       = f.select :basichonorific, options_for_select(GeneralMethods.basichonorific, @entity.basichonorific), {}, {class: "state form-control"}
     .form-group.required
       label.control-label Owner First Name
-      = f.text_field :first_name, class: "partnership form-control"
+      span.error-msg
+      = f.text_field :first_name, class: "partnership form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
     .form-group.required
       label.control-label Owner Last Name
-      = f.text_field :last_name, class: "partnership form-control"
+      span.error-msg
+      = f.text_field :last_name, class: "partnership form-control", required: true , "data-parsley-error-message" => "Last name can't be blank"
     .form-group
       label Fictitious Business Name
       = f.text_field :name2, class: "partnership form-control"
