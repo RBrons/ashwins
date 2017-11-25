@@ -174,8 +174,8 @@ javascript:
       else {
         if($('#available_properties').val() == "0"){
           $('.corporate-contact-form form').notify(
-            'Sorry, you need to make a Purchased Property without an Owner', 
-            {position: "top left", arrowShow: false},
+            'Sorry, you need to create a Purchased Property without an Owner', 
+            {position: "top left", arrowShow: false, autoHide: false},
             'error'
           )
           return false;
