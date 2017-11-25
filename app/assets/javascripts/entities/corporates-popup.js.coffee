@@ -76,3 +76,8 @@ $ ->
     setTimeout(->
       $(document).find("div#stockholder-empty-modal").modal("hide")
     , 10000)
+
+  if $(document).has("span#flash_message")
+    setTimeout(->
+      $(document).find("span#flash_message").fadeOut()
+    , 7000)

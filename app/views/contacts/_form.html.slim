@@ -2,7 +2,7 @@
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
-        button.btn.btn-sm Save
+        button#save_btn.btn.btn-sm Save
       = render_breadcrumbs :tag => :li, :separator => ""
     .action-links
       - if params[:id].present?
@@ -13,13 +13,14 @@
 - heading = @contact.persisted? ? "Edit Client" : "New Client"
 .clearfix.margin-sm-top
 .col-lg-4.col-md-4
-  = form_for @contact, url: url,remote: (request.xhr?) do |f|
+  = form_for @contact, url: url,remote: (request.xhr?), html: { class: "validation_form" } do |f|
     .clearfix
     - if params[:contact_type] == "company"
-      .form-group
+      .form-group.required
         = f.hidden_field :is_company, value: true
-        = f.label :company_name, "Company Name"
-        = f.text_field :company_name, class: "form-control"
+        = f.label :company_name, "Company Name", class: "control-label"
+        span.error-msg
+        = f.text_field :company_name, class: "form-control", required: true, "data-parsley-error-message" => "Company name can't be blank"
         div#legal-ending-wrapper
           = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], @contact.legal_ending)
     - else 
@@ -41,13 +42,15 @@
         div#cp-role-wrapper
           = f.select :cp_role, Contact::CLIENT_PARTICIPANT_ROLE, {}, class: 'form-control selectize-single'      
 
-    .form-group
-      = f.label :first_name, "#{@contact.cprefix}First Name"
-      = f.text_field :first_name, class: "form-control"
+    .form-group.required
+      = f.label :first_name, "#{@contact.cprefix}First Name", class: "control-label"
+      span.error-msg
+      = f.text_field :first_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
 
-    .form-group
-      = f.label :last_name, "#{@contact.cprefix}Last Name"
-      = f.text_field :last_name, class: "form-control"
+    .form-group.required
+      = f.label :last_name, "#{@contact.cprefix}Last Name", class: "control-label"
+      span.error-msg
+      = f.text_field :last_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
 
     .form-group
       = f.label :phone1
@@ -92,3 +95,8 @@
     .clearfix
     /.form-group
       /= f.submit 'Save', class: 'btn btn-sm btn-primary'
+
+javascript:
+  $('#save_btn').on('click', function() {
+    $('.validation_form').submit();
+  });

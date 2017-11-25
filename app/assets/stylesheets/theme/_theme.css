@@ -5367,15 +5367,16 @@ ol.number_with_parentheses>li:before {
     position: fixed;
     width: 100%;
     z-index: 250;
-    top: 80px;
+    top: 75px;
     left: 0;
     background: #fff;
+    padding-top: 5px;
 }
 
 .breadcrumb-wrapper{
     background-color: inherit;
     padding: 7px 30px 7px;
-    margin: 10px 0;
+    margin: 5px 0;
     max-height: 60px;
 }
 
@@ -5444,23 +5445,11 @@ ul.m__breadcrumb li a:hover {
     width: 100%;
 }
 
-/*Scrolling issue*/
-.top_nav.entities:after {
-    content: '';
-    display: block;
-    position: absolute;
-    width: 117%;
-    left: -230px;
-    height: 15px;
-    background: #fff;
-    bottom: -4px;
-}
-
 .corporate-forms .button-bar {
     position: fixed;
     top: 150px;
     z-index: 10;
     width: 100%;
     background: #fff;
-    padding: 15px 0 10px 0;
+    padding: 20px 0 5px 0;
 }

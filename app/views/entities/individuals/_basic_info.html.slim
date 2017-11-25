@@ -1,12 +1,10 @@
-- if @just_created.present?
-  span.flash_message[style="display: none"]
-    = "Congratulations, you have just created a record for #{@entity.first_name} #{@entity.last_name}"
-
-- if @just_edited.present?
-  span.flash_message[style="display: none"]
-    = "Congratulations, you have just made a change in the record for #{@entity.first_name} #{@entity.last_name}"
-
 .fixed-breadcrumb
+  span#flash_message.label.label-primary.margin-sm-left
+    - if @just_created.present?
+      = "Congratulations, you have just created a record for #{@entity.first_name} #{@entity.last_name}"
+    - if @just_edited.present?
+      = "Congratulations, you have just made a change in the record for #{@entity.first_name} #{@entity.last_name}"
+
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
