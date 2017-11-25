@@ -66,16 +66,10 @@ $ ->
 
   trigger_basic_info_form = ->
     $(document).find('.modal').each(->
-      $(this).modal('hide');
+      $(this).modal('hide')
     )
     $(document).find("div.modal-backdrop").hide()
-    $(document).find("input[type='submit'].basic_info").trigger("click");
-
-  if $(document).has("div#entity-creation-message")
-    $(document).find("div#entity-creation-message").modal()
-    setTimeout(->
-      $(document).find("div#entity-creation-message").modal("hide")
-    , 10000)
+    $(document).find("input[type='submit'].basic_info").trigger("click")
 
   if $(document).has("div#stockholder-empty-modal")
     $(document).find("div#stockholder-empty-modal").modal()
