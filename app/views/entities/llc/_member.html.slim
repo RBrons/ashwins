@@ -28,7 +28,7 @@
   - plural_individual_str = individual_members.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_members.length} #{plural_individual_str} and #{entity_members.length} #{plural_entity_str} who could hold a membership interest in this LLC."
 
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+  .col-lg-6.close-md-6.col-sm-12.col-xs-12
     - if individual_members.length == 0 && entity_members.length == 0
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new LLC Member <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_members.length == 1 && entity_members.length == 0
