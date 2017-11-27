@@ -1,14 +1,16 @@
 .fixed-breadcrumb
+  - if flash[:success]
+    span#flash_message.label.label-primary.margin-sm-left
+      = flash[:success]
+  
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
         button#save_btn_prop_tax.btn.btn-sm[type="submit"] Save
       = render_breadcrumbs :tag => :li, :separator => ''
-    
-    - if @property.id.present?
-      .action-links
-        = link_to "List", properties_path, class: "margin-md-right"
-        = link_to "Show", property_path(@property.key), class: ""
+    .action-links
+      = link_to "List", properties_path, class: "margin-md-right"
+      = link_to "Show", property_path(@property.key), class: ""
 
 .clearfix
   = render 'properties/form_header_link'

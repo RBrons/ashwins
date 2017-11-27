@@ -27,9 +27,8 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.save
-        # flash[:success] = "New Contact Successfully Created.</br><a href='#{contacts_path(active_id: @contact.id)}'>Show in List</a>" if !request.xhr?
+        flash[:success] = "Congratulations, you have just created a record for #{@contact.name}"
         format.html { redirect_to edit_contact_path(@contact) }
-        # format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
         format.json { render json: @contact }
       else
@@ -46,6 +45,7 @@ class ContactsController < ApplicationController
       # flash[:error] = "Specified contact not found."
       return redirect_to contacts_path
     end
+    prior_contact_name = @contact.name
     params[:contact_type] = "company" if !@contact.company_name.nil?
     @contact.legal_ending = nil if @contact.company_name.nil?
     @contact.cprefix =  (params[:contact_type] == "company") ? "Contact " : ""
@@ -59,6 +59,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       if @contact.save
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_contact_name}"
         format.html { redirect_to contacts_path }
         format.js {render layout: false, template: "contacts/new"}
         format.json { render json: @contact }

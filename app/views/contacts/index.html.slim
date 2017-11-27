@@ -11,6 +11,10 @@
         = link_to 'Yes', 'javascript:void(0)', data: {:id => ''}, class: "#{delete_xs} delete-contact-yes"
         = link_to 'No', 'javascript:void(0)', class: "#{show_xs} delete-contact-no", data: {dismiss: "modal"}, aria: {label: "Close"}
 .fixed-breadcrumb
+  - if flash[:success]
+    span#flash_message.label.label-primary.margin-sm-left
+      = flash[:success]
+      
   .breadcrumb-wrapper
     ul.m__breadcrumb
       = render_breadcrumbs tag: :li, separator: ""
