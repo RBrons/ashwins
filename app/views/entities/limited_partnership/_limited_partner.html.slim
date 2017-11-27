@@ -23,7 +23,7 @@
   - plural_individual_str = individual_partners.length != 1 ? 'individual clients or contacts' : 'individual client or contact'
   - basic_str = "You have #{individual_partners.length} #{plural_individual_str} and #{entity_partners.length} #{plural_entity_str} who could hold a limited partnership interest in this Limited Partnership."
 
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+  .col-lg-6.close-md-6.col-sm-12.col-xs-12
     - if individual_partners.length == 0 && entity_partners.length == 0
       p.text-info = (basic_str + " Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Limited Partnership <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
     - elsif individual_partners.length == 1 && entity_partners.length == 0

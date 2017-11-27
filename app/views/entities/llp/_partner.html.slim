@@ -20,7 +20,7 @@
       ul
         - override_active_record_errors(@partner.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
           li = message
-  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+  .col-lg-6.close-md-6.col-sm-12.col-xs-12
     - prepopulated_partners = options_html('limited-liability-partner', "true", @partner.super_entity, f.object.temp_id, 'array')
     - if prepopulated_partners.length == 0
       p.text-info = ("You have #{prepopulated_partners.length} individual #{prepopulated_partners.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold a partnership interest in this LLP. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new LLP Partner <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.").html_safe
