@@ -25,6 +25,10 @@
 input#property_id[type="hidden" value=(@property.id)]
 
 .fixed-breadcrumb
+  - if flash[:success]
+    span#flash_message.label.label-primary.margin-sm-left
+      = flash[:success]
+      
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right

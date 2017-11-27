@@ -107,7 +107,7 @@ class PropertiesController < ApplicationController
     respond_to do |format|
       if @property.save
         AccessResource.add_access({ user: current_user, resource: @property })
-        # flash[:success] = "New Property Successfully Created.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>" if !request.xhr?
+        flash[:success] = "Congratulations, you have just created a record for #{@property.title}"
         format.html { redirect_to edit_property_path(@property.key, type_is: 'basic_info') }
         # format.html { redirect_to properties_path }
         format.js { render json: @property.to_json, status: :ok }
@@ -146,6 +146,7 @@ class PropertiesController < ApplicationController
         format.json { render action: 'show', status: :created, location: @property }
       end
     else
+      prior_property_name = @property.title
       @property.assign_attributes(property_params)
       if params[:use_current_rent] == false
         @property.lease_base_rent = @property.current_rent
@@ -266,7 +267,7 @@ class PropertiesController < ApplicationController
 
           end
 
-          # flash[:success] = "The Property Successfully Updated.</br><a href='#{properties_path(active_id: @property.id)}'>Show in List</a>"
+          flash[:success] = "Congratulations, you have just made a change in the record for #{prior_property_name}"
 
           if params[:lease_sub].blank?
             format.html { redirect_to edit_property_path(@property.key, type_is: params[:type_is]) }

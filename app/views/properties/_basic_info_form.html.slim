@@ -1,4 +1,8 @@
 .fixed-breadcrumb
+  - if flash[:success]
+    span#flash_message.label.label-primary.margin-sm-left
+      = flash[:success]
+      
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
@@ -261,20 +265,6 @@
             | Close
 
 javascript:
-  $(document).ready(function() {
-    $('#save_btn_prop_basic').on('click', function() {
-      var persisted = #{@property.persisted?}
-      if (persisted === true) {
-        var answer = confirm ("Warning, you just made changes to #{@property.title} Are you sure you want to proceed to do this? " )
-        if (!answer) {
-          return false;
-        }
-        else {
-          $('.basic-info-property-form form').submit();
-        }
-      }
-      else {
-        $('.basic-info-property-form form').submit();
-      }
-    });
+  $(document).on('click', '#save_btn_prop_basic', function() {
+    $('.basic-info-property-form form').submit();
   });
