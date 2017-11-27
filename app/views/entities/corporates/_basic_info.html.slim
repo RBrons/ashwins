@@ -1,17 +1,8 @@
-- if @just_created.present?
-  .modal.fade#entity-creation-message tabindex="-3" role="dialog" aria-labelledby="entity-creation-message"
-    .modal-dialog
-      .modal-content
-        .modal-header
-          button.close aria-label="Close" data-dismiss="modal" type="button"
-            span aria-hidden="true"  &times;
-        .modal-body
-          .corporation-creation-message
-            = "Congratulations you have just created #{@entity.display_name}"
-        .modal-footer
-          button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Close
-
 .fixed-breadcrumb
+  - if flash[:success]
+    span#flash_message.label.label-primary.margin-sm-left
+      = flash[:success]
+
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
@@ -173,20 +164,6 @@ javascript:
     $(this).val(realMaskValue.toFixed(realDecimalCount));
   });
 
-  $(document).ready(function() {
-    $('#save_btn').on('click', function() {
-      var persisted = #{@entity.persisted?}
-      if (persisted === true) {
-        var answer = confirm ("Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? " )
-        if (!answer) {
-          return false;
-        }
-        else {
-          $('.corporate-contact-form form').submit();
-        }
-      }
-      else {
-        $('.corporate-contact-form form').submit();
-      }
-    });
+  $(document).on('click', '#save_btn', function() {
+    $('.corporate-contact-form form').submit(); 
   });

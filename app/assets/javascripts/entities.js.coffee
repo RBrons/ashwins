@@ -17,14 +17,14 @@ $ ->
       url: "/xhr/entity_type_list"
       dataType: "html"
       success: (val) ->
-        $(document).find("#EntityTypeList").html(val);
+        $(document).find("#EntityTypeList").html(val)
         $(document).find("#EntityTypeList").show()
       error: (e) ->
         console.log e
   $(document).on 'click', (e) ->
     container = $("div#EntityTypeList")
     if (!container.is(e.target) && (container.has(e.target).length == 0))
-      container.hide();
+      container.hide()
   $(document).on "click", ".type", ->
     val = $(this).text()
     window.location = "/entities/new?type="+val
@@ -45,7 +45,7 @@ $ ->
       "paginate": false
       "info": false
 
-    $(document).find('#data_table_length').hide();
+    $(document).find('#data_table_length').hide()
     $(document).find('table#data_table2').DataTable
       "paging": false
       "searching": false
@@ -54,6 +54,6 @@ $ ->
       "paginate": false
       "info": false
 
-    $(document).find('#data_table2_info').hide();
+    $(document).find('#data_table2_info').hide()
     # Manage Styling of Table Grid
     $.unblockUI()

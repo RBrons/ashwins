@@ -10,8 +10,6 @@ class Entities::IndividualsController < ApplicationController
       @entity = Entity.find_by(key: key)
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
-      @just_created = params[:just_created].to_b
-      @just_edited = params[:just_edited].to_b
       if @entity.new_record?
         individual_breadcrumb
       else
@@ -28,19 +26,21 @@ class Entities::IndividualsController < ApplicationController
       @entity.name = @entity.first_name + ' ' + @entity.last_name
       if @entity.save
         AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
-        return redirect_to entities_individuals_basic_info_path(@entity.key, :just_created => true)
+        flash[:success] = "Congratulations, you have just created a record for #{@entity.name}"
+        return redirect_to entities_individuals_basic_info_path(@entity.key)
       else
         individual_breadcrumb
       end
     elsif request.patch?
       @entity                 = Entity.find_by(key: key)
-      user_session[:prior_entity_name] = @entity.first_name + ' ' + @entity.last_name
+      prior_entity_name = @entity.name
       @entity.type_           = MemberType.getIndividualId
       @entity.basic_info_only = true
       @entity.assign_attributes(individuals_params)
       @entity.name = @entity.first_name + ' ' + @entity.last_name
       if @entity.save
-        return redirect_to entities_individuals_basic_info_path(@entity.key, :just_edited => true)
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}"
+        return redirect_to entities_individuals_basic_info_path(@entity.key)
       end
     else      
       raise UnknownRequestFormat

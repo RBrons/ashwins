@@ -46,8 +46,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
           @entity.save
           @principal.gen_temp_id
           AccessResource.add_access({user: current_user, resource: Entity.find(@entity.id)})
-          # return render json: {redirect: view_context.entities_power_of_attorney_basic_info_path( @entity.key ), just_created: true}
-          # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+          flash[:success] = "Congratulations, you have just created a record for #{@entity.name}"
           return redirect_to entities_power_of_attorney_basic_info_path( @entity.key )          
         end
       else
@@ -55,6 +54,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
         @principal = Principal.new
       end
     elsif request.patch?
+      prior_entity_name = @entity.name
       @entity                 = Entity.find_by(key: key)
       @entity.type_           = MemberType.getPowerOfAttorneyId
       @entity.basic_info_only = true
@@ -72,6 +72,7 @@ class Entities::PowerOfAttorneyController < ApplicationController
           @principal.gen_temp_id
           @entity.name = "POA for #{@principal.entity.name}"
           @entity.save
+          flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}"
           return redirect_to entities_power_of_attorney_basic_info_path( @entity.key )
         end
         #redirect_to edit_entity_path(@entity.key)
@@ -167,17 +168,18 @@ class Entities::PowerOfAttorneyController < ApplicationController
       @agent.class_name      = "Agent"
       if @agent.save
         @agents             = @agent.super_entity.agents
-        # flash[:success] = "New Agent Successfully Created.</br><a href='#{entities_power_of_attorney_agents_path(@entity.key, @agent.id, active_id: @agent.id)}'>Show in List</a>"
-        # return render layout: false, template: "entities/power_of_attorney/agents"
+        flash[:success] = "Congratulations, you have just created a record for #{@agent.first_name} #{@agent.last_name}, a Agent of #{@entity.name}"
         return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)
       else
         return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)
       end
     elsif request.patch?
+      prior_agent_name = "#{@agent.first_name} #{@agent.last_name}"
       if @agent.update(agent_params)
         @agent.use_temp_id
         @agent.save
         @agents             = @agent.super_entity.agents
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_agent_name}, a Agent of #{@entity.name}"
         return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)
       else
         return redirect_to entities_power_of_attorney_agent_path(@entity.key, @agent.id)

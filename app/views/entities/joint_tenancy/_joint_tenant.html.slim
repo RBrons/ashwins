@@ -1,0 +1,56 @@
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      li.btn_bc.margin-sm-right
+        button.btn.btn-sm[type="submit" id="save_btn"] Save
+      = render_breadcrumbs :tag => :li, :separator => ''
+    - if @entity.id
+      .action-links
+        = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
+        = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
+        
+= form_for @joint_tenant, url: entities_joint_tenancy_joint_tenant_path( @entity.key, @joint_tenant.id ), html: { class: "entity-page-xhr validation_form" } do |f|
+  = hidden_field_tag :int_action, 'Add Joint Tenant'
+  - if @joint_tenant.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@joint_tenant.errors.count, "error")} prohibited this Joint Tenant from being saved:"
+      ul
+        - override_active_record_errors(@joint_tenant.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
+          li = message
+
+  - joint_tenants = options_html('joint-tenant', "true", @joint_tenant.super_entity, f.object.temp_id, 'array')
+
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    - if joint_tenants.length == 0
+      p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b>.").html_safe
+    - elsif joint_tenants.length == 1
+      p.text-info = ("You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.").html_safe
+    - else
+      p.text-info = "You have #{joint_tenants.length} individual #{joint_tenants.length != 1 ? 'clients or contacts' : 'client or contact'} who could hold an undivided interest in this Joint Tenancy. Please select one or create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Joint Tenant <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
+
+    - if joint_tenants.length > 0
+      .form-group#joint_tenant_entity
+        = hidden_field_tag "joint_tenant[is_person]", true
+        = f.select :temp_id, options_html('joint-tenant', "true", @joint_tenant.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if joint_tenants.length == 1}", data: {id: @joint_tenant.super_entity.id, clienttype: 'joint-tenant'}, readonly: (joint_tenants.length == 1)
+
+        = hidden_field_tag "joint_tenant[member_type_id]", MemberType.getJointTenancyId
+        = hidden_field_tag :cid, @joint_tenant.temp_id
+
+      .form-group.required
+        = f.label "Undivided interest of this member"
+        span.error-msg
+        = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control", required: true
+      .form-group
+        = f.label "Undivided interest remaining to be assigned"
+        = text_field_tag "remaining_number_of_assets", @joint_tenant.remaining_share_or_interest,
+                "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control",
+                "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage : 0)
+        = hidden_field_tag "remaining_number_of_assets", @joint_tenant.remaining_share_or_interest
+        = hidden_field_tag "remaining_number_of_assets_warning", 'Undivided Interest Cannot Be Negative'
+      .form-group
+        = f.submit "Save", class: "btn btn-primary"
+
+javascript:
+  $(document).on('click', '#save_btn', function() {
+    $('.corporate-contact-form form').submit(); 
+  });

@@ -1,0 +1,52 @@
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      li.btn_bc.margin-sm-right
+        button.btn.btn-sm[type="submit" id="save_btn"] Save
+      = render_breadcrumbs :tag => :li, :separator => ''
+    - if @entity.id
+      .action-links
+        = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
+        = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
+        
+= form_for @spouse, url: entities_tenancy_by_entirety_spouse_path( @entity.key, @spouse.id ), html: { class: "entity-page-xhr" } do |f|
+  = hidden_field_tag :int_action, 'Add Spouse'
+  - if @spouse.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@spouse.errors.count, "error")} prohibited this Spouse from being saved:"
+      ul
+        - override_active_record_errors(@spouse.errors.messages, {share_error: 'All Interest are assigned!'}).each do |message|
+          li = message
+
+  - prepopulated_spouses = options_html('spouse', "true", @spouse.super_entity, f.object.temp_id, 'array')
+
+  .col-lg-4.close-md-4.col-sm-12.col-xs-12
+    - if prepopulated_spouses.length == 0
+      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. Please create a new individual <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span>.".html_safe
+    - elsif prepopulated_spouses.length == 1
+      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. Since there is only one client or contact, it has been pre-selected. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
+    - else
+      p.text-info = "You have #{prepopulated_spouses.length} individual #{prepopulated_spouses.length != 1 ? 'clients or contacts' : 'client or contact'} that could be one of the two Spouses of this Tenancy by the Entirety. However, you could also create a new <span class='ipp-modal' data-id='add-client'><b>Client</b></span> or a new Spouse <span class='ipp-modal' data-id='add-contact'><b>Contact</b></span> if you so desire.".html_safe
+
+    - if prepopulated_spouses.length > 0
+      .form-group#spouse_entity
+        = hidden_field_tag "spouse[is_person]", true
+        = f.select :temp_id, options_html('spouse', "true", @spouse.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_spouses.length == 1}", data: {id: @spouse.super_entity.id, clienttype: 'spouse'}, readonly: (prepopulated_spouses.length == 1)
+        = hidden_field_tag "spouse[member_type_id]", MemberType.getTenancyByTheEntiretyId
+        = hidden_field_tag :cid, @spouse.temp_id
+      .form-group
+        = f.label "Gender"
+        .clearfix
+        .option-1
+          = f.label "Male"
+          = f.radio_button :gender, 'Male', checked: @spouse.gender == 'Male', class: "zoom-in-ele"
+        .option-2
+          = f.label "Female"
+          = f.radio_button :gender, 'Female', checked: @spouse.gender == 'Female', class: "zoom-in-ele"
+      .form-group
+        = f.submit "Save", class: "btn btn-primary"
+
+javascript:
+  $(document).on('click', '#save_btn', function() {
+    $('.corporate-contact-form form').submit(); 
+  });

@@ -1,4 +1,8 @@
 .fixed-breadcrumb
+  - if flash[:success]
+    span#flash_message.label.label-primary.margin-sm-left
+      = flash[:success]
+
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
@@ -61,8 +65,6 @@
         = f.submit 'Save', class: "btn btn-primary"
 
 javascript:
-  $(document).ready(function() {
-    $('#save_btn').on('click', function() {
-          $('.corporate-contact-form form').submit();   
-    });
+  $(document).on('click', '#save_btn', function() {
+    $('.corporate-contact-form form').submit(); 
   });

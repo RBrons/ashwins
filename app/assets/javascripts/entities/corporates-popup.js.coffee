@@ -77,6 +77,7 @@ $ ->
       $(document).find("div#stockholder-empty-modal").modal("hide")
     , 10000)
 
+  # Show duration for flash mesage
   if $(document).has("span#flash_message")
     setTimeout(->
       $(document).find("span#flash_message").fadeOut()
