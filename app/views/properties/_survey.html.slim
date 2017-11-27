@@ -17,7 +17,7 @@
 .clearfix
   = render 'properties/form_header_link'
   
-.clearfix.mask_content
+.clearfix.mask_content.margin-sm-top
   = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
     = hidden_field_tag :type_is, params[:type_is]
     - if @property.errors.any?
