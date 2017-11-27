@@ -17,7 +17,7 @@
 .clearfix
   = render 'properties/form_header_link'
 
-.clearfix
+.clearfix.margin-sm-top
   ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
     li role="presentation" class=("#{'active' if params[:tenant_sub] == 'tenant_company_section' || params[:tenant_sub].blank?}")
       a#lease_basics[href="#tenant_company_section" role="tab" data-toggle="tab" aria-expanded="true"] Company

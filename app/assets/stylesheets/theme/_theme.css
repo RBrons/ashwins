@@ -430,7 +430,7 @@ i.lnr {
 }
 
 .nav-md .container.body .view-content {
-    padding: 160px 20px;
+    padding: 165px 20px;
 }
 
 .nav-md.transaction .container.body .col-md-3.left_col {
@@ -5376,7 +5376,7 @@ ol.number_with_parentheses>li:before {
 .breadcrumb-wrapper{
     background-color: inherit;
     padding: 7px 30px 7px;
-    margin: 5px 0;
+    margin: 22px 0 5px;
     max-height: 60px;
 }
 
@@ -5451,5 +5451,5 @@ ul.m__breadcrumb li a:hover {
     z-index: 10;
     width: 100%;
     background: #fff;
-    padding: 20px 0 5px 0;
+    padding: 23px 0 5px 0;
 }
