@@ -3,17 +3,15 @@ class Entities::LimitedPartnershipController < ApplicationController
   layout "entities"
 
   before_action :current_page
-  before_action :check_xhr_page
+  before_action :check_xhr_page, only: [:contact_info, :owns]
   before_action :set_entity, only: [:basic_info]
-  # before_action :add_breadcrum
-
+  
   def basic_info
     #key = params[:entity_key]
     if request.get?
       #@entity = Entity.find_by(key: key)
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
-      @just_created = params[:just_created].to_b
       if @entity.new_record?
         add_breadcrumb "Clients", clients_path, :title => "Clients"
         add_breadcrumb "Limited Partnership", '',  :title => "Limited Partnership"
@@ -32,20 +30,19 @@ class Entities::LimitedPartnershipController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        return render json: { redirect: view_context.entities_limited_partnership_basic_info_path(@entity.key), just_created: true }
-        # return redirect_to clients_path
+        flash[:success] = "Congratulations, you have just created a record for #{@entity.display_name}"
+        return redirect_to entities_limited_partnership_basic_info_path(@entity.key)
       else
-        add_breadcrumb "Clients", clients_path, :title => "Clients"
-        add_breadcrumb "Limited Partnership", '',  :title => "Limited Partnership"
-        add_breadcrumb "Create", '',  :title => "Create"
-        return render layout: false, template: "entities/limited_partnership/basic_info"
+        return redirect_to entities_limited_partnership_basic_info_path(@entity.key)
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
+      prior_entity_name = @entity.display_name
       @entity.type_           = MemberType.getLimitedPartnershipId
       @entity.basic_info_only = true
       if @entity.update(entity_params)
-        #return redirect_to edit_entity_path(@entity.key)
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}"
+        return redirect_to entities_limited_partnership_basic_info_path(@entity.key)
       end
     else
       raise UnknownRequestFormat
@@ -106,24 +103,29 @@ class Entities::LimitedPartnershipController < ApplicationController
       @partner.class_name      = "LimitedPartner"
       if @partner.save
         @partners = @partner.super_entity.limited_partners
-        return render layout: false, template: "entities/limited_partnership/limited_partners"
+        
+        flash[:success] = "Congratulations, you have just created a record for #{@partner.first_name} #{@partner.last_name}, a Limited Partner of #{@entity.display_name}"
+        return redirect_to entities_limited_partnership_limited_partners_path(@entity.key)
       else
-        return render layout: false, template: "entities/limited_partnership/limited_partner"
+        return redirect_to entities_limited_partnership_limited_partner_path(@entity.key)
       end
     elsif request.patch?
+      prior_partner_name = "#{@partner.first_name} #{@partner.last_name}"
       if @partner.update(limited_partner_params)
         @partner.use_temp_id
         @partner.save
         @partners = @partner.super_entity.limited_partners
-        return render layout: false, template: "entities/limited_partnership/limited_partners"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_partner_name}, a Limited Partner of #{@entity.display_name}"
+        return redirect_to entities_limited_partnership_limited_partners_path(@entity.key)
       else
-        return render layout: false, template: "entities/limited_partnership/limited_partner"
+        return redirect_to entities_limited_partnership_limited_partner_path(@entity.key, @partner.id)
       end
     elsif request.delete?
+      @entity = Entity.find_by(key: params[:key])
       partner = LimitedPartner.find(params[:id])
       partner.delete
       @partners = partner.super_entity.limited_partners
-      return render layout: false, template: "entities/limited_partnership/limited_partners"
+      return redirect_to entities_limited_partnership_limited_partners_path(@entity.key)
     end
     @partner.gen_temp_id
     render layout: false if request.xhr?
@@ -170,24 +172,28 @@ class Entities::LimitedPartnershipController < ApplicationController
       @partner.use_temp_id
       if @partner.save
         @partners = @partner.super_entity.general_partners
-        return render layout: false, template: "entities/limited_partnership/general_partners"
+        flash[:success] = "Congratulations, you have just created a record for #{@partner.first_name} #{@partner.last_name}, a General Partner of #{@entity.display_name}"
+        return redirect_to entities_limited_partnership_general_partners_path(@entity.key)
       else
-        return render layout: false, template: "entities/limited_partnership/general_partner"
+        return redirect_to entities_limited_partnership_general_partner_path(@entity.key)
       end
     elsif request.patch?
+      prior_partner_name = "#{@partner.first_name} #{@partner.last_name}"
       if @partner.update(general_partner_params)
         @partner.use_temp_id
         @partner.save
         @partners = @partner.super_entity.general_partners
-        return render layout: false, template: "entities/limited_partnership/general_partners"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_partner_name}, a General Partner of #{@entity.display_name}"
+        return redirect_to entities_limited_partnership_general_partners_path(@entity.key)
       else
-        return render layout: false, template: "entities/limited_partnership/general_partner"
+        return redirect_to entities_limited_partnership_general_partner_path(@entity.key, @partner.id)
       end
     elsif request.delete?
+      @entity = Entity.find_by(key: params[:key])
       partner = GeneralPartner.find(params[:id])
       partner.delete
       @partners = partner.super_entity.general_partners
-      return render layout: false, template: "entities/limited_partnership/general_partners"
+      return redirect_to entities_limited_partnership_general_partners_path(@entity.key)
     end
     @partner.gen_temp_id
     render layout: false if request.xhr?

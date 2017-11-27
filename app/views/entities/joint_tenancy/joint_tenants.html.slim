@@ -1,45 +1,7 @@
-.fixed-breadcrumb
-  .breadcrumb-wrapper
-    ul.m__breadcrumb
-      = render_breadcrumbs :tag => :li, :separator => ''
-    .action-links
-      = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
-      = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
-
-= hidden_field_tag :int_action, 'Joint Tenants List'
-.clearfix
-.col-sm-12
-  table#data_table
-    thead
-      tr
-        th
-          | Actions
-        th
-          | Joint Tenant Name
-        th
-          | Type
-        th
-          | EIN / Social
-        th
-          | Email
-        th
-          | Undivided Interest
-    tbody
-      - @joint_tenants.each do |object|
-        tr
-          td.actions
-            = link_to 'Edit', entities_joint_tenancy_joint_tenant_path( @entity.key, object.id ), remote: true, class: "#{edit_xs} entity-page-xhr"
-            = link_to 'Delete', entities_joint_tenancy_joint_tenant_path( object.id ), data: {:confirm => 'Are you sure?'}, :method => :delete, remote: true, class: "#{delete_xs} entity-page-xhr"
-          td
-            - if object.entity.present?
-              = link_to object.try(:name), edit_entity_path(object.entity.key)
-            - elsif object.contact.present?
-              = link_to object.try(:name), edit_contact_path(object.contact)
-          td
-            = MemberType.member_types[object.member_type_id]
-          td
-            = object.ein_or_ssn
-          td
-            = object.email
-          td
-            = object.my_percentage
+- if request.xhr?
+  == render partial: "entities/joint_tenancy/basic_info"
+- else
+  .corporate-forms
+    == render partial: "entities/joint_tenancy/links"
+    .corporate-contact-form
+      == render partial: "entities/joint_tenancy/joint_tenants"

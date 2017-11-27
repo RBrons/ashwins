@@ -3,10 +3,8 @@ class Entities::TenancyByEntiretyController < ApplicationController
   layout "entities"
 
   before_action :current_page
-  before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
-  # before_action :add_breadcrum
-
+  
   def basic_info
     #key = params[:entity_key]
     if request.get?
@@ -16,7 +14,6 @@ class Entities::TenancyByEntiretyController < ApplicationController
       #  @entity = EntityTenancyByEntirety.find_by(key: key)
       #end
       @entity       ||= EntityTenancyByEntirety.new(type_: params[:type])
-      @just_created = params[:just_created].to_b
       if @entity.new_record?
         add_breadcrumb "Clients", clients_path, :title => "Clients"
         add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
@@ -35,14 +32,17 @@ class Entities::TenancyByEntiretyController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: Entity.find(@entity.id) })
-        return render json: { redirect: view_context.entities_tenancy_by_entirety_basic_info_path(@entity.key), just_created: true }
+        flash[:success] = "Congratulations, you have just created a record for #{@entity.name}"
+        return redirect_to entities_tenancy_by_entirety_basic_info_path(@entity.key)
       end
     elsif request.patch?
       #@entity                 = EntityTenancyByEntirety.find_by(key: key)
+      prior_entity_name = @entity.name
       @entity.type_           = MemberType.getTenancyByTheEntiretyId
       @entity.basic_info_only = true
       if @entity.update(entity_tenancy_by_entirety_params)
-        return redirect_to edit_entity_path(@entity.key)
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}"
+        return redirect_to entities_tenancy_by_entirety_basic_info_path(@entity.key)
       end
     else
       raise UnknownRequestFormat
@@ -84,29 +84,29 @@ class Entities::TenancyByEntiretyController < ApplicationController
       @spouse.use_temp_id
       if @spouse.save
         @spouses = @spouse.super_entity.spouses
-        return render layout: false, template: "entities/tenancy_by_entirety/spouses"
+        flash[:success] = "Congratulations, you have just created a record for #{@spouse.first_name} #{@spouse.last_name}, a Spouse of #{@entity.name}"
+        return redirect_to entities_tenancy_by_entirety_spouses_path(@entity.key)
       else
-        add_breadcrumb "Clients", clients_path, :title => "Clients"
-        add_breadcrumb "Tenancy by the Entirety", '',  :title => "Tenancy by the Entirety"
-        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
-        add_breadcrumb "Spouse Create", '',  :title => "Spouse Create"
-        return render layout: false, template: "entities/tenancy_by_entirety/spouse"
+        return redirect_to entities_tenancy_by_entirety_spouse_path(@entity.key)
       end
     elsif request.patch?
+      prior_spouse_name = "#{@spouse.first_name} #{@spouse.last_name}"
       if @spouse.update(spouse_params)
         @spouse.use_temp_id
         @spouse.save
         @spouses = @spouse.super_entity.spouses
-        return render layout: false, template: "entities/tenancy_by_entirety/spouses"
+
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_spouse_name}, a Spouse of #{@entity.name}"
+        return redirect_to entities_tenancy_by_entirety_spouses_path(@entity.key, @spouse.id)
       else
-        return render layout: false, template: "entities/tenancy_by_entirety/spouse"
+        return redirect_to entities_tenancy_by_entirety_spouse_path(@entity.key, @spouse.id)
       end
     elsif request.delete?
       spouse = Spouse.find(params[:id])
       spouse.delete
       @entity  = spouse.super_entity
       @spouses = @entity.spouses
-      return render layout: false, template: "entities/tenancy_by_entirety/spouses"
+      return redirect_to entities_tenancy_by_entirety_spouses_path(@entity.key)
     end
     @spouse.gen_temp_id
     render layout: false if request.xhr?

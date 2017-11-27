@@ -32,10 +32,8 @@ class Entities::LlpController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@entity.display_name}"
         return redirect_to entities_llp_basic_info_path( @entity.key )
-        # return render json: {redirect: view_context.entities_llp_basic_info_path( @entity.key ), just_created: true}
-        # return redirect_to clients_path
       else
         add_breadcrumb "Clients", clients_path, :title => "Clients"
         add_breadcrumb "LLP", '',  :title => "LLP"
@@ -44,10 +42,12 @@ class Entities::LlpController < ApplicationController
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
+      prior_entity_name = @entity.display_name
       @entity.type_           = MemberType.getLLPId
       @entity.basic_info_only = true
       if @entity.update(entity_params)
-        #return redirect_to edit_entity_path(@entity.key)
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}"
+        return redirect_to entities_llp_basic_info_path( @entity.key )
       end
     else
       raise UnknownRequestFormat
@@ -109,20 +109,19 @@ class Entities::LlpController < ApplicationController
       @partner.use_temp_id
       if @partner.save
         @partners = @partner.super_entity.partners
-        # flash[:success] = "New Partner Successfully Created.</br><a href='#{entities_llp_partners_path( @entity.key, active_id: @partner.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@partner.first_name} #{@partner.last_name}, a Partner of #{@entity.display_name}"
         return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
-        # return render layout: false, template: "entities/llp/partners"
       else
         return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
       end
     elsif request.patch?
+      prior_partner_name = "#{@partner.first_name} #{@partner.last_name}"
       if @partner.update(partner_params)
         @partner.use_temp_id
         @partner.save
         @partners = @partner.super_entity.partners
-        # flash[:success] = "The Partner Successfully Updated.</br><a href='#{entities_llp_partners_path( @entity.key, active_id: @partner.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_partner_name}, a Partner of #{@entity.display_name}"
         return redirect_to entities_llp_partner_path( @entity.key, @partner.id )
-        # return render layout: false, template: "entities/llp/partners"
       else
         # return render layout: false, template: "entities/llp/partner"
         return redirect_to entities_llp_partner_path( @entity.key, @partner.id )

@@ -13,7 +13,6 @@ class Entities::CorporatesController < ApplicationController
       #@entity = Entity.find_by(key: key)
       entity_check() if @entity.present?
       @entity       ||= Entity.new(type_: params[:type])
-      @just_created = params[:just_created].to_b
       if @entity.new_record?
         add_breadcrumb "Clients", clients_path, :title => "Clients"
         add_breadcrumb "Corporation", '',  :title => "Corporation"
@@ -31,8 +30,7 @@ class Entities::CorporatesController < ApplicationController
       @entity.user_id         = current_user.id
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        # return render json: { redirect: view_context.entities_corporates_basic_info_path(@entity.key), just_created: true }
-        # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@entity.display_name}"
         return redirect_to entities_corporates_basic_info_path( @entity.key )
       else
         add_breadcrumb "Clients", clients_path, :title => "Clients"
@@ -41,10 +39,13 @@ class Entities::CorporatesController < ApplicationController
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
+      prior_entity_name = @entity.display_name
       @entity.type_           = MemberType.getCorporationId
       @entity.basic_info_only = true
-      @entity.update(entity_params)
-      return redirect_to entities_corporates_basic_info_path( @entity.key )
+      if @entity.update(entity_params)
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}"
+        return redirect_to entities_corporates_basic_info_path( @entity.key )
+      end
     else
       raise UnknownRequestFormat
     end
@@ -75,7 +76,6 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def director
-    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Director </a></h4></div>".html_safe
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
       id      = params[:id]
@@ -106,20 +106,19 @@ class Entities::CorporatesController < ApplicationController
       @director.use_temp_id
       if @director.save
         @directors = @entity.directors
-        # return render layout: false, template: "entities/corporates/directors"
-        # flash[:success] = "New Director Successfully Created.</br><a href='#{entities_corporates_directors_path( @entity.key, active_id: @director.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@director.first_name} #{@director.last_name}, a Director of #{@entity.display_name}"
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
       else
         # return render layout: false, template: "entities/corporates/director"
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
       end
     elsif request.patch?
+      prior_director_name = "#{@director.first_name} #{@director.last_name}"
       if @director.update(director_params)
         @director.use_temp_id
         @directors = @director.entity.directors
         @director.save
-        # return render layout: false, template: "entities/corporates/directors"
-        # flash[:success] = "The Director Successfully Updated.</br><a href='#{entities_corporates_directors_path( @entity.key, active_id: @director.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_director_name}, a Director of #{@entity.display_name}"
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
       else
         return redirect_to entities_corporates_director_path( @entity.key, @director.id )
@@ -152,7 +151,6 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def officer
-    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Officer </a></h4></div>".html_safe
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
       id      = params[:id]
@@ -183,7 +181,7 @@ class Entities::CorporatesController < ApplicationController
       @officer.use_temp_id
       if @officer.save
         @officers = @entity.officers
-        # flash[:success] = "New Officer Successfully Created.</br><a href='#{entities_corporates_officers_path( @entity.key, active_id: @officer.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@officer.first_name} #{@officer.last_name}, a Officer of #{@entity.display_name}"
         return redirect_to entities_corporates_officer_path( @entity.key, @officer.id )
         # return render layout: false, template: "entities/corporates/officers"
       else
@@ -191,13 +189,13 @@ class Entities::CorporatesController < ApplicationController
         return redirect_to entities_corporates_officer_path( @entity.key, @officer.id )
       end
     elsif request.patch?
+      prior_officer_name = "#{@officer.first_name} #{@officer.last_name}"
       if @officer.update(officer_params)
         @officer.use_temp_id
         @officer.save
         @officers = @officer.entity.officers
-        # flash[:success] = "The Officer Successfully Updated.</br><a href='#{entities_corporates_officers_path( @entity.key, @officer.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_officer_name}, a Officer of #{@entity.display_name}"
         return redirect_to entities_corporates_officer_path( @entity.key, @officer.id )
-        # return render layout: false, template: "entities/corporates/officers"
       else
         # return render layout: false, template: "entities/corporates/officer"
         return redirect_to entities_corporates_officer_path( @entity.key, @officer.id )
@@ -231,8 +229,6 @@ class Entities::CorporatesController < ApplicationController
   end
 
   def stockholder
-    # add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"#\">Stockholder </a></h4></div>".html_safe
-
     @referrer = request.referrer
     unless request.delete?
       @entity = Entity.find_by(key: params[:entity_key])
@@ -265,22 +261,20 @@ class Entities::CorporatesController < ApplicationController
       @stockholder.class_name      = "StockHolder"
       if (@stockholder.entity.present? || @stockholder.contact.present?) && @stockholder.save
         @stockholders = @entity.stockholders
-        # flash[:success] = "New Stockholder Successfully Created.</br><a href='#{entities_corporates_stockholders_path( @entity.key, active_id: @stockholder.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@stockholder.first_name} #{@stockholder.last_name}, a Stockholder of #{@entity.display_name}"
         return redirect_to entities_corporates_stockholder_path( @entity.key, @stockholder.id )
-        # return render layout: false, template: "entities/corporates/stockholders"
       else
         @stockholder.errors.add(:stockholder, "problem creating. Check data and try again.")
         # return render layout: false, template: "entities/corporates/stockholder"
         return redirect_to entities_corporates_stockholder_path( @entity.key, @stockholder.id )
       end
     elsif request.patch?
-
+      prior_stockholder_name = "#{@stockholder.first_name} #{@stockholder.last_name}"
       @stockholder.assign_attributes(stockholder_params)
       @stockholder.use_temp_id
       if (@stockholder.entity.present? || @stockholder.contact.present?) && @stockholder.save
         @stockholders = @entity.stockholders
-        # return render layout: false, template: "entities/corporates/stockholders"
-        # flash[:success] = "The Stockholder Successfully Updated.</br><a href='#{entities_corporates_stockholders_path( @entity.key, active_id: @stockholder.id )}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_stockholder_name}, a Stockholder of #{@entity.display_name}"
         return redirect_to entities_corporates_stockholder_path( @entity.key, @stockholder.id )
       else
         @stockholder.errors.add(:stockholder, "problem updating. Check data and try again.")

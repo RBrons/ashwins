@@ -26,18 +26,18 @@ class Entities::TrustController < ApplicationController
       @entity.user_id         = current_user.id
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: @entity })
-        # return render json: {redirect: view_context.entities_trust_basic_info_path( @entity.key ), just_created: true}
-        #return redirect_to clients_path
-        # flash[:success] = "New Client Successfully Created.</br><a href='#{clients_path(active_id: @entity.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@entity.name}"
         return redirect_to entities_trust_basic_info_path( @entity.key )
       else
         individual_breadcrumb
       end
     elsif request.patch?
       #@entity                 = Entity.find_by(key: key)
+      prior_entity_name = @entity.name
       @entity.type_           = MemberType.getTrustId
       @entity.basic_info_only = true
       if @entity.update(entity_params)
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}"
         return redirect_to edit_entity_path(@entity.key)
       end
     else
@@ -102,30 +102,21 @@ class Entities::TrustController < ApplicationController
       @settlor.use_temp_id
       @settlor.super_entity_id = @entity.id
       @settlor.class_name      = "Settlor"
-      # add_breadcrumb "/Clients", clients_path, :title => "Clients" 
-      # add_breadcrumb "/ Trust", '',  :title => "Trust"
-      # add_breadcrumb "/ Trustee", '',  :title => "Trustee"
-      # add_breadcrumb "/ Create", '',  :title => "Create"
       if @settlor.save
         @settlors = @settlor.super_entity.settlors
-        # return render layout: false, template: "entities/trust/settlors"
-        # flash[:success] = "New Settlor Successfully Created.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@settlor.first_name} #{@settlor.last_name}, a Settlor of #{@entity.name}"
         return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       else
         # return render layout: false, template: "entities/trust/settlor"
         return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       end
     elsif request.patch?
-      # add_breadcrumb "/Clients", clients_path, :title => "Clients" 
-      # add_breadcrumb "/ Trust", '',  :title => "Trust"
-      # add_breadcrumb "/ Edit: #{@entity.name}", '',  :title => "Editt"
-      # add_breadcrumb "/ Trustee", '',  :title => "Trustee"
+      prior_settlor_name = "#{@settlor.first_name} #{@settlor.last_name}"
       if @settlor.update(settlor_params)
         @settlor.use_temp_id
         @settlor.save
         @settlors = @settlor.super_entity.settlors
-        flash[:success] = "The Settlor Successfully Updated.</br><a href='#{entities_trust_settlors_path(@entity.key, active_id: @settlor.id)}'>Show in List</a>"
-        # return render layout: false, template: "entities/trust/settlors"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_settlor_name}, a Settlor of #{@entity.name}"
         return redirect_to entities_trust_settlor_path(@entity.key, @settlor.id)
       else
         # return render layout: false, template: "entities/trust/settlor"
@@ -186,20 +177,20 @@ class Entities::TrustController < ApplicationController
       @trustee.super_entity_id = @entity.id
       if @trustee.save
         @trustees = @trustee.super_entity.trustees
-        # return render layout: false, template: "entities/trust/trustees"
-        # flash[:success] = "New Trustee Successfully Created.</br><a href='#{entities_trust_trustees_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@trustee.first_name} #{@trustee.last_name}, a Trustee of #{@entity.name}"
         return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       else
         # return render layout: false, template: "entities/trust/trustee"
         return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       end
     elsif request.patch?
+      prior_trustee_name = "#{@trustee.first_name} #{@trustee.last_name}"
       if @trustee.update(trustee_params)
         @trustees = @trustee.super_entity.trustees
         @trustee.use_temp_id
         @trustee.save
         # return render layout: false, template: "entities/trust/trustees"
-        flash[:success] = "The Trustee Successfully Updated.</br><a href='#{entities_trust_trustee_path(@entity.key, active_id: @trustee.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_trustee_name}, a Trustee of #{@entity.name}"
         return redirect_to entities_trust_trustee_path(@entity.key, @trustee.id)
       else
         # return render layout: false, template: "entities/trust/trustee"
@@ -261,19 +252,20 @@ class Entities::TrustController < ApplicationController
       if @beneficiary.save
         @beneficiaries = @beneficiary.super_entity.beneficiaries
         # return render layout: false, template: "entities/trust/beneficiaries"
-        # flash[:success] = "New Beneficiary Successfully Created.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{@beneficiary.first_name} #{@beneficiary.last_name}, a Beneficiary of #{@entity.name}"
         return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       else
         # return render layout: false, template: "entities/trust/beneficiary"
         return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       end
     elsif request.patch?
+      prior_beneficiary_name = "#{@beneficiary.first_name} #{@beneficiary.last_name}"
       if @beneficiary.update(beneficiary_params)
         @beneficiary.use_temp_id
         @beneficiary.save
         @beneficiaries = @beneficiary.super_entity.beneficiaries
         # return render layout: false, template: "entities/trust/beneficiaries"
-        flash[:success] = "The Beneficiary Successfully Updated.</br><a href='#{entities_trust_beneficiaries_path(@entity.key, active_id: @beneficiary.id)}'>Show in List</a>"
+        flash[:success] = "Congratulations, you have just created a record for #{prior_beneficiary_name}, a Beneficiary of #{@entity.name}"
         return redirect_to entities_trust_beneficiary_path(@entity.key, @beneficiary.id)
       else
         # return render layout: false, template: "entities/trust/beneficiary"

@@ -1,7 +1,7 @@
 class Entities::TenancyInCommonController < ApplicationController
 
   before_action :current_page
-  before_action :check_xhr_page
+  # before_action :check_xhr_page
   before_action :set_entity, only: [:basic_info]
   # before_action :add_breadcrum
 
@@ -14,7 +14,6 @@ class Entities::TenancyInCommonController < ApplicationController
       #  @entity = EntityTenancyInCommon.find_by(key: key)
       #end
       @entity       ||= EntityTenancyInCommon.new(type_: params[:type])
-      @just_created = params[:just_created].to_b
       if @entity.new_record?
         add_breadcrumb "Clients", clients_path, :title => "Clients"
         add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
@@ -33,14 +32,17 @@ class Entities::TenancyInCommonController < ApplicationController
 
       if @entity.save
         AccessResource.add_access({ user: current_user, resource: Entity.find(@entity.id) })
-        return render json: { redirect: view_context.entities_tenancy_in_common_basic_info_path(@entity.key), just_created: true }
+        flash[:success] = "Congratulations, you have just created a record for #{@entity.name}, a Tenancy in Common"
+        return redirect_to entities_tenancy_in_common_basic_info_path(@entity.key)
       end
     elsif request.patch?
       #@entity                 = EntityTenancyInCommon.find_by(key: key)
+      prior_entity_name = @entity.name
       @entity.type_           = MemberType.getTenancyinCommonId
       @entity.basic_info_only = true
       if @entity.update(entity_tenancy_in_common_params)
-        return redirect_to edit_entity_path(@entity.key)
+        flash[:success] = "Congratulations, you have just made a change in the record for #{prior_entity_name}, a Tenancy in Common"
+        return redirect_to entities_tenancy_in_common_basic_info_path(@entity.key)
       end
     else
       raise UnknownRequestFormat
@@ -78,31 +80,31 @@ class Entities::TenancyInCommonController < ApplicationController
       @tenant_in_common.use_temp_id
       if @tenant_in_common.save
         @tenants_in_common = @tenant_in_common.super_entity.tenants_in_common
-        return render layout: false, template: "entities/tenancy_in_common/tenants_in_common"
+        flash[:success] = "Congratulations, you have just created a record for #{@tenant_in_common.first_name} #{@tenant_in_common.last_name}, a Tenant in Common of #{@entity.name}"
+        return redirect_to entities_tenancy_in_common_tenants_in_common_path(@entity.key)
       else
         @tenant_in_common.gen_temp_id
-        add_breadcrumb "Clients", clients_path, :title => "Clients"
-        add_breadcrumb "Tenancy in Common", '',  :title => "Tenancy in Common"
-        add_breadcrumb "Edit: #{@entity.name}", '',  :title => "Edit"
-        add_breadcrumb "Tenant in Common Create", '',  :title => "Tenant in Common Create"
-        return render layout: false, template: "entities/tenancy_in_common/tenant_in_common"
+        return redirect_to entities_tenancy_in_common_tenant_in_common_path(@entity.key, @tenant_in_common.id)
       end
     elsif request.patch?
+      prior_tic_name = "#{@tenant_in_common.first_name} #{@tenant_in_common.last_name}"
       if @tenant_in_common.update(tenant_in_common_params)
         @tenant_in_common.use_temp_id
-        @tenant_in_common.save
-        @tenants_in_common = @tenant_in_common.super_entity.tenants_in_common
-        return render layout: false, template: "entities/tenancy_in_common/tenants_in_common"
+        if @tenant_in_common.save
+          @tenants_in_common = @tenant_in_common.super_entity.tenants_in_common
+          flash[:success] = "Congratulations, you have just made a change in the record for #{prior_tic_name}, a Tenant in Common of #{@entity.name}"
+          return redirect_to entities_tenancy_in_common_tenants_in_common_path(@entity.key)
+        end
       else
         @tenant_in_common.gen_temp_id
-        return render layout: false, template: "entities/tenancy_in_common/tenant_in_common"
+        return redirect_to entities_tenancy_in_common_tenant_in_common_path(@entity.key, @tenant_in_common.id)
       end
     elsif request.delete?
       tenant_in_common = TenantInCommon.find(params[:id])
       tenant_in_common.delete
       @entity            = tenant_in_common.super_entity
       @tenants_in_common = @entity.tenants_in_common
-      return render layout: false, template: "entities/tenancy_in_common/tenants_in_common"
+      return redirect_to entities_tenancy_in_common_tenants_in_common_path(@entity.key)
     end
     @tenant_in_common.gen_temp_id
     render layout: false if request.xhr?

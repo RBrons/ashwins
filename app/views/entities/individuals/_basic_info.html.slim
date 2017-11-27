@@ -1,9 +1,7 @@
 .fixed-breadcrumb
-  span#flash_message.label.label-primary.margin-sm-left
-    - if @just_created.present?
-      = "Congratulations, you have just created a record for #{@entity.name}"
-    - if @just_edited.present?
-      = "Congratulations, you have just made a change in the record for #{user_session[:prior_entity_name] || @entity.name }"
+  - if flash[:success]
+    span#flash_message.label.label-primary.margin-sm-left
+      = flash[:success]
 
   .breadcrumb-wrapper
     ul.m__breadcrumb
