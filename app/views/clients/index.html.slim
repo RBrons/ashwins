@@ -11,6 +11,10 @@
         span Are you sure you want to continue?
         = link_to 'Yes', 'javascript:void(0)', data: {:key => ''}, class: "#{delete_xs} delete-client-yes"
         = link_to 'No', 'javascript:void(0)', class: "#{show_xs} delete-client-no", data: {dismiss: "modal"}, aria: {label: "Close"}
+.fixed-breadcrumb
+  .breadcrumb-wrapper
+    ul.m__breadcrumb
+      = render_breadcrumbs :tag => :li, :separator => ""
 
 .clients_list_view
   - if !params[:grp] || params[:page]
@@ -30,13 +34,6 @@
         = hidden_field_tag :multi_remove_entities, ''
         = hidden_field_tag :group_id, @current_grp
         = link_to 'Remove Selected From Group', 'javascript:void(0);', class: 'btn btn-sm btn-danger', id: 'multi_remove_entities', 'data-confirm' => 'false'
-    .fixed-breadcrumb
-      .breadcrumb-wrapper
-        ul.m__breadcrumb
-          li
-            | Clients
-          li
-            | List View
     
     table#data_table
       thead

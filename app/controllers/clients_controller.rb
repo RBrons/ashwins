@@ -1,7 +1,7 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :edit, :update, :destroy]
   before_action :current_page
-  before_action :add_breadcrum
+
   # GET /clients
   # GET /clients.json
   def index
@@ -49,7 +49,9 @@ class ClientsController < ApplicationController
     end
     @entities   = @entities.order(created_at: :desc).paginate(page: params[:page], per_page: sessioned_per_page)
     @activeId = params[:active_id]
-    add_breadcrumb "<div class=\"pull-left\"><h4><a href=\"/clients\">List </a></h4></div>".html_safe
+    
+    add_breadcrumb "Clients"
+    add_breadcrumb "List View"
     render layout: false if request.xhr?
   end
 
