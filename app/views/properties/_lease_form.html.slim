@@ -44,7 +44,7 @@ input#property_id[type="hidden" value=(@property.id)]
   = render 'properties/form_header_link'
 
 .clearfix.margin-sm-top
-  ul#lease_tab.nav.nav-tabs.bar_tabs[role="tablist"]
+  ul#lease_tab.nav.nav-tabs.bar_tabs.bar_tabs_sm[role="tablist"]
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
       a#lease_basics[href="#lease_basics_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="true"] Parties
     li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_terms_section'}")

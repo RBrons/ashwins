@@ -3204,6 +3204,10 @@ ul.bar_tabs>li a {
     border-top-right-radius: 0
 }
 
+ul.bar_tabs_sm >li a {
+    padding: 10px 12px;
+}
+
 ul.bar_tabs>li a span {
     display: none;
     vertical-align: baseline;

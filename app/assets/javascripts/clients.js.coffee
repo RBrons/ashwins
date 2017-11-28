@@ -151,7 +151,8 @@ $ ->
         url: url
         dataType: "html"
         success: (val) ->
-          $("div#entities-list").html(val)
+          $("div#entities-list").replaceWith(val)
+          set_breadcrumb_colors()
           $('#current_group_id').val(p[0])
           manage_jsGrid_UI()
         error: (e) ->
