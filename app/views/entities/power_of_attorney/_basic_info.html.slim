@@ -81,9 +81,9 @@
 
       .clearfix
       .form-group.margin-sm-top
-        = f.label "State of Formation"
+        = f.label :jurisdiction, "State of Formation"
         .clearfix
-        = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction),class: "form-control selectize-single"
+        = f.select :jurisdiction, options_for_select(Entity.USSTATES, @entity.jurisdiction), {}, class: "form-control selectize-single"
       .clearfix
         .form-group
           - if @entity.persisted?
