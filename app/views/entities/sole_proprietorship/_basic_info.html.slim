@@ -48,10 +48,10 @@
           label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
         .pull-right
           = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
-    .clearfix
+      .clearfix
     .form-content-tax
       .form-group
-        = f.label "Ein"
+        = f.label :ein_or_ssn, "EIN"
         = f.text_field :ein_or_ssn, class: "ein form-control"
     .form-group
       label Postal Address
