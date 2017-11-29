@@ -3,7 +3,7 @@ class Entities::LlpController < ApplicationController
   layout "entities"
 
   before_action :current_page
-  # before_action :check_xhr_page
+  before_action :check_xhr_page, only: [:contact_info, :owns]
   before_action :set_entity, only: [:basic_info]
   # before_action :add_breadcrum
 

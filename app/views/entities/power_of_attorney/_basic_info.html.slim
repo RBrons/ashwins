@@ -42,13 +42,13 @@
 
     - if individual_principals.length != 0 || entity_principals.length != 0
       .form-group style=("#{('display: none;' if entity_principals.length == 0 || individual_principals.length == 0)}")
-        .option-1
-          = f.label "Individual"
-          = radio_button_tag "is_person", true, @principal.is_person
-        .option-2
-          = f.label "Entity"
-          = radio_button_tag "is_person", false, !@principal.is_person
-
+        .heading_blue.radio-inline
+          span = f.radio_button :is_person, true, checked: @principal.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Individual
+        .heading_blue.radio-inline
+          span.margin-md-left = f.radio_button :is_person, false, checked: !@principal.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Entity
+      
       .form-group#principal_entity
         label Principal
         span.error-msg
@@ -78,8 +78,8 @@
             label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
           .pull-right
             = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
-
-      .clearfix
+        .clearfix
+        
       .form-group.margin-sm-top
         = f.label :jurisdiction, "State of Formation"
         .clearfix

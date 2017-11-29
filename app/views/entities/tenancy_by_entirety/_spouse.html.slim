@@ -34,15 +34,15 @@
         = f.select :temp_id, options_html('spouse', "true", @spouse.super_entity, f.object.temp_id), {}, class: "form-control #{'disabled-like' if prepopulated_spouses.length == 1}", data: {id: @spouse.super_entity.id, clienttype: 'spouse'}, readonly: (prepopulated_spouses.length == 1)
         = hidden_field_tag "spouse[member_type_id]", MemberType.getTenancyByTheEntiretyId
         = hidden_field_tag :cid, @spouse.temp_id
+
       .form-group
-        = f.label "Gender"
-        .clearfix
-        .option-1
-          = f.label "Male"
-          = f.radio_button :gender, 'Male', checked: @spouse.gender == 'Male', class: "zoom-in-ele"
-        .option-2
-          = f.label "Female"
-          = f.radio_button :gender, 'Female', checked: @spouse.gender == 'Female', class: "zoom-in-ele"
+        .heading_blue.radio-inline.no-padding
+          span = f.radio_button :gender, 'Male', checked:  @spouse.gender == 'Male', class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Male
+        .heading_blue.radio-inline.no-padding
+          span.margin-md-left = f.radio_button :gender, 'Female', checked: @spouse.gender == 'Female', class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Female
+      
       .form-group
         = f.submit "Save", class: "btn btn-primary"
 

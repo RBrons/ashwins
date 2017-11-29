@@ -39,13 +39,13 @@
 
     - if individual_tenants.length != 0 || entity_tenants.length != 0
       .form-group style=("#{('display: none;' if entity_tenants.length == 0 || individual_tenants.length == 0)}")
-        .option-1
-          = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @tenant_in_common.is_person, class: "zoom-in-ele"
-        .option-2
-          = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@tenant_in_common.is_person, class: "zoom-in-ele"
-
+        .heading_blue.radio-inline
+          span = f.radio_button :is_person, true, checked: @tenant_in_common.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Individual
+        .heading_blue.radio-inline
+          span.margin-md-left = f.radio_button :is_person, false, checked: !@tenant_in_common.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Entity
+      
       .form-group#tenant_in_common_entity
         label.is-person-hide style=("#{('display: none;' if @tenant_in_common.is_person)}") Owning Entity
 

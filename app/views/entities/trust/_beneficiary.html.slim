@@ -42,12 +42,13 @@
 
     - if individual_beneficiaries.length != 0 || entity_beneficiaries.length != 0
       .form-group style=("#{('display: none;' if entity_beneficiaries.length == 0 || individual_beneficiaries.length == 0)}")
-        .option-1
-          = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @beneficiary.is_person
-        .option-2
-          = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@beneficiary.is_person
+        .heading_blue.radio-inline
+          span = f.radio_button :is_person, true, checked: @beneficiary.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Individual
+        .heading_blue.radio-inline
+          span.margin-md-left = f.radio_button :is_person, false, checked: !@beneficiary.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Entity
+
       .form-group#beneficiary_entity
         label.is-person-hide style=("#{('display: none;' if @beneficiary.is_person)}") Beneficial Entity
 
@@ -61,21 +62,18 @@
         = hidden_field_tag "beneficiary[member_type_id]", MemberType.getTrustId
         = hidden_field_tag :cid, @beneficiary.temp_id
       .form-group
-        .col-sm-6
-          label Beneficiary Interest
-          br
+        label.control-label Beneficiary Interest
+        .input-group.width-field-md
           = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
-          .percentage-text
-            | %
-        .col-sm-6
-          label Remaining Beneficiary Interest to be Assigned
-          br
+          span.input-group-addon %
+      .form-group
+        label.control-label Remaining Beneficiary Interest to be Assigned
+        .input-group.width-field-md
           = text_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest,
                   "disabled" => "disabled", "autocomplete" => "off", class: "assets-share form-control", "data-init" => (f.object.my_percentage_was.present? ? f.object.my_percentage_was : 0)
-          .percentage-text
-            | %
-          = hidden_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest
-          = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
+          span.input-group-addon %
+        = hidden_field_tag "remaining_number_of_assets", @beneficiary.remaining_share_or_interest
+        = hidden_field_tag "remaining_number_of_assets_warning", 'Interest Cannot Be Negative'
       .form-group
         .actions = f.submit "Save", class: "btn btn-primary"
 javascript:
