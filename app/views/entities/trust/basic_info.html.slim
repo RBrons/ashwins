@@ -1,7 +1,7 @@
 - if request.xhr?
   == render partial: "entities/trust/basic_info"
 - else
-  .corporate-forms
+  .corporate-forms[style=(@entity.persisted? ? '' : 'margin-top: 0')]
     == render partial: "entities/trust/links"
     .clearfix
     .corporate-contact-form
