@@ -42,9 +42,10 @@
     .form-group.required.date_of_formation
       label.control-label Date of Formation
       .clearfix
-      .pull-left
+      .pull-left.stretch-container.width-field-md
         = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", "data-parsley-ui-enabled" => false, style: "#{'display: none;' if f.object.m_date_of_formation?}"
         = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
+        span.stretch
       .pull-right
         .pull-left
           label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
