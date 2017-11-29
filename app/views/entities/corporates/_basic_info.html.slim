@@ -68,17 +68,14 @@
         = text_field_tag "instant_remaining_number_of_assets", @entity.corporate_remaining_share, "disabled" => "disabled", class: " input-mask-integer form-control"
       = hidden_field_tag "instant_remaining_number_of_assets", @entity.corporate_distributed_share
     .form-group
-      .part23
-        .half
-          .part1
-            label S Corp Status
-          .part2
-            = f.check_box :s_corp_status, class: "zoom-in-ele"
-        .half
-          .part1
-            label Not For Profit
-          .part2
-            = f.check_box :not_for_profit_status, class: "zoom-in-ele"
+      label.control-label S Corp Status
+      p
+        = f.check_box :s_corp_status, class: "flat-icheck"
+    
+    .form-group
+      label Not For Profit
+      p
+        = f.check_box :not_for_profit_status, class: "flat-icheck"
     .clearfix
       .form-group
         - if @entity.persisted?
