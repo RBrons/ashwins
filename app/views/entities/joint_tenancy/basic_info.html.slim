@@ -1,7 +1,7 @@
 - if request.xhr?
   == render partial: "entities/joint_tenancy/basic_info"
 - else
-  .corporate-forms
+  .corporate-forms[style=(@entity.persisted? ? '' : 'margin-top: 0')]
     == render partial: "entities/joint_tenancy/links"
     .corporate-contact-form
       == render partial: "entities/joint_tenancy/basic_info"
