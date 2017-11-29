@@ -1,5 +1,5 @@
 $ ->
-  $(document).on 'click', "input[id$=is_person_false]", ->
+  $(document).on 'ifChecked', "input[id$=is_person_false]", ->
     if this.checked
       $(document).find(".contact").html('Contact')
       $(document).find("input[id$=_entity]").parent().show()
@@ -25,7 +25,7 @@ $ ->
 
       sort_select_options($(document).find("select[id$=_state]")[0], false)
 
-  $(document).on 'click', "input[id$=is_person_true]", ->
+  $(document).on 'ifChecked', "input[id$=is_person_true]", ->
     if this.checked
       $(document).find(".contact").html('&nbsp;')
       $(document).find("input[id$=_entity]").parent().hide()

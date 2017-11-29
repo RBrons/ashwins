@@ -42,13 +42,13 @@
 
     - if individual_members.length != 0 || entity_members.length != 0
       .form-group style=("#{('display: none;' if entity_members.length == 0 || individual_members.length == 0)}")
-        .option-1
-          = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @member.is_person, class: "zoom-in-ele"
-        .option-2
-          = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@member.is_person, class: "zoom-in-ele"
-
+        .heading_blue.radio-inline
+          span = f.radio_button :is_person, true, checked: @member.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Individual
+        .heading_blue.radio-inline
+          span.margin-md-left = f.radio_button :is_person, false, checked: !@member.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Entity
+      
       .form-group#member_entity
         label.is-person-hide style=("#{('display: none;' if @member.is_person)}") Owning Entity
 
@@ -64,7 +64,7 @@
       .form-group
           label Manager?
           .clearfix
-          = f.check_box :is_manager, class: "zoom-in-ele"
+          = f.check_box :is_manager, class: "flat-icheck"
       .form-group
         label Member Interest for this Member
         = f.text_field :my_percentage, "autocomplete" => "off", class: "assets-share form-control"
@@ -78,7 +78,7 @@
       .form-group
         label Tax Matters Member
         .clearfix
-        = f.check_box :tax_member, class: "zoom-in-ele"
+        = f.check_box :tax_member, class: "flat-icheck"
       .form-group
         = f.submit 'Save', class: "btn btn-primary"
 

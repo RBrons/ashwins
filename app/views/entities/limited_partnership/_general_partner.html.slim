@@ -38,12 +38,12 @@
 
     - if individual_partners.length != 0 || entity_partners.length != 0
       .form-group style=("#{('display: none;' if entity_partners.length == 0 || individual_partners.length == 0)}")
-        .option-1
-          = f.label "Individual"
-          = f.radio_button :is_person, true, checked: @partner.is_person, class: "zoom-in-ele"
-        .option-2
-          = f.label "Entity"
-          = f.radio_button :is_person, false, checked: !@partner.is_person, class: "zoom-in-ele"
+        .heading_blue.radio-inline
+          span = f.radio_button :is_person, true, checked: @partner.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Individual
+        .heading_blue.radio-inline
+          span.margin-md-left = f.radio_button :is_person, false, checked: !@partner.is_person, class: 'form-control flat-icheck radiobuttons'
+          span.margin-md-left Entity
 
       .form-group#general_partner_entity
         label.is-person-hide style=("#{('display: none;' if @partner.is_person)}") Owning Entity
@@ -68,7 +68,7 @@
       .form-group
         label Tax Matters Member
         .clearfix
-        = f.check_box :tax_member, class: "zoom-in-ele"
+        = f.check_box :tax_member, class: "flat-icheck"
       .form-group
         = f.submit "Save", class: "btn btn-primary"
 

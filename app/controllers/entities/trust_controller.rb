@@ -1,7 +1,7 @@
 class Entities::TrustController < ApplicationController
 
   before_action :current_page
-  # before_action :check_xhr_page
+  before_action :check_xhr_page, only: [:contact_info, :owns]
   before_action :set_entity, only: [:basic_info]
   
   def basic_info
