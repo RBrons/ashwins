@@ -5460,3 +5460,14 @@ ul.m__breadcrumb li a:hover {
     background: #fff;
     padding: 23px 0 5px 0;
 }
+
+/* date field left and right flush */
+.stretch-container{
+    text-align: justify;
+}
+.stretch{
+    width: 100%;
+    display: inline-block;
+    font-size: 0;
+    line-height: 0
+}
