@@ -5465,6 +5465,11 @@ ul.m__breadcrumb li a:hover {
 .stretch-container{
     text-align: justify;
 }
+
+.form-group .stretch-container{
+    height: 34px;
+}
+
 .stretch{
     width: 100%;
     display: inline-block;
