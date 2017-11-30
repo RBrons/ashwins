@@ -100,8 +100,9 @@ $ ->
   $(document).on 'click', '.title', ->
     url = $(this).parent().attr('url')
     window.location.href = url if url.length > 0
-  $(document).on 'click', 'input#property_location_street_address_from_county_tax_authorities_is', ->
-    if this.checked
+  
+  $(document).on 'ifChanged', '#property_location_street_address_from_county_tax_authorities_is', ->
+    if $(this).is(':checked')
       $(document).find('#location_street_address_from_county_tax_authorities').show()
     else
       $(document).find('#location_street_address_from_county_tax_authorities').hide()

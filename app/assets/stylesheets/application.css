@@ -63,8 +63,4 @@ table#data_table tbody tr.child-row.active-item{
   margin-top: 46px;
 }
 
-.check_box_label{
-  position: relative !important;
-  left: 12px !important;
-}
 
