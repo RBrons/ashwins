@@ -52,7 +52,7 @@ class ClientsController < ApplicationController
     
     add_breadcrumb "Clients"
     add_breadcrumb "List View"
-    render layout: false if request.xhr?
+    render layout: false, template: 'clients/clients_by_group' if request.xhr?
   end
 
   # GET /clients/1

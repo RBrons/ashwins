@@ -50,8 +50,8 @@ $ ->
       $(document).find("input#client_email").val(json.email)
       $(document).find("input#client_postal_address").val(json.postal_address)
       $(document).find("input#client_city").val(json.city)
-      $(document).find("input#client_state").find('option:selected').removeAttr("selected");
-      $(document).find("input#client_state, option[value='"+json.state+"']").attr("selected", "selected")
+      $(document).find("input#client_state").find('option:selected').removeAttr("selected")
+      $(document).find("input#client_state, option[value='" + json.state+"']").attr("selected", "selected")
       $(document).find("input#client_zip").val(json.zip)
     catch
 
@@ -151,7 +151,7 @@ $ ->
         url: url
         dataType: "html"
         success: (val) ->
-          $("div#entities-list").replaceWith(val)
+          $("div#entities-list").html(val)
           set_breadcrumb_colors()
           $('#current_group_id').val(p[0])
           manage_jsGrid_UI()
@@ -163,49 +163,30 @@ $ ->
   tree_nodes = []
 
   $('#entity-groups-tree').on('model.jstree', (e, data) ->
-    #alert('tree changes')
-    #alert(data.parent)
-    #alert(data.nodes)
     if tree_nodes.length == 0
       tree_nodes = data.nodes
     return
   )
 
   $('#entity-groups-tree').on('rename_node.jstree', (e, data) ->
-    #alert('node renamed')
-    #alert(data.old)
-    #alert(data.text)
-    #alert(data.node.id)
-    #alert('parent ' + data.node.parent)
-    #alert(tree_nodes)
     if tree_nodes.indexOf(data.node.id) == -1
-      #alert('new node')
-      #inst = $.jstree.reference(data.reference)
-      #parent = inst.get_parent(data.node)
-      #parent1 = $.jstree.reference('#entity-groups-tree').get_parent(data.node)
-      #alert('parent id is : ' + parent1)
       $.ajax
         url: '/groups'
         type: 'post'
         dataType: 'json'
         data: {"group": {"name": data.text, "gtype": "Entity", "parent_id": data.node.parent}}
         success: (sdata) ->
-          #alert(sdata.id)
-          #alert(sdata.name)
           $.jstree.reference('#entity-groups-tree').set_id(data.node, sdata.id)
           $.jstree.reference('#entity-groups-tree').set_text(data.node, sdata.name +
             '<a href="#" class="addtogroup" id="grp_' + sdata.id + '"><img  src="/assets/plusCyan.png" id="igrp_' +
             sdata.id + '"></img></a>')
     else
-      #alert('edit node')
       $.ajax
         url: '/groups/' + data.node.id
         type: 'patch'
         dataType: 'json'
         data: {"group": {"name": data.text, "gtype": "Entity", "parent_id": data.node.parent}}
         success: (sdata) ->
-          #alert(sdata.id)
-          #alert(sdata.name)
           $.jstree.reference('#entity-groups-tree').set_id(data.node, sdata.id)
           $.jstree.reference('#entity-groups-tree').set_text(data.node, sdata.name +
             '<a href="#" class="addtogroup" id="grp_' + sdata.id + '"><img  src="/assets/plusCyan.png" id="igrp_' +
@@ -214,7 +195,6 @@ $ ->
   )
 
   $('#entity-groups-tree').on('delete_node.jstree', (e, data) ->
-    #alert(data.node.id)
     $.ajax
       url: '/groups/' + data.node.id
       type: 'delete'
@@ -226,8 +206,6 @@ $ ->
   )
 
   $(document).on 'click', "#add_button" , (e) ->
-    #prevent Default functionality
-    #alert 'add ...'
     e.preventDefault()
     actionurl = '/clients/index'
     $.ajax
@@ -255,15 +233,12 @@ $ ->
 
   $(document).on 'click', "#multi_add_entities" , (e) ->
     #prevent Default functionality
-    #alert 'add multi...'
     e.preventDefault()
     ents = $(document).find('input#multi_delete_objects').val()
-    #alert ents
     actionurl = '/clients/index'
     if ents.length > 0
       $(document).find('input#multi_add_entities').val(ents)
       selgrp = $(document).find('select#group_id').val()
-      #alert selgrp
       $.ajax
         url: actionurl
         type: 'post'
@@ -277,10 +252,8 @@ $ ->
 
   $(document).on 'click', "#multi_remove_entities" , (e) ->
     #prevent Default functionality
-    #alert 'remove multi...'
     e.preventDefault()
     ents = $(document).find('input#multi_delete_objects').val()
-    #alert ents
     actionurl = '/clients/index'
     if ents.length > 0
       $(document).find('input#multi_remove_entities').val(ents)
@@ -299,13 +272,10 @@ $ ->
     ents = $(document).find('input#multi_delete_objects').val()
     #prevent Default functionality
     ids = e.target.id.split('_')
-    #ents = $(document).find('input#multi_delete_objects').val()
-    #alert ents
     actionurl = '/clients/index'
     if ents.length > 0
       $(document).find('input#multi_add_entities').val(ents)
       selgrp = ids[1]
-      #alert selgrp
       $.ajax
         url: actionurl
         type: 'post'
@@ -346,3 +316,14 @@ $ ->
           window.location.href = '/clients'
       error: (e) ->
         console.log e
+    
+  $(document).on "click", "a.toogle-tree-group", ->
+    console.log 'toggle tree group'
+    if $('.clients_list_view').hasClass('tree-in')
+      $('.clients_list_view').addClass('tree-out').removeClass('tree-in')
+      $('#entity-groups-tree').hide()
+    else
+      $('.clients_list_view').addClass('tree-in').removeClass('tree-out')
+      $('#entity-groups-tree').show()
+
+      

@@ -16,11 +16,14 @@
     ul.m__breadcrumb
       = render_breadcrumbs :tag => :li, :separator => ""
 
-.clients_list_view
+.clients_list_view.tree-in
   - if !params[:grp] || params[:page]
     div.tree-wrapper
       div#entity-groups-tree
   div#entities-list
+    .tree-action-btn
+      a.toogle-tree-group[href="#" title="toggle client group tree"] 
+        span.fa.fa-bars.fa-2x
     = hidden_field_tag :current_group_id, @current_grp
     - if @current_grp == '0'
       = form_tag(clients_index_path, method: :post, remote: true, id: 'addmultiform', style: "display: none;") do
