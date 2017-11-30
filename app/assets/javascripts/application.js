@@ -360,6 +360,10 @@ $(window).resize(function(){
  * Make Parsley Validation on Form Submitation
  */
 $(document).ready(function(){
+    
+    /**
+     * Parsley Validation form
+     */
     $('form.validation_form').parsley(
         {
             errorsContainer: function(em){
@@ -368,6 +372,11 @@ $(document).ready(function(){
             }
         }
     )
+
+    /**
+     * WYSIWYG Editor
+     */
+    $('.editor-wrapper').summernote();
 })
 
 // Bootstrap tree view

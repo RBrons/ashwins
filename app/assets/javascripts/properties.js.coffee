@@ -53,17 +53,21 @@ $ ->
   tmpComments = 0
   $(document).on 'click', '.property-add-comment', ->
     tmpComments = $(this).prev()
-    $("#new-comment-modal #comment-content").val('')
-    $("#new-comment-modal #comment-content").attr("data-type", $(this).attr("data-type"))
-    $("#new-comment-modal #comment-content").attr("data-user", $(this).attr("data-user"))
-    $("#new-comment-modal #comment-content").attr("data-property", $(this).attr("data-property"))
-    $("#new-comment-modal").modal('show')
+    $("#new-comment #comment-content").val('')
+    $("#new-comment #comment-content").attr("data-type", $(this).attr("data-type"))
+    $("#new-comment #comment-content").attr("data-user", $(this).attr("data-user"))
+    $("#new-comment #comment-content").attr("data-property", $(this).attr("data-property"))
+    
+    $('#new-comment').slideToggle()
 
-  $("#new-comment-modal").on 'click', '#add-comment', ->
-    typeComments = $("#new-comment-modal #comment-content").attr("data-type")
-    propertyId = $("#new-comment-modal #comment-content").attr("data-property")
-    userId = $("#new-comment-modal #comment-content").attr("data-user")
+  $(document).on 'click', '.compose-close', ->
+    $('#new-comment').slideToggle()
 
+  $(document).on 'click', '#add-comment', ->
+    typeComments = $("#new-comment #comment-content").attr("data-type")
+    propertyId = $("#new-comment #comment-content").attr("data-property")
+    userId = $("#new-comment #comment-content").attr("data-user")
+    
     $.ajax
       type: "POST"
       url: "/xhr/add_property_comment"
@@ -72,6 +76,7 @@ $ ->
       success: (response) ->
         console.log response.status
         tmpComments.text('Comments(' + response.length + ')')
+        $('#new-comment').slideToggle()
       error: (e) ->
         console.log e
 
