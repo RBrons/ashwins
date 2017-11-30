@@ -9,21 +9,17 @@
       button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
         | Close
 
-#new-comment-modal.modal.fade[data-keyboard="false" data-backdrop="static"]
-  .modal-dialog.modal-md
-    .modal-header
-      button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
-        span.lnr.lnr-cross
-      h4.modal-title Add Comment
-    .modal-body
-      textarea#comment-content rows=7
-    .modal-footer
-      button#add-comment.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
-        | Save
-      button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
-        | Close
+#new-comment.compose.col-md-6.col-xs-12
+  .compose-header
+    | New Comment
+    button.close.compose-close[type="button"]
+      span ×
+  .compose-body
+    textarea#comment-content.editor-wrapper
+  .compose-footer
+    button#add-comment.btn.btn-sm.btn-success[type="button"] Save
+    
 input#property_id[type="hidden" value=(@property.id)]
-
 .fixed-breadcrumb
   - if flash[:success]
     span#flash_message.label.label-primary.margin-sm-left
