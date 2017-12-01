@@ -40,7 +40,7 @@ class XhrController < ApplicationController
     @user = User.find(params[:user_id])
     @comments = @property.comments.where(user_id: @user.id, comment_type: params[:type]).order(created_at: :desc)
 
-    @html = (@comments.blank?) ? "<p>No Comments!</p>".html_safe : property_comments_html(@comments)
+    render json: render_to_string(template: 'xhr/property_comments', locals: { comments: @comments })
   end
 
   def clients_delete_warning

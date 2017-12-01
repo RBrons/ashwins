@@ -1,1 +1,8 @@
-= @html
+.comments-wrapper
+    - comments.each do |comment|
+        .comment
+            .comment-info.clearfix
+                span.pull-right
+                    = "Commented by <b>#{comment.user.name}</b> at <b>#{comment.created_at}</b>".html_safe
+            .comment-content
+                = comment.comment.html_safe

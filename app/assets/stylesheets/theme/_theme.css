@@ -5379,7 +5379,7 @@ ol.number_with_parentheses>li:before {
 
 .breadcrumb-wrapper{
     background-color: inherit;
-    padding: 7px 280px 7px;
+    padding: 7px 30px 7px 280px;
     margin: 22px 0 5px;
     max-height: 60px;
 }
@@ -5459,6 +5459,11 @@ ul.m__breadcrumb li a:hover {
     width: 100%;
     background: #fff;
     padding: 23px 0 5px 0;
+}
+
+/* Left Justification */
+.left-justify{
+    padding-left: 250px;
 }
 
 /* date field left and right flush */
