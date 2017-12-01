@@ -15,8 +15,7 @@
 
 - url = @contact.persisted? ? contact_path(@contact.id) : contacts_path
 - heading = @contact.persisted? ? "Edit Client" : "New Client"
-.clearfix.margin-sm-top
-.contact-form-wrapper
+.clearfix.contact-form-wrapper.left-justify.margin-sm-top
   .col-lg-6.col-md-6
     = form_for @contact, url: url,remote: (request.xhr?), html: { class: "validation_form" } do |f|
       .clearfix
