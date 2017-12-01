@@ -1,8 +1,14 @@
 .comments-wrapper
     - comments.each do |comment|
-        .comment
-            .comment-info.clearfix
-                span.pull-right
-                    = "Commented by <b>#{comment.user.name}</b> at <b>#{comment.created_at}</b>".html_safe
-            .comment-content
-                = comment.comment.html_safe
+        .comment-list
+            .comment-body
+                .comment-meta.clearfix
+                    span.pull-right
+                        = "Commented by <b>#{comment.user.name}</b> at <b>#{comment.created_at}</b>".html_safe
+                .comment-text
+                    = comment.comment.html_safe
+            .comment-dd
+                a.edit-comment[href="#" data-comment-id=(comment.id)]
+                    i.fa.fa-edit
+                a.delete-comment[href="#" data-comment-id=(comment.id)]
+                    i.fa.fa-trash-o

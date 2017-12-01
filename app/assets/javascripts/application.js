@@ -376,7 +376,9 @@ $(document).ready(function(){
     /**
      * WYSIWYG Editor
      */
-    $('.editor-wrapper').summernote();
+    $('.editor-wrapper').summernote({
+        height: 80  
+    });
 })
 
 // Bootstrap tree view
