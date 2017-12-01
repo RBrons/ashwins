@@ -40,35 +40,62 @@ input#property_id[type="hidden" value=(@property.id)]
   = render 'properties/form_header_link'
 
 .clearfix.margin-sm-top
-  ul#lease_tab.nav.nav-tabs.bar_tabs.bar_tabs_sm[role="tablist"]
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
-      a#lease_basics[href="#lease_basics_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="true"] Parties
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_terms_section'}")
-      a#lease_terms[href="#lease_terms_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Lease Term
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
-      a#lease_rent_table[href="#lease_rent_table_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Rent Table
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
-      a#lease_rent_details[href="#lease_rent_details_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Rent Details
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
-      a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Taxes and Fees
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
-      a#lease_taxes_and_fees[href="#lease_site_preparation_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Site Preparation
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_construction_section'}")
-      a#lease_construction[href="#lease_construction_section" class="sub_tab_menu" role="tab" data-toggle="tab" aria-expanded="false"] Construction
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_use_section'}")
-      a#lease_use[href="#lease_use_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Use
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_premises_section'}")
-      a#lease_premises[href="#lease_premises_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Premises
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_transfer_section'}")
-      a#lease_transfer[href="#lease_transfer_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Transfer
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_remedies_section'}")
-      a#lease_remedies[href="#lease_remedies_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Remedies
-    li role="presentation" class=("tab_content #{'active' if params[:lease_sub] == 'lease_misc_section'}")
-      a#lease_misc[href="#lease_misc_section" role="tab" class="sub_tab_menu" data-toggle="tab" aria-expanded="false"] Misc
+  ul#lease_tab.nav.nav-tabs.bar_tabs.bar_tabs_sm
+    li class=("#{'active' if params[:lease_sub] == 'lease_dash_section' || params[:lease_sub].blank?}")
+      a#lease_dash[href="#lease_dash_section" data-toggle="tab"] All
+    li class=("#{'active' if params[:lease_sub] == 'lease_basics_section'}")
+      a#lease_basics[href="#lease_basics_section" data-toggle="tab"] Parties
+    li class=("#{'active' if params[:lease_sub] == 'lease_terms_section'}")
+      a#lease_terms[href="#lease_terms_section" data-toggle="tab"] Lease Term
+    li class=("#{'active' if params[:lease_sub] == 'lease_rent_table_section'}")
+      a#lease_rent_table[href="#lease_rent_table_section" data-toggle="tab"] Rent Table
+    li class=("#{'active' if params[:lease_sub] == 'lease_rent_details_section'}")
+      a#lease_rent_details[href="#lease_rent_details_section" data-toggle="tab"] Rent Details
+    li class=("#{'active' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
+      a#lease_taxes_and_fees[href="#lease_taxes_and_fees_section" data-toggle="tab"] Taxes and Fees
+    li class=("#{'active' if params[:lease_sub] == 'lease_site_preparation_section'}")
+      a#lease_taxes_and_fees[href="#lease_site_preparation_section" data-toggle="tab"] Site Preparation
+    li class=("#{'active' if params[:lease_sub] == 'lease_construction_section'}")
+      a#lease_construction[href="#lease_construction_section" data-toggle="tab"] Construction
+    li class=("#{'active' if params[:lease_sub] == 'lease_use_section'}")
+      a#lease_use[href="#lease_use_section" data-toggle="tab"] Use
+    li class=("#{'active' if params[:lease_sub] == 'lease_premises_section'}")
+      a#lease_premises[href="#lease_premises_section" data-toggle="tab"] Premises
+    li class=("#{'active' if params[:lease_sub] == 'lease_transfer_section'}")
+      a#lease_transfer[href="#lease_transfer_section" data-toggle="tab"] Transfer
+    li class=("#{'active' if params[:lease_sub] == 'lease_remedies_section'}")
+      a#lease_remedies[href="#lease_remedies_section" data-toggle="tab"] Remedies
+    li class=("#{'active' if params[:lease_sub] == 'lease_misc_section'}")
+      a#lease_misc[href="#lease_misc_section" data-toggle="tab"] Misc
 
 
-  .tab-content
-    #lease_basics_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
+  .tab-content.clearfix
+    #lease_dash_section class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_dash_section' || params[:lease_sub].blank?}")
+      ul.nav.nav-tabs.bar_tabs
+        li.active
+          a#lease_dash_grid[href="#lease_dash_grid_section" data-toggle="tab"] Grid
+        li
+          a#lease_dash_text[href="#lease_dash_text_section" data-toggle="tab"] Text
+      .tab-content.clearfix
+        #lease_dash_grid_section.tab-pane.active.fade.in
+          div
+            .heading_blue.radio-inline
+              input.flat-icheck[type="radio" name=""]
+              span.margin-md-left Verbatim Text and Comments
+            .heading_blue.radio-inline
+              input.flat-icheck[type="radio" name=""]
+              span.margin-md-left Comments only
+
+        #lease_dash_text_section.tab-pane.fade
+          div
+            .heading_blue.radio-inline
+              input.flat-icheck[type="radio" name=""]
+              span.margin-md-left Verbatim Text and Comments
+            .heading_blue.radio-inline
+              input.flat-icheck[type="radio" name=""]
+              span.margin-md-left Comments only
+          
+    #lease_basics_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_basics_section'
@@ -106,7 +133,7 @@ input#property_id[type="hidden" value=(@property.id)]
             = f.text_field :lease_original_guarantor, class: 'form-control'
           .form-group
             = f.submit 'Save', id: "mynameis", class: 'submit btn btn-sm btn-primary', style: "display: none;"
-    #lease_terms_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
+    #lease_terms_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_terms_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_terms_section'
@@ -235,7 +262,7 @@ input#property_id[type="hidden" value=(@property.id)]
                 .input-group-addon %
           .form-group
             = f.submit 'Save', id:'lease_submit',class: 'submit btn btn-sm btn-primary',style: "display: none;"            
-    #lease_rent_table_section role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")      
+    #lease_rent_table_section class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")      
       - if @property.rent_tables.present?
         .user-setup-wizard
           ul.wizard_steps
@@ -325,7 +352,7 @@ input#property_id[type="hidden" value=(@property.id)]
                     td
                       = number_to_currency row[13]
 
-    #lease_rent_details_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
+    #lease_rent_details_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_rent_details_section'
@@ -383,7 +410,7 @@ input#property_id[type="hidden" value=(@property.id)]
                 = f.text_field :lease_percentage_rent_exclusions_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-    #lease_taxes_and_fees_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
+    #lease_taxes_and_fees_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_taxes_and_fees_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_taxes_and_fees_section'
@@ -534,7 +561,7 @@ input#property_id[type="hidden" value=(@property.id)]
               = f.text_field :taxes_and_fees_easements_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-    #lease_site_preparation_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
+    #lease_site_preparation_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_site_preparation_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_site_preparation_section'
@@ -608,7 +635,7 @@ input#property_id[type="hidden" value=(@property.id)]
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
 
-    #lease_construction_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
+    #lease_construction_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_construction_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_construction_section'
@@ -681,7 +708,7 @@ input#property_id[type="hidden" value=(@property.id)]
               = f.text_field :construction_approval_of_plans_and_specs_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-    #lease_use_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
+    #lease_use_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_use_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_use_section'
@@ -725,7 +752,7 @@ input#property_id[type="hidden" value=(@property.id)]
               = f.text_field :use_exclusive_clause_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-    #lease_premises_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
+    #lease_premises_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_premises_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_premises_section'
@@ -1008,7 +1035,7 @@ input#property_id[type="hidden" value=(@property.id)]
               = f.text_field :premises_utilities_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-    #lease_transfer_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
+    #lease_transfer_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_transfer_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_transfer_section'
@@ -1081,7 +1108,7 @@ input#property_id[type="hidden" value=(@property.id)]
               = f.text_field :transfer_estoppel_certificate_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-    #lease_remedies_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
+    #lease_remedies_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_remedies_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_remedies_section'
@@ -1184,7 +1211,7 @@ input#property_id[type="hidden" value=(@property.id)]
               = f.text_field :remedies_exculpation_keywords, class: 'form-control'
           .form-group.submit
             = f.submit 'Save', class: 'btn btn-sm btn-primary', style: "display: none;"
-    #lease_misc_section.mask_content role="tabpanel" class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
+    #lease_misc_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_misc_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
         = hidden_field_tag :lease_sub, 'lease_misc_section'
