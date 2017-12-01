@@ -2,7 +2,7 @@ $ ->
   $(document).on 'ajax:beforeSend', 'a.new-property', ->
     $.blockUI()
 
-  $(document).on 'ajax:success', 'a.new-property', (data, xhr, status)->
+  $(document).on 'ajax:success', 'a.new-property', (data, xhr, status) ->
     $('#NewProperty').find('.modal-content').html(xhr)
     $('#NewProperty').modal()
     enable_datetimepicker()
@@ -11,7 +11,7 @@ $ ->
   $(document).on 'ajax:beforeSend', 'form.new_property', ->
     $.blockUI()
 
-  $(document).on 'ajax:success', 'form.new_property', (data, xhr, status)->
+  $(document).on 'ajax:success', 'form.new_property', (data, xhr, status) ->
     $('div.project-index').append(xhr)
     $('#NewProperty').modal('hide')
     $.unblockUI()
@@ -21,7 +21,7 @@ $ ->
     $(this).parent().parent().find('#property-settings:first').toggle()
     $(this).parent().parent().find('#property-settings:first').css('left', (position.left - 100) + 'px')
 
-  $(document).on 'click', (e)->
+  $(document).on 'click', (e) ->
     if !$(e.target).hasClass('property-settings')
       container = $("#property-settings")
       if (!container.is(e.target) and (container.has(e.target).length == 0))
@@ -49,38 +49,82 @@ $ ->
         $("#comments-modal").modal('show')
       error: (e) ->
         console.log e
+    
+  $(document).on 'click', '.delete-comment', ->
+    commentID = $(this).data('comment-id')
+    deleteBTN = $(this)
+    $.ajax
+      type: "DELETE"
+      url: "/comments/" + commentID
+      dataType: "json"
+      success: (status) ->
+        deleteBTN.closest('.comment-list').remove()
+        $('.property-comments-box').find('a.property-comments').text('Comments(' + $('.comments-wrapper .comment-list').length + ')')
+      error: (e) ->
+        console.log e
+
+  $(document).on 'click', '.edit-comment', ->
+    commentID = $(this).data('comment-id')
+    $.ajax
+      type: "GET"
+      url: "/comments/" + commentID + '/edit'
+      dataType: "json"
+      success: (data) ->
+        $(".comment-editor .compose-header span.title").text('Edit Comment')
+        $(".comment-editor #comment-content").attr("data-comment-id", data.id)
+        $('#comments-modal').modal('hide')
+
+        $('.comment-editor #comment-content').summernote('code', data.comment)
+        $('.comment-editor').slideToggle()
+      error: (e) ->
+        console.log e
 
   tmpComments = 0
   $(document).on 'click', '.property-add-comment', ->
     tmpComments = $(this).prev()
-    $("#new-comment #comment-content").val('')
-    $("#new-comment #comment-content").attr("data-type", $(this).attr("data-type"))
-    $("#new-comment #comment-content").attr("data-user", $(this).attr("data-user"))
-    $("#new-comment #comment-content").attr("data-property", $(this).attr("data-property"))
+    $(".comment-editor #comment-content").val('')
+    $(".comment-editor #comment-content").attr("data-comment-id", '')
+    $(".comment-editor #comment-content").attr("data-type", $(this).attr("data-type"))
+    $(".comment-editor #comment-content").attr("data-user", $(this).attr("data-user"))
+    $(".comment-editor #comment-content").attr("data-property", $(this).attr("data-property"))
     
-    $('#new-comment').slideToggle()
+    $('.comment-editor #comment-content').summernote('code', '')
+    $('.comment-editor').slideToggle()
 
   $(document).on 'click', '.compose-close', ->
-    $('#new-comment').slideToggle()
+    $('.comment-editor').slideToggle()
 
-  $(document).on 'click', '#add-comment', ->
-    typeComments = $("#new-comment #comment-content").attr("data-type")
-    propertyId = $("#new-comment #comment-content").attr("data-property")
-    userId = $("#new-comment #comment-content").attr("data-user")
-    
-    $.ajax
-      type: "POST"
-      url: "/xhr/add_property_comment"
-      data: {id: propertyId, type: typeComments, user_id: userId, comment: $("#comment-content").val()}
-      dataType: "json"
-      success: (response) ->
-        console.log response.status
-        tmpComments.text('Comments(' + response.length + ')')
-        $('#new-comment').slideToggle()
-      error: (e) ->
-        console.log e
+  $(document).on 'click', '#save-comment', ->
+    if !$(".comment-editor #comment-content").attr("data-comment-id")
+      typeComments = $(".comment-editor #comment-content").attr("data-type")
+      propertyId = $(".comment-editor #comment-content").attr("data-property")
+      userId = $(".comment-editor #comment-content").attr("data-user")
+      
+      $.ajax
+        type: "POST"
+        url: "/xhr/add_property_comment"
+        data: {id: propertyId, type: typeComments, user_id: userId, comment: $("#comment-content").val()}
+        dataType: "json"
+        success: (response) ->
+          console.log response.status
+          tmpComments.text('Comments(' + response.length + ')')
+          $('.comment-editor').slideToggle()
+        error: (e) ->
+          console.log e
+    else
+      commentID = $(".comment-editor #comment-content").attr("data-comment-id")
+      $.ajax
+        type: "PUT"
+        url: "/comments/" + commentID
+        data: { comment: $("#comment-content").val() }
+        dataType: "json"
+        success: (response) ->
+          console.log response.status
+          $('.comment-editor').slideToggle()
+        error: (e) ->
+          console.log e
 
-  #      Inline EDIT
+  # Inline EDIT
   $(document).on 'mouseover', '.property-heading-index', ->
     id = $(this).attr('data-id')
     $(document).find('.property-heading-index').editable '/properties/update/'+id,

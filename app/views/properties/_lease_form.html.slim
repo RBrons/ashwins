@@ -9,15 +9,15 @@
       button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
         | Close
 
-#new-comment.compose.col-md-6.col-xs-12
+.comment-editor.compose.col-md-6.col-xs-12
   .compose-header
-    | New Comment
+    span.title New Comment
     button.close.compose-close[type="button"]
       span ×
   .compose-body
     textarea#comment-content.editor-wrapper
   .compose-footer
-    button#add-comment.btn.btn-sm.btn-success[type="button"] Save
+    button#save-comment.btn.btn-sm.btn-success[type="button"] Save
     
 input#property_id[type="hidden" value=(@property.id)]
 .fixed-breadcrumb
@@ -1207,7 +1207,7 @@ input#property_id[type="hidden" value=(@property.id)]
                 - $attribute_name = 'property[misc_notices_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_notices_rating}
               .property-comments-box
-                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'notices').count})", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'notices', deleted: false).count})", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-comments"
                 = link_to "+", "javascript:void(0)", data: {type: "notices", property: @property.id, user: current_user.id}, class: "property-add-comment"
               = f.text_area :misc_notices, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)
@@ -1222,7 +1222,7 @@ input#property_id[type="hidden" value=(@property.id)]
                 - $attribute_name = 'property[misc_obligation_rating]'
                 = render :partial => '/properties/star_rating', :locals => {:attribute_name => $attribute_name, :star_rating => @property.misc_obligation_rating}
               .property-comments-box
-                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'misc_obligation').count})", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-comments"
+                = link_to "Comments (#{@property.comments.where(user_id: current_user.id, comment_type: 'misc_obligation').count})", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id, deleted: false}, class: "property-comments"
                 = link_to "+", "javascript:void(0)", data: {type: "misc_obligation", property: @property.id, user: current_user.id}, class: "property-add-comment"
               = f.text_area :misc_obligation, rows: 7, class: 'form-control'
               h2.heading.mg-top-5 Keywords (separate by commas)

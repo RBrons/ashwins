@@ -244,6 +244,8 @@ Rails.application.routes.draw do
 
   resources :procedures
 
+  resources :comments
+
   get 'comments/property'
   post 'comments/property'
 

@@ -38,8 +38,8 @@ class XhrController < ApplicationController
   def property_comments
     @property = Property.find(params[:id])
     @user = User.find(params[:user_id])
-    @comments = @property.comments.where(user_id: @user.id, comment_type: params[:type]).order(created_at: :desc)
-
+    @comments = @property.comments.where(user_id: @user.id, comment_type: params[:type], deleted: false).order(created_at: :desc)
+    
     render json: render_to_string(template: 'xhr/property_comments', locals: { comments: @comments })
   end
 
@@ -66,7 +66,7 @@ class XhrController < ApplicationController
     # @comments = @property.comments.where(user_id: @user.id, comment_type: params[:type]).order(created_at: :desc)
     # @html = (@comments.blank?) ? "<p>No Comments!</p>".html_safe : property_comments_html(@comments)
     if @comment = Comment.create(user_id: @user.id, comment_type: @typeComment, comment: @content, commentable: @property)
-      render :json => {status: "success", length: @property.comments.where(user_id: @user.id, comment_type: params[:type]).count}
+      render :json => {status: "success", length: @property.comments.where(user_id: @user.id, comment_type: params[:type], deleted: false).count}
     else
       render :json => {status: "error"}
     end
