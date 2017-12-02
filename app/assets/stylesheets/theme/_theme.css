@@ -407,11 +407,12 @@ i.lnr {
 .nav_menu {
     float: left;
     background: #3082EE;
-    border-bottom: 1px solid #D9DEE4;
+    border-bottom: 1px solid #3082EE;
     margin-bottom: 10px;
     width: 100%;
     position: relative;
     padding: 0 30px;
+    height: 75px;
 }
 
 @media (min-width: 480px) {

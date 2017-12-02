@@ -369,10 +369,17 @@ $(document).ready(function(){
             errorsContainer: function(em){
                 $err = em.$element.parents('.form-group').find('.error-msg');
                 return $err
+            },
+            listeners: {
+                onFieldValidate: function(elem, ParsleyField) {
+                    console.log("validate", elem);
+                },
+                onFieldError: function(elem, constraints, ParsleyField) {
+                    console.log("error", elem);
+                }
             }
         }
     )
-
     /**
      * WYSIWYG Editor
      */
