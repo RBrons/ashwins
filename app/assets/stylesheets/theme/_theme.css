@@ -412,6 +412,9 @@ i.lnr {
     width: 100%;
     position: relative;
     padding: 0 30px;
+}
+
+.top-header{
     height: 75px;
 }
 
