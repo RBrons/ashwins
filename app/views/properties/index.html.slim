@@ -74,7 +74,7 @@ table#data_table
   = render template: 'shared/trashed_un', locals: { local_path: multi_delete_properties_path, klazz: Property, index_path: properties_path(trashed: !params[:trashed].to_b) }
   .clearfix
   = render template: 'shared/per_page_set'
-  .pull-right
+  .pull-right.paginate-style
     = will_paginate @properties
 
 javascript:

@@ -205,6 +205,7 @@ $ ->
     return
   )
 
+
   $(document).on 'click', "#add_button" , (e) ->
     e.preventDefault()
     actionurl = '/clients/index'
@@ -316,7 +317,7 @@ $ ->
           window.location.href = '/clients'
       error: (e) ->
         console.log e
-    
+
   $(document).on "click", "a.toogle-tree-group", ->
     console.log 'toggle tree group'
     if $('.clients_list_view').hasClass('tree-in')
@@ -326,4 +327,3 @@ $ ->
       $('.clients_list_view').addClass('tree-in').removeClass('tree-out')
       $('#entity-groups-tree').show()
 
-      
