@@ -2,7 +2,7 @@
   - if flash[:success]
     span#flash_message.label.label-primary.margin-sm-left
       = flash[:success]
-      
+
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
@@ -27,7 +27,7 @@
           = f.text_field :company_name, class: "form-control", required: true, "data-parsley-error-message" => "Company name can't be blank"
           div#legal-ending-wrapper
             = f.select :legal_ending, options_for_select(["", "Inc.", "Corp.", "Ltd.", "LLC", "LLP", "LP", "Partners", "Partnership"], @contact.legal_ending)
-      - else 
+      - else
           = f.hidden_field :is_company, value: false
 
       .form-group
@@ -44,7 +44,7 @@
           div#per-role-wrapper
             = f.select :per_role, Contact::PERSONNEL_ROLE, {}, class: 'form-control selectize-single'
           div#cp-role-wrapper
-            = f.select :cp_role, Contact::CLIENT_PARTICIPANT_ROLE, {}, class: 'form-control selectize-single'      
+            = f.select :cp_role, Contact::CLIENT_PARTICIPANT_ROLE, {}, class: 'form-control selectize-single'
       - if params[:contact_type] == "company"
         .form-group
           = f.label :first_name, "#{@contact.cprefix}First Name", class: "control-label"
@@ -65,11 +65,11 @@
           = f.text_field :last_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
 
       .form-group
-        = f.label :phone1
+        = f.label :phone1, "Phone 1"
         = f.text_field :phone1, class: "form-control"
 
       .form-group
-        = f.label :phone2
+        = f.label :phone2, "Phone 2"
         = f.text_field :phone2, class: "form-control"
 
       .form-group
