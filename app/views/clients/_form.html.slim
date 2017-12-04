@@ -19,7 +19,7 @@
         = f.radio_button :is_person, true, checked: @client.is_person, class: 'form-control radiobuttons'
         = f.label "Entity"
         = f.radio_button :is_person, false, checked: !@client.is_person, class: 'form-control radiobuttons'
-    
+
     = f.hidden_field :client_type,value:  params[:client_type] || @client.client_type
     .form-group style=("#{('display: none;' if @client.is_person)}")
       .part1
@@ -40,7 +40,7 @@
         = f.check_box :is_honorific, class: ""
       .part3 style="display: #{(@client.is_honorific ? 'inline' : 'none')}"
         = f.select :honorific, options_for_select(GeneralMethods.honorific, @client.honorific), {}, {class: "state form-control"}
-    
+
 
     .form-group.required
       = f.label "First Name", class: "control-label"
@@ -51,11 +51,11 @@
       = f.text_field :last_name, class: "form-control"
 
     .form-group
-      = f.label :phone1
+      = f.label :phone1, "Phone 1"
       = f.text_field :phone1, class: "form-control"
 
     .form-group
-      = f.label :phone2
+      = f.label :phone2, "Phone 2"
       = f.text_field :phone2, class: "form-control"
 
     .form-group
@@ -88,7 +88,7 @@
     .form-group
       = f.submit 'Save', class: 'btn btn-sm btn-primary'
 
-    
+
 
 /! Modal
 #ClientFormNewEntity.modal.fade aria-hidden="true" aria-labelledby="ClientFormNewEntity" role="dialog" tabindex="-5"

@@ -214,15 +214,64 @@ p.text-info.con-current
   margin: 10px 0px 0px 0px
 
 .clients_list_view
-  margin-top: -15px
+  margin-top: -20px
   .tree-wrapper
     width: 230px
     position: fixed
+    padding-top: 31px
   #entities-list
     margin-left: 240px
-    
+    position: relative
+    .record-pagination
+      position: absolute
+      padding-top: 26px
 .clients_list_view.tree-out
   .tree-wrapper
     width: 0px
   #entities-list
     margin-left: 0px
+
+.action-col
+  width: 149px
+
+.client-col
+  width: 100px
+
+.own-col
+  width: 112px
+
+.owned-by-col
+  width: 112px
+
+.fixed-breadcrumb.client-style
+  .toogle-tree-group
+    &:before
+      content: '\f0c0'
+      font-family: fontawesome
+      font-size: 30px
+      color: white
+      position: absolute
+      left: 20px
+      top: 66%
+      transform: translateY(-50%)
+
+.record-page
+  display: block !important
+
+#per_page
+  text-align: center
+  padding-top: 4px
+  padding-bottom: 4px
+  border-radius: 3px
+  border-width: 1px
+  border-right-color: #b1acac
+  border-bottom-color: #b1acac
+
+.save-style
+  padding-top: 5px
+  padding-bottom: 5px
+  text-align: center
+  width: 50px
+  border-radius: 3px
+  margin-top: 4px
+  border-color: #b1acac

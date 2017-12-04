@@ -14,7 +14,7 @@
   - if flash[:success]
     span#flash_message.label.label-primary.margin-sm-left
       = flash[:success]
-      
+
   .breadcrumb-wrapper
     ul.m__breadcrumb
       = render_breadcrumbs tag: :li, separator: ""
@@ -40,7 +40,9 @@ table#data_table
       th
         | Email
       th
-        | Phone
+        | Phone 1
+      th
+        | Phone 2
       th
         | Fax
       th
@@ -77,6 +79,8 @@ table#data_table
           = contact.email
         td
           = contact.phone1
+        td
+          = contact.phone2
         td
           = contact.fax
         td

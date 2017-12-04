@@ -29,7 +29,7 @@
     .form-group.required
       = f.label :first_name, class: "control-label"
       span.error-msg
-      = f.text_field :first_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
+      = f.text_field :first_name, class: "form-control", id: "target", required: true, "data-parsley-error-message" => "First name can't be blank"
     .form-group.required
       = f.label :last_name, class: "control-label"
       span.error-msg
@@ -57,10 +57,10 @@
     .form-group
       label City
       = f.text_field :city, class: 'city form-control'
-    .form-group  
+    .form-group
       label.control-label State
       = f.select :state, options_for_select(GeneralMethods.USSTATES, @entity.state), {}, class: 'state form-control selectize-single'
-    .form-group  
+    .form-group
       label Zip
       = f.text_field :zip, class: 'zip form-control'
     .form-group
@@ -69,7 +69,7 @@
     .clearfix
       .form-group
         - if @entity.persisted?
-          - c_str = "Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? " 
+          - c_str = "Warning, you just made changes to #{@entity.display_name} Are you sure you want to proceed to do this? "
           = f.submit 'Save', class: 'btn btn-sm btn-primary', data: { confirm: c_str }
         - else
           = f.submit 'Save', class: 'btn btn-sm btn-primary'
@@ -79,5 +79,5 @@ javascript:
       $.notify($('.flash_message').html(), {autoHideDelay: 7000, className: 'success'});
   });
   $('#save_btn').on('click', function() {
-    $('.corporate-contact-form form').submit(); 
+    $('.corporate-contact-form form').submit();
   });
