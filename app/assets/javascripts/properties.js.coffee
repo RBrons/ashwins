@@ -49,7 +49,7 @@ $ ->
         $("#comments-modal").modal('show')
       error: (e) ->
         console.log e
-    
+
   $(document).on 'click', '.delete-comment', ->
     commentID = $(this).data('comment-id')
     deleteBTN = $(this)
@@ -87,7 +87,7 @@ $ ->
     $(".comment-editor #comment-content").attr("data-type", $(this).attr("data-type"))
     $(".comment-editor #comment-content").attr("data-user", $(this).attr("data-user"))
     $(".comment-editor #comment-content").attr("data-property", $(this).attr("data-property"))
-    
+
     $('.comment-editor #comment-content').summernote('code', '')
     $('.comment-editor').slideToggle()
 
@@ -99,7 +99,7 @@ $ ->
       typeComments = $(".comment-editor #comment-content").attr("data-type")
       propertyId = $(".comment-editor #comment-content").attr("data-property")
       userId = $(".comment-editor #comment-content").attr("data-user")
-      
+
       $.ajax
         type: "POST"
         url: "/xhr/add_property_comment"
@@ -149,7 +149,7 @@ $ ->
   $(document).on 'click', '.title', ->
     url = $(this).parent().attr('url')
     window.location.href = url if url.length > 0
-  
+
   $(document).on 'ifChanged', '#property_location_street_address_from_county_tax_authorities_is', ->
     if $(this).is(':checked')
       $(document).find('#location_street_address_from_county_tax_authorities').show()
@@ -218,16 +218,19 @@ $ ->
     #alert "is person"
     $(document).find('div.sale-tr-pr-detail').show()
     $(document).find('div.sale-tr-et-detail').hide()
+    $(document).find('div.concurrent_estates_popup').hide()
 
   $(document).on 'ifChecked', '#property_owner_person_is_2', ->
     #alert "is a entity"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').show()
+    $(document).find('div.concurrent_estates_popup').hide()
 
   $(document).on 'ifChecked', '#property_owner_person_is_0', ->
     #alert "is not a person"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').hide()
+    $(document).find('div.concurrent_estates_popup').hide()
 
   $(document).on 'blur', '#property_location_city', ->
     $("#property-readonly-city").val($(this).val())
@@ -236,6 +239,7 @@ $ ->
     #alert "is not a person"
     $(document).find('div.sale-tr-pr-detail').hide()
     $(document).find('div.sale-tr-et-detail').hide()
+    $(document).find('div.concurrent_estates_popup').show()
 
   $(document).on "click", "a.ownership-form-new-entity", ->
     if $('#status_poperty')[0].value == "Purchased"
@@ -369,7 +373,7 @@ $ ->
     if $('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == '' && $('#property_length_of_option_period').val() == '' && $('#property_lease_rent_increase_percentage').val() == ''
       $.notify 'Optional Extension fields are need to be filled.', 'warn'
       e.preventDefault()
-    
+
     # validates if all fields for calculating current rent has proper value
     ret = true
     if lease_form.find('#use_current_rent_false').is(':checked')
@@ -406,12 +410,12 @@ $ ->
           $("#md-delete-property").modal 'hide'
           window.location.href = '/properties'
       error: (e) ->
-        console.log 
-        
+        console.log
+
   $(document).on 'click', '#lease_tab li a', ->
     curPropertyId = $("#property_id").val()
     selectedLeaseTabId = $(this).attr("href").substring(1)
-    
+
     if parseInt(curPropertyId) > 0
       $.ajax
         type: "POST"
@@ -422,7 +426,7 @@ $ ->
           console.log val
         error: (e) ->
           console.log e
-  
+
   # make fixed tab while scrolling
   $(document).on 'shown.bs.tab', '#lease_tab a[data-toggle="tab"]', ->
     $('.mask_content').each ->

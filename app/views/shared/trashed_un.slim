@@ -1,4 +1,4 @@
-= form_tag local_path, method: :post do
+= form_tag local_path, method: :post, class: 'record-pagination' do
   = hidden_field_tag :multi_delete_objects, ''
   - klazz = [klazz] unless klazz.is_a?(Array)
   = hidden_field_tag :klazzz, "#{klazz.map(&:to_s).join(',')}"

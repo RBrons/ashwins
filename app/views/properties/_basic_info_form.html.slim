@@ -2,13 +2,13 @@
   - if flash[:success]
     span#flash_message.label.label-primary.margin-sm-left
       = flash[:success]
-      
+
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
         button#save_btn_prop_basic.btn.btn-sm[type="submit"] Save
       = render_breadcrumbs :tag => :li, :separator => ''
-    
+
     - unless @property.new_record?
       .action-links
         = link_to "List", properties_path, class: "margin-md-right"
@@ -41,13 +41,20 @@
         = label_tag 'Tenant'
         / = f.select :tenant_id, current_user.tenants.pluck(:name, :id), {}, class: 'form-control width-field-md'
         = f.select :tenant_id, Tenant.all().pluck(:name, :id), {}, class: 'form-control width-field-md'
+
       .form-group.required
         = f.label :location_city, "City", class: "control-label"
         span.error-msg
         = f.text_field :location_city, class: 'form-control width-field-md', required: true, "data-parsley-error-message" => "City can't be blank"
+
       .form-group.tilte_basic_info
         = label_tag 'Title'
         = f.text_field :title, class: 'form-control width-field-md'
+
+      .form-group
+        label Square Feet
+        = f.text_field :square_feet, class: 'form-control width-field-md'
+
       .form-group
         label Document
         .input-group.select_in_gdrive
@@ -56,14 +63,14 @@
             button#select_property_document.btn-gdrive.btn.btn-default.border-blue[type="button"]
               = image_tag('icons/icon-google-drive.svg', :width => '16px', :alt => "image", :class => "icon")
               span.margin-md-left.blue Select in Google Drive
-      .form-group
-        label Square Feet
-        = f.text_field :square_feet, class: 'form-control width-field-md'
+
       .form-group
         = label_tag 'Description'
-        = f.text_area :description, class: 'form-control width-field-lg'
+        = f.text_area :description, class: 'form-control'
+
       .form-group
       - if @property.ostatus == "Purchased"
+        label Owner
         - entity_clients = options_html_entities(f.object.owner_entity_id, "properties", "entity", "array")
         - individual_clients = options_html_entities(f.object.owner_entity_id, "properties", "individual", "array")
 
@@ -83,8 +90,7 @@
             = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
             = " one."
 
-        label Owning Client
-        .form-group style=("#{('display: none;' if entity_clients.length == 0 && individual_clients.length == 0)}")
+        .form-group.radio-button style=("#{('display: none;' if entity_clients.length == 0 && individual_clients.length == 0)}")
           .heading_blue.radio-inline style=("#{('display: none;' if individual_clients.length == 0)}")
             = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
             span.margin-md-left Individual
@@ -94,16 +100,40 @@
           .heading_blue.radio-inline
             = f.radio_button :owner_person_is, 0, checked: (f.object.owner_person_is == 0 || f.object.owner_person_is == nil), class: 'form-control flat-icheck radiobuttons'
             span.margin-md-left.pull-right
-              | No Current Owner
-              br
-              | or Concurrent Estate
+              | No Current Owner or Concurrent Estate
+
+        .form-group.margin-lg-top.concurrent_estates_popup style=("#{('display: none;')}")
+          ul.nav.navbar-nav
+            li.concurrent_properties
+              a.padding-md.concurrent_properties_img href=("/entities/new?type=Tenancy in Common")
+                img.icon alt=("Tenancy in common") src="/assets/icons/tenancy-in-common-685acaebe54b5b552c69dd73036d741d90b17295c354b490684d5528c98b957c.svg" /
+              span Tenancy in Common
+            li.concurrent_properties
+              a.padding-md.concurrent_properties_img href=("/entities/new?type=Joint Tenancy with Rights of Survivorship (JTWROS)")
+                img.icon alt=("Joint tenancy with rights of survivorship (jtwros)") src="/assets/icons/joint-tenancy-with-rights-of-survivorship-(jtwros)-d43d2920f4fcdb9fe134f49b739a1127bf3aa0acebcbd853a8a82a93e1294df6.svg" /
+              span Joint Tenancy with Rights of Survivorship (JTWROS)
+            li.concurrent_properties
+              a.padding-md.concurrent_properties_img href=("/entities/new?type=Tenancy by the Entirety")
+                img.icon alt=("Tenancy by the entirety") src="/assets/icons/tenancy-by-the-entirety-daa1506c0c2291b1a107cee6902f1ece442b7a25521e4fb841ec66fdb4481982.svg" /
+              span Tenancy by the Entirety
 
         .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 2)}")
           - if entity_clients.length > 1
-            = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single width-field-lg'
+            = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single'
           - elsif entity_clients.length == 1
             = f.hidden_field :owner_entity_id, value: entity_clients[0][1]
-            input.form-control.width-field-lg[type="text" value="#{entity_clients[0][0]}" readonly]
+            input.form-control[type="text" value="#{entity_clients[0][0]}" readonly]
+
+          - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
+            - owner_entity = Entity.find(@property.owner_entity_id)
+            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
+
+        .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 2)}")
+          - if entity_clients.length > 1
+            = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single'
+          - elsif entity_clients.length == 1
+            = f.hidden_field :owner_entity_id, value: entity_clients[0][1]
+            input.form-control[type="text" value="#{entity_clients[0][0]}" readonly]
 
           - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
             - owner_entity = Entity.find(@property.owner_entity_id)
@@ -111,16 +141,17 @@
 
         .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 1)}")
           - if individual_clients.length > 1
-            = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single width-field-lg'
+            = f.select :owner_entity_id_indv, options_html_entities(f.object.owner_entity_id, "properties", "individual"), {}, class: 'selectize-single'
           - elsif individual_clients.length == 1
             = f.hidden_field :owner_entity_id_indv, value: individual_clients[0][1]
-            input.form-control.width-field-lg[type="text" value="#{individual_clients[0][0]}" readonly]
+            input.form-control[type="text" value="#{individual_clients[0][0]}" readonly]
 
           - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
             - owner_entity = Entity.find(@property.owner_entity_id)
             = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
 
       - else
+        label Owner
         - entity_owners = Contact.TransactionContacts("company", current_user.id)
         - individual_owners = Contact.TransactionContacts("individual", current_user.id)
 
@@ -139,8 +170,7 @@
             = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
             = " one."
 
-        label Owner
-        .form-group style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")
+        .form-group.radio-button style=("#{('display: none;' if entity_owners.length == 0 || individual_owners.length == 0)}")
           .heading_blue.radio-inline
             span = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
             span.margin-md-left Individual
@@ -150,10 +180,10 @@
 
         .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is == 1)}")
           - if entity_owners.length > 1
-            = f.select :owner_entity_id, options_for_select(entity_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+            = f.select :owner_entity_id, options_for_select(entity_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
           - elsif entity_owners.length == 1
             = f.hidden_field :owner_entity_id, value: entity_owners[0][1]
-            input.form-control.width-field-lg[type="text" value="#{entity_owners[0][0]}" readonly]
+            input.form-control[type="text" value="#{entity_owners[0][0]}" readonly]
 
           - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
             - owner_contact = Contact.find(@property.owner_entity_id)
@@ -161,10 +191,10 @@
 
         .form-group.sale-tr-pr-detail.margin-lg-top style=("#{('display: none;' unless f.object.owner_person_is == 1)}")
           - if individual_owners.length > 1
-            = f.select :owner_entity_id_indv, options_for_select(individual_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single width-field-lg'
+            = f.select :owner_entity_id_indv, options_for_select(individual_owners, f.object.owner_entity_id), {include_blank: true}, class: 'selectize-single'
           - elsif individual_owners.length == 1
             = f.hidden_field :owner_entity_id_indv, value: individual_owners[0][1]
-            input.form-control.width-field-lg[type="text" value="#{individual_owners[0][0]}" readonly]
+            input.form-control[type="text" value="#{individual_owners[0][0]}" readonly]
 
           - if @property.owner_entity_id.present? && Contact.where(id: @property.owner_entity_id).length > 0
             - owner_contact = Contact.find(@property.owner_entity_id)
@@ -190,7 +220,7 @@
       - unless (params[:ostatus] == 'Prospective Purchase' || @property.ownership_status == 'Prospective Purchase')
         .form-group.width-field-lg
           label.control-label Closing Date
-          .clearfix    
+          .clearfix
           .pull-left.width-field-md.stretch-container
             = f.date_select :closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_closing_date", style: "#{'display: none;' if f.object.m_closing_date?}"
             = f.text_field :closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_closing_date?}"
@@ -201,11 +231,11 @@
             .pull-right
               = f.check_box :m_closing_date, data: {class: 'property_closing_date'}, class: 'manually_date'
           .clearfix
-      
+
       .form-group
         label General Property Type
         = f.select :type_is, Property::TYPES, {}, class: 'form-control width-field-md'
-      
+
       .form-group
         label Property Location
         p.helper-block Street Address (from closing statement)
@@ -216,8 +246,8 @@
       .form-group
         label.control-label
           = f.check_box :location_street_address_from_county_tax_authorities_is, class: "flat-icheck"
-          | &nbsp;Street Address (county tax authorities)
-        
+          span.check-style Street Address (county tax authorities)
+
         div#location_street_address_from_county_tax_authorities style="#{ 'display: none;' unless f.object.location_street_address_from_county_tax_authorities_is?}"
           = f.text_field :location_street_address_from_county_tax_authorities, class: 'form-control width-field-md'
       .form-group

@@ -1,7 +1,5 @@
 .tree-action-btn
-  a.toogle-tree-group[href="#"] 
-    span.fa.fa-bars.fa-2x
-    
+
 = hidden_field_tag :current_group_id, @current_grp
 - if @current_grp == '0'
   = form_tag(clients_index_path, method: :post, remote: true, id: 'addmultiform', style: "display: none;") do
@@ -21,7 +19,7 @@ table#data_table
     tr
       th = check_box_tag :object_all, false, false
       th
-        | Actions        
+        | Actions
       th style="width: 100px;"
         | Client
       th
@@ -53,7 +51,7 @@ table#data_table
         td.action
           = link_to 'Edit', edit_entity_path(entity.key), class: "#{edit_xs}"
           = link_to 'Show', entity_path(entity), class: "#{show_xs}"
-          = link_to 'Delete', 'javascript:void(0)', data: {:key => entity.key}, class: "#{delete_xs} delete-client"         
+          = link_to 'Delete', 'javascript:void(0)', data: {:key => entity.key}, class: "#{delete_xs} delete-client"
         td
           = client_entity(entity)
         td
@@ -87,7 +85,7 @@ table#data_table
               - if (name.try(:length) || 0) > 1
                 a href = name[1] style="display: block"
                   span.badge
-                    = name[0] 
+                    = name[0]
           - if entity.entity_type == "Sole Proprietorship"
             = entity.basichonorific
           = entity.honorific
@@ -98,11 +96,11 @@ table#data_table
               - if (name.try(:length) || 0) > 1
                 a href = name[1] style="display: block"
                   span.badge
-                    = name[0]           
+                    = name[0]
           - if entity.entity_type.name == "Sole Proprietorship"
             - if entity.first_name2.nil?
               = entity.first_name
-            - else 
+            - else
               = entity.first_name2
           - else
             = first_name_of_entity entity
@@ -117,7 +115,7 @@ table#data_table
           - if entity.entity_type.name == "Sole Proprietorship"
             - if entity.last_name2.nil?
               = entity.last_name
-            - else                
+            - else
               = entity.last_name2
           - else
             = last_name_of_entity entity

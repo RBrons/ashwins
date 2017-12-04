@@ -50,3 +50,5 @@ $(document).ready ->
                         window.location.href = '/contacts'
                 error: (e) ->
                     console.log e
+
+
