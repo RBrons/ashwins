@@ -12,17 +12,18 @@ html
     = render partial: 'shared/modals'
     .container.body
       .main_container
-        .col-md-3.left_col.menu_fixed
-          .left_col.scroll-view
-            .navbar.nav_title[style="border: 0;"]
-              = link_to image_tag('logo.png', class: 'logo'), '/'
-            .clearfix
-            - if @transaction.present? && !@transaction.id.nil? && @transaction.relinquishing_seller_entity_id
-              = render partial: 'layouts/left_sidebar'
         .top_nav
+          .logo-wrapper
+            = link_to image_tag('', class: 'logo', alt: ''), '/'
           = render partial: 'layouts/header'
         .transaction-breadcrumb
           = render partial: 'transactions/breadcrum'
+        .col-md-3.left_col.menu_fixed
+          .left_col.scroll-view
+            .navbar.nav_title[style="border: 0;"]
+            .clearfix
+            - if @transaction.present? && !@transaction.id.nil? && @transaction.relinquishing_seller_entity_id
+              = render partial: 'layouts/left_sidebar'
         .right_col[role="main"]
           div.row
             = yield

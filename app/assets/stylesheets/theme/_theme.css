@@ -448,13 +448,10 @@ i.lnr {
 }
 
 .nav-md img.logo {
-    position: fixed;
-    left: 0;
-    top: 0;
     width: 230px;
     height: 75px;
-    z-index: 100;
-    background-color: white
+    display: inline-block;
+    background-color: #3082EE
 }
 
 body .container.body .right_col {
@@ -643,12 +640,11 @@ body {
 }
 
 .main_container .top_nav {
-    display: block;
-    margin-left: 230px;
     position: fixed;
-    width: calc(100% - 230px);
+    width: 100%;
     z-index: 300;
     top: 0;
+    display: flex;
 }
 
 .no-padding {
