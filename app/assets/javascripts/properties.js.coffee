@@ -349,39 +349,6 @@ $ ->
   $(document).on 'ifChecked', '#use_current_rent_false', ->
     console.log 'Calculate current rent from base rent and other terms'
 
-  $(document).on 'click', '#lease_submit', (e) ->
-    lease_form = $(document).find('#lease_terms_section form')
-
-    # validation Date Of Lease, Rent Commencement Date
-    today = new Date()
-    leaseDate = new Date(
-      lease_form.find('#property_date_of_lease_1i').val(),
-      lease_form.find('#property_date_of_lease_2i').val() - 1,
-      lease_form.find('#property_date_of_lease_3i').val()
-    )
-    rentCommencementDate = new Date(
-      lease_form.find('#property_rent_commencement_date_1i').val(),
-      lease_form.find('#property_rent_commencement_date_2i').val() - 1,
-      lease_form.find('#property_rent_commencement_date_3i').val()
-    )
-    if leaseDate > today
-      $.notify 'Date of Lease should be prior to Today\'s date.', 'warn'
-      e.preventDefault()
-    if leaseDate > rentCommencementDate
-      $.notify 'Rent Commencement date should be greater than the Lease Date.', 'warn'
-      e.preventDefault()
-    if $('#property_optional_extensions_status').is(':checked') && $('#property_number_of_option_period').val() == '' && $('#property_length_of_option_period').val() == '' && $('#property_lease_rent_increase_percentage').val() == ''
-      $.notify 'Optional Extension fields are need to be filled.', 'warn'
-      e.preventDefault()
-
-    # validates if all fields for calculating current rent has proper value
-    ret = true
-    if lease_form.find('#use_current_rent_false').is(':checked')
-      if ! lease_form.find('#property_lease_base_rent').val() &&
-         ! lease_form.find('#property_lease_duration_in_years').val()
-        $.notify "Option Period cannot be calculated because all the fields were not inputted", "info"
-        e.preventDefault()
-
   $(document).on "click", "a.delete-property", ->
     key = $(this).attr 'data-key'
 
