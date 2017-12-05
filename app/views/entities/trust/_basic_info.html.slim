@@ -12,7 +12,7 @@
       .action-links
         = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
         = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
-        
+
 = form_for @entity, url: entities_trust_basic_info_path( @entity.key ), html: { class: "entity-page-xhr validation_form" } do |f|
   - if @entity.errors.any?
     #error_explanation
@@ -40,13 +40,14 @@
         = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
         = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
         span.stretch
-      .pull-right
-        .pull-left
-          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-        .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date'
+      .pull-right.date-manual
+        .pull-left.date-manual-label
+          label Input Date Manually&nbsp;&nbsp;&nbsp;
+        .pull-right.manual-checkbox
+          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date manual_date_style'
+
       .clearfix
-    
+
     .form-group.margin-sm-top
       label State of Formation
       .clearfix
@@ -106,7 +107,7 @@
           button.btn.btn-primary.should-not-change-date-of-formation-cancel data-dismiss="modal" type="button"  Cancel
 javascript:
   $(document).on('click', '#save_btn', function() {
-    $('.corporate-contact-form form').submit(); 
+    $('.corporate-contact-form form').submit();
   });
 
 /#required_field

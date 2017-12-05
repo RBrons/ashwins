@@ -2,7 +2,7 @@
   - if flash[:success]
     span#flash_message.label.label-primary.margin-sm-left
       = flash[:success]
-      
+
   .breadcrumb-wrapper
     ul.m__breadcrumb
       li.btn_bc.margin-sm-right
@@ -30,7 +30,7 @@
       div
         = f.hidden_field :has_comma, class: "has_comma_val"
         = image_tag('Comma.png', :id=> 'comma', :width => '30px', :height=> '30px')
-        = image_tag('Comma-grey.png', :id=> 'comma-grey', :width => '30px', :height=> '30px')
+        i#comma-grey.fa.fa-ban.pull-left aria-hidden="true"
         = f.select :legal_ending, options_for_select([["Partners", "Partners"], ["Partnership", "Partnership"], ["No Suffix", ""]], @entity.legal_ending), {}, class: "form-control select_auto"
       .clearfix
       = linkbacks_entity(@entity)
@@ -46,11 +46,11 @@
         = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", "data-parsley-ui-enabled" => false, style: "#{'display: none;' if f.object.m_date_of_formation?}"
         = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
         span.stretch
-      .pull-right
-        .pull-left
-          label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-        .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date zoom-in-ele'
+      .pull-right.date-manual
+        .pull-left.date-manual-label
+          label Input Date Manually&nbsp;&nbsp;&nbsp;
+        .pull-right.manual-checkbox
+          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date zoom-in-ele manual_date_style'
 
     .clearfix
     .form-group
@@ -116,5 +116,5 @@
 
 javascript:
   $(document).on('click', '#save_btn', function() {
-    $('.corporate-contact-form form').submit(); 
+    $('.corporate-contact-form form').submit();
   });

@@ -5,7 +5,7 @@ $ ->
   $(document).on "click", "img[id='comma']", ->
     toggle_comma("on")
 
-  $(document).on "click", "img[id='comma-grey']", ->
+  $(document).on "click", "i[id='comma-grey']", ->
     toggle_comma("off")
 
   toggle_comma = (what) ->

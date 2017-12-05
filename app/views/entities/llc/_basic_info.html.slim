@@ -12,7 +12,7 @@
       .action-links
         = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
         = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
-        
+
 = form_for @entity, url: entities_llc_basic_info_path( @entity.key ), html: { class: "entity-page-xhr validation_form" } do |f|
   - if @entity.errors.any?
     #error_explanation
@@ -29,7 +29,7 @@
       div
         = f.hidden_field :has_comma, class: "has_comma_val"
         = image_tag('Comma.png', :id=> 'comma', :width => '30px', :height=> '30px', :class => 'pull-left')
-        = image_tag('Comma-grey.png', :id=> 'comma-grey', :width => '30px', :height=> '30px', :class => 'pull-left')
+        i#comma-grey.fa.fa-ban.pull-left aria-hidden="true"
         span.name-suffix-span.pull-left
           | LLC
         = f.hidden_field :legal_ending, :value => "LLC"
@@ -47,11 +47,11 @@
         = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_date_of_formation", "data-parsley-ui-enabled" => false, style: "#{'display: none;' if f.object.m_date_of_formation?}"
         = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
         span.stretch
-      .pull-right
-        .pull-left
+      .pull-right.date-manual
+        .pull-left.date-manual-label
           label Input Date Manually&nbsp;&nbsp;&nbsp;
-        .pull-right
-          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date zoom-in-ele'
+        .pull-right.manual-checkbox
+          = f.check_box :m_date_of_formation, data: { class: 'entity_date_of_formation' }, class: 'manually_date zoom-in-ele manual_date_style'
 
     .clearfix
     .form-group
@@ -118,5 +118,5 @@
 
 javascript:
   $(document).on('click', '#save_btn', function() {
-    $('.corporate-contact-form form').submit(); 
+    $('.corporate-contact-form form').submit();
   });
