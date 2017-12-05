@@ -290,7 +290,23 @@ $ ->
     $.ajax
       type: "POST"
       url: "/xhr/get_rent_table"
-      data: {id: propertyId, version: selectedVersion}
+      data: { id: propertyId, version: selectedVersion }
+      dataType: "html"
+      success: (val) ->
+        $(document).find("#rent-table-wrapper").html(val)
+      error: (e) ->
+        console.log e
+
+  $(document).on 'change', "select[id^='filter_rent_table_by_date']", ->
+    year = $('#filter_rent_table_by_date__1i').val()
+    month = $('#filter_rent_table_by_date__2i').val()
+    day = $('#filter_rent_table_by_date__3i').val()
+    propertyId = $(this).data("id")
+
+    $.ajax
+      type: "POST"
+      url: "/xhr/get_all_rent_by_date"
+      data: { id: propertyId, year: year, month: month, day: day }
       dataType: "html"
       success: (val) ->
         $(document).find("#rent-table-wrapper").html(val)
