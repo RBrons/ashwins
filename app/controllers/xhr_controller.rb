@@ -195,4 +195,15 @@ class XhrController < ApplicationController
     end
   end
 
+  # Get all rent by date
+  def get_all_rent_by_date
+    property = Property.find(params[:id])
+    @filter_date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i)
+    if property.rent_commencement_date <= @filter_date && @filter_date <= (property.rent_commencement_date + property.lease_duration_in_years.years)
+      @rent_tables = property.rent_tables.where("start_year <= ? AND end_year >= ?", params[:year].to_i, params[:year].to_i)
+    else
+      @rent_tables = []
+    end
+  end
+
 end
