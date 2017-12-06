@@ -337,12 +337,14 @@ class Property < ApplicationRecord
     Entity.where(property_id: self.id, type_: [7, 8, 9]).length > 0
   end
 
-  # In which term is the property by chosen date
-  #  Return 
-    # 0: Preliminary Term, 
-    # 1: Base Term, 
-    # 2: Extension Term, 
-    # -1: property is not in any terms
+  # Check which term is the property by chosen date in
+  #  Return [status, extension_period]
+    # status:
+      # 0: Preliminary Term, 
+      # 1: Base Term, 
+      # 2: Extension Term, 
+      # -1: property is not in any terms
+
   def check_in_which_term chosen_date = false
     if chosen_date == false
       chosen_date = Time.now
@@ -354,25 +356,26 @@ class Property < ApplicationRecord
     if self.preliminary_term_status
       if !self.preliminary_term_expired
         if chosen_date >= self.date_of_lease
-          return 0
+          return [0, nil]
         end
       elsif chosen_date < self.rent_commencement_date && chosen_date >= self.date_of_lease
-        return 0
+        return [0, nil]
       end
     end
 
     if chosen_date >= base_start_date && chosen_date <= base_end_date
-      return 1
+      return [1, nil]
     end
 
     if self.optional_extensions_status
-      total_option_period = self.number_of_option_period * self.length_of_option_period
-      if chosen_date > base_end_date && chosen_date <= (base_end_date + total_option_period.years)
-        return 2
+      self.number_of_option_period.times do |option|
+        if chosen_date > base_end_date && chosen_date <= (base_end_date + (self.length_of_option_period * (option + 1)).years)
+          return [2, option + 1]
+        end
       end
     end
     
-    return -1
+    return [-1, nil]
   end
 
 end
