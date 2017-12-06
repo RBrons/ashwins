@@ -274,7 +274,7 @@ input#property_id[type="hidden" value=(@property.id)]
                 span.step_descr 
                   | Preliminary Term
                   br
-                  - if term_status == 0
+                  - if term_status[0] == 0
                     small.label.label-success Lease is in Preliminary Term
             
             li
@@ -283,17 +283,19 @@ input#property_id[type="hidden" value=(@property.id)]
                 span.step_descr 
                   | Base Term
                   br
-                  - if term_status == 1
+                  - if term_status[0] == 1
                     small.label.label-success Lease is in Base Term
             
             li
               a[class=(@property.optional_extensions_status == true ? 'selected' : 'disabled')]
                 span.step_no 3
-                span.step_descr 
-                  | Option
-                  br
-                  - if term_status == 2
+                - if term_status[0] == 2
+                  span.step_descr
+                    = @property.number_of_option_period > 1 ? "Option (#{term_status[1]} of #{@property.number_of_option_period})" : "Option"
+                    br
                     small.label.label-success Lease is in Extension Term
+                - else
+                  span.step_descr Option
         
         .mask_content
           .col-md-3.col-xs-12
