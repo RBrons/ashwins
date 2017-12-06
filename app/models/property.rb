@@ -251,19 +251,30 @@ class Property < ApplicationRecord
     end_year = lease_end_date.year
     end_month = lease_end_date.month
 
-    total_no_of_months = (end_year * 12 + end_month) - (start_year * 12 + start_month)
     rent_slab = self.lease_rent_slab_in_years || 1
     switch_years = []
 
     year_ = start_year
     while true do
       year_ = year_ + rent_slab
-      if year_ > end_year
+      if year_ >= end_year
         break
       end
       switch_years << year_
     end
 
+    if self.optional_extensions_status
+      year_ = end_year
+      lease_end_date = lease_end_date + (self.number_of_option_period * self.length_of_option_period - 1).year
+      end_year = lease_end_date.year
+      end_month = lease_end_date.month
+      
+      (self.number_of_option_period - 1).times do |option|
+        switch_years << (year_ + (option + 1) * length_of_option_period)
+      end
+    end
+
+    total_no_of_months = (end_year * 12 + end_month) - (start_year * 12 + start_month)
     base_rent = self.lease_base_rent
     base_monthly_rent = self.lease_base_rent / 12.00
     first_rent = self.lease_is_pro_rated ? self.pro_rated_month_rent : base_monthly_rent
@@ -327,12 +338,41 @@ class Property < ApplicationRecord
   end
 
   # In which term is the property by chosen date
+  #  Return 
+    # 0: Preliminary Term, 
+    # 1: Base Term, 
+    # 2: Extension Term, 
+    # -1: property is not in any terms
   def check_in_which_term chosen_date = false
     if chosen_date == false
       chosen_date = Time.now
     end
     
+    base_start_date = self.rent_commencement_date
+    base_end_date = self.rent_commencement_date + self.lease_duration_in_years.years
+
+    if self.preliminary_term_status
+      if !self.preliminary_term_expired
+        if chosen_date >= self.date_of_lease
+          return 0
+        end
+      elsif chosen_date < self.rent_commencement_date && chosen_date >= self.date_of_lease
+        return 0
+      end
+    end
+
+    if chosen_date >= base_start_date && chosen_date <= base_end_date
+      return 1
+    end
+
+    if self.optional_extensions_status
+      total_option_period = self.number_of_option_period * self.length_of_option_period
+      if chosen_date > base_end_date && chosen_date <= (base_end_date + total_option_period.years)
+        return 2
+      end
+    end
     
+    return -1
   end
 
 end
