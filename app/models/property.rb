@@ -264,13 +264,15 @@ class Property < ApplicationRecord
     end
 
     if self.optional_extensions_status
-      year_ = end_year
-      lease_end_date = lease_end_date + (self.number_of_option_period * self.length_of_option_period - 1).year
-      end_year = lease_end_date.year
-      end_month = lease_end_date.month
-      
-      (self.number_of_option_period - 1).times do |option|
-        switch_years << (year_ + (option + 1) * length_of_option_period)
+      if !self.number_of_option_period.nil? && !self.length_of_option_period.nil?
+        year_ = end_year
+        lease_end_date = lease_end_date + (self.number_of_option_period * self.length_of_option_period - 1).year
+        end_year = lease_end_date.year
+        end_month = lease_end_date.month
+        
+        (self.number_of_option_period - 1).times do |option|
+          switch_years << (year_ + (option + 1) * length_of_option_period)
+        end
       end
     end
 
@@ -376,6 +378,17 @@ class Property < ApplicationRecord
     end
     
     return [-1, nil]
+  end
+
+  def term_end
+    lease_end_date = self.rent_commencement_date + self.lease_duration_in_years.years
+    if self.optional_extensions_status
+      if self.number_of_option_period.present? && self.length_of_option_period.present?
+        lease_end_date = lease_end_date + (self.number_of_option_period * self.length_of_option_period).year
+      end
+    end
+
+    return lease_end_date
   end
 
 end
