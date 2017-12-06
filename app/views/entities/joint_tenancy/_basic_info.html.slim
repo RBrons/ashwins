@@ -12,7 +12,7 @@
       .action-links
         = link_to 'List', clients_path(active_id: @entity.id), :title => "list", :class => "margin-md-right"
         = link_to 'Show', entity_path(@entity), :title => "show", :class => ""
-        
+
 = form_for @entity, url: entities_joint_tenancy_basic_info_path( @entity.key ), html: { class: "entity-page-xhr validation_form" } do |f|
   - if @entity.errors.any?
     #error_explanation
@@ -22,20 +22,20 @@
           li = message
   - available_properties = Property.where(id: AccessResource.get_ids(resource_klass: 'Property', user: current_user), ownership_status: 'Purchased', owner_entity_id: [0, nil]).select {|s| !s.is_owned_by_concurrent_estate?}
   .col-lg-6.close-md-6.col-sm-12.col-xs-12
-    div.text-danger.invalid-form-error  
+    div.text-danger.invalid-form-error
     input#invalid_form[type="hidden" value=(available_properties.length == 0 ? 'false' : 'true')]
     - if available_properties.length > 0
       .clearfix
-      .form-group.date_of_formation
+      .form-group.date_of_formation.attorney_form
         label.control-label Date of Formation
         .clearfix
         .pull-left
           = f.date_select :date_of_formation, { start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year] }, class: "form-control select_auto entity_joint_tenancy_date_of_formation", style: "#{'display: none;' if f.object.m_date_of_formation?}"
           = f.text_field :date_of_formation, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_formation?}"
-        .pull-right
+        .pull-right.date_manual_field
           .pull-left
             label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-          .pull-right
+          .pull-right.date_manual_check_field
             = f.check_box :m_date_of_formation, data: { class: 'entity_joint_tenancy_date_of_formation' }, class: 'manually_date zoom-in-ele'
 
     .clearfix
@@ -151,5 +151,5 @@
 
 javascript:
   $(document).on('click', '#save_btn', function() {
-    $('.corporate-contact-form form').submit(); 
+    $('.corporate-contact-form form').submit();
   });

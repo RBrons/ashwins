@@ -73,6 +73,7 @@
         label Owner
         - entity_clients = options_html_entities(f.object.owner_entity_id, "properties", "entity", "array")
         - individual_clients = options_html_entities(f.object.owner_entity_id, "properties", "individual", "array")
+        - concurrent_clients = options_html_entities(f.object.owner_entity_id, "properties", "no current owner or concurrent estate", "array")
 
         - plural_entity_client_str = entity_clients.length != 1 ? 'business clients' : 'business client'
         - plural_individual_client_str = individual_clients.length != 1 ? 'individual clients' : 'individual client'
@@ -90,7 +91,7 @@
             = link_to "New", "javascript:void(0)", class: "new-tenant-button underline-red"
             = " one."
 
-        .form-group.radio-button style=("#{('display: none;' if entity_clients.length == 0 && individual_clients.length == 0)}")
+        .form-group.radio-button.properties-radio-button style=("#{('display: none;' if entity_clients.length == 0 && individual_clients.length == 0)}")
           .heading_blue.radio-inline style=("#{('display: none;' if individual_clients.length == 0)}")
             = f.radio_button :owner_person_is, 1, checked: f.object.owner_person_is == 1, class: 'form-control flat-icheck radiobuttons'
             span.margin-md-left Individual
@@ -98,35 +99,27 @@
             = f.radio_button :owner_person_is, 2, checked: f.object.owner_person_is == 2, class: 'form-control flat-icheck radiobuttons'
             span.margin-md-left Entity
           .heading_blue.radio-inline
-            = f.radio_button :owner_person_is, 0, checked: (f.object.owner_person_is == 0 || f.object.owner_person_is == nil), class: 'form-control flat-icheck radiobuttons'
+            = f.radio_button :owner_person_is, 0, checked: (f.object.owner_person_is == 0), class: 'form-control flat-icheck radiobuttons'
             span.margin-md-left.pull-right
               | No Current Owner or Concurrent Estate
 
         .form-group.margin-lg-top.concurrent_estates_popup style=("#{('display: none;')}")
           ul.nav.navbar-nav
             li.concurrent_properties
-              a.padding-md.concurrent_properties_img href=("/entities/new?type=Tenancy in Common")
+              a.padding-md.concurrent_properties_img.no_current_owner
+              span No Current Owner
+            li.concurrent_properties
+              a.padding-md.concurrent_properties_img
                 img.icon alt=("Tenancy in common") src="/assets/icons/tenancy-in-common-685acaebe54b5b552c69dd73036d741d90b17295c354b490684d5528c98b957c.svg" /
               span Tenancy in Common
             li.concurrent_properties
-              a.padding-md.concurrent_properties_img href=("/entities/new?type=Joint Tenancy with Rights of Survivorship (JTWROS)")
+              a.padding-md.concurrent_properties_img
                 img.icon alt=("Joint tenancy with rights of survivorship (jtwros)") src="/assets/icons/joint-tenancy-with-rights-of-survivorship-(jtwros)-d43d2920f4fcdb9fe134f49b739a1127bf3aa0acebcbd853a8a82a93e1294df6.svg" /
               span Joint Tenancy with Rights of Survivorship (JTWROS)
             li.concurrent_properties
-              a.padding-md.concurrent_properties_img href=("/entities/new?type=Tenancy by the Entirety")
+              a.padding-md.concurrent_properties_img
                 img.icon alt=("Tenancy by the entirety") src="/assets/icons/tenancy-by-the-entirety-daa1506c0c2291b1a107cee6902f1ece442b7a25521e4fb841ec66fdb4481982.svg" /
               span Tenancy by the Entirety
-
-        .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 2)}")
-          - if entity_clients.length > 1
-            = f.select :owner_entity_id, options_html_entities(f.object.owner_entity_id, "properties"), {}, class: 'selectize-single'
-          - elsif entity_clients.length == 1
-            = f.hidden_field :owner_entity_id, value: entity_clients[0][1]
-            input.form-control[type="text" value="#{entity_clients[0][0]}" readonly]
-
-          - if @property.owner_entity_id.present? && Entity.where(id: @property.owner_entity_id).length > 0
-            - owner_entity = Entity.find(@property.owner_entity_id)
-            = link_to owner_entity.display_name, entity_path(owner_entity), target: '_blank',class: "margin-sm-left"
 
         .form-group.sale-tr-et-detail.margin-lg-top style=("#{('display: none;' if f.object.owner_person_is != 2)}")
           - if entity_clients.length > 1
