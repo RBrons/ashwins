@@ -64,8 +64,20 @@ table#data_table
             = property.closing_date
           -else
             = ""
-        td = ""
-        td = property.number_of_years_in_term
+        td 
+          - if property.rent_tables.present?
+            - term_status = property.check_in_which_term
+            - if term_status[0] == 0
+              = "Preliminary Term"
+            - elsif term_status[0] == 1
+              = "Base Term"
+            - elsif term_status[0] == 2
+              = "Extension #{term_status[1]}"
+            - else
+              = "Expired"
+          - else
+            = "N/A"
+        td = property.term_end if property.rent_tables.present?
         td = property.date_of_lease
         td = property.building_status_is
 

@@ -199,11 +199,21 @@ class XhrController < ApplicationController
   def get_all_rent_by_date
     property = Property.find(params[:id])
     @filter_date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i)
-    if property.rent_commencement_date <= @filter_date && @filter_date <= (property.rent_commencement_date + property.lease_duration_in_years.years)
-      @rent_tables = property.rent_tables.where("start_year <= ? AND end_year >= ?", params[:year].to_i, params[:year].to_i)
+    lease_start_date = property.rent_commencement_date
+    lease_end_date = property.rent_commencement_date + property.lease_duration_in_years.years
+    
+    if property.optional_extensions_status
+      lease_end_date = lease_end_date + (property.number_of_option_period * property.length_of_option_period).years
+    end
+
+    if lease_start_date <= @filter_date && @filter_date <= lease_end_date
+      @rent_tables = property.rent_tables.where("version = ? AND start_year <= ? AND end_year >= ?", property.rent_table_version, params[:year].to_i, params[:year].to_i)
     else
       @rent_tables = []
     end
+    
+    # Option periods should always be displayed no matter what the user sets the current date to 
+    @extensions = property.rent_tables.where(version: property.rent_table_version, is_option: true)
   end
 
 end

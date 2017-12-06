@@ -264,35 +264,45 @@ input#property_id[type="hidden" value=(@property.id)]
             = f.submit 'Save', id:'lease_submit',class: 'submit btn btn-sm btn-primary',style: "display: none;"
     #lease_rent_table_section class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")      
       - if @property.rent_tables.present?
+        - term_status = @property.check_in_which_term
+        
         .user-setup-wizard
           ul.wizard_steps
             li
-              a[class=(@property.preliminary_term_status == true ? 'selected' : 'disabled') data-step=1]
+              a[class=(@property.preliminary_term_status == true ? 'selected' : 'disabled')]
                 span.step_no 1
-                span.step_descr Preliminary Term
+                span.step_descr 
+                  | Preliminary Term
+                  br
+                  - if term_status[0] == 0
+                    small.label.label-success Lease is in Preliminary Term
+            
             li
-              a.selected[ data-step=2]
+              a.selected
                 span.step_no 2
-                span.step_descr Base Term
+                span.step_descr 
+                  | Base Term
+                  br
+                  - if term_status[0] == 1
+                    small.label.label-success Lease is in Base Term
+            
             li
-              a.disabled[data-step=3]
+              a[class=(@property.optional_extensions_status == true ? 'selected' : 'disabled')]
                 span.step_no 3
-                span.step_descr Option 1
-            li
-              a.disabled[data-step=4]
-                span.step_no 4
-                span.step_descr Option 2
+                - if term_status[0] == 2
+                  span.step_descr
+                    = @property.number_of_option_period > 1 ? "Option (#{term_status[1]} of #{@property.number_of_option_period})" : "Option"
+                    br
+                    small.label.label-success Lease is in Extension Term
+                - else
+                  span.step_descr Option
+        
         .mask_content
           .col-md-3.col-xs-12
             .form-group
-              label Rent Table Version
-              = select_tag "rent_table_version", options_for_select(@property.rent_tables.collect{|p| p.version}.uniq, @property.rent_table_version), class: 'form-control width-field-sm', data: {id: @property.id}
-          
-          .col-md-3.col-xs-12
-            .form-group
-              label.control-label Today's Date
+              label.control-label Set Date for Rent Table Purpose to:
               .clearfix
-              = date_select 'filter_rent_table_by_date', '', { start_year: 50.years.ago.year, end_year: 50.years.from_now.year, selected: Time.zone.now, order: [:month, :day, :year] }, class: "form-control select_auto", data: {id: @property.id}
+              = date_select 'filter_rent_table_by_date', '', { start_year: @property.date_of_lease.year, end_year: (@property.rent_commencement_date.year + @property.lease_duration_in_years + @property.number_of_option_period.to_i * @property.length_of_option_period.to_i), selected: Time.zone.now, order: [:month, :day, :year] }, class: "form-control select_auto", data: {id: @property.id}
               a.reset_filter_date.margin-md-left[href="#"]
                 i.fa.fa-refresh
           .clearfix
@@ -303,8 +313,8 @@ input#property_id[type="hidden" value=(@property.id)]
                   th Particulars
                   th Amount
               tbody
-                - @property.rent_tables.where(version: @property.rent_table_version).order("start_year ASC NULLS First").each do |rent_row|
-                  tr
+                - @property.rent_tables.where(version: @property.rent_table_version).order("start_year ASC NULLS First, rent ASC").each do |rent_row|
+                  tr[class=(rent_row.start_year == Time.zone.now.year ? 'orange' : 'text-danger')]
                     td
                       = rent_row.display_info
                     td
@@ -331,35 +341,16 @@ input#property_id[type="hidden" value=(@property.id)]
               tbody
                 - @property.monthly_rent_table.each do |row|
                   tr
-                    td
+                    td[class=(Time.zone.now.year == row[0] ? 'text-warning' : 'text-danger' )]
                       = row[0]
-                    td
-                      = number_to_currency row[1]
-                    td
-                      = number_to_currency row[2]
-                    td
-                      = number_to_currency row[3]
-                    td
-                      = number_to_currency row[4]
-                    td
-                      = number_to_currency row[5]
-                    td
-                      = number_to_currency row[6]
-                    td
-                      = number_to_currency row[7]
-                    td
-                      = number_to_currency row[8]
-                    td
-                      = number_to_currency row[9]
-                    td
-                      = number_to_currency row[10]
-                    td
-                      = number_to_currency row[11]
-                    td
-                      = number_to_currency row[12]
+                    - 12.times do |month|
+                      td[class=(Time.zone.now.year == row[0] && Time.zone.now.month == (month + 1) ? 'orange' : 'text-danger' )]
+                        = number_to_currency row[month + 1]
                     td
                       = number_to_currency row[13]
-
+      - else
+        h4.text-center.text-danger You can't write the rent table because there's no rent
+    
     #lease_rent_details_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_details_section'}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]
