@@ -1,0 +1,16 @@
+table.table.table-striped.table-bordered#rent-table
+  thead
+    tr
+      th Particulars
+      th Amount
+  tbody
+    - if @rent_tables.length > 0
+      - @rent_tables.each do |rent_row|
+        tr
+          td
+            = "Rent for #{@filter_date.strftime('%d %b %Y')}"
+          td
+            = number_to_currency rent_row.rent / 365.00
+    - else
+      tr
+        td[colspan="2"] No rent data
