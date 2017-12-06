@@ -326,4 +326,13 @@ class Property < ApplicationRecord
     Entity.where(property_id: self.id, type_: [7, 8, 9]).length > 0
   end
 
+  # In which term is the property by chosen date
+  def check_in_which_term chosen_date = false
+    if chosen_date == false
+      chosen_date = Time.now
+    end
+    
+    
+  end
+
 end

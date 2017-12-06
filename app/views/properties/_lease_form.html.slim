@@ -303,7 +303,7 @@ input#property_id[type="hidden" value=(@property.id)]
                   th Particulars
                   th Amount
               tbody
-                - @property.rent_tables.where(version: @property.rent_table_version).order(created_at: :asc).each do |rent_row|
+                - @property.rent_tables.where(version: @property.rent_table_version).order("start_year ASC NULLS First").each do |rent_row|
                   tr
                     td
                       = rent_row.display_info
