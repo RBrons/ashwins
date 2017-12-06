@@ -32,7 +32,7 @@ class XhrController < ApplicationController
 
   def get_rent_table
     @property = Property.find(params[:id])
-    @rent_tables = @property.rent_tables.where(version: params[:version])
+    @rent_tables = @property.rent_tables.where(version: params[:version]).order(created_at: :asc)
   end
 
   def property_comments

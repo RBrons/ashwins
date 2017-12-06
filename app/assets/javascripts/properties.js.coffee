@@ -297,6 +297,14 @@ $ ->
       error: (e) ->
         console.log e
 
+  $(document).on 'click', '.reset_filter_date', ->
+    today = new Date()
+    $('#filter_rent_table_by_date__1i').val(today.getFullYear())
+    $('#filter_rent_table_by_date__2i').val(today.getMonth() + 1)
+    $('#filter_rent_table_by_date__3i').val(today.getDate())
+
+    $("select[id^='filter_rent_table_by_date']").change()
+  
   $(document).on 'change', "select[id^='filter_rent_table_by_date']", ->
     year = $('#filter_rent_table_by_date__1i').val()
     month = $('#filter_rent_table_by_date__2i').val()
