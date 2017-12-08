@@ -88,7 +88,5 @@ table#data_table
 
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: {local_path: multi_delete_contacts_path, klazz: Contact, index_path: contacts_path(trashed: !params[:trashed].to_b)}
-  .pull-right
-    = will_paginate @contacts
-    .clearfix
-    = render template: 'shared/per_page_set'
+  = will_paginate @contacts
+  = render template: 'shared/per_page_set'

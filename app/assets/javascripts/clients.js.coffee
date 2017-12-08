@@ -327,3 +327,5 @@ $ ->
       $('.clients_list_view').addClass('tree-in').removeClass('tree-out')
       $('#entity-groups-tree').show()
 
+
+

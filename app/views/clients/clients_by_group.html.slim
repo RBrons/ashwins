@@ -20,13 +20,13 @@ table#data_table
       th = check_box_tag :object_all, false, false
       th
         | Actions
-      th style="width: 100px;"
+      th.client-action
         | Client
       th
         | Type
-      th style="width: 112px;"
+      th.client-own-action
         | Owns
-      th style="width: 112px;"
+      th.client-owned-by-action
         | Owned By
       th
         | State of Formation
@@ -61,7 +61,7 @@ table#data_table
           - if arr
             - arr.each do |name|
               - if (name.try(:length) || 0) > 1
-                a href = name[1] style="display: block"
+                a.name-badge href = name[1]
                   span.badge
                     = name[0]
         td
@@ -69,7 +69,7 @@ table#data_table
           - if arr
             - arr.each do |name|
               - if (name.try(:length) || 0) > 1
-                a href = name[1] style="display: block"
+                a.name-badge href = name[1]
                   span.badge
                     = name[0]
         td
@@ -83,7 +83,7 @@ table#data_table
           - if arr
             - arr.each do |name|
               - if (name.try(:length) || 0) > 1
-                a href = name[1] style="display: block"
+                a.name-badge href = name[1]
                   span.badge
                     = name[0]
           - if entity.entity_type == "Sole Proprietorship"
@@ -94,7 +94,7 @@ table#data_table
           - if arr
             - arr.each do |name|
               - if (name.try(:length) || 0) > 1
-                a href = name[1] style="display: block"
+                a.name-badge href = name[1]
                   span.badge
                     = name[0]
           - if entity.entity_type.name == "Sole Proprietorship"
@@ -109,7 +109,7 @@ table#data_table
           - if arr
             - arr.each do |name|
               - if (name.try(:length) || 0) > 1
-                a href = name[1] style="display: block"
+                a.name-badge href = name[1]
                   span.badge
                     = name[0]
           - if entity.entity_type.name == "Sole Proprietorship"
@@ -126,8 +126,6 @@ table#data_table
 
 
 .margin-lg-top
-= render template: 'shared/trashed_un', locals: {local_path: multi_delete_clients_path, klazz: Entity, index_path: clients_path(trashed: !params[:trashed].to_b)}
-.clearfix
-= render template: 'shared/per_page_set'
-.pull-right
+  = render template: 'shared/trashed_un', locals: {local_path: multi_delete_clients_path, klazz: Entity, index_path: clients_path(trashed: !params[:trashed].to_b)}
   = will_paginate @entities
+  = render template: 'shared/per_page_set'

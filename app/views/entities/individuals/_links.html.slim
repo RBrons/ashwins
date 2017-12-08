@@ -1,5 +1,32 @@
 - if @entity.key.present?
-	.button-bar
-	  = link_to "Basic info", entities_individuals_basic_info_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'basic_info' ? 'active' : ''}"
-	  = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
-	  = link_to "Owns", entities_individuals_owns_path(@entity.key), id: 'owns-link', data: {key: @entity.key}, remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"
+  .button-bar
+    = link_to "Basic info", entities_individuals_basic_info_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'basic_info' ? 'active' : ''}"
+    div.dropdown.pull-left.gear-set
+      a.btn.btn-sm.btn-default.pull-left.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown"
+        span.glyphicon.glyphicon-cog
+      ul.dropdown-menu
+        li
+          a.dropdown-item href="#"  Notes
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  History
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Favs
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Messages
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Mail
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Tasks
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Owns
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Documents
+    = link_to "Owns", entities_individuals_owns_path(@entity.key), id: 'owns-link', data: {key: @entity.key}, remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"
+

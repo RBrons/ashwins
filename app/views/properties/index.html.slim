@@ -64,7 +64,7 @@ table#data_table
             = property.closing_date
           -else
             = ""
-        td 
+        td
           - if property.rent_tables.present?
             - term_status = property.check_in_which_term
             - if term_status[0] == 0
@@ -84,10 +84,8 @@ table#data_table
 
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: { local_path: multi_delete_properties_path, klazz: Property, index_path: properties_path(trashed: !params[:trashed].to_b) }
-  .clearfix
+  = will_paginate @properties
   = render template: 'shared/per_page_set'
-  .pull-right.paginate-style
-    = will_paginate @properties
 
 javascript:
   $( document ).ready(function() {

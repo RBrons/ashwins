@@ -218,10 +218,10 @@
             = f.date_select :closing_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_closing_date", style: "#{'display: none;' if f.object.m_closing_date?}"
             = f.text_field :closing_date, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_closing_date?}"
             span.stretch
-          .pull-right
+          .pull-right.purchase-date-field
             .pull-left
               label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
-            .pull-right
+            .pull-right.purchase-date-check-field
               = f.check_box :m_closing_date, data: {class: 'property_closing_date'}, class: 'manually_date'
           .clearfix
 

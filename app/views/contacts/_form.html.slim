@@ -57,12 +57,12 @@
         .form-group.required
           = f.label :first_name, "First Name", class: "control-label"
           span.error-msg
-          = f.text_field :first_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
+          = f.text_field :first_name, class: "form-control contact_first_name", required: true, "data-parsley-error-message" => "First name can't be blank"
 
         .form-group.required
           = f.label :last_name, "Last Name", class: "control-label"
           span.error-msg
-          = f.text_field :last_name, class: "form-control", required: true, "data-parsley-error-message" => "First name can't be blank"
+          = f.text_field :last_name, class: "form-control contact_last_name", required: true, "data-parsley-error-message" => "Last name can't be blank"
 
       .form-group
         = f.label :phone1, "Phone 1"

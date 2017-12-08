@@ -1,4 +1,7 @@
 $ ->
+  $(document).ready ->
+    $('.dropdown-toggle').dropdown()
+
   $(document).on 'change', 'select#entity_type_', ->
     val = $('option:selected', this).text()
     $.ajax

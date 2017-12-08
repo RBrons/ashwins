@@ -2,7 +2,7 @@
   .breadcrumb-wrapper
     ul.m__breadcrumb
       = render_breadcrumbs :tag => :li, :separator => ""
-      
+
 .text-center
   = link_to 'Sale Mode', transactions_path(mode: :sale), class: "btn #{(params[:mode].blank? || params[:mode] == 'sale') ? 'btn-primary' : 'btn-default'}"
   = link_to 'Buy Mode', transactions_path(mode: :buy), class: "btn #{(params[:mode] == 'buy') ? 'btn-primary' : 'btn-default'} margin-sm-left"
@@ -253,7 +253,5 @@
             td
 .margin-lg-top
   = render template: 'shared/trashed_un', locals: { local_path: multi_delete_transactions_path, klazz: [TransactionSale, TransactionPurchase], index_path: transactions_path(trashed: !params[:trashed].to_b, mode: params[:mode]) }
-  .clearfix
+  = will_paginate @transactions
   = render template: 'shared/per_page_set'
-  .pull-right
-    = will_paginate @transactions
