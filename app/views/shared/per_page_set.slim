@@ -1,5 +1,4 @@
-.clearfix
-.pull-right
+.pagination-field
   = form_tag(({controller: '/settings', action: 'per_page'}), method: :post) do
     label.record-page Records Per Page
     = text_field_tag :per_page, sessioned_per_page, style: 'width: 50px'

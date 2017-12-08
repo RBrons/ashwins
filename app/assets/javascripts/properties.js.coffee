@@ -94,6 +94,10 @@ $ ->
   $(document).on 'click', '.compose-close', ->
     $('.comment-editor').slideToggle()
 
+
+  $(document).on 'click', '.concurrent_estates_popup ul li a', (e) ->
+    $('.concurrent_estates_popup ul li a').removeClass('selected')
+    $(e.currentTarget).addClass('selected')
   $(document).on 'click', '#save-comment', ->
     if !$(".comment-editor #comment-content").attr("data-comment-id")
       typeComments = $(".comment-editor #comment-content").attr("data-type")
@@ -199,6 +203,7 @@ $ ->
 
   $(document).ready ->
     titleHideShow()
+    $(document).find('div.properties-radio-button div:first-child .iradio_flat-blue').addClass('checked')
 
   $(document).on 'keyup', '#property_location_city', ->
     val = $('#property_location_city').val()
@@ -304,7 +309,7 @@ $ ->
     $('#filter_rent_table_by_date__3i').val(today.getDate())
 
     $("select[id^='filter_rent_table_by_date']").change()
-  
+
   $(document).on 'change', "select[id^='filter_rent_table_by_date']", ->
     year = $('#filter_rent_table_by_date__1i').val()
     month = $('#filter_rent_table_by_date__2i').val()

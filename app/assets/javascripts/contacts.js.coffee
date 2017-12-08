@@ -36,19 +36,38 @@ $(document).ready ->
             error: (e) ->
                 console.log e
 
-      $(document).on "click", "a.delete-contact-yes", ->
-            id = $(this).attr 'data-id'
-            $(this).attr("disabled", "disabled")
+    $(document).on "click", "a.delete-contact-yes", ->
+        id = $(this).attr 'data-id'
+        $(this).attr("disabled", "disabled")
 
-            $.ajax
-                type: "DELETE"
-                url: "/contacts/" + id
-                dataType: "json"
-                success: (val) ->
-                    if val.success == true
-                        $("#md-delete-contact").modal 'hide'
-                        window.location.href = '/contacts'
-                error: (e) ->
-                    console.log e
+        $.ajax
+            type: "DELETE"
+            url: "/contacts/" + id
+            dataType: "json"
+            success: (val) ->
+                if val.success == true
+                    $("#md-delete-contact").modal 'hide'
+                    window.location.href = '/contacts'
+            error: (e) ->
+                console.log e
 
+    $(document).on 'keyup', 'input.contact_first_name', ->
+      $(document).find('button#save_btn').addClass('new_style_save')
+      $(document).find('button#save_btn').removeClass('default_style_save')
+      if $(document).find('input.contact_first_name').val() == ''
+        $(document).find('button#save_btn').removeClass('new_style_save')
+        $(document).find('button#save_btn').addClass('default_style_save')
 
+    $(document).on 'keyup', 'input.contact_last_name', ->
+      $(document).find('button#save_btn').addClass('new_style_save')
+      $(document).find('button#save_btn').removeClass('default_style_save')
+      if $(document).find('input.contact_last_name').val() == ''
+        $(document).find('button#save_btn').removeClass('new_style_save')
+        $(document).find('button#save_btn').addClass('default_style_save')
+
+    $(document).on 'keyup', 'input#contact_company_name', ->
+      $(document).find('button#save_btn').addClass('new_style_save')
+      $(document).find('button#save_btn').removeClass('default_style_save')
+      if $(document).find('input#contact_company_name').val() == ''
+        $(document).find('button#save_btn').removeClass('new_style_save')
+        $(document).find('button#save_btn').addClass('default_style_save')

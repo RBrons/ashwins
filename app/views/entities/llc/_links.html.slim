@@ -7,5 +7,31 @@
     = link_to "+", entities_llc_member_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left stockholder-add entity-page-xhr #{params[:action] == 'member' ? 'active' : ''}"
     = link_to "Managers", entities_llc_managers_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'managers' ? 'active' : ''}"
     = link_to "+", entities_llc_manager_path(@entity.key), class: "btn btn-sm btn-default margin-sm-left pull-left director-add entity-page-xhr #{params[:action] == 'manager' ? 'active' : ''}"
-    = link_to raw("<span class='glyphicon glyphicon-cog'></span>"), "#", class: "btn btn-sm btn-default margin-sm-left pull-left"
+    div.dropdown.pull-left.gear-set
+      a.btn.btn-sm.btn-default.pull-left.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown"
+        span.glyphicon.glyphicon-cog
+      ul.dropdown-menu
+        li
+          a.dropdown-item href="#"  Notes
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  History
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Favs
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Messages
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Mail
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Tasks
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Owns
+        li.divider role="separator"
+        li
+          a.dropdown-item href="#"  Documents
     = link_to "Owns", entities_llc_owns_path(@entity.key), remote: true, class: "btn btn-sm btn-default margin-sm-left pull-left entity-page-xhr #{params[:action] == 'owns' ? 'active' : ''}"

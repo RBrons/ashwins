@@ -1,4 +1,7 @@
 $ ->
+  $(document).ready ->
+    $('.dropdown-toggle').dropdown()
+
   $(document).on 'change', 'select#entity_type_', ->
     val = $('option:selected', this).text()
     $.ajax
@@ -10,6 +13,14 @@ $ ->
         $(document).find('#entity_number_of_share').attr('name', val)
       error: (e) ->
         console.log e
+
+  $(document).on 'keyup', 'input#entity_name', ->
+    $(document).find('button#save_btn').addClass('new_style_save')
+    $(document).find('button#save_btn').removeClass('default_style_save')
+    if $(document).find('input#entity_name').val() == ''
+
+      $(document).find('button#save_btn').removeClass('new_style_save')
+      $(document).find('button#save_btn').addClass('default_style_save')
 
   $(document).on "click", "a.entity-new", ->
     $.ajax
