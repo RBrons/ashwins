@@ -177,7 +177,8 @@ class PropertiesController < ApplicationController
 
             base_rent = @property.lease_base_rent
             duration = @property.lease_duration_in_years
-            percentage = @property.lease_rent_increase_percentage || 0
+            extension_percentage = @property.lease_rent_increase_percentage || 0
+            base_percentage = @property.base_rent_increase_percentage || 0
             slab = @property.lease_rent_slab_in_years || 1
 
             rent = base_rent
@@ -236,7 +237,9 @@ class PropertiesController < ApplicationController
               @property.rent_tables.create(version: rent_table_version, start_year: start_year, end_year: end_year, rent: rent)
 
               start_year = end_year + 1
-              rent = rent + rent * percentage / 100
+              if @property.rent_increase_in_base_term_status
+                rent = rent + rent * base_percentage / 100
+              end
             end
 
             if @property.number_of_option_period && @property.length_of_option_period &&
@@ -260,7 +263,7 @@ class PropertiesController < ApplicationController
                   is_option: true, option_slab: count)
 
                 start_year = end_year + 1
-                rent = rent + rent * percentage / 100
+                rent = rent + rent * extension_percentage / 100
                 count = count + 1
               end
             end

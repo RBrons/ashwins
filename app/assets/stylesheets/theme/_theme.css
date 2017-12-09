@@ -5481,3 +5481,7 @@ ul.m__breadcrumb li a:hover {
     font-size: 0;
     line-height: 0
 }
+
+.checkbox label, .checkbox span{
+    vertical-align: middle;
+}

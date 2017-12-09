@@ -254,13 +254,15 @@ class Property < ApplicationRecord
     rent_slab = self.lease_rent_slab_in_years || 1
     switch_years = []
 
-    year_ = start_year
-    while true do
-      year_ = year_ + rent_slab
-      if year_ >= end_year
-        break
+    if self.rent_increase_in_base_term_status && self.base_rent_increase_percentage
+      year_ = start_year
+      while true do
+        year_ = year_ + rent_slab
+        if year_ >= end_year
+          break
+        end
+        switch_years << year_
       end
-      switch_years << year_
     end
 
     if self.optional_extensions_status
@@ -360,7 +362,7 @@ class Property < ApplicationRecord
         if chosen_date >= self.date_of_lease
           return [0, nil]
         end
-      elsif chosen_date < self.rent_commencement_date && chosen_date >= self.date_of_lease
+      elsif chosen_date < self.preliminary_term_expiration_date
         return [0, nil]
       end
     end

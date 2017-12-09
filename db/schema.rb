@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115171249) do
+ActiveRecord::Schema.define(version: 20171209010415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -674,6 +674,7 @@ ActiveRecord::Schema.define(version: 20171115171249) do
     t.string   "taxes_and_fees_additional_rent_keywords"
     t.string   "taxes_and_fees_net_nature_keywords"
     t.string   "premises_quiet_enjoyment_keywords"
+    t.date     "preliminary_term_expiration_date"
     t.index ["deleted_at"], name: "index_properties_on_deleted_at", using: :btree
     t.index ["key"], name: "index_properties_on_key", using: :btree
   end
