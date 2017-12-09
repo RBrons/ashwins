@@ -445,13 +445,11 @@ $ ->
   $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_true', ->
     $('.PL_date_certain').show()
     $('.PL_date_not_certain').hide()
-    $('.necessary_fields_in_rent_table').show()
     
   $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_false', ->
     $('.PL_date_certain').hide()
     $('.PL_date_not_certain').show()
     $('#property_preliminary_term_expired').iCheck('uncheck')
-    $('.necessary_fields_in_rent_table').hide()
     
   $(document).on 'change', "select[id^='property_preliminary_term_expiration_date']", ->
     # Preliminary Term Expiration is a certain date
@@ -477,8 +475,6 @@ $ ->
         animation: "slide-from-top"
       }, (isConfirm) ->
         if isConfirm
-          $('.necessary_fields_in_rent_table').show()
-
           manual_RCD = $('.manual-rent-commencement-date-wrapper')
           $('#property_rent_commencement_date_2i').
             val( manual_RCD.find('#manual-rent-commencement-date__2i').val())
@@ -487,4 +483,3 @@ $ ->
           $('#property_rent_commencement_date_1i')
             .val(manual_RCD.find('#manual-rent-commencement-date__1i').val())
     else
-      $('.necessary_fields_in_rent_table').hide()
