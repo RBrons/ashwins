@@ -147,7 +147,7 @@ class PropertiesController < ApplicationController
       end
     else
       prior_property_name = @property.title
-      @property.assign_attributes(property_params)
+      @property.assign_attributes(sanitize_property_params)
       if params[:use_current_rent] == false
         @property.lease_base_rent = @property.current_rent
       end
@@ -171,7 +171,7 @@ class PropertiesController < ApplicationController
 
           # finally remove the old upload
           # Cloudinary::Uploader.destroy(public_id) unless public_id.blank?
-
+          
           if @property.can_create_rent_table?
             rent_table_version = @property.rent_table_version
 
@@ -355,6 +355,44 @@ class PropertiesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def property_params
     params.require(:property).permit!
+  end
+
+  def sanitize_property_params
+    initial_params = property_params
+    if initial_params[:optional_extensions_status].present?
+      if initial_params[:optional_extensions_status] != '1'
+        initial_params[:number_of_option_period] = nil
+        initial_params[:length_of_option_period] = nil
+        initial_params[:lease_rent_increase_percentage] = nil
+      end
+    end
+    
+    if initial_params[:preliminary_term_status].present?
+      if initial_params[:preliminary_term_status] == '1'
+        if initial_params[:rent_commencement_depend_on_expiration] == 'true'
+          initial_params[:preliminary_term_expired] = true
+        else
+          if initial_params[:preliminary_term_expired] == '1'
+            initial_params['preliminary_term_expiration_date(1i)'.to_sym] = Time.now.year.to_s
+            initial_params['preliminary_term_expiration_date(2i)'.to_sym] = Time.now.month.to_s
+            initial_params['preliminary_term_expiration_date(3i)'.to_sym] = Time.now.day.to_s
+          else
+            initial_params['preliminary_term_expiration_date(1i)'.to_sym] = ''
+            initial_params['preliminary_term_expiration_date(2i)'.to_sym] = ''
+            initial_params['preliminary_term_expiration_date(3i)'.to_sym] = ''
+          end
+        end
+      else
+        initial_params[:rent_commencement_depend_on_expiration] = true
+        initial_params[:preliminary_term_expired] = false
+
+        initial_params['preliminary_term_expiration_date(1i)'.to_sym] = ''
+        initial_params['preliminary_term_expiration_date(2i)'.to_sym] = ''
+        initial_params['preliminary_term_expiration_date(3i)'.to_sym] = ''
+      end
+    end
+
+    initial_params
   end
 
   def current_page
