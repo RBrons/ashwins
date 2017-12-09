@@ -217,7 +217,7 @@ class Property < ApplicationRecord
 
   def can_create_rent_table?
     # check if mandatary fields have the value for creating rent table
-    self.lease_base_rent.present? && self.lease_duration_in_years.present? && self.rent_commencement_date.present?
+    self.preliminary_term_expired && self.lease_base_rent.present? && self.lease_duration_in_years.present? && self.rent_commencement_date.present?
   end
 
   def current_monthly_rent
@@ -351,7 +351,7 @@ class Property < ApplicationRecord
 
   def check_in_which_term chosen_date = false
     if chosen_date == false
-      chosen_date = Time.now
+      chosen_date = Date.today
     end
     
     base_start_date = self.rent_commencement_date
@@ -362,7 +362,7 @@ class Property < ApplicationRecord
         if chosen_date >= self.date_of_lease
           return [0, nil]
         end
-      elsif chosen_date < self.preliminary_term_expiration_date
+      elsif chosen_date <= self.preliminary_term_expiration_date
         return [0, nil]
       end
     end

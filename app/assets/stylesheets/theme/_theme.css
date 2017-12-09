@@ -3205,7 +3205,7 @@ ul.bar_tabs>li a {
 }
 
 ul.bar_tabs_sm >li a {
-    padding: 10px 12px;
+    padding: 10px 8px;
 }
 
 ul.bar_tabs>li a span {
@@ -5484,4 +5484,24 @@ ul.m__breadcrumb li a:hover {
 
 .checkbox label, .checkbox span{
     vertical-align: middle;
+}
+
+.lease_term_wizard ul.wizard_steps{
+    padding-left: 25px;
+}
+
+.lease_term_wizard ul.wizard_steps li a .step_no{
+    margin: 5px 0;
+}
+
+.lease_term_wizard ul.wizard_steps li:first-child a:before{
+    left: 0;
+}
+
+.lease_term_wizard ul.wizard_steps li:last-child a:before{
+    right: 100%;
+}
+
+.lease_term_wizard ul.wizard_steps li{
+    text-align: left;
 }

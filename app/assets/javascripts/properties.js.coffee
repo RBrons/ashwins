@@ -163,7 +163,8 @@ $ ->
   $(document).on 'click', '.title', ->
     url = $(this).parent().attr('url')
     window.location.href = url if url.length > 0
-  $(document).on 'click', 'input#property_rent_increase_in_base_term_status', ->
+  
+  $(document).on 'ifChanged', 'input#property_rent_increase_in_base_term_status', ->
     if this.checked
       $(document).find('#rent_increase_in_base_term').show()
     else
@@ -172,7 +173,8 @@ $ ->
   $(document).on 'click', '.title', ->
     url = $(this).parent().attr('url')
     window.location.href = url if url.length > 0
-  $(document).on 'click', 'input#property_preliminary_term_status', ->
+  
+  $(document).on 'ifChanged', 'input#property_preliminary_term_status', ->
     if this.checked
       $(document).find('#preliminary_term').show()
     else
@@ -181,11 +183,15 @@ $ ->
   $(document).on 'click', '.title', ->
     url = $(this).parent().attr('url')
     window.location.href = url if url.length > 0
-  $(document).on 'click', 'input#property_optional_extensions_status', ->
+  $(document).on 'ifChanged', 'input#property_optional_extensions_status', ->
     if this.checked
       $(document).find('#optional_extensions').show()
+      $(document).find('#optional_extensions .form-group').addClass('required')
+      $(document).find('#optional_extensions .form-group input').attr('required', true)
     else
       $(document).find('#optional_extensions').hide()
+      $(document).find('#optional_extensions .form-group').removeClass('required')
+      $(document).find('#optional_extensions .form-group input').attr('required', false)
 
   setTitleValue = ->
     if $('#property_location_city').val().length > 0
@@ -422,7 +428,7 @@ $ ->
             $(this).addClass('text-danger')
           
           i = 1
-          while i <= 12
+          while i <= 13
             $(this).find('td').eq(i).removeClass('text-danger text-success orange')
             if $(this).find('td').eq(0).text() == year
               if i > parseInt(month)
@@ -439,17 +445,17 @@ $ ->
   $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_true', ->
     $('.PL_date_certain').show()
     $('.PL_date_not_certain').hide()
-    $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', false)
-
+    $('.necessary_fields_in_rent_table').show()
+    
   $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_false', ->
     $('.PL_date_certain').hide()
     $('.PL_date_not_certain').show()
-    $('#property_preliminary_term_expired')
-      .iCheck('enable')
-      .iCheck('uncheck')
-    $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', true)
-
+    $('#property_preliminary_term_expired').iCheck('uncheck')
+    $('.necessary_fields_in_rent_table').hide()
+    
   $(document).on 'change', "select[id^='property_preliminary_term_expiration_date']", ->
+    # Preliminary Term Expiration is a certain date
+    # set Rent Commencement Date to Next date of Preliminary Term Expiration
     $('#property_rent_commencement_date_2i').
       val($('#property_preliminary_term_expiration_date_2i').val())
     $('#property_rent_commencement_date_3i').
@@ -457,33 +463,28 @@ $ ->
     $('#property_rent_commencement_date_1i').
       val($('#property_preliminary_term_expiration_date_1i').val())
 
-  $(document).on 'ifChecked', '#property_preliminary_term_expired', ->
-    modal_html = '<div class="manual-rent-commencement-date-wrapper">' +
-                    $('.present_date_select_template').html() +
-                  '</div>'
-    swal {
-      title: 'Please choose<br>Rent Commencement Date'
-      html: true
-      text: modal_html
-      confirmButtonColor: "#3082EE"
-      closeOnConfirm: true
-      animation: "slide-from-top"
-    }, (isConfirm) ->
-      if isConfirm
-        $('#property_rent_commencement_date_2i').
-          val($('.manual-rent-commencement-date-wrapper #manual-rent-commencement-date__2i').val())
-        $('#property_rent_commencement_date_3i').
-          val($('.manual-rent-commencement-date-wrapper #manual-rent-commencement-date__3i').val())
-        $('#property_rent_commencement_date_1i')
-          .val($('.manual-rent-commencement-date-wrapper #manual-rent-commencement-date__1i').val())
+  $(document).on 'ifChanged', '#property_preliminary_term_expired', ->
+    if this.checked
+      modal_html = '<div class="manual-rent-commencement-date-wrapper">' +
+                      $('.present_date_select_template').html() +
+                    '</div>'
+      swal {
+        title: 'Please choose<br>Rent Commencement Date'
+        html: true
+        text: modal_html
+        confirmButtonColor: "#3082EE"
+        closeOnConfirm: true
+        animation: "slide-from-top"
+      }, (isConfirm) ->
+        if isConfirm
+          $('.necessary_fields_in_rent_table').show()
 
-        $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', false)
-        $('#property_preliminary_term_expiration_date_2i')
-          .val($('.present_date_select_template #manual-rent-commencement-date__2i').val())
-        $('#property_preliminary_term_expiration_date_3i')
-          .val($('.present_date_select_template #manual-rent-commencement-date__3i').val())
-        $('#property_preliminary_term_expiration_date_1i')
-          .val($('.present_date_select_template #manual-rent-commencement-date__1i').val())
-  
-  $(document).on 'ifUnchecked', '#property_preliminary_term_expired', ->
-    $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', true)
+          manual_RCD = $('.manual-rent-commencement-date-wrapper')
+          $('#property_rent_commencement_date_2i').
+            val( manual_RCD.find('#manual-rent-commencement-date__2i').val())
+          $('#property_rent_commencement_date_3i').
+            val(manual_RCD.find('#manual-rent-commencement-date__3i').val())
+          $('#property_rent_commencement_date_1i')
+            .val(manual_RCD.find('#manual-rent-commencement-date__1i').val())
+    else
+      $('.necessary_fields_in_rent_table').hide()
