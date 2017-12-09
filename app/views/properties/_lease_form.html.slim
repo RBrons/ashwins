@@ -298,26 +298,21 @@ input#property_id[type="hidden" value=(@property.id)]
             li
               a[class=(term_status[0] == 1 ? 'selected' : 'disabled')]
                 span.step_no 2
-                span.step_descr 
-                  | Base Term
-                  br
-                  - if term_status[0] == 1
-                    small.label.label-success Lease is in Base Term
-            
+                span.step_descr Base Term
+                  
             li
               a[class=(term_status[0] == 2 ? 'selected' : 'disabled')]
                 span.step_no 3
                 - if @property.optional_extensions_status == false
                   span.step_descr None
                 - else
-                  - if term_status[0] == 2
-                    span.step_descr
-                      = @property.number_of_option_period > 1 ? "Currently in Extention #{term_status[1]} of #{@property.number_of_option_period}" : "Currently in Extention"
-                      br
-                      small.label.label-success Lease is in Extension Term
-                  - else
-                    span.step_descr 
-                      = @property.number_of_option_period > 1 ? "#{@property.number_of_option_period} Extensions" : "Extension"
+                  - if @property.number_of_option_period.present?
+                    - if term_status[0] == 2
+                      span.step_descr
+                        = @property.number_of_option_period > 1 ? "Currently in Extention #{term_status[1]} of #{@property.number_of_option_period}" : "Currently in Extention"
+                    - else
+                      span.step_descr 
+                        = @property.number_of_option_period > 1 ? "#{@property.number_of_option_period} Extensions" : "Extension"
         
         .mask_content
           .col-md-3.col-xs-12

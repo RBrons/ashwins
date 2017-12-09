@@ -423,8 +423,8 @@ $ ->
           
           i = 1
           while i <= 12
+            $(this).find('td').eq(i).removeClass('text-danger text-success orange')
             if $(this).find('td').eq(0).text() == year
-              $(this).find('td').eq(i).removeClass('text-danger text-success orange')
               if i > parseInt(month)
                 $(this).find('td').eq(i).addClass('text-success')
               else if i == parseInt(month)
