@@ -231,99 +231,99 @@ input#property_id[type="hidden" value=(@property.id)]
                 label Conditions for the End of Preliminary Term
                 = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
 
-          .necessary_fields_in_rent_table[style=(@property.preliminary_term_expired ? '' : 'display: none')]
-            .form-group
-              h2.heading Base Term
-              label Rent Commencement Date
-              .clearfix
-              = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
-            .form-group
-              .checkbox.no-padding
-                label
-                  = f.check_box :lease_is_pro_rated, class: 'flat-icheck'
-                  span.margin-md-left Pro Rated Rent?
-            .form-group
-              label Rent Commencement Date Details
-              .clearfix
-              = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
-            .form-group
-              label Duration of Base Term
-              =  f.text_field :lease_duration_in_years, class: 'form-control'
-            .form-group
-              .checkbox.no-padding
-                label
-                  = f.check_box :rent_increase_in_base_term_status, class: 'flat-icheck'
-                  span.margin-md-left Are there Rent Increases in the Base Terms
+          
+          .form-group
+            h2.heading Base Term
+            label Rent Commencement Date
+            .clearfix
+            = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
+          .form-group
+            .checkbox.no-padding
+              label
+                = f.check_box :lease_is_pro_rated, class: 'flat-icheck'
+                span.margin-md-left Pro Rated Rent?
+          .form-group
+            label Rent Commencement Date Details
+            .clearfix
+            = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
+          .form-group
+            label Duration of Base Term
+            =  f.text_field :lease_duration_in_years, class: 'form-control'
+          .form-group
+            .checkbox.no-padding
+              label
+                = f.check_box :rent_increase_in_base_term_status, class: 'flat-icheck'
+                span.margin-md-left Are there Rent Increases in the Base Terms
 
-            div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
-              .form-group
-                label No of Years Between Rent Increases
-                = f.text_field :lease_rent_slab_in_years, class: 'form-control'
-              .form-group
-                label Base Term Rent Increase Percentage
-                .input-group.width-field-sm
-                  = f.text_field :base_rent_increase_percentage, class: 'form-control'
-                  .input-group-addon %
-            div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
-              h2.heading Optional Extensions
-              .form-group
-                label.control-label Number Of Option Period(s)
-                span.error-msg
-                = f.text_field :number_of_option_period, class: 'form-control'
-              .form-group
-                label.control-label Length of an Option Period in Years
-                span.error-msg
-                = f.text_field :length_of_option_period, class: 'form-control'
-              .form-group
-                label.control-label Option Period Rent Increase Percentage
-                span.error-msg
-                .input-group.width-field-sm
-                  = f.text_field :lease_rent_increase_percentage, class: 'form-control'
-                  .input-group-addon %
+          div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
+            .form-group
+              label No of Years Between Rent Increases
+              = f.text_field :lease_rent_slab_in_years, class: 'form-control'
+            .form-group
+              label Base Term Rent Increase Percentage
+              .input-group.width-field-sm
+                = f.text_field :base_rent_increase_percentage, class: 'form-control'
+                .input-group-addon %
+          div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
+            h2.heading Optional Extensions
+            .form-group
+              label.control-label Number Of Option Period(s)
+              span.error-msg
+              = f.text_field :number_of_option_period, class: 'form-control'
+            .form-group
+              label.control-label Length of an Option Period in Years
+              span.error-msg
+              = f.text_field :length_of_option_period, class: 'form-control'
+            .form-group
+              label.control-label Option Period Rent Increase Percentage
+              span.error-msg
+              .input-group.width-field-sm
+                = f.text_field :lease_rent_increase_percentage, class: 'form-control'
+                .input-group-addon %
                         
           .form-group
             = f.submit 'Save', id:'lease_submit',class: 'submit btn btn-sm btn-primary',style: "display: none;"
     #lease_rent_table_section class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")      
-      - term_status = @property.check_in_which_term
-      .user-setup-wizard.lease_term_wizard
-        ul.wizard_steps
-          li
-            a[class=(@property.preliminary_term_status ? 'selected' : 'disabled')]
-              span.step_no 1
-              - if @property.preliminary_term_status == false
-                span.step_descr None
-              - else
-                - if term_status[0] == 0
-                  - if @property.preliminary_term_expired
-                    span.step_descr = "Currently in Preliminary Term ending #{@property.preliminary_term_expiration_date.strftime('%d %b %Y')}"
-                  - else
-                    span.step_descr Currently in Preliminary Term no Certain Termination Date
-                - else
-                  span.step_descr Preliminary Term
-                  
-          li
-            a.selected
-              span.step_no 2
-              span.step_descr 
-                | Base Term
-                br
-                small.label.label-success Currently in Base Term
-                
-          li
-            a[class=(@property.optional_extensions_status ? 'selected' : 'disabled')]
-              span.step_no 3
-              - if @property.optional_extensions_status == false
-                span.step_descr None
-              - else
-                - if @property.number_of_option_period.present?
-                  - if term_status[0] == 2
-                    span.step_descr
-                      = @property.number_of_option_period > 1 ? "Currently in Extention #{term_status[1]} of #{@property.number_of_option_period}" : "Currently in Extention"
-                  - else
-                    span.step_descr 
-                      = @property.number_of_option_period > 1 ? "#{@property.number_of_option_period} Extensions" : "Extension"
-
       - if @property.rent_tables.where(version: @property.rent_table_version).present?  
+        - term_status = @property.check_in_which_term
+        .user-setup-wizard.lease_term_wizard
+          ul.wizard_steps
+            li
+              a[class=(@property.preliminary_term_status ? 'selected' : 'disabled')]
+                span.step_no 1
+                - if @property.preliminary_term_status == false
+                  span.step_descr None
+                - else
+                  - if term_status[0] == 0
+                    - if @property.preliminary_term_expired
+                      span.step_descr = "Currently in Preliminary Term ending #{@property.preliminary_term_expiration_date.strftime('%d %b %Y')}"
+                    - else
+                      span.step_descr Currently in Preliminary Term no Certain Termination Date
+                  - else
+                    span.step_descr Preliminary Term
+                    
+            li
+              a.selected
+                span.step_no 2
+                span.step_descr 
+                  | Base Term
+                  br
+                  small.label.label-success Currently in Base Term
+                  
+            li
+              a[class=(@property.optional_extensions_status ? 'selected' : 'disabled')]
+                span.step_no 3
+                - if @property.optional_extensions_status == false
+                  span.step_descr None
+                - else
+                  - if @property.number_of_option_period.present?
+                    - if term_status[0] == 2
+                      span.step_descr
+                        = @property.number_of_option_period > 1 ? "Currently in Extention #{term_status[1]} of #{@property.number_of_option_period}" : "Currently in Extention"
+                    - else
+                      span.step_descr 
+                        = @property.number_of_option_period > 1 ? "#{@property.number_of_option_period} Extensions" : "Extension"
+
         .mask_content
           .col-md-3.col-xs-12
             .form-group
