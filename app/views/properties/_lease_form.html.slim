@@ -1,7 +1,7 @@
 #comments-modal.modal.fade[data-keyboard="false" data-backdrop="static"]
   .modal-dialog.modal-md
     .modal-header
-      button.close[type="button" data-dismiss="modal" aria-label="Close" data-back-url="#{@back_url}"]
+      button.close[type="button" data-dismiss="modal" aria-label="Close"]
         span.lnr.lnr-cross
       h4.modal-title Comments
     .modal-body
@@ -9,6 +9,9 @@
       button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
         | Close
 
+.present_date_select_template.hide
+  = date_select 'manual-rent-commencement-date', '', { start_year: Time.zone.now.year, end_year: Time.zone.now.year + 5, order: [:month, :day, :year] }, class: "form-control select_auto"
+  
 .comment-editor.compose.col-md-6.col-xs-12
   .compose-header
     span.title New Comment
@@ -176,12 +179,9 @@ input#property_id[type="hidden" value=(@property.id)]
           .form-group
             label.mg-top-5 Date Of Lease
             .clearfix
-            /.pull-left
             = f.date_select :date_of_lease, {start_year: 50.years.ago.year, end_year: Time.zone.now.year, order: [:month, :day, :year]}, class: "form-control select_auto property_date_of_lease", style: "#{'display: none;' if f.object.m_date_of_lease?}"
             = f.text_field :date_of_lease, placeholder: 'YYYY-MM-DD', class: 'form-control', style: "#{'display: none;' unless f.object.m_date_of_lease?}"
             .pull-right
-              /.pull-left
-                /label Input Date Manually &nbsp; &nbsp; &nbsp; &nbsp;
               .pull-right
                 = f.check_box :m_date_of_lease, data: {class: 'property_date_of_lease'}, class: 'manually_date', style: "display: none;"
           .form-group
@@ -206,17 +206,30 @@ input#property_id[type="hidden" value=(@property.id)]
           div#preliminary_term style="#{ 'display: none;' unless f.object.preliminary_term_status?}"
             .form-group
               h2.heading Preliminary Term
+              .form-group
+                label.control-label Does the Preliminary Term End on Date Certain?
+                .clearfix
+                .heading_blue.radio-inline
+                  = f.radio_button :rent_commencement_depend_on_expiration, true, class: 'form-control flat-icheck radiobuttons'
+                  span.margin-md-left Yes
+                .heading_blue.radio-inline
+                  = f.radio_button :rent_commencement_depend_on_expiration, false, class: 'form-control flat-icheck radiobuttons'
+                  span.margin-md-left No
+            
+            .PL_date_certain[style=(@property.rent_commencement_depend_on_expiration ? '' : 'display: none')]
+              .form-grup
+                label.control-label Preliminary Term Expiration Date
+                .clearfix
+                = f.date_select :preliminary_term_expiration_date, {start_year: Time.zone.now.year, end_year: Time.zone.now.year + 5, order: [:month, :day, :year]}, class: 'form-control select_auto'
+            
+            .PL_date_not_certain[style=(@property.rent_commencement_depend_on_expiration ? 'display: none' : '')]
               .checkbox
                 label
-                  = f.check_box :rent_commencement_depend_on_expiration, class: 'product-list'
-                  | Is the Rent Commencement Date dependent on the Expiration of the Preliminary Terms? <br>
-              .checkbox
-                label
-                  = f.check_box :preliminary_term_expired, class: 'product-list'
-                  | Has the Preliminary Term Expired?
-            .form-group
-              label Conditions for the End of Preliminary Term
-              = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
+                  = f.check_box :preliminary_term_expired, class: 'flat-icheck'
+                  span.margin-md-left Has the Preliminary Term Expired?
+              .form-group
+                label Conditions for the End of Preliminary Term
+                = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
 
           .form-group
             h2.heading Base Term
@@ -269,16 +282,21 @@ input#property_id[type="hidden" value=(@property.id)]
         .user-setup-wizard
           ul.wizard_steps
             li
-              a[class=(@property.preliminary_term_status == true ? 'selected' : 'disabled')]
+              a[class=(term_status[0] == 0 ? 'selected' : 'disabled')]
                 span.step_no 1
-                span.step_descr 
-                  | Preliminary Term
-                  br
+                - if @property.preliminary_term_status == false
+                  span.step_descr None
+                - else
                   - if term_status[0] == 0
-                    small.label.label-success Lease is in Preliminary Term
-            
+                    - if @property.preliminary_term_expired
+                      span.step_descr = "Currently in Preliminary Term ending #{@property.preliminary_term_expiration_date.strftime('%d %b %Y')}"
+                    - else
+                      span.step_descr Currently in Preliminary Term no Certain Termination Date
+                  - else
+                    span.step_descr Preliminary Term
+                    
             li
-              a.selected
+              a[class=(term_status[0] == 1 ? 'selected' : 'disabled')]
                 span.step_no 2
                 span.step_descr 
                   | Base Term
@@ -287,15 +305,19 @@ input#property_id[type="hidden" value=(@property.id)]
                     small.label.label-success Lease is in Base Term
             
             li
-              a[class=(@property.optional_extensions_status == true ? 'selected' : 'disabled')]
+              a[class=(term_status[0] == 2 ? 'selected' : 'disabled')]
                 span.step_no 3
-                - if term_status[0] == 2
-                  span.step_descr
-                    = @property.number_of_option_period > 1 ? "Option (#{term_status[1]} of #{@property.number_of_option_period})" : "Option"
-                    br
-                    small.label.label-success Lease is in Extension Term
+                - if @property.optional_extensions_status == false
+                  span.step_descr None
                 - else
-                  span.step_descr Option
+                  - if term_status[0] == 2
+                    span.step_descr
+                      = @property.number_of_option_period > 1 ? "Currently in Extention #{term_status[1]} of #{@property.number_of_option_period}" : "Currently in Extention"
+                      br
+                      small.label.label-success Lease is in Extension Term
+                  - else
+                    span.step_descr 
+                      = @property.number_of_option_period > 1 ? "#{@property.number_of_option_period} Extensions" : "Extension"
         
         .mask_content
           .col-md-3.col-xs-12
@@ -314,7 +336,16 @@ input#property_id[type="hidden" value=(@property.id)]
                   th Amount
               tbody
                 - @property.rent_tables.where(version: @property.rent_table_version).order("start_year ASC NULLS First, rent ASC").each do |rent_row|
-                  tr[class=(rent_row.start_year == Time.zone.now.year ? 'orange' : 'text-danger')]
+                  - if rent_row.start_year.nil?
+                    - row_highlights = ''
+                  - elsif rent_row.start_year > Time.zone.now.year
+                    - row_highlights = 'text-success'
+                  - elsif rent_row.start_year == Time.zone.now.year
+                    - row_highlights = 'orange'
+                  - else
+                    - row_highlights = 'text-danger'
+
+                  tr[class=(row_highlights)]
                     td
                       = rent_row.display_info
                     td
@@ -340,11 +371,26 @@ input#property_id[type="hidden" value=(@property.id)]
                   th Annual
               tbody
                 - @property.monthly_rent_table.each do |row|
-                  tr
-                    td[class=(Time.zone.now.year == row[0] ? 'text-warning' : 'text-danger' )]
+                  - if row[0] > Time.zone.now.year
+                    - row_highlights = 'text-success'
+                  - elsif row[0] == Time.zone.now.year
+                    - row_highlights = 'orange'
+                  - else
+                    - row_highlights = 'text-danger'
+
+                  tr[class=(row_highlights)]
+                    td
                       = row[0]
                     - 12.times do |month|
-                      td[class=(Time.zone.now.year == row[0] && Time.zone.now.month == (month + 1) ? 'orange' : 'text-danger' )]
+                      -if Time.zone.now.year == row[0]
+                        - if Time.zone.now.month < (month + 1)
+                          - row_highlights = 'text-success'
+                        - elsif (month + 1) == Time.zone.now.year
+                          - row_highlights = 'orange'
+                        - else
+                          - row_highlights = 'text-danger'
+
+                      td[class=(row_highlights)]
                         = number_to_currency row[month + 1]
                     td
                       = number_to_currency row[13]

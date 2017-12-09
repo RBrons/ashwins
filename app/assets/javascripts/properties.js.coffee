@@ -287,45 +287,7 @@ $ ->
       $('#owner_entity_dropown_selection').html('<input autocomplete="off" id="property_owner_entity_id" name="property[owner_entity_id]" type="hidden">')
       $('#property_owner_entity_id').val($(this).data('id'))
       $('#member_entity').val($(this).data('name'))
-
-  $(document).on 'click', "select#rent_table_version", ->
-    propertyId = $(this).data("id")
-    selectedVersion = $(this).val()
-
-    $.ajax
-      type: "POST"
-      url: "/xhr/get_rent_table"
-      data: { id: propertyId, version: selectedVersion }
-      dataType: "html"
-      success: (val) ->
-        $(document).find("#rent-table-wrapper").html(val)
-      error: (e) ->
-        console.log e
-
-  $(document).on 'click', '.reset_filter_date', ->
-    today = new Date()
-    $('#filter_rent_table_by_date__1i').val(today.getFullYear())
-    $('#filter_rent_table_by_date__2i').val(today.getMonth() + 1)
-    $('#filter_rent_table_by_date__3i').val(today.getDate())
-
-    $("select[id^='filter_rent_table_by_date']").change()
-
-  $(document).on 'change', "select[id^='filter_rent_table_by_date']", ->
-    year = $('#filter_rent_table_by_date__1i').val()
-    month = $('#filter_rent_table_by_date__2i').val()
-    day = $('#filter_rent_table_by_date__3i').val()
-    propertyId = $(this).data("id")
-
-    $.ajax
-      type: "POST"
-      url: "/xhr/get_all_rent_by_date"
-      data: { id: propertyId, year: year, month: month, day: day }
-      dataType: "html"
-      success: (val) ->
-        $(document).find("#rent-table-wrapper").html(val)
-      error: (e) ->
-        console.log e
-
+    
   autoPopulateCapRate = ->
     currentRent = $("#property_current_rent").val().replace(/\,/g, "")
     propertyPrice = $("#property_price").val().replace(/\,/g, "")
@@ -427,3 +389,102 @@ $ ->
         if height > 50
           $(this).css('overflow-y', 'scroll')
           $(this).height(height)
+  # Improving Rent Table UI
+  $(document).on 'click', '.reset_filter_date', ->
+    today = new Date()
+    $('#filter_rent_table_by_date__1i').val(today.getFullYear())
+    $('#filter_rent_table_by_date__2i').val(today.getMonth() + 1)
+    $('#filter_rent_table_by_date__3i').val(today.getDate())
+
+    $("select[id^='filter_rent_table_by_date']").change()
+
+  $(document).on 'change', "select[id^='filter_rent_table_by_date']", ->
+    year = $('#filter_rent_table_by_date__1i').val()
+    month = $('#filter_rent_table_by_date__2i').val()
+    day = $('#filter_rent_table_by_date__3i').val()
+    propertyId = $(this).data("id")
+
+    $.ajax
+      type: "POST"
+      url: "/xhr/get_all_rent_by_date"
+      data: { id: propertyId, year: year, month: month, day: day }
+      dataType: "html"
+      success: (val) ->
+        $(document).find("#rent-table-wrapper").html(val)
+
+        $('#monthly-rent-table-wrapper table tbody tr').each ->
+          $(this).removeClass('text-danger text-success orange')
+          if $(this).find('td').eq(0).text() > year
+            $(this).addClass('text-success')
+          else if $(this).find('td').eq(0).text() == year
+            $(this).addClass('orange')
+          else
+            $(this).addClass('text-danger')
+          
+          i = 1
+          while i <= 12
+            if $(this).find('td').eq(0).text() == year
+              $(this).find('td').eq(i).removeClass('text-danger text-success orange')
+              if i > parseInt(month)
+                $(this).find('td').eq(i).addClass('text-success')
+              else if i == parseInt(month)
+                $(this).find('td').eq(i).addClass('orange')
+              else
+                $(this).find('td').eq(i).addClass('text-danger')
+            i++
+
+      error: (e) ->
+        console.log e
+
+  $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_true', ->
+    $('.PL_date_certain').show()
+    $('.PL_date_not_certain').hide()
+    $('#property_preliminary_term_expired').iCheck('check')
+    $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', false)
+
+  $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_false', ->
+    $('.PL_date_certain').hide()
+    $('.PL_date_not_certain').show()
+    $('#property_preliminary_term_expired')
+      .iCheck('enable')
+      .iCheck('uncheck')
+    $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', true)
+
+  $(document).on 'change', "select[id^='property_preliminary_term_expiration_date']", ->
+    $('#property_rent_commencement_date_2i').
+      val($('#property_preliminary_term_expiration_date_2i').val())
+    $('#property_rent_commencement_date_3i').
+      val($('#property_preliminary_term_expiration_date_3i').val())
+    $('#property_rent_commencement_date_1i').
+      val($('#property_preliminary_term_expiration_date_1i').val())
+
+  $(document).on 'ifChecked', '#property_preliminary_term_expired', ->
+    modal_html = '<div class="manual-rent-commencement-date-wrapper">' +
+                    $('.present_date_select_template').html() +
+                  '</div>'
+    swal {
+      title: 'Please choose<br>Rent Commencement Date'
+      html: true
+      text: modal_html
+      confirmButtonColor: "#3082EE"
+      closeOnConfirm: true
+      animation: "slide-from-top"
+    }, (isConfirm) ->
+      if isConfirm
+        $('#property_rent_commencement_date_2i').
+          val($('.manual-rent-commencement-date-wrapper #manual-rent-commencement-date__2i').val())
+        $('#property_rent_commencement_date_3i').
+          val($('.manual-rent-commencement-date-wrapper #manual-rent-commencement-date__3i').val())
+        $('#property_rent_commencement_date_1i')
+          .val($('.manual-rent-commencement-date-wrapper #manual-rent-commencement-date__1i').val())
+
+        $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', false)
+        $('#property_preliminary_term_expiration_date_2i')
+          .val($('.present_date_select_template #manual-rent-commencement-date__2i').val())
+        $('#property_preliminary_term_expiration_date_3i')
+          .val($('.present_date_select_template #manual-rent-commencement-date__3i').val())
+        $('#property_preliminary_term_expiration_date_1i')
+          .val($('.present_date_select_template #manual-rent-commencement-date__1i').val())
+  
+  $(document).on 'ifUnchecked', '#property_preliminary_term_expired', ->
+    $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', true)

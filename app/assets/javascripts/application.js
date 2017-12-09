@@ -257,10 +257,6 @@ $( document ).ready(function() {
 });
 
 $(document).ready(function(){  
-  $('.product-list').on('change', function() {
-    $('.product-list').not(this).prop('checked', false);
-  });
-  
   var unsaved = false;
   $(":input").change(function(){ //trigers change in all input fields including text type
       unsaved = true;
