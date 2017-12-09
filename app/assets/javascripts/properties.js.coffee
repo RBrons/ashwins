@@ -439,7 +439,6 @@ $ ->
   $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_true', ->
     $('.PL_date_certain').show()
     $('.PL_date_not_certain').hide()
-    $('#property_preliminary_term_expired').iCheck('check')
     $("select[id^='property_preliminary_term_expiration_date']").attr('disabled', false)
 
   $(document).on 'ifChecked', '#property_rent_commencement_depend_on_expiration_false', ->
