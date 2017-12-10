@@ -78,7 +78,8 @@ table#data_table
           - else
             = "N/A"
         td = property.term_end if property.rent_tables.present?
-        td = distance_of_time_in_words(Time.now, property.term_end, :only => [:years, :months, :days]) if property.rent_tables.present?
+        td 
+          = Time.diff(Time.now, property.term_end, '%y, %M and %d')[:diff] if property.rent_tables.present?
         td = property.building_status_is
 
 

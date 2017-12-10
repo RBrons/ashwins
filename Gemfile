@@ -86,7 +86,7 @@ gem 'cloudinary'
 gem 'geocoder'
 
 # Use for get date diff in human understand
-gem 'dotiw'
+gem 'time_diff'
 
 group :development, :test do
   gem 'rspec-rails'
