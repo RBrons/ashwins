@@ -5495,11 +5495,17 @@ ul.m__breadcrumb li a:hover {
 }
 
 .lease_term_wizard ul.wizard_steps li:first-child a:before{
-    left: 0;
+    left: 40px;
+    width: 50%;
+    z-index: 5;
 }
 
 .lease_term_wizard ul.wizard_steps li:last-child a:before{
-    right: 100%;
+    left: -50%;
+}
+
+.lease_term_wizard ul.wizard_steps li a:before{
+    left: -50%;
 }
 
 .lease_term_wizard ul.wizard_steps li{

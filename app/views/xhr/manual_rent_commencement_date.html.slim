@@ -1,0 +1,2 @@
+.manual-rent-commencement-date-wrapper
+  = date_select('manual-rent-commencement-date', '', { start_year: @date_of_lease.year, end_year: @date_of_lease.year + 20, selected: @date_of_lease, order: [:month, :day, :year] }, class: "form-control select_auto")
