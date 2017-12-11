@@ -206,9 +206,11 @@ class XhrController < ApplicationController
     else
       @rent_tables = []
     end
-    
-    # Option periods should always be displayed no matter what the user sets the current date to 
-    @extensions = property.rent_tables.where(version: property.rent_table_version, is_option: true)
+  
+  end
+
+  def manual_rent_commencement_date
+    @date_of_lease = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i)
   end
 
 end

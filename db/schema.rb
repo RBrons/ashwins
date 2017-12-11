@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171209010415) do
+ActiveRecord::Schema.define(version: 20171210203155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -553,7 +553,7 @@ ActiveRecord::Schema.define(version: 20171209010415) do
     t.string   "condition_for_preliminary_term"
     t.decimal  "base_rent_increase_percentage",                                     precision: 5,  scale: 2
     t.boolean  "rent_increase_in_base_term_status",                                                          default: false
-    t.boolean  "rent_commencement_depend_on_expiration",                                                     default: true
+    t.boolean  "has_date_certain_for_preliminary",                                                           default: true
     t.boolean  "preliminary_term_expired",                                                                   default: false
     t.string   "lease_rent_abatement_rating"
     t.string   "lease_percentage_rent_exclusions_rating"

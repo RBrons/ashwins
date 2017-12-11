@@ -25,7 +25,7 @@ class Property < ApplicationRecord
 
   after_create :access_resource
   after_save :add_key
-  before_save :check_price_current_rent_cap_rate
+  before_save :check_price_current_rent_cap_rate, :sanitize_lease_columns
 
   belongs_to :transaction_sale
   belongs_to :tenant
@@ -217,7 +217,12 @@ class Property < ApplicationRecord
 
   def can_create_rent_table?
     # check if mandatary fields have the value for creating rent table
-    self.preliminary_term_expired && self.lease_base_rent.present? && self.lease_duration_in_years.present? && self.rent_commencement_date.present?
+    if self.preliminary_term_status
+      if !self.preliminary_term_expired
+        return false
+      end
+    end
+    self.lease_base_rent.present? && self.lease_duration_in_years.present? && self.rent_commencement_date.present?
   end
 
   def current_monthly_rent
@@ -353,32 +358,32 @@ class Property < ApplicationRecord
     if chosen_date == false
       chosen_date = Date.today
     end
-    
-    base_start_date = self.rent_commencement_date
-    base_end_date = self.rent_commencement_date + self.lease_duration_in_years.years
-
-    if self.preliminary_term_status
-      if !self.preliminary_term_expired
-        if chosen_date >= self.date_of_lease
+    if self.date_of_lease.present?
+      if self.preliminary_term_status
+        if !self.preliminary_term_expired
+          if chosen_date >= self.date_of_lease
+            return [0, nil]
+          end
+        elsif chosen_date < self.rent_commencement_date
           return [0, nil]
         end
-      elsif chosen_date <= self.preliminary_term_expiration_date
-        return [0, nil]
       end
-    end
 
-    if chosen_date >= base_start_date && chosen_date <= base_end_date
-      return [1, nil]
-    end
+      base_start_date = self.rent_commencement_date
+      base_end_date = self.rent_commencement_date + self.lease_duration_in_years.years
+      if chosen_date >= base_start_date && chosen_date <= base_end_date
+        return [1, nil]
+      end
 
-    if self.optional_extensions_status
-      self.number_of_option_period.times do |option|
-        if chosen_date > base_end_date && chosen_date <= (base_end_date + (self.length_of_option_period * (option + 1)).years)
-          return [2, option + 1]
+      if self.optional_extensions_status
+        self.number_of_option_period.times do |option|
+          if chosen_date > base_end_date && chosen_date <= (base_end_date + (self.length_of_option_period * (option + 1)).years)
+            return [2, option + 1]
+          end
         end
       end
     end
-    
+
     return [-1, nil]
   end
 
@@ -392,5 +397,24 @@ class Property < ApplicationRecord
 
     return lease_end_date
   end
+
+  private
+    def sanitize_lease_columns
+      if self.preliminary_term_status
+        if self.has_date_certain_for_preliminary
+          self.preliminary_term_expired = true
+        end
+      end
+
+      if !self.optional_extensions_status
+        self.number_of_option_period = nil
+        self.length_of_option_period = nil
+        self.lease_rent_increase_percentage = nil
+      end
+
+      if !self.preliminary_term_status && !self.optional_extensions_status
+        self.rent_commencement_date = self.date_of_lease
+      end
+    end
 
 end

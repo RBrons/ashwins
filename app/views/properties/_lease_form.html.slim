@@ -9,9 +9,6 @@
       button.btn.btn-primary[type="button" data-dismiss="modal" aria-label="Close"]
         | Close
 
-.present_date_select_template.hide
-  = date_select 'manual-rent-commencement-date', '', { start_year: Time.zone.now.year, end_year: Time.zone.now.year + 20, order: [:month, :day, :year] }, class: "form-control select_auto"
-  
 .comment-editor.compose.col-md-6.col-xs-12
   .compose-header
     span.title New Comment
@@ -203,26 +200,20 @@ input#property_id[type="hidden" value=(@property.id)]
               label
                 = f.check_box :optional_extensions_status, class: 'flat-icheck'
                 span.margin-md-left Optional Extensions
-          div#preliminary_term style="#{ 'display: none;' unless f.object.preliminary_term_status?}"
+          div#preliminary_term_fields style="#{ 'display: none;' unless f.object.preliminary_term_status?}"
             .form-group
               h2.heading Preliminary Term
               .form-group
                 label.control-label Does the Preliminary Term End on a Date Certain?
                 .clearfix
                 .heading_blue.radio-inline.no-padding
-                  = f.radio_button :rent_commencement_depend_on_expiration, true, class: 'form-control flat-icheck radiobuttons'
+                  = f.radio_button :has_date_certain_for_preliminary, true, class: 'form-control flat-icheck radiobuttons'
                   span.margin-md-left Yes
                 .heading_blue.radio-inline
-                  = f.radio_button :rent_commencement_depend_on_expiration, false, class: 'form-control flat-icheck radiobuttons'
+                  = f.radio_button :has_date_certain_for_preliminary, false, class: 'form-control flat-icheck radiobuttons'
                   span.margin-md-left No
             
-            .PL_date_certain[style=(@property.rent_commencement_depend_on_expiration ? '' : 'display: none')]
-              .form-grup
-                label.control-label Preliminary Term Expiration Date
-                .clearfix
-                = f.date_select :preliminary_term_expiration_date, {start_year: Time.zone.now.year, end_year: Time.zone.now.year + 20, order: [:month, :day, :year]}, class: 'form-control select_auto'
-            
-            .PL_date_not_certain[style=(@property.rent_commencement_depend_on_expiration ? 'display: none' : '')]
+            .PL_date_not_certain[style=(@property.has_date_certain_for_preliminary ? 'display: none' : '')]
               .checkbox.no-padding
                 label
                   = f.check_box :preliminary_term_expired, class: 'flat-icheck'
@@ -231,87 +222,84 @@ input#property_id[type="hidden" value=(@property.id)]
                 label Conditions for the End of Preliminary Term
                 = f.text_area :condition_for_preliminary_term,rows: 7, class: 'form-control'
 
-          
-          .form-group
+          div#base_term_fields[style="#{ 'display: none;' if f.object.preliminary_term_status && !f.object.has_date_certain_for_preliminary? && !f.object.preliminary_term_expired?}"]
             h2.heading Base Term
-            label Rent Commencement Date
-            .clearfix
-            = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
-          .form-group
-            .checkbox.no-padding
-              label
-                = f.check_box :lease_is_pro_rated, class: 'flat-icheck'
-                span.margin-md-left Pro Rated Rent?
-          .form-group
-            label Rent Commencement Date Details
-            .clearfix
-            = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
-          .form-group
-            label Duration of Base Term
-            =  f.text_field :lease_duration_in_years, class: 'form-control'
-          .form-group
-            .checkbox.no-padding
-              label
-                = f.check_box :rent_increase_in_base_term_status, class: 'flat-icheck'
-                span.margin-md-left Are there Rent Increases in the Base Terms
+            .form-group.rent-commencement_date[style=('display: none' if !f.object.preliminary_term_status)]
+              label Rent Commencement Date
+              .clearfix
+              = f.date_select :rent_commencement_date, {start_year: 50.years.ago.year, end_year: Time.zone.now.year+50, order: [:month, :day, :year]}, class: 'form-control select_auto'
+            .form-group
+              .checkbox.no-padding
+                label
+                  = f.check_box :lease_is_pro_rated, class: 'flat-icheck'
+                  span.margin-md-left Pro Rated Rent?
+            .form-group
+              label Rent Commencement Date Details
+              .clearfix
+              = f.select :rent_commencement_date_details, Property::RENT_COMMENCEMENT_DATE_DETAILS, {}, class: 'form-control'
+            .form-group
+              label Duration of Base Term
+              =  f.text_field :lease_duration_in_years, class: 'form-control'
+            .form-group
+              .checkbox.no-padding
+                label
+                  = f.check_box :rent_increase_in_base_term_status, class: 'flat-icheck'
+                  span.margin-md-left Are there Rent Increases in the Base Terms
 
-          div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
-            .form-group
-              label No of Years Between Rent Increases
-              = f.text_field :lease_rent_slab_in_years, class: 'form-control'
-            .form-group
-              label Base Term Rent Increase Percentage
-              .input-group.width-field-sm
-                = f.text_field :base_rent_increase_percentage, class: 'form-control'
-                .input-group-addon %
-          div#optional_extensions style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
+            div#rent_increase_in_base_term style="#{ 'display: none;' unless f.object.rent_increase_in_base_term_status?}"
+              .form-group
+                label No of Years Between Rent Increases
+                = f.text_field :lease_rent_slab_in_years, class: 'form-control'
+              .form-group
+                label Base Term Rent Increase Percentage
+                .input-group.width-field-sm
+                  = f.text_field :base_rent_increase_percentage, class: 'form-control'
+                  .input-group-addon %
+          div#optional_extensions_fields style="#{ 'display: none;' unless f.object.optional_extensions_status?}"
             h2.heading Optional Extensions
-            .form-group
+            .form-group[class=('required' if f.object.optional_extensions_status)]
               label.control-label Number Of Option Period(s)
               span.error-msg
-              = f.text_field :number_of_option_period, class: 'form-control'
-            .form-group
+              = f.text_field :number_of_option_period, class: 'form-control', required: f.object.optional_extensions_status
+            .form-group[class=('required' if f.object.optional_extensions_status)]
               label.control-label Length of an Option Period in Years
               span.error-msg
-              = f.text_field :length_of_option_period, class: 'form-control'
-            .form-group
+              = f.text_field :length_of_option_period, class: 'form-control', required: f.object.optional_extensions_status
+            .form-group[class=('required' if f.object.optional_extensions_status)]
               label.control-label Option Period Rent Increase Percentage
               span.error-msg
               .input-group.width-field-sm
-                = f.text_field :lease_rent_increase_percentage, class: 'form-control'
+                = f.text_field :lease_rent_increase_percentage, class: 'form-control', required: f.object.optional_extensions_status
                 .input-group-addon %
                         
           .form-group
             = f.submit 'Save', id:'lease_submit',class: 'submit btn btn-sm btn-primary',style: "display: none;"
     #lease_rent_table_section class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_rent_table_section'}")      
-      - if @property.rent_tables.where(version: @property.rent_table_version).present?  
+      - if @property.date_of_lease.present?
         - term_status = @property.check_in_which_term
         .user-setup-wizard.lease_term_wizard
           ul.wizard_steps
             li
-              a[class=(@property.preliminary_term_status ? 'selected' : 'disabled')]
+              a[class=(term_status[0] == 0 ? 'selected' : 'disabled')]
                 span.step_no 1
                 - if @property.preliminary_term_status == false
                   span.step_descr None
                 - else
                   - if term_status[0] == 0
                     - if @property.preliminary_term_expired
-                      span.step_descr = "Currently in Preliminary Term ending #{@property.preliminary_term_expiration_date.strftime('%d %b %Y')}"
+                      span.step_descr = "Currently in Preliminary Term ending #{(@property.rent_commencement_date - 1.days).strftime('%d %b %Y')}"
                     - else
                       span.step_descr Currently in Preliminary Term no Certain Termination Date
                   - else
                     span.step_descr Preliminary Term
                     
             li
-              a.selected
+              a[class=(term_status[0] == 1 ? 'selected' : 'disabled')]
                 span.step_no 2
-                span.step_descr 
-                  | Base Term
-                  br
-                  small.label.label-success Currently in Base Term
+                span.step_descr Base Term
                   
             li
-              a[class=(@property.optional_extensions_status ? 'selected' : 'disabled')]
+              a[class=(term_status[0] == 2 ? 'selected' : 'disabled')]
                 span.step_no 3
                 - if @property.optional_extensions_status == false
                   span.step_descr None
@@ -323,17 +311,21 @@ input#property_id[type="hidden" value=(@property.id)]
                     - else
                       span.step_descr 
                         = @property.number_of_option_period > 1 ? "#{@property.number_of_option_period} Extensions" : "Extension"
+                  - else
+                    span.step_descr Extension
 
+      - if @property.rent_tables.where(version: @property.rent_table_version).present?  
         .mask_content
           .col-md-3.col-xs-12
             .form-group
               label.control-label Set Date for Rent Table Purpose to:
               .clearfix
-              = date_select 'filter_rent_table_by_date', '', { start_year: @property.rent_commencement_date.year, end_year: @property.term_end.year, selected: Date.today, order: [:month, :day, :year] }, class: "form-control select_auto", data: {id: @property.id}
+              = date_select 'filter_rent_table_by_date', '', { start_year: @property.rent_commencement_date.year, end_year: @property.term_end.year, selected: @property.rent_commencement_date, order: [:month, :day, :year] }, class: "form-control select_auto", data: {id: @property.id}
               a.reset_filter_date.margin-md-left[href="#"]
                 i.fa.fa-refresh
           .clearfix
-          div#rent-table-wrapper
+          div#daily-rent-table-wrapper
+          div#annual-rent-table-wrapper
             table.table.table-striped.table-bordered#rent-table
               thead
                 tr
@@ -345,12 +337,12 @@ input#property_id[type="hidden" value=(@property.id)]
                     - row_highlights = ''
                   - elsif rent_row.start_year > Time.zone.now.year
                     - row_highlights = 'text-success'
-                  - elsif rent_row.start_year == Time.zone.now.year
+                  - elsif rent_row.start_year <= Time.zone.now.year && rent_row.end_year >= Time.zone.now.year
                     - row_highlights = 'orange'
                   - else
                     - row_highlights = 'text-danger'
 
-                  tr[class=(row_highlights)]
+                  tr[class=(row_highlights) data-start_year=(rent_row.start_year) data-end_year=(rent_row.end_year)]
                     td
                       = rent_row.display_info
                     td
@@ -390,7 +382,7 @@ input#property_id[type="hidden" value=(@property.id)]
                       -if Time.zone.now.year == row[0]
                         - if Time.zone.now.month < (month + 1)
                           - row_highlights = 'text-success'
-                        - elsif (month + 1) == Time.zone.now.year
+                        - elsif (month + 1) == Time.zone.now.month
                           - row_highlights = 'orange'
                         - else
                           - row_highlights = 'text-danger'

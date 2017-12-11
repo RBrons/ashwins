@@ -10,10 +10,4 @@ table.table.table-striped.table-bordered#rent-table
           = "Rent for #{@filter_date.strftime('%d %b %Y')}"
         td
           = number_to_currency rent_row.rent / 365.00
-    - @extensions.each do |rent_row|
-      tr
-        td
-          = rent_row.display_info
-        td
-          = number_to_currency rent_row.rent
     
