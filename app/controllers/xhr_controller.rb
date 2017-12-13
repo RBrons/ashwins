@@ -193,7 +193,7 @@ class XhrController < ApplicationController
   # Get all rent by date
   def get_all_rent_by_date
     property = Property.find(params[:id])
-    @filter_date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i)
+    filter_date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i)
     lease_start_date = property.rent_commencement_date
     lease_end_date = property.rent_commencement_date + property.lease_duration_in_years.years
     
@@ -201,12 +201,17 @@ class XhrController < ApplicationController
       lease_end_date = lease_end_date + (property.number_of_option_period * property.length_of_option_period).years
     end
 
-    if lease_start_date <= @filter_date && @filter_date <= lease_end_date
-      @rent_tables = property.rent_tables.where("version = ? AND start_year <= ? AND end_year >= ?", property.rent_table_version, params[:year].to_i, params[:year].to_i)
+    if lease_start_date <= filter_date && filter_date <= lease_end_date
+      rent_tables = property.rent_tables.where("version = ? AND start_year <= ? AND end_year >= ?", property.rent_table_version, params[:year].to_i, params[:year].to_i)
     else
-      @rent_tables = []
+      rent_tables = []
     end
-  
+    daily_table_html = render_to_string :template => "xhr/daily_rent", :locals => {:rent_tables => rent_tables, :filter_date => filter_date}
+    
+    term_status = property.check_in_which_term filter_date
+    term_wizard_html = render_to_string :template => "xhr/lease_term_wizard", :locals => {:property => property, :term_status => term_status}
+    
+    render json: { daily_rent: daily_table_html, term_wizard: term_wizard_html }
   end
 
   def manual_rent_commencement_date

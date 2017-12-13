@@ -421,9 +421,10 @@ $ ->
       type: "POST"
       url: "/xhr/get_all_rent_by_date"
       data: { id: propertyId, year: year, month: month, day: day }
-      dataType: "html"
-      success: (val) ->
-        $(document).find("#daily-rent-table-wrapper").html(val)
+      dataType: "json"
+      success: (data) ->
+        $(document).find(".lease_term_wizard").html(data.term_wizard)
+        $(document).find("#daily-rent-table-wrapper").html(data.daily_rent)
 
         $('#annual-rent-table-wrapper table tbody tr').each ->
           $(this).removeClass('text-danger text-success orange')
