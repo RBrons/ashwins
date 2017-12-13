@@ -68,7 +68,6 @@ input#property_id[type="hidden" value=(@property.id)]
     li class=("#{'active' if params[:lease_sub] == 'lease_misc_section'}")
       a#lease_misc[href="#lease_misc_section" data-toggle="tab"] Misc
 
-
   .tab-content.clearfix
     #lease_dash_section class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_dash_section' || params[:lease_sub].blank?}")
       ul.nav.nav-tabs.bar_tabs
@@ -78,23 +77,129 @@ input#property_id[type="hidden" value=(@property.id)]
           a#lease_dash_text[href="#lease_dash_text_section" data-toggle="tab"] Text
       .tab-content.clearfix
         #lease_dash_grid_section.tab-pane.active.fade.in
-          div
-            .heading_blue.radio-inline
-              input.flat-icheck[type="radio" name=""]
-              span.margin-md-left Verbatim Text and Comments
-            .heading_blue.radio-inline
-              input.flat-icheck[type="radio" name=""]
-              span.margin-md-left Comments only
+          .col-md-6.col-xs-12
+            .form-group
+              .heading_blue.radio-inline
+                input.flat-icheck[type="radio" name=""]
+                span.margin-md-left Verbatim Text and Comments
+              .heading_blue.radio-inline
+                input.flat-icheck[type="radio" name=""]
+                span.margin-md-left Comments only
+            
+            #all_gridview.accordion
+              .panel
+                a.panel-heading[data-toggle="collapse" data-parent="#subtabs_grid_view" href="#basic_info_section"]
+                  h4.panel-title Basic Info
+                #basic_info_section.panel-collapse.collapse.in
+                  .panel-body
+                    = nested_form_for @property, remote: (request.xhr?), html: { class: "validation_form new_property#{('_xhr' if request.xhr?)}" } do |f|
+                      = hidden_field_tag :type_is, 'lease'
+                      = f.hidden_field :ownership_status, value: @property.ostatus
+
+                      .form-group
+                        label.control-label Tenant
+                        = f.select :tenant_id, Tenant.all().pluck(:name, :id), {}, class: 'form-control width-field-md'
+
+                      .form-group.required
+                        label.control-label City
+                        span.error-msg
+                        = f.text_field :location_city, class: 'form-control width-field-md', required: true, "data-parsley-error-message" => "City can't be blank"
+
+                      .form-group
+                        label.control-label Square Feet
+                        = f.text_field :square_feet, class: 'form-control width-field-md'
+                      .form-group
+                        label.control-label Description
+                        = f.text_area :description, class: 'form-control'
+                      .form-group
+                        label.control-label Current Rent
+                        .input-group.width-field-md
+                          .input-group-addon $
+                          = f.text_field :current_rent, class: 'form-control input-mask-currency'
+                      .form-group
+                        label.control-label General Property Type
+                        = f.select :type_is, Property::TYPES, {}, class: 'form-control width-field-md'
+                      .form-group
+                        label.control-label State
+                        = f.select :location_state, Property::US_STATES, {}, class: 'form-control selectize-single width-field-md'
+                      .form-group
+                        label.control-label Zip
+                        = f.text_field :zip, class: 'form-control width-field-md'
+                      .form-group
+                        label.control-label County
+                        = f.text_field :location_county, class: 'form-control width-field-md'
+              
+              .panel
+                a.panel-heading[data-toggle="collapse" data-parent="#subtabs_grid_view" href="#parties_section"]
+                  h4.panel-title Parties
+                #parties_section.panel-collapse.collapse[aria-labelledby="#parties_heading"]
+                  .panel-body
+                    = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)} validation_form" } do |f|
+                      = hidden_field_tag :type_is, 'lease'
+                      .form-group.margin-lg-top
+                        label.control-label Original Landlord
+                        = f.text_field :lease_original_landlord, class: 'form-control'
+                      .form-group
+                        label.control-label Original Tenant
+                        = f.text_field :lease_original_tenant, class: 'form-control'
+                      .form-group
+                        label.control-label Original Guarantor
+                        = f.text_field :lease_original_guarantor, class: 'form-control'
 
         #lease_dash_text_section.tab-pane.fade
-          div
+          .form-group
             .heading_blue.radio-inline
               input.flat-icheck[type="radio" name=""]
               span.margin-md-left Verbatim Text and Comments
             .heading_blue.radio-inline
               input.flat-icheck[type="radio" name=""]
               span.margin-md-left Comments only
-          
+          .form-group
+            .col-md-3.col-xs-6
+              #lease_tab_categories
+                ul
+                  li[data-linked_tab='#basic_info_section']
+                    | Basic Info
+                    ul
+                      li[data-jstree='{"type":"select"}' data-linked_field="#property_tenant_id"] Tenant
+                      li[data-jstree='{"type":"input"}' data-linked_field="#property_location_city"] City
+                      li[data-jstree='{"type":"numeric"}' data-linked_field="#property_square_feet"] Square Feet
+                      li[data-jstree='{"type":"input"}' data-linked_field="#property_description"] Description
+                      li[data-jstree='{"type":"input"}' data-linked_field=""] Owner
+                      li[data-jstree='{"type":"currency"}' data-linked_field="#property_current_rent"] Current Rent
+                      li[data-jstree='{"type":"select"}' data-linked_field=""] General Property Type
+                      li[data-jstree='{"type":"input"}' data-linked_field=""] Property Location
+                      li[data-jstree='{"type":"input"}' data-linked_field=""] Street Address
+                      li[data-jstree='{"type":"select"}' data-linked_field=""] State
+                      li[data-jstree='{"type":"input"}' data-linked_field="#property_zip"] Zip
+                      li[data-jstree='{"type":"input"}' data-linked_field="#property_location_county"] Country
+                  li[data-linked_tab='#parties_section']
+                    | Parties
+                    ul
+                      li[data-jstree='{"type":"input"}' data-linked_field="#property_lease_original_landlord"] Original Landlord
+                      li[data-jstree='{"type":"input"}' data-linked_field="#property_lease_original_tenant"] Original Tenant
+                      li[data-jstree='{"type":"input"}' data-linked_field="#property_lease_original_guarantor"] Original Guarantor
+                  li[data-linked_tab='t#erms_section']
+                    | Lease Term
+                    ul
+                      li[data-jstree='{"type":"currency"}'] Lease Base Rent
+                      li[data-jstree='{"type":"currency"}'] Current Monthly Rent
+                      li[data-jstree='{"type":"select"}'] Lease Type
+                      li[data-jstree='{"type":"select"}'] Building Status
+                      li[data-jstree='{"type":"date"}'] Date Of Lease
+                      li[data-jstree='{"type":"select"}'] Date Of Lease Details
+                      li[data-jstree='{"type":"date"}'] Rent Commencement Date
+                      li[data-jstree='{"type":"checkbox"}'] Pro Rated Rent?
+                      li[data-jstree='{"type":"select"}'] Rent Commencement Date Details
+                      li[data-jstree='{"type":"numeric"}'] Duration of Base Term
+                      li[data-jstree='{"type":"checkbox"}'] Are there Rent Increases in the Base Terms 
+                      li[data-jstree='{"type":"numeric"}'] Number Of Option Period(s)
+                      li[data-jstree='{"type":"numeric"}'] Length of an Option Period in Years
+                      li[data-jstree='{"type":"numeric"}'] Option Period Rent Increase Percentage
+                      
+            .col-md-6
+              textarea#lease_document_clipboard
+                  
     #lease_basics_section.mask_content class=("tab-pane fade #{'active in' if params[:lease_sub] == 'lease_basics_section' || params[:lease_sub].blank?}")
       = nested_form_for @property, remote: (request.xhr?), html: { class: "new_property#{('_xhr' if request.xhr?)}" } do |f|
         = hidden_field_tag :type_is, params[:type_is]

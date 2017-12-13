@@ -257,7 +257,8 @@ class Property < ApplicationRecord
     end_month = lease_end_date.month
 
     rent_slab = self.lease_rent_slab_in_years || 1
-    switch_years = []
+    switch_years_in_base = []
+    switch_years_in_extension = []
 
     if self.rent_increase_in_base_term_status && self.base_rent_increase_percentage
       year_ = start_year
@@ -266,7 +267,7 @@ class Property < ApplicationRecord
         if year_ >= end_year
           break
         end
-        switch_years << year_
+        switch_years_in_base << year_
       end
     end
 
@@ -278,7 +279,7 @@ class Property < ApplicationRecord
         end_month = lease_end_date.month
         
         (self.number_of_option_period - 1).times do |option|
-          switch_years << (year_ + (option + 1) * length_of_option_period)
+          switch_years_in_extension << (year_ + (option + 1) * length_of_option_period)
         end
       end
     end
@@ -315,9 +316,15 @@ class Property < ApplicationRecord
         year_rent_arr[year_indx_count] = current_year
         year_indx_count = year_indx_count + 1
       end
-      if year_indx_count == switch_month && switch_years.include?(current_year)
+      
+      if year_indx_count == switch_month && switch_years_in_base.include?(current_year)
+        current_rent = current_rent * ((100.00 + self.base_rent_increase_percentage) / 100.00)
+      end
+
+      if year_indx_count == switch_month && switch_years_in_extension.include?(current_year)
         current_rent = current_rent * ((100.00 + self.lease_rent_increase_percentage) / 100.00)
       end
+
       year_rent_arr[year_indx_count] = current_rent
       year_indx_count = year_indx_count + 1
       months_remaining = months_remaining - 1

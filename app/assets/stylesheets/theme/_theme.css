@@ -842,7 +842,7 @@ a:active,
 
 a:hover,
 a:focus {
-    text-decoration: none
+    text-decoration: none;
 }
 
 .navbar {
@@ -1347,10 +1347,12 @@ h2 {
 }
 
 .accordion .panel-heading {
-    background: #F2F5F7;
+    background: #3082ee;
+    color: white;
     padding: 13px;
     width: 100%;
-    display: block
+    display: block;
+    border: none;
 }
 
 .accordion .panel:hover {

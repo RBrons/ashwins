@@ -499,3 +499,46 @@ $ ->
             $('#base_term_fields').show()
     else
       $('#base_term_fields').hide()
+
+  # All Tab
+  $('#lease_tab_categories').jstree
+    'core': 'check_callback': true
+    'plugins': [
+      'types'
+      'dnd'
+    ]
+    'types':
+      'default': 'icon': 'fa fa-folder'
+      'input': 'icon': 'fa fa-terminal'
+      'select': 'icon': 'fa fa-list-alt'
+      'checkbox': 'icon': 'fa fa-check-square-o'
+      'currency': 'icon': 'fa fa-usd'
+      'numeric': 'icon': 'fa fa-sort-numeric-asc'
+      'date': 'icon': 'fa fa-calendar'
+
+  getHighlightText = ->
+    clipboard = document.getElementById('lease_document_clipboard')
+    selectedText = ''
+    if clipboard.selectionStart != clipboard.selectionEnd
+      selectedText = clipboard.value.substring(clipboard.selectionStart, clipboard.selectionEnd)
+
+    return selectedText
+  
+  setText2Field = (tab_id, field_id, field_type, value) ->
+    tab = $('#all_gridview').find(tab_id)
+    if field_type != 'select'
+      tab.find(field_id).val(value)
+
+  $('#lease_tab_categories').on 'changed.jstree', (e, data) ->
+    selectedText = getHighlightText()
+    current_node = data.instance.get_node(data.selected[0])
+    node_in_dom = $('#' + current_node.id)
+    if selectedText != ''
+      node_in_dom.addClass('orange')
+    else
+      node_in_dom.removeClass('orange')
+      
+    setText2Field(node_in_dom.parents('li').data('linked_tab'),
+        node_in_dom.data('linked_field'), current_node.type, selectedText)
+
+    $('#lease_document_clipboard').focus()
