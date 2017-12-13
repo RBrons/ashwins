@@ -1,0 +1,35 @@
+ul.wizard_steps
+  li
+    a[class=(term_status[0] == 0 ? 'selected' : 'disabled')]
+      span.step_no 1
+      - if property.preliminary_term_status == false
+        span.step_descr None
+      - else
+        - if term_status[0] == 0
+          - if property.preliminary_term_expired
+            span.step_descr = "Currently in Preliminary Term ending #{(property.rent_commencement_date - 1.days).strftime('%d %b %Y')}"
+          - else
+            span.step_descr Currently in Preliminary Term no Certain Termination Date
+        - else
+          span.step_descr Preliminary Term
+          
+  li
+    a[class=(term_status[0] == 1 ? 'selected' : 'disabled')]
+      span.step_no 2
+      span.step_descr Base Term
+        
+  li
+    a[class=(term_status[0] == 2 ? 'selected' : 'disabled')]
+      span.step_no 3
+      - if property.optional_extensions_status == false
+        span.step_descr None
+      - else
+        - if property.number_of_option_period.present?
+          - if term_status[0] == 2
+            span.step_descr
+              = property.number_of_option_period > 1 ? "Currently in Extention #{term_status[1]} of #{property.number_of_option_period}" : "Currently in Extention"
+          - else
+            span.step_descr 
+              = property.number_of_option_period > 1 ? "#{property.number_of_option_period} Extensions" : "Extension"
+        - else
+          span.step_descr Extension

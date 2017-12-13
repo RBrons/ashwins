@@ -4,10 +4,10 @@ table.table.table-striped.table-bordered#rent-table
       th Particulars
       th Amount
   tbody
-    - @rent_tables.each do |rent_row|
+    - rent_tables.each do |rent_row|
       tr
         td
-          = "Rent for #{@filter_date.strftime('%d %b %Y')}"
+          = "Rent for #{filter_date.strftime('%d %b %Y')}"
         td
           = number_to_currency rent_row.rent / 365.00
     
